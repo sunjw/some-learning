@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">org.sunjw.learnand.ch2</string>
+    <string name="title_activity_main">org.sunjw.learnand.ch2</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="main_activity">Main Activity</string>
+    <string name="title_activity_secondary">SecondaryActivity</string>
+    <string name="secondary_activity">Secondary Activity</string>
+    <string name="open_secondary_activity">Open secondray Activity</string>
+    <string name="title_activity_third">ThirdActivity</string>
+    <string name="third_activity">Third Activity</string>
+    <string name="open_third_activity">Open third activity</string>
+    <string name="messenger_activity">Messenger Activity</string>
+    <string name="open_messenger_activity">Open Messenger Activity</string>
+    <string name="open_bookmanager_activity">Open BookManager Activity</string>
+    <string name="open_provider_activity">Open Provider Activity</string>
+    <string name="open_chat_activity">Open Chat Activity</string>
+    <string name="title_activity_messenger">MessengerActivity</string>
+    <string name="title_activity_bookmanager">BookManagerActivity</string>
+    <string name="title_activity_provider">ProviderActivity</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="input_message">Input message</string>
+    <string name="send">Send</string>
+
+</resources>

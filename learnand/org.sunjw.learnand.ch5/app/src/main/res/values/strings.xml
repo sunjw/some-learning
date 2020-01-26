@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">learnand.ch5</string>
+    <string name="string_chapter_5">Chapter 5</string>
+    <string name="string_open_activity">Open Activity</string>
+</resources>
