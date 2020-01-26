@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "longest-substr-nomore-k-distinct-char", "longest-substr-nomore-k-distinct-char\longest-substr-nomore-k-distinct-char.vcxproj", "{B12B4277-BB85-47FB-9073-3E648D7CA7C8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B12B4277-BB85-47FB-9073-3E648D7CA7C8}.Debug|x64.ActiveCfg = Debug|x64
+		{B12B4277-BB85-47FB-9073-3E648D7CA7C8}.Debug|x64.Build.0 = Debug|x64
+		{B12B4277-BB85-47FB-9073-3E648D7CA7C8}.Debug|x86.ActiveCfg = Debug|Win32
+		{B12B4277-BB85-47FB-9073-3E648D7CA7C8}.Debug|x86.Build.0 = Debug|Win32
+		{B12B4277-BB85-47FB-9073-3E648D7CA7C8}.Release|x64.ActiveCfg = Release|x64
+		{B12B4277-BB85-47FB-9073-3E648D7CA7C8}.Release|x64.Build.0 = Release|x64
+		{B12B4277-BB85-47FB-9073-3E648D7CA7C8}.Release|x86.ActiveCfg = Release|Win32
+		{B12B4277-BB85-47FB-9073-3E648D7CA7C8}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CAD572DC-5E45-4DBE-BBD8-C409B034845F}
+	EndGlobalSection
+EndGlobal
