@@ -1,0 +1,121 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(简体，中国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG_MAIN DIALOGEX 0, 0, 307, 175
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
+CAPTION "SysInfo"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Exit",IDC_BUTTON_EXIT,246,152,54,16
+    RTEXT           "Processor architecture:",IDC_STATIC,7,15,114,8
+    RTEXT           "Processor level:",IDC_STATIC,7,30,114,8
+    RTEXT           "Number of processor:",IDC_STATIC,7,60,114,8
+    RTEXT           "Active processor mask:",IDC_STATIC,7,75,114,8
+    RTEXT           "Allocation granularity:",IDC_STATIC,7,90,114,8
+    RTEXT           "Processor revision:",IDC_STATIC,7,45,114,8
+    RTEXT           "Page size:",IDC_STATIC,7,105,114,8
+    RTEXT           "Minimum app. address:",IDC_STATIC,7,120,114,8
+    RTEXT           "Maximum app. address:",IDC_STATIC,7,135,114,8
+    RTEXT           "[pa]",IDC_STATIC_PA,186,15,114,8
+    RTEXT           "[pl]",IDC_STATIC_PL,186,30,114,8
+    RTEXT           "[pr]",IDC_STATIC_PR,186,45,114,8
+    RTEXT           "[nop]",IDC_STATIC_NOP,186,60,114,8
+    RTEXT           "[apm]",IDC_STATIC_APM,186,75,114,8
+    RTEXT           "[ag]",IDC_STATIC_AG,186,90,114,8
+    RTEXT           "[ps]",IDC_STATIC_PS,186,105,114,8
+    RTEXT           "[minaa]",IDC_STATIC_MINAA,186,120,114,8
+    RTEXT           "[maxaa]",IDC_STATIC_MAXAA,186,135,114,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_DIALOG_MAIN, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 300
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 168
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON_WZIP           ICON                    "WINZIP3213.ico"
+#endif    // 中文(简体，中国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

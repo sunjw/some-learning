@@ -1,0 +1,13 @@
+.DS_Store
+Backup
+*Debug
+[0-9]*/Release
+*/x64
+*.aps
+*.ncb
+*.suo
+*.user
+*.pdb
+*.sdf
+*.opensdf
+UpgradeLog*.htm
