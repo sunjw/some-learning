@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="org.sunjw.uilayouttest.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/input_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Type something" />
+
+            <Button
+                android:id="@+id/send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="This is TextView" />
+
+            <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:src="@mipmap/ic_launcher" />
+
+        </FrameLayout>
+
+        <android.support.percent.PercentFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_gravity="left|top"
+                app:layout_widthPercent="50%"
+                app:layout_heightPercent="50%"
+                android:text="Button 1" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_gravity="right|top"
+                app:layout_widthPercent="50%"
+                app:layout_heightPercent="50%"
+                android:text="Button 2" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_gravity="left|bottom"
+                app:layout_widthPercent="50%"
+                app:layout_heightPercent="50%"
+                android:text="Button 3" />
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_gravity="right|bottom"
+                app:layout_widthPercent="50%"
+                app:layout_heightPercent="50%"
+                android:text="Button 4" />
+
+        </android.support.percent.PercentFrameLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
