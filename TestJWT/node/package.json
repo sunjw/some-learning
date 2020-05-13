@@ -1,0 +1,13 @@
+{
+  "name": "node-jwt",
+  "version": "1.0.0",
+  "description": "A demo script to handle jwt.",
+  "main": "test_main.js",
+  "scripts": {
+    "start": "node test_main.js"
+  },
+  "dependencies": {
+    "base64url": "^3.0.1",
+    "log4js": "^6.1.2"
+  }
+}
