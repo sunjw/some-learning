@@ -14,4 +14,9 @@ func GetLogger() *logrus.Logger {
 	return logger
 }
 
-var Logger = GetLogger()
+var LoggerJson = GetLogger()
+
+func main() {
+	LoggerJson.Info("main start...")
+	LoggerJson.Info("main end.")
+}
