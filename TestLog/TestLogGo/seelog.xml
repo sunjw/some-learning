@@ -8,6 +8,6 @@
         </filter>
     </outputs>
     <formats>
-        <format id="main" format="%Date %Time [%Level] %File:%Line %FuncShort - %Msg%n"/>
+        <format id="main" format="%Date(2006-01-02T15:04:05-0700) %Time %Level [%File:%Line] - %Msg%n"/>
     </formats>
 </seelog>
