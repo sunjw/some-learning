@@ -1,0 +1,10 @@
+{
+  "name": "test-log-node",
+  "version": "0.9.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "log4js": "^6.2.1"
+  },
+  "author": "Sun Junwen"
+}
