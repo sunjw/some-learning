@@ -1,11 +1,12 @@
 package main
 
 import (
+	"github.com/cihub/seelog"
 	"github.com/sirupsen/logrus"
 	"os"
 )
 
-func GetLogger() *logrus.Logger {
+func GetLogrusJson() *logrus.Logger {
 	logger := logrus.New()
 	logger.SetFormatter(&logrus.JSONFormatter{})
 	logger.SetReportCaller(true)
@@ -14,9 +15,22 @@ func GetLogger() *logrus.Logger {
 	return logger
 }
 
-var LoggerJson = GetLogger()
+var logrusJson = GetLogrusJson()
+
+func init() {
+	loggerSeelog, err := seelog.LoggerFromConfigAsFile("seelog.xml")
+	if err != nil {
+		panic("init seelog error")
+	}
+	_ = seelog.ReplaceLogger(loggerSeelog)
+}
 
 func main() {
-	LoggerJson.Info("main start...")
-	LoggerJson.Info("main end.")
+	defer seelog.Flush()
+
+	logrusJson.Info("main start...")
+	logrusJson.Info("main end.")
+
+	seelog.Info("main start...")
+	seelog.Info("main end.")
 }

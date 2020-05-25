@@ -1,0 +1,13 @@
+<seelog type="asynctimer" asyncinterval="5000000" minlevel="info" maxlevel="error">
+    <exceptions>
+        <exception filepattern="*" levels="trace,debug,info,warn,error"/>
+    </exceptions>
+    <outputs formatid="main">
+        <filter levels="info,warn,error">
+            <console/>
+        </filter>
+    </outputs>
+    <formats>
+        <format id="main" format="%Date %Time [%Level] %File:%Line %FuncShort - %Msg%n"/>
+    </formats>
+</seelog>
