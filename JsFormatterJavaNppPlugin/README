@@ -1,0 +1,17 @@
+A javascript plugin for Notepad++.
+ * Douglas Crockford's JSMin algorithm to minimize javascript code.
+ * My own algorithm to format javascript code. Written in Java and use JNI to run.
+ * A JSON data viewer. 
+
+HOWTOUSE
+1. Compile this project by "Unicode Debug" or "Unicode Release" configuration, and you'll get JSMinJava.dll file.
+2. Compile JsToolJava project in eclipse (get it from https://github.com/sunjw/JsToolJava.git) and export to JsToolJava.jar file. Or, if you don't want to compile by yourself, just use "JsToolJava.jar" file in this repo.
+3. Copy JSMinJava.dll, JsToolJava.jar and commons-lang-2.6.jar into notepad++ plugin directory.
+4. Add %JAVA_HOME%\bin\client into PATH environment variable.
+5. Open notepad++, you'll see JSMinJava in plugin menu. You need to install jre 1.6 or above to use JSFormat.
+
+LICENSE
+GPL 2.0
+
+AUTHOR
+Sun Junwen sunjw8888 at gmail.com
