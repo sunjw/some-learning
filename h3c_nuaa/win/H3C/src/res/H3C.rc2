@@ -1,0 +1,52 @@
+//
+// OpenGL.RC2 - Microsoft Visual C++ 不会直接编辑的资源
+//
+
+#ifdef APSTUDIO_INVOKED
+#error 此文件不能由 Microsoft Visual C++ 编辑
+#endif //APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+// 在此处添加手动编辑的资源...
+#include "version.h"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION NUM_VERSION
+ PRODUCTVERSION NUM_VERSION
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080403a8"
+        BEGIN
+            VALUE "CompanyName", "SUN Junwen"
+            VALUE "FileDescription", "华为802.1x兼容客户端V2.4"
+            VALUE "FileVersion", STR_VERSION
+            VALUE "InternalName", "H3C.exe"
+            VALUE "OriginalFilename", "H3C.exe"
+            VALUE "ProductName", "华为802.1x兼容客户端"
+            VALUE "ProductVersion", STR_VERSION
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 936
+    END
+END
+
+/////////////////////////////////////////////////////////////////////////////

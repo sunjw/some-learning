@@ -1,0 +1,226 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(中华人民共和国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\H3C.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
+    "#include ""afxres.rc""     // 标准组件\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\Connect.ico"
+IDI_DISCON              ICON                    "res\\Disconnect.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_H3C_DIALOG DIALOGEX 0, 0, 275, 202
+STYLE DS_SETFONT | DS_MODALFRAME | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "H3C 802.1x"
+FONT 9, "宋体", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "连接(&C)",ID_CON,215,14,50,16
+    EDITTEXT        IDC_USERNAME,65,17,83,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PASSWORD,65,38,83,14,ES_PASSWORD | ES_AUTOHSCROLL
+    COMBOBOX        IDC_COMBO1,65,59,111,46,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "关于(&A)",ID_ABOUT,215,158,50,16
+    PUSHBUTTON      "退出(&X)",ID_EXIT,215,179,50,16
+    GROUPBOX        "用户信息",IDC_STATIC,8,4,198,101,BS_LEFT
+    LTEXT           "密码：",IDC_STATIC,15,40,37,8
+    LTEXT           "网络设备：",IDC_STATIC,15,61,47,8
+    CTEXT           "TODO: 在此放置对话框控件。",IDC_MAC,65,82,85,12,WS_BORDER
+    LTEXT           "用户名：",IDC_STATIC,15,19,34,8
+    LTEXT           "网卡MAC：",IDC_STATIC,15,82,41,8
+    EDITTEXT        IDC_EDIT1,7,109,200,84,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | WS_VSCROLL | NOT WS_TABSTOP
+    PUSHBUTTON      "设置(&S)",IDC_BUTTON_SETTING,215,35,50,16
+END
+
+IDD_DIALOG1 DIALOGEX 0, 0, 186, 89
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,129,7,50,14
+    PUSHBUTTON      "取消",IDCANCEL,129,24,50,14
+    LTEXT           "华为802.1x客户端",IDC_STATIC,19,16,94,8
+    LTEXT           "SUN Junwen\r\nSpecial Thank to hszhaoshuan@gmail.com",IDC_STATIC,19,55,139,27
+    LTEXT           "version",IDC_STATIC_VERSION,19,27,61,8
+    LTEXT           "2.40-0145版兼容",IDC_STATIC,19,38,58,8
+END
+
+IDD_SETTING_DIALOG DIALOGEX 0, 0, 221, 119
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "设置"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "添加",IDC_BUTTON_ADD,7,98,35,14
+    PUSHBUTTON      "修改",IDC_BUTTON_MODIFY,46,98,35,14
+    PUSHBUTTON      "删除",IDC_BUTTON_DELETE,84,98,35,14
+    CONTROL         "",IDC_LIST_PROFILE,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,207,86
+    PUSHBUTTON      "关闭",IDC_BUTTON_CLOSE,179,98,35,14
+END
+
+IDD_PROFILE_DIALOG DIALOGEX 0, 0, 135, 75
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "配置"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,19,54,50,14
+    PUSHBUTTON      "取消",IDCANCEL,78,54,50,14
+    RTEXT           "用户名：",IDC_STATIC,7,15,39,8
+    RTEXT           "密码：",IDC_STATIC,7,32,39,8
+    EDITTEXT        IDC_EDIT1,47,12,81,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT2,47,30,81,14,ES_AUTOHSCROLL
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_H3C_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 265
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 195
+    END
+
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 82
+    END
+
+    IDD_SETTING_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 214
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 112
+    END
+
+    IDD_PROFILE_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 128
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 68
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU 
+BEGIN
+    POPUP "menu"
+    BEGIN
+        MENUITEM "连接",                          ID_MENU_CON
+        MENUITEM "显示/隐藏窗口",                     ID_MENU_MAIN
+        MENUITEM SEPARATOR
+        MENUITEM "退出程序",                        ID_MENU_EXIT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// RT_MANIFEST
+//
+
+1                       RT_MANIFEST             "res\\h3c.manifest"
+#endif    // 中文(中华人民共和国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\H3C.rc2"  // 非 Microsoft Visual C++ 编辑的资源
+#include "afxres.rc"     // 标准组件
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
