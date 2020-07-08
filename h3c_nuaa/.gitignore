@@ -1,0 +1,11 @@
+win/H3C.ncb
+win/H3C.suo
+win/UpgradeLog.XML
+win/debug
+win/release
+win/H3C/Debug
+win/H3C/Release
+win/H3C/H3C.vcproj.SUN-N001.Sun Junwen.user
+win/H3C/H3C.vcproj.ORG-SUNJW-N0-7.Sun Junwen.user
+win/H3C/*.APS
+win/H3C/src/*.APS
