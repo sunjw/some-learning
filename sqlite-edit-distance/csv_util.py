@@ -67,10 +67,10 @@ def write_dict_to_csv(dict_data, file_path):
             header = False
             for itr_header in itr_dict:
                 file_content = file_content + itr_header + ','
-            file_content = file_content + '\r\n'
+            file_content = file_content + '\n'
 
         for itr_header in itr_dict:
             file_content = file_content + str(itr_dict[itr_header]) + ','
-        file_content = file_content + '\r\n'
+        file_content = file_content + '\n'
 
     comm_util.write_file_text(file_path, file_content)
