@@ -2,6 +2,8 @@ import os
 import sqlite3
 import sys
 
+from Levenshtein import distance
+
 import log_util
 
 logger = log_util.logger
@@ -28,6 +30,43 @@ def read_bookmarks_from_sqlite(sqlite_db_path):
     return bookmarks
 
 
+def convert_bookmarks_to_urls(bookmarks):
+    urls = []
+    for bookmark_id in bookmarks:
+        bookmark = bookmarks[bookmark_id]
+        if not bookmark['url']:
+            continue
+        url = {}
+        url['id'] = bookmark['id']
+        url['title'] = bookmark['title']
+        url['url'] = bookmark['url']
+        urls.append(url)
+        # logger.debug('%d: {id: %d, title: "%s", url: "%s"}', row_count, bookmark['id'], bookmark['title'], bookmark['url'])
+
+    return urls
+
+
+def calculate_urls_distance(urls):
+    url_distances = []
+    url_count = len(urls)
+    logger.info('url_count=%d', url_count)
+    comb_count = 0
+    for i in range(url_count):
+        for j in range(i + 1, url_count):
+            url_distance_obj = {}
+            url1 = urls[i]
+            url2 = urls[j]
+            url_distance = distance(url1['url'], url2['url'])
+            url_distance_obj['url1_id'] = url1['id']
+            url_distance_obj['url2_id'] = url2['id']
+            url_distance_obj['distance'] = url_distance
+            url_distances.append(url_distance_obj)
+            comb_count = comb_count + 1
+    logger.info('comb_count=%d', comb_count)
+
+    return url_distances
+
+
 def main():
     logger.info('SQLiteEditDistance go!')
 
@@ -39,12 +78,15 @@ def main():
     logger.info('sqlite_db_path=[%s]', sqlite_db_path)
 
     bookmarks = read_bookmarks_from_sqlite(sqlite_db_path)
-    row_count = 0
-    for bookmark_id in bookmarks:
-        bookmark = bookmarks[bookmark_id]
-        logger.debug('%d: {id: %d, title: "%s", url: "%s"}', row_count, bookmark['id'], bookmark['title'],
-                     bookmark['url'])
-        row_count = row_count + 1
+    # row_count = 0
+    # for bookmark_id in bookmarks:
+    #     bookmark = bookmarks[bookmark_id]
+    #     logger.debug('%d: {id: %d, title: "%s", url: "%s"}', row_count, bookmark['id'], bookmark['title'],
+    #                  bookmark['url'])
+    #     row_count = row_count + 1
+
+    urls = convert_bookmarks_to_urls(bookmarks)
+    url_distances = calculate_urls_distance(urls)
 
 
 if __name__ == '__main__':
