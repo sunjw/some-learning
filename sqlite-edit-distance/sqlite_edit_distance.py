@@ -119,10 +119,22 @@ def main():
             test_distance['url2_title'] = bookmarks[url_distance['url2_id']]['title']
             test_distance['url2_url'] = bookmarks[url_distance['url2_id']]['url']
 
-            if not find_url_pair_in_test_distances(test_distances,
-                                                   test_distance['url1_url'],
-                                                   test_distance['url2_url']):
-                test_distances.append(test_distance)
+            if not test_distance['url1_title']:
+                continue
+            if not test_distance['url2_title']:
+                continue
+
+            if test_distance['url1_title']:
+                test_distance['url1_title'] = test_distance['url1_title'].replace(',', ' ')
+            if test_distance['url2_title']:
+                test_distance['url2_title'] = test_distance['url2_title'].replace(',', ' ')
+
+            if find_url_pair_in_test_distances(test_distances,
+                                               test_distance['url1_url'],
+                                               test_distance['url2_url']):
+                continue
+
+            test_distances.append(test_distance)
         else:
             break
 
