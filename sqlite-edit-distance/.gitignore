@@ -69,3 +69,4 @@ target/
 log/
 
 *.pyc
+*.sqlite
