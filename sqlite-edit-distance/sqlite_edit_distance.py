@@ -47,6 +47,8 @@ def convert_bookmarks_to_urls(bookmarks):
 
 
 def calculate_urls_distance(urls):
+    logger.info('calculate_urls_distance...')
+
     url_distances = []
     url_count = len(urls)
     logger.info('url_count=%d', url_count)
@@ -62,7 +64,12 @@ def calculate_urls_distance(urls):
             url_distance_obj['distance'] = url_distance
             url_distances.append(url_distance_obj)
             comb_count = comb_count + 1
-    logger.info('comb_count=%d', comb_count)
+
+    url_distances_count = len(url_distances)
+    logger.info('url_distances_count=%d', url_distances_count)
+
+    logger.info('sort url_distances...')
+    url_distances.sort(key=lambda item: item['distance'])
 
     return url_distances
 
@@ -87,6 +94,7 @@ def main():
 
     urls = convert_bookmarks_to_urls(bookmarks)
     url_distances = calculate_urls_distance(urls)
+    logger.info('got url_distances.')
 
 
 if __name__ == '__main__':
