@@ -75,6 +75,13 @@ def calculate_urls_distance(urls):
     return url_distances
 
 
+def find_url_pair_in_test_distances(test_distances, url1, url2):
+    for test_distance in test_distances:
+        if test_distance['url1_url'] == url1 and test_distance['url2_url'] == url2:
+            return True
+    return False
+
+
 def main():
     logger.info('SQLiteEditDistance go!')
 
@@ -111,7 +118,11 @@ def main():
             test_distance['url2_id'] = url_distance['url2_id']
             test_distance['url2_title'] = bookmarks[url_distance['url2_id']]['title']
             test_distance['url2_url'] = bookmarks[url_distance['url2_id']]['url']
-            test_distances.append(test_distance)
+
+            if not find_url_pair_in_test_distances(test_distances,
+                                                   test_distance['url1_url'],
+                                                   test_distance['url2_url']):
+                test_distances.append(test_distance)
         else:
             break
 

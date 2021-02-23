@@ -72,3 +72,4 @@ log/
 *.sqlite
 *.sqlite-*
 *.csv
+*.xlsx
