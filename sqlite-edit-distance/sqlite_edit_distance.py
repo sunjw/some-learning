@@ -5,6 +5,7 @@ import sys
 from Levenshtein import distance
 
 import log_util
+import csv_util
 
 logger = log_util.logger
 
@@ -66,7 +67,7 @@ def calculate_urls_distance(urls):
             comb_count = comb_count + 1
 
     url_distances_count = len(url_distances)
-    #logger.debug('url_distances_count=%d', url_distances_count)
+    # logger.debug('url_distances_count=%d', url_distances_count)
 
     logger.info('sort url_distances...')
     url_distances.sort(key=lambda item: item['distance'])
@@ -98,20 +99,27 @@ def main():
     logger.info('got url_distances, len=%d', url_distances_count)
 
     test_distances = []
-    test_distance_threshold = 5
+    test_distance_threshold = 1
     for i in range(url_distances_count):
         url_distance = url_distances[i]
-        if url_distance['distance'] < test_distance_threshold:
+        if url_distance['distance'] <= test_distance_threshold:
             test_distance = {}
             test_distance['distance'] = url_distance['distance']
-            test_distance['url1'] = bookmarks[url_distance['url1_id']]
-            test_distance['url2'] = bookmarks[url_distance['url2_id']]
+            test_distance['url1_id'] = url_distance['url1_id']
+            test_distance['url1_title'] = bookmarks[url_distance['url1_id']]['title']
+            test_distance['url1_url'] = bookmarks[url_distance['url1_id']]['url']
+            test_distance['url2_id'] = url_distance['url2_id']
+            test_distance['url2_title'] = bookmarks[url_distance['url2_id']]['title']
+            test_distance['url2_url'] = bookmarks[url_distance['url2_id']]['url']
             test_distances.append(test_distance)
         else:
             break
 
     test_distance_count = len(test_distances)
     logger.info('test_distance_threshold=%d, test_distance_count=%d', test_distance_threshold, test_distance_count)
+
+    csv_file_name = 'distance-%d.csv' % (test_distance_threshold)
+    csv_util.write_dict_to_csv(test_distances, csv_file_name)
 
 
 if __name__ == '__main__':
