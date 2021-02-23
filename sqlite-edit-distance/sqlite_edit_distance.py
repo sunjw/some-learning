@@ -47,11 +47,11 @@ def convert_bookmarks_to_urls(bookmarks):
 
 
 def calculate_urls_distance(urls):
-    logger.info('calculate_urls_distance...')
-
     url_distances = []
     url_count = len(urls)
     logger.info('url_count=%d', url_count)
+
+    logger.info('calculate_urls_distance...')
     comb_count = 0
     for i in range(url_count):
         for j in range(i + 1, url_count):
@@ -66,7 +66,7 @@ def calculate_urls_distance(urls):
             comb_count = comb_count + 1
 
     url_distances_count = len(url_distances)
-    logger.info('url_distances_count=%d', url_distances_count)
+    #logger.debug('url_distances_count=%d', url_distances_count)
 
     logger.info('sort url_distances...')
     url_distances.sort(key=lambda item: item['distance'])
@@ -94,7 +94,15 @@ def main():
 
     urls = convert_bookmarks_to_urls(bookmarks)
     url_distances = calculate_urls_distance(urls)
-    logger.info('got url_distances.')
+    url_distances_count = len(url_distances)
+    logger.info('got url_distances, len=%d', url_distances_count)
+
+    test_distance = 5
+    test_distance_count = 0
+    for i in range(url_distances_count):
+        if url_distances[i]['distance'] < test_distance:
+            test_distance_count = test_distance_count + 1
+    logger.info('test_distance=%d, test_distance_count=%d', test_distance, test_distance_count)
 
 
 if __name__ == '__main__':
