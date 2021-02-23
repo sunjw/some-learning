@@ -97,14 +97,21 @@ def main():
     url_distances_count = len(url_distances)
     logger.info('got url_distances, len=%d', url_distances_count)
 
-    test_distance = 5
-    test_distance_count = 0
+    test_distances = []
+    test_distance_threshold = 5
     for i in range(url_distances_count):
-        if url_distances[i]['distance'] < test_distance:
-            test_distance_count = test_distance_count + 1
-    logger.info('test_distance=%d, test_distance_count=%d', test_distance, test_distance_count)
+        url_distance = url_distances[i]
+        if url_distance['distance'] < test_distance_threshold:
+            test_distance = {}
+            test_distance['distance'] = url_distance['distance']
+            test_distance['url1'] = bookmarks[url_distance['url1_id']]
+            test_distance['url2'] = bookmarks[url_distance['url2_id']]
+            test_distances.append(test_distance)
+        else:
+            break
 
-
+    test_distance_count = len(test_distances)
+    logger.info('test_distance_threshold=%d, test_distance_count=%d', test_distance_threshold, test_distance_count)
 
 
 if __name__ == '__main__':
