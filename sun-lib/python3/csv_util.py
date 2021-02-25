@@ -70,7 +70,11 @@ def write_dict_to_csv(dict_data, file_path):
             file_content = file_content + '\n'
 
         for itr_header in itr_dict:
-            file_content = file_content + str(itr_dict[itr_header]) + ','
+            itr_str = str(itr_dict[itr_header])
+            if itr_str.find(',') != -1:
+                itr_str = itr_str.replace('"', '""')
+                itr_str = '"' + itr_str + '"'
+            file_content = file_content + itr_str + ','
         file_content = file_content + '\n'
 
     comm_util.write_file_text(file_path, file_content)

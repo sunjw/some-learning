@@ -33,6 +33,12 @@ def main():
     test_data['value'] = 781942.54485
     test_datas.append(test_data)
 
+    test_data = {}
+    test_data['id'] = 5
+    test_data['title'] = 'ui  w"yr,ie"w sad\'fs\'afq"yr'
+    test_data['value'] = 17654.321
+    test_datas.append(test_data)
+
     csv_file_name = 'test.csv'
     csv_util.write_dict_to_csv(test_datas, csv_file_name)
 
