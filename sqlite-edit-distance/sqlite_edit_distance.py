@@ -124,11 +124,6 @@ def main():
             if not test_distance['url2_title']:
                 continue
 
-            if test_distance['url1_title']:
-                test_distance['url1_title'] = test_distance['url1_title'].replace(',', ' ')
-            if test_distance['url2_title']:
-                test_distance['url2_title'] = test_distance['url2_title'].replace(',', ' ')
-
             if find_url_pair_in_test_distances(test_distances,
                                                test_distance['url1_url'],
                                                test_distance['url2_url']):
