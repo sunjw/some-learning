@@ -1,3 +1,5 @@
+import csv
+
 import comm_util
 import log_util
 
@@ -19,7 +21,10 @@ def read_csv_internal(file_path, key_col):
     i = 0
     for csv_line in csv_content.splitlines():
         i = i + 1
-        csv_line_array = csv_line.split(',')
+        # csv_line_array = csv_line.split(',')
+        csv_line_array = csv.reader([csv_line])
+        csv_line_array = list(csv_line_array)[0]
+
         if i == 1:
             # first line
             csv_headers.extend(csv_line_array)
