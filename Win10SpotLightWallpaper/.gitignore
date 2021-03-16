@@ -1,2 +1,8 @@
 .DS_Store
-spotlight_wallpapers/*
+__pycache__/
+build/
+dist/**
+!dist/Win10SpotLightWallpaper.zip
+spotlight_wallpapers/
+
+Win10SpotLightWallpaper.spec
