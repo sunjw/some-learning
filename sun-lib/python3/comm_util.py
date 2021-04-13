@@ -1,5 +1,6 @@
 import datetime
 import io
+import json
 import math
 import os
 import time
@@ -32,3 +33,7 @@ def write_file_binary(file_path, file_content):
     file_obj = open(file_path, 'wb')
     file_obj.write(file_content)
     file_obj.close()
+
+
+def pprint_dict_to_string(a_dict):
+    return json.dumps(a_dict, indent=2, ensure_ascii=False)
