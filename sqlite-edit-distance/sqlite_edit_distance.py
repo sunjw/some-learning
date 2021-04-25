@@ -132,6 +132,10 @@ def do_distance_by_url(bookmarks):
     do_distance_by(bookmarks, 'url')
 
 
+def do_distance_by_title(bookmarks):
+    do_distance_by(bookmarks, 'title')
+
+
 def main():
     logger.info('SQLiteEditDistance go!')
 
@@ -150,7 +154,8 @@ def main():
     #                  bookmark['url'])
     #     row_count = row_count + 1
 
-    do_distance_by_url(bookmarks)
+    # do_distance_by_url(bookmarks)
+    do_distance_by_title(bookmarks)
 
 
 if __name__ == '__main__':
