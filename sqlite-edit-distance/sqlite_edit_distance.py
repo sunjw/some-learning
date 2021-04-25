@@ -50,7 +50,7 @@ def extract_bookmarks(bookmarks):
 def calculate_distance_by(data_items, by_col):
     data_distances = []
     data_count = len(data_items)
-    logger.info('data_count=%d, by_col=[]', data_count, by_col)
+    logger.info('data_count=%d, by_col=[%s]', data_count, by_col)
 
     logger.info('calculate_distance_by...')
     data1_id = '%s1_id' % (by_col)
