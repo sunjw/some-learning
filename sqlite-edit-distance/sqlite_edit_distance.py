@@ -82,26 +82,8 @@ def find_url_pair_in_test_distances(test_distances, url1, url2):
     return False
 
 
-def main():
-    logger.info('SQLiteEditDistance go!')
-
-    if len(sys.argv) != 2:
-        logger.error('Usage: python3 sqlite_edit_distance.py [input.sqlite]')
-        return
-
-    sqlite_db_path = os.path.realpath(sys.argv[1])
-    logger.info('sqlite_db_path=[%s]', sqlite_db_path)
-
-    bookmarks = read_bookmarks_from_sqlite(sqlite_db_path)
-    # row_count = 0
-    # for bookmark_id in bookmarks:
-    #     bookmark = bookmarks[bookmark_id]
-    #     logger.debug('%d: {id: %d, title: "%s", url: "%s"}', row_count, bookmark['id'], bookmark['title'],
-    #                  bookmark['url'])
-    #     row_count = row_count + 1
-
+def do_urls_distance(bookmarks):
     simple_bookmarks = extract_bookmarks(bookmarks)
-
     url_distances = calculate_urls_distance(simple_bookmarks)
     url_distances_count = len(url_distances)
     logger.info('got url_distances, len=%d', url_distances_count)
@@ -137,8 +119,29 @@ def main():
     test_distance_count = len(test_distances)
     logger.info('test_distance_threshold=%d, test_distance_count=%d', test_distance_threshold, test_distance_count)
 
-    csv_file_name = 'distance-%d.csv' % (test_distance_threshold)
+    csv_file_name = 'distance-url-%d.csv' % (test_distance_threshold)
     csv_util.write_dict_to_csv(test_distances, csv_file_name)
+
+
+def main():
+    logger.info('SQLiteEditDistance go!')
+
+    if len(sys.argv) != 2:
+        logger.error('Usage: python3 sqlite_edit_distance.py [input.sqlite]')
+        return
+
+    sqlite_db_path = os.path.realpath(sys.argv[1])
+    logger.info('sqlite_db_path=[%s]', sqlite_db_path)
+
+    bookmarks = read_bookmarks_from_sqlite(sqlite_db_path)
+    # row_count = 0
+    # for bookmark_id in bookmarks:
+    #     bookmark = bookmarks[bookmark_id]
+    #     logger.debug('%d: {id: %d, title: "%s", url: "%s"}', row_count, bookmark['id'], bookmark['title'],
+    #                  bookmark['url'])
+    #     row_count = row_count + 1
+
+    do_urls_distance(bookmarks)
 
 
 if __name__ == '__main__':
