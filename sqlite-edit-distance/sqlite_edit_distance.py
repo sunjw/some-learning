@@ -163,7 +163,7 @@ def main():
     #                  bookmark['url'])
     #     row_count = row_count + 1
 
-    do_distance_by_url(bookmarks)
+    # do_distance_by_url(bookmarks)
     do_distance_by_title(bookmarks)
 
 
