@@ -47,32 +47,32 @@ def extract_bookmarks(bookmarks):
     return simple_bookmarks
 
 
-def calculate_distance_by(urls):
-    url_distances = []
-    url_count = len(urls)
-    logger.info('url_count=%d', url_count)
+def calculate_distance_by(data_items):
+    data_distances = []
+    data_count = len(data_items)
+    logger.info('data_count=%d', data_count)
 
-    logger.info('calculate_urls_distance...')
+    logger.info('calculate_distance_by...')
     comb_count = 0
-    for i in range(url_count):
-        for j in range(i + 1, url_count):
-            url_distance_obj = {}
-            url1 = urls[i]
-            url2 = urls[j]
-            url_distance = distance(url1['url'], url2['url'])
-            url_distance_obj['url1_id'] = url1['id']
-            url_distance_obj['url2_id'] = url2['id']
-            url_distance_obj['distance'] = url_distance
-            url_distances.append(url_distance_obj)
+    for i in range(data_count):
+        for j in range(i + 1, data_count):
+            data_distance_obj = {}
+            data1 = data_items[i]
+            data2 = data_items[j]
+            url_distance = distance(data1['url'], data2['url'])
+            data_distance_obj['url1_id'] = data1['id']
+            data_distance_obj['url2_id'] = data2['id']
+            data_distance_obj['distance'] = url_distance
+            data_distances.append(data_distance_obj)
             comb_count = comb_count + 1
 
-    url_distances_count = len(url_distances)
-    # logger.debug('url_distances_count=%d', url_distances_count)
+    # data_distances_count = len(data_distances)
+    # logger.debug('data_distances_count=%d', data_distances_count)
 
-    logger.info('sort url_distances...')
-    url_distances.sort(key=lambda item: item['distance'])
+    logger.info('sort data_distances...')
+    data_distances.sort(key=lambda item: item['distance'])
 
-    return url_distances
+    return data_distances
 
 
 def find_data_pair_in_test_distances(test_distances, url1, url2):
