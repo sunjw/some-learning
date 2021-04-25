@@ -109,10 +109,12 @@ def do_distance_by(bookmarks, by_col):
             if not test_distance['data2_title']:
                 continue
 
+            data1_by = 'data1_%s' % (by_col)
+            data2_by = 'data2_%s' % (by_col)
             if find_data_pair_in_test_distances(test_distances,
-                                                test_distance['data1_url'],
-                                                test_distance['data2_url'],
-                                                'url'):
+                                                test_distance[data1_by],
+                                                test_distance[data2_by],
+                                                by_col):
                 continue
 
             test_distances.append(test_distance)
@@ -122,7 +124,7 @@ def do_distance_by(bookmarks, by_col):
     test_distance_count = len(test_distances)
     logger.info('test_distance_threshold=%d, test_distance_count=%d', test_distance_threshold, test_distance_count)
 
-    csv_file_name = 'distance-url-%d.csv' % (test_distance_threshold)
+    csv_file_name = 'distance-%s-%d.csv' % (by_col, test_distance_threshold)
     csv_util.write_dict_to_csv(test_distances, csv_file_name)
 
 
