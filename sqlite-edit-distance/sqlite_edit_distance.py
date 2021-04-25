@@ -59,7 +59,16 @@ def calculate_distance_by(data_items, by_col):
             data_distance_obj = {}
             data1 = data_items[i]
             data2 = data_items[j]
-            data_distance = distance(data1[by_col], data2[by_col])
+            data1_by_col = data1[by_col]
+            data2_by_col = data2[by_col]
+            if not data1_by_col and not data2_by_col:
+                data_distance = 0
+            elif not data1_by_col:
+                data_distance = len(data2_by_col)
+            elif not data2_by_col:
+                data_distance = len(data1_by_col)
+            else:
+                data_distance = distance(data1_by_col, data2_by_col)
             data_distance_obj['data1_id'] = data1['id']
             data_distance_obj['data2_id'] = data2['id']
             data_distance_obj['distance'] = data_distance
