@@ -31,7 +31,7 @@ def read_bookmarks_from_sqlite(sqlite_db_path):
     return bookmarks
 
 
-def convert_bookmarks_to_urls(bookmarks):
+def extract_bookmarks(bookmarks):
     urls = []
     for bookmark_id in bookmarks:
         bookmark = bookmarks[bookmark_id]
@@ -100,8 +100,9 @@ def main():
     #                  bookmark['url'])
     #     row_count = row_count + 1
 
-    urls = convert_bookmarks_to_urls(bookmarks)
-    url_distances = calculate_urls_distance(urls)
+    simple_bookmarks = extract_bookmarks(bookmarks)
+
+    url_distances = calculate_urls_distance(simple_bookmarks)
     url_distances_count = len(url_distances)
     logger.info('got url_distances, len=%d', url_distances_count)
 
