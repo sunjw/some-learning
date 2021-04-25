@@ -1,7 +1,9 @@
 import datetime
 import io
+import json
 import math
 import os
+import re
 import time
 
 
@@ -32,3 +34,16 @@ def write_file_binary(file_path, file_content):
     file_obj = open(file_path, 'wb')
     file_obj.write(file_content)
     file_obj.close()
+
+
+def pprint_dict_to_string(a_dict):
+    return json.dumps(a_dict, indent=2, ensure_ascii=False)
+
+
+def is_ipv4(input_str):
+    compile_ip = re.compile(
+        '^(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|[1-9])\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)$')
+    if compile_ip.match(input_str):
+        return True
+    else:
+        return False
