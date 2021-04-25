@@ -32,22 +32,22 @@ def read_bookmarks_from_sqlite(sqlite_db_path):
 
 
 def extract_bookmarks(bookmarks):
-    urls = []
+    simple_bookmarks = []
     for bookmark_id in bookmarks:
         bookmark = bookmarks[bookmark_id]
         if not bookmark['url']:
             continue
-        url = {}
-        url['id'] = bookmark['id']
-        url['title'] = bookmark['title']
-        url['url'] = bookmark['url']
-        urls.append(url)
+        simple_bookmark = {}
+        simple_bookmark['id'] = bookmark['id']
+        simple_bookmark['title'] = bookmark['title']
+        simple_bookmark['url'] = bookmark['url']
+        simple_bookmarks.append(simple_bookmark)
         # logger.debug('%d: {id: %d, title: "%s", url: "%s"}', row_count, bookmark['id'], bookmark['title'], bookmark['url'])
 
-    return urls
+    return simple_bookmarks
 
 
-def calculate_urls_distance(urls):
+def calculate_distance_by(urls):
     url_distances = []
     url_count = len(urls)
     logger.info('url_count=%d', url_count)
@@ -75,41 +75,41 @@ def calculate_urls_distance(urls):
     return url_distances
 
 
-def find_url_pair_in_test_distances(test_distances, url1, url2):
+def find_data_pair_in_test_distances(test_distances, url1, url2):
     for test_distance in test_distances:
         if test_distance['url1_url'] == url1 and test_distance['url2_url'] == url2:
             return True
     return False
 
 
-def do_urls_distance(bookmarks):
+def do_distance_by(bookmarks, by_col):
     simple_bookmarks = extract_bookmarks(bookmarks)
-    url_distances = calculate_urls_distance(simple_bookmarks)
-    url_distances_count = len(url_distances)
-    logger.info('got url_distances, len=%d', url_distances_count)
+    bookmark_distances = calculate_distance_by(simple_bookmarks)
+    bookmark_distances_count = len(bookmark_distances)
+    logger.info('got bookmark_distances, len=%d', bookmark_distances_count)
 
     test_distances = []
     test_distance_threshold = 1
-    for i in range(url_distances_count):
-        url_distance = url_distances[i]
-        if url_distance['distance'] <= test_distance_threshold:
+    for i in range(bookmark_distances_count):
+        bookmark_distance = bookmark_distances[i]
+        if bookmark_distance['distance'] <= test_distance_threshold:
             test_distance = {}
-            test_distance['distance'] = url_distance['distance']
-            test_distance['url1_id'] = url_distance['url1_id']
-            test_distance['url1_title'] = bookmarks[url_distance['url1_id']]['title']
-            test_distance['url1_url'] = bookmarks[url_distance['url1_id']]['url']
-            test_distance['url2_id'] = url_distance['url2_id']
-            test_distance['url2_title'] = bookmarks[url_distance['url2_id']]['title']
-            test_distance['url2_url'] = bookmarks[url_distance['url2_id']]['url']
+            test_distance['distance'] = bookmark_distance['distance']
+            test_distance['url1_id'] = bookmark_distance['url1_id']
+            test_distance['url1_title'] = bookmarks[bookmark_distance['url1_id']]['title']
+            test_distance['url1_url'] = bookmarks[bookmark_distance['url1_id']]['url']
+            test_distance['url2_id'] = bookmark_distance['url2_id']
+            test_distance['url2_title'] = bookmarks[bookmark_distance['url2_id']]['title']
+            test_distance['url2_url'] = bookmarks[bookmark_distance['url2_id']]['url']
 
             if not test_distance['url1_title']:
                 continue
             if not test_distance['url2_title']:
                 continue
 
-            if find_url_pair_in_test_distances(test_distances,
-                                               test_distance['url1_url'],
-                                               test_distance['url2_url']):
+            if find_data_pair_in_test_distances(test_distances,
+                                                test_distance['url1_url'],
+                                                test_distance['url2_url']):
                 continue
 
             test_distances.append(test_distance)
@@ -121,6 +121,10 @@ def do_urls_distance(bookmarks):
 
     csv_file_name = 'distance-url-%d.csv' % (test_distance_threshold)
     csv_util.write_dict_to_csv(test_distances, csv_file_name)
+
+
+def do_distance_by_url(bookmarks):
+    do_distance_by(bookmarks, 'url')
 
 
 def main():
@@ -141,7 +145,7 @@ def main():
     #                  bookmark['url'])
     #     row_count = row_count + 1
 
-    do_urls_distance(bookmarks)
+    do_distance_by_url(bookmarks)
 
 
 if __name__ == '__main__':
