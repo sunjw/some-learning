@@ -47,22 +47,24 @@ def extract_bookmarks(bookmarks):
     return simple_bookmarks
 
 
-def calculate_distance_by(data_items):
+def calculate_distance_by(data_items, by_col):
     data_distances = []
     data_count = len(data_items)
-    logger.info('data_count=%d', data_count)
+    logger.info('data_count=%d, by_col=[]', data_count, by_col)
 
     logger.info('calculate_distance_by...')
+    data1_id = '%s1_id' % (by_col)
+    data2_id = '%s2_id' % (by_col)
     comb_count = 0
     for i in range(data_count):
         for j in range(i + 1, data_count):
             data_distance_obj = {}
             data1 = data_items[i]
             data2 = data_items[j]
-            url_distance = distance(data1['url'], data2['url'])
-            data_distance_obj['url1_id'] = data1['id']
-            data_distance_obj['url2_id'] = data2['id']
-            data_distance_obj['distance'] = url_distance
+            data_distance = distance(data1[by_col], data2[by_col])
+            data_distance_obj[data1_id] = data1['id']
+            data_distance_obj[data2_id] = data2['id']
+            data_distance_obj['distance'] = data_distance
             data_distances.append(data_distance_obj)
             comb_count = comb_count + 1
 
@@ -84,7 +86,7 @@ def find_data_pair_in_test_distances(test_distances, url1, url2):
 
 def do_distance_by(bookmarks, by_col):
     simple_bookmarks = extract_bookmarks(bookmarks)
-    bookmark_distances = calculate_distance_by(simple_bookmarks)
+    bookmark_distances = calculate_distance_by(simple_bookmarks, by_col)
     bookmark_distances_count = len(bookmark_distances)
     logger.info('got bookmark_distances, len=%d', bookmark_distances_count)
 
