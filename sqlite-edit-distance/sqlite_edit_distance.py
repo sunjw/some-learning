@@ -53,8 +53,6 @@ def calculate_distance_by(data_items, by_col):
     logger.info('data_count=%d, by_col=[%s]', data_count, by_col)
 
     logger.info('calculate_distance_by...')
-    data1_id = '%s1_id' % (by_col)
-    data2_id = '%s2_id' % (by_col)
     comb_count = 0
     for i in range(data_count):
         for j in range(i + 1, data_count):
@@ -62,8 +60,8 @@ def calculate_distance_by(data_items, by_col):
             data1 = data_items[i]
             data2 = data_items[j]
             data_distance = distance(data1[by_col], data2[by_col])
-            data_distance_obj[data1_id] = data1['id']
-            data_distance_obj[data2_id] = data2['id']
+            data_distance_obj['data1_id'] = data1['id']
+            data_distance_obj['data2_id'] = data2['id']
             data_distance_obj['distance'] = data_distance
             data_distances.append(data_distance_obj)
             comb_count = comb_count + 1
@@ -77,9 +75,11 @@ def calculate_distance_by(data_items, by_col):
     return data_distances
 
 
-def find_data_pair_in_test_distances(test_distances, url1, url2):
+def find_data_pair_in_test_distances(test_distances, test_data1, test_data2, by_col):
+    data1_by = 'data1_%s' % (by_col)
+    data2_by = 'data2_%s' % (by_col)
     for test_distance in test_distances:
-        if test_distance['url1_url'] == url1 and test_distance['url2_url'] == url2:
+        if test_distance[data1_by] == test_data1 and test_distance[data2_by] == test_data2:
             return True
     return False
 
@@ -97,21 +97,22 @@ def do_distance_by(bookmarks, by_col):
         if bookmark_distance['distance'] <= test_distance_threshold:
             test_distance = {}
             test_distance['distance'] = bookmark_distance['distance']
-            test_distance['url1_id'] = bookmark_distance['url1_id']
-            test_distance['url1_title'] = bookmarks[bookmark_distance['url1_id']]['title']
-            test_distance['url1_url'] = bookmarks[bookmark_distance['url1_id']]['url']
-            test_distance['url2_id'] = bookmark_distance['url2_id']
-            test_distance['url2_title'] = bookmarks[bookmark_distance['url2_id']]['title']
-            test_distance['url2_url'] = bookmarks[bookmark_distance['url2_id']]['url']
+            test_distance['data1_id'] = bookmark_distance['data1_id']
+            test_distance['data1_title'] = bookmarks[bookmark_distance['data1_id']]['title']
+            test_distance['data1_url'] = bookmarks[bookmark_distance['data1_id']]['url']
+            test_distance['data2_id'] = bookmark_distance['data2_id']
+            test_distance['data2_title'] = bookmarks[bookmark_distance['data2_id']]['title']
+            test_distance['data2_url'] = bookmarks[bookmark_distance['data2_id']]['url']
 
-            if not test_distance['url1_title']:
+            if not test_distance['data1_title']:
                 continue
-            if not test_distance['url2_title']:
+            if not test_distance['data2_title']:
                 continue
 
             if find_data_pair_in_test_distances(test_distances,
-                                                test_distance['url1_url'],
-                                                test_distance['url2_url']):
+                                                test_distance['data1_url'],
+                                                test_distance['data2_url'],
+                                                'url'):
                 continue
 
             test_distances.append(test_distance)
