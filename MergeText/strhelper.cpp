@@ -8,7 +8,9 @@
  * Provides replacing function to string and wstring.
  * Provides newline fixing to string.
  */
+#if (defined(WIN32) || defined(_WIN32))
 #include "stdafx.h"
+#endif
 
 #include <math.h>
 #include <string>
