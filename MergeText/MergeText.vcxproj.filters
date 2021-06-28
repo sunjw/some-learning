@@ -18,24 +18,24 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="MergeText\stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="MergeText\targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="strhelper.h">
+    <ClInclude Include="MergeText\strhelper.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="MergeText\stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MergeText.cpp">
+    <ClCompile Include="MergeText\MergeText.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="strhelper.cpp">
+    <ClCompile Include="MergeText\strhelper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

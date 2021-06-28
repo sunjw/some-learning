@@ -145,19 +145,19 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="strhelper.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="MergeText\stdafx.h" />
+    <ClInclude Include="MergeText\strhelper.h" />
+    <ClInclude Include="MergeText\targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MergeText.cpp" />
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="MergeText\MergeText.cpp" />
+    <ClCompile Include="MergeText\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="strhelper.cpp" />
+    <ClCompile Include="MergeText\strhelper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
