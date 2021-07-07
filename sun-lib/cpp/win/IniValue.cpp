@@ -1,7 +1,7 @@
 /*
  * IniValue class implementation file
  * Author: Sun Junwen
- * Version: 1.1
+ * Version: 1.1.1
  */
 #include <cstdlib>
 #include <string>
@@ -42,7 +42,7 @@ string IniValue::ToString() const
 {
 	string ret("");
 
-	if(bStr)
+	if (bStr)
 	{
 		ret.append(PreMultiLine(strValue));
 		ret.append("\n");
@@ -50,7 +50,7 @@ string IniValue::ToString() const
 	else
 	{
 		IniValue::StrMap::const_iterator itr = mapValue.begin();
-		for(; itr != mapValue.end(); ++itr)
+		for (; itr != mapValue.end(); ++itr)
 		{
 			string line("");
 			line.append((*itr).first);

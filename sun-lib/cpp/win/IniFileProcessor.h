@@ -1,7 +1,7 @@
 /*
  * IniFileProcessor class header file
  * Author: Sun Junwen
- * Version: 1.0.1
+ * Version: 1.0.2
  */
 #ifndef _INI_FILE_PROCESSOR_H_
 #define _INI_FILE_PROCESSOR_H_
@@ -18,7 +18,7 @@ public:
 	 */
 	explicit IniFileProcessor(const sunjwbase::tstring& fileName)
 	{
-		m_strFileName = sunjwbase::tstrtostr(fileName);
+		m_tstrFileName = fileName;
 	}
 
 	virtual void Save();
@@ -29,7 +29,7 @@ public:
 	IniProcessor::IniMap GetInfo(bool bProcSection, bool bRefresh);
 
 private:
-	std::string m_strFileName;
+	sunjwbase::tstring m_tstrFileName;
 };
 
 #endif

@@ -1,21 +1,28 @@
 /*
  * IniFileProcessor class implementation file
  * Author: Sun Junwen
- * Version: 1.0.1
+ * Version: 1.0.2
  */
+#include "IniFileProcessor.h"
+
 #include <cstdlib>
 #include <string>
 #include <fstream>
-
-#include "IniFileProcessor.h"
+#include "strhelper.h"
 
 using namespace std;
+using namespace sunjwbase;
 
 void IniFileProcessor::Save()
 {
-	ofstream out(m_strFileName.c_str());
+#if defined (WIN32)
+	ofstream out(m_tstrFileName.c_str());
+#else
+	string strFileName = tstrtostr(m_tstrFileName);
+	ofstream out(strFileName.c_str());
+#endif
 
-	if(out)
+	if (out)
 	{
 		out << ToString();
 	}
@@ -25,6 +32,11 @@ void IniFileProcessor::Save()
 	
 IniProcessor::IniMap IniFileProcessor::GetInfo(bool bProcSection, bool bRefresh)
 {
-	ifstream m_in(m_strFileName.c_str());
+#if defined (WIN32)
+	ifstream m_in(m_tstrFileName.c_str());
+#else
+	string strFileName = tstrtostr(m_tstrFileName);
+	ifstream m_in(strFileName.c_str());
+#endif
 	return IniProcessor::GetInfo(m_in, bProcSection, bRefresh);
 }
