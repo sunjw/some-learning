@@ -1,11 +1,11 @@
 /* unsortedmap.h
    2013-5-26
-   Version: 0.1
+   Version: 0.2
 
 Copyright (c) 2012- SUN Junwen
 
 对 std::list<std::pair<_Key, _Tp> > 的封装
-努力实现 std::map 的特性，并提供 FIFO 迭代器
+努力实现 std::map 的特性, 并提供 FIFO 迭代器
 对于元素的搜索 插入 删除 操作都是 O(n) 的
 时间复杂度
 性能基本是一个 std::list 
@@ -59,8 +59,10 @@ public:
 	iterator erase(const key_type& key)
 	{
 		typename unsorted_map::iterator itr = find(key);
-		if(itr != end())
+		if (itr != end())
+		{
 			itr = erase(itr);
+		}
 
 		return itr;
 	}
@@ -82,21 +84,37 @@ public:
 
 	iterator find(const key_type& key)
 	{
-        typename unsorted_map::iterator itr = m_list.begin();
-        for(; itr != m_list.end(); ++itr)
-        {
-            if(key == itr->first)
-                return itr;
-        }
-        
-        return m_list.end();
+		typename unsorted_map::iterator itr = m_list.begin();
+		for (; itr != m_list.end(); ++itr)
+		{
+			if (key == itr->first)
+			{
+				return itr;
+			}
+		}
+
+		return m_list.end();
+	}
+
+	const_iterator find(const key_type& key) const
+	{
+		typename unsorted_map::const_iterator itr = m_list.begin();
+		for (; itr != m_list.end(); ++itr)
+		{
+			if (key == itr->first)
+			{
+				return itr;
+			}
+		}
+
+		return m_list.end();
 	}
 
 	// 只能提供 O(n) 的性能
 	mapped_type& operator[](const key_type& key)
 	{
 		typename unsorted_map::iterator itr = find(key);
-		if(itr == m_list.end())
+		if (itr == m_list.end())
 		{
 			// 没有, 插入一个
 			m_list.push_back(pair_type(key, mapped_type()));
