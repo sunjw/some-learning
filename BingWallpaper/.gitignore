@@ -77,5 +77,6 @@ fabric.properties
 __pycache__/
 build/
 dist/**
+wallpaper/
 
 *.spec

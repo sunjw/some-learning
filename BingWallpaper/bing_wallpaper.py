@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 from urllib.request import urlopen
 
@@ -58,6 +59,21 @@ def get_bing_wallpaper(download_count):
     return wallpaper_list
 
 
+def download_wallpaper_list(wallpaper_list):
+    wallpaper_dir = 'wallpaper'
+
+    wallpaper_list_len = len(wallpaper_list)
+    logger.info('wallpaper_list_len=%d', wallpaper_list_len)
+
+    if not os.path.isdir(wallpaper_dir):
+        logger.info('make dir [%s]', wallpaper_dir)
+        os.mkdir(wallpaper_dir)
+    else:
+        logger.info('[%s] exists', wallpaper_dir)
+
+
+
+
 def main():
     logger.info('BingWallpaper go!')
 
@@ -68,6 +84,7 @@ def main():
     download_count = int(sys.argv[1])
     logger.info('download_count=%d', download_count)
     wallpaper_list = get_bing_wallpaper(download_count)
+    download_wallpaper_list(wallpaper_list)
 
 
 if __name__ == '__main__':
