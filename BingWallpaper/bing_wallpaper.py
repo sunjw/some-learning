@@ -1,14 +1,61 @@
 import json
-import os
 import sys
+from urllib.request import urlopen
 
+import comm_util
 import log_util
 
 logger = log_util.logger
 
 
-def get_bing_wallpaper(count):
-    bing_wallpaper_meta_url = 'https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=10&nc=1612409408851&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160';
+def get_bing_wallpaper(download_count):
+    bing_base_url = 'https://www.bing.com'
+    bing_wallpaper_meta_path = '/HPImageArchive.aspx?format=js&idx=0&n=10&nc=1612409408851&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160';
+
+    wallpaper_list = []
+
+    bing_wallpaper_meta_json_path = bing_base_url + bing_wallpaper_meta_path
+    logger.info('bing_wallpaper_meta_json_path=[%s]', bing_wallpaper_meta_json_path)
+    resp = urlopen(bing_wallpaper_meta_json_path)
+    str_body = resp.read().decode('utf-8')
+    json_body = json.loads(str_body)
+    # logger.debug('json_body\n%s', comm_util.pprint_dict_to_string(json_body))
+
+    images_list = json_body['images']
+    images_list_len = len(images_list)
+    if images_list_len < download_count:
+        logger.error('No enough images, images_list_len=%d, download_count=%d', images_list_len, download_count)
+        return wallpaper_list
+    else:
+        logger.info('images_list_len=%d', images_list_len)
+
+    i = 0
+    while i < download_count:
+        image_data = {}
+        image_url = images_list[i]['url']
+        idx = image_url.find('&')
+        if idx > -1:
+            image_url = image_url[:idx]
+
+        name_key = 'id='
+        image_name = image_url
+        idx = image_name.find(name_key)
+        if idx == -1:
+            logger.error('No name found, image_url=[%s]', image_url)
+            return wallpaper_list
+        image_name = image_name[idx + len(name_key):]
+
+        image_url = bing_base_url + image_url
+        image_data['url'] = image_url
+        image_data['name'] = image_name
+        # logger.info('image_data\n%s', comm_util.pprint_dict_to_string(image_data))
+
+        wallpaper_list.append(image_data)
+
+        i = i + 1
+
+    logger.info('wallpaper_list\n%s', comm_util.pprint_dict_to_string(wallpaper_list))
+    return wallpaper_list
 
 
 def main():
@@ -20,6 +67,7 @@ def main():
 
     download_count = int(sys.argv[1])
     logger.info('download_count=%d', download_count)
+    wallpaper_list = get_bing_wallpaper(download_count)
 
 
 if __name__ == '__main__':
