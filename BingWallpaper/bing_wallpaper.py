@@ -97,7 +97,7 @@ def download_wallpaper_list(wallpaper_list):
             logger.info('Download finished.')
 
         image_file_size = os.path.getsize(image_path)
-        logger.info('image_path=[%s], image_file_size=%d', image_path, image_file_size)
+        logger.info('[%s], image_file_size=%d', image_name, image_file_size)
 
 
 def main():
