@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 import requests
@@ -60,6 +61,30 @@ def get_bing_wallpaper(download_count):
     return wallpaper_list
 
 
+def clean_the_same_wallpaper(wallpaper_dir):
+    files_in_wallpaper_md5 = {}
+    files_in_wallpaper_dir = comm_util.list_file(wallpaper_dir)
+    for file_name in files_in_wallpaper_dir:
+        file_path = os.path.join(wallpaper_dir, file_name)
+        file_md5 = hashlib.md5(open(file_path, 'rb').read()).hexdigest()
+        files_in_wallpaper_md5[file_name] = file_md5
+    logger.info('files_in_wallpaper_md5\n%s', comm_util.pprint_dict_to_string(files_in_wallpaper_md5))
+
+    files_in_wallpaper_dir_count = len(files_in_wallpaper_dir)
+    for i in range(files_in_wallpaper_dir_count):
+        file_name_1 = files_in_wallpaper_dir[i]
+        file_md5_1 = files_in_wallpaper_md5[file_name_1]
+        for j in range(i + 1, files_in_wallpaper_dir_count):
+            file_name_2 = files_in_wallpaper_dir[j]
+            file_md5_2 = files_in_wallpaper_md5[file_name_2]
+            if file_md5_1 == file_md5_2 and file_name_1 != file_name_2:
+                file_path_2 = os.path.join(wallpaper_dir, file_name_2)
+                if os.path.exists(file_path_2):
+                    logger.info('found the same wallpapers [%s, %s]', file_name_1, file_name_2)
+                    logger.info('delete [%s]', file_name_2)
+                    os.remove(os.path.join(file_path_2))
+
+
 def download_wallpaper_list(wallpaper_list):
     wallpaper_dir = 'wallpaper'
 
@@ -98,6 +123,8 @@ def download_wallpaper_list(wallpaper_list):
 
         image_file_size = os.path.getsize(image_path)
         logger.info('[%s], image_file_size=%d', image_name, image_file_size)
+
+    clean_the_same_wallpaper(wallpaper_dir)
 
 
 def main():

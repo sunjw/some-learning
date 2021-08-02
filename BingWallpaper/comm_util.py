@@ -47,3 +47,8 @@ def is_ipv4(input_str):
         return True
     else:
         return False
+
+
+def list_file(dir_path):
+    files = [f for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f))]
+    return files
