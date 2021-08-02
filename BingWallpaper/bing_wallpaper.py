@@ -64,6 +64,7 @@ def get_bing_wallpaper(download_count):
 def clean_the_same_wallpaper(wallpaper_dir):
     files_in_wallpaper_md5 = {}
     files_in_wallpaper_dir = comm_util.list_file(wallpaper_dir)
+    files_in_wallpaper_dir.sort()
     for file_name in files_in_wallpaper_dir:
         file_path = os.path.join(wallpaper_dir, file_name)
         file_md5 = hashlib.md5(open(file_path, 'rb').read()).hexdigest()
