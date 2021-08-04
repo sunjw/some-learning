@@ -3,7 +3,9 @@ import io
 import json
 import math
 import os
+import platform
 import re
+import subprocess
 import time
 
 
@@ -52,3 +54,19 @@ def is_ipv4(input_str):
 def list_file(dir_path):
     files = [f for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f))]
     return files
+
+
+def is_windows():
+    return (platform.system() == 'Windows')
+
+
+def is_macos():
+    return (platform.system() == 'Darwin')
+
+
+def is_linux():
+    return (platform.system() == 'Linux')
+
+
+def call_command(args_list, is_shell=False):
+    subprocess.call(args_list, shell=is_shell)
