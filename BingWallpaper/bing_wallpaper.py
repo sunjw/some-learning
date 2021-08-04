@@ -10,8 +10,8 @@ import log_util
 
 logger = log_util.logger
 
-
 WALLPAPER_DIR = 'wallpaper'
+OPEN_WALLPAPER_DIR = True
 
 
 def get_bing_wallpaper(download_count):
@@ -65,6 +65,7 @@ def get_bing_wallpaper(download_count):
 
 
 def open_wallpaper_dir(wallpaper_dir):
+    logger.info('Open [%s]', wallpaper_dir)
     if comm_util.is_windows():
         comm_util.call_command(['explorer', wallpaper_dir], True)
     if comm_util.is_macos():
@@ -108,7 +109,8 @@ def download_wallpaper_list(wallpaper_list):
     else:
         logger.info('[%s] exists.', wallpaper_dir)
 
-    open_wallpaper_dir(wallpaper_dir)
+    if OPEN_WALLPAPER_DIR:
+        open_wallpaper_dir(wallpaper_dir)
 
     for wallpaper_data in wallpaper_list:
         # logger.debug('wallpaper_data\n%s', comm_util.pprint_dict_to_string(wallpaper_data))
