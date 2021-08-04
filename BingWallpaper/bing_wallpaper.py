@@ -69,7 +69,7 @@ def open_wallpaper_dir(wallpaper_dir):
     if comm_util.is_windows():
         comm_util.call_command(['explorer', wallpaper_dir], True)
     if comm_util.is_macos():
-        comm_util.call_command(['open', wallpaper_dir], True)
+        comm_util.call_command(['open', wallpaper_dir])
 
 
 def clean_the_same_wallpaper(wallpaper_dir):
