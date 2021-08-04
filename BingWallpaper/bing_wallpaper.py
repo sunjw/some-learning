@@ -11,6 +11,9 @@ import log_util
 logger = log_util.logger
 
 
+WALLPAPER_DIR = 'wallpaper'
+
+
 def get_bing_wallpaper(download_count):
     bing_base_url = 'https://www.bing.com'
     bing_wallpaper_meta_path = '/HPImageArchive.aspx?format=js&idx=0&n=10&nc=1612409408851&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160';
@@ -61,6 +64,13 @@ def get_bing_wallpaper(download_count):
     return wallpaper_list
 
 
+def open_wallpaper_dir(wallpaper_dir):
+    if comm_util.is_windows():
+        comm_util.call_command(['explorer', wallpaper_dir], True)
+    if comm_util.is_macos():
+        comm_util.call_command(['open', wallpaper_dir], True)
+
+
 def clean_the_same_wallpaper(wallpaper_dir):
     files_in_wallpaper_md5 = {}
     files_in_wallpaper_dir = comm_util.list_file(wallpaper_dir)
@@ -87,23 +97,23 @@ def clean_the_same_wallpaper(wallpaper_dir):
 
 
 def download_wallpaper_list(wallpaper_list):
-    wallpaper_dir = 'wallpaper'
-
     wallpaper_list_len = len(wallpaper_list)
     logger.info('wallpaper_list_len=%d', wallpaper_list_len)
 
-    if not os.path.isdir(wallpaper_dir):
-        logger.info('Make directory [%s]', wallpaper_dir)
-        os.mkdir(wallpaper_dir)
+    if not os.path.isdir(WALLPAPER_DIR):
+        logger.info('Make directory [%s]', WALLPAPER_DIR)
+        os.mkdir(WALLPAPER_DIR)
     else:
-        logger.info('[%s] exists.', wallpaper_dir)
+        logger.info('[%s] exists.', WALLPAPER_DIR)
+
+    open_wallpaper_dir(WALLPAPER_DIR)
 
     for wallpaper_data in wallpaper_list:
         # logger.debug('wallpaper_data\n%s', comm_util.pprint_dict_to_string(wallpaper_data))
         image_url = wallpaper_data['url']
         image_name = wallpaper_data['name']
 
-        image_path = os.path.join(wallpaper_dir, image_name)
+        image_path = os.path.join(WALLPAPER_DIR, image_name)
         if os.path.exists(image_path):
             logger.info('[%s] exists, ignore.', image_name)
             continue
@@ -125,7 +135,7 @@ def download_wallpaper_list(wallpaper_list):
         image_file_size = os.path.getsize(image_path)
         logger.info('[%s], image_file_size=%d', image_name, image_file_size)
 
-    clean_the_same_wallpaper(wallpaper_dir)
+    clean_the_same_wallpaper(WALLPAPER_DIR)
 
 
 def main():
@@ -137,6 +147,7 @@ def main():
 
     download_count = int(sys.argv[1])
     logger.info('download_count=%d', download_count)
+
     wallpaper_list = get_bing_wallpaper(download_count)
     download_wallpaper_list(wallpaper_list)
 
