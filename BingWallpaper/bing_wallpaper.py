@@ -97,23 +97,25 @@ def clean_the_same_wallpaper(wallpaper_dir):
 
 
 def download_wallpaper_list(wallpaper_list):
+    wallpaper_dir = WALLPAPER_DIR
+
     wallpaper_list_len = len(wallpaper_list)
     logger.info('wallpaper_list_len=%d', wallpaper_list_len)
 
-    if not os.path.isdir(WALLPAPER_DIR):
-        logger.info('Make directory [%s]', WALLPAPER_DIR)
-        os.mkdir(WALLPAPER_DIR)
+    if not os.path.isdir(wallpaper_dir):
+        logger.info('Make directory [%s]', wallpaper_dir)
+        os.mkdir(wallpaper_dir)
     else:
-        logger.info('[%s] exists.', WALLPAPER_DIR)
+        logger.info('[%s] exists.', wallpaper_dir)
 
-    open_wallpaper_dir(WALLPAPER_DIR)
+    open_wallpaper_dir(wallpaper_dir)
 
     for wallpaper_data in wallpaper_list:
         # logger.debug('wallpaper_data\n%s', comm_util.pprint_dict_to_string(wallpaper_data))
         image_url = wallpaper_data['url']
         image_name = wallpaper_data['name']
 
-        image_path = os.path.join(WALLPAPER_DIR, image_name)
+        image_path = os.path.join(wallpaper_dir, image_name)
         if os.path.exists(image_path):
             logger.info('[%s] exists, ignore.', image_name)
             continue
@@ -135,7 +137,7 @@ def download_wallpaper_list(wallpaper_list):
         image_file_size = os.path.getsize(image_path)
         logger.info('[%s], image_file_size=%d', image_name, image_file_size)
 
-    clean_the_same_wallpaper(WALLPAPER_DIR)
+    clean_the_same_wallpaper(wallpaper_dir)
 
 
 def main():
