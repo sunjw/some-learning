@@ -1,4 +1,5 @@
 import datetime
+import hashlib
 import io
 import json
 import math
@@ -70,3 +71,9 @@ def is_linux():
 
 def call_command(args_list, is_shell=False):
     subprocess.call(args_list, shell=is_shell)
+
+
+def md5_str(input_str, encode='utf-8'):
+    md5hash = hashlib.md5()
+    md5hash.update(input_str.encode(encode))
+    return md5hash.hexdigest()
