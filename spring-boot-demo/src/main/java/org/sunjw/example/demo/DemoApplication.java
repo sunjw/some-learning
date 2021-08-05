@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.sunjw.example.demo.consumingrest.Quote;
 import org.sunjw.example.demo.relationaldataaccess.Customer;
+import org.sunjw.example.demo.uploadingfiles.StorageProperties;
+import org.sunjw.example.demo.uploadingfiles.StorageService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 
 @SpringBootApplication
 @EnableScheduling
+@EnableConfigurationProperties(StorageProperties.class)
 @RestController
 public class DemoApplication implements CommandLineRunner {
 
@@ -79,5 +83,14 @@ public class DemoApplication implements CommandLineRunner {
                 (rs, rowNum) -> new Customer(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name")),
                 "Josh"
         ).forEach(customer -> log.info(customer.toString()));
+    }
+
+    @Bean
+    CommandLineRunner init(StorageService storageService) {
+        return (args) -> {
+            //storageService.deleteAll();
+            storageService.init();
+            log.info("StorageService init");
+        };
     }
 }
