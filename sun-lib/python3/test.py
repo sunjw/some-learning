@@ -1,4 +1,5 @@
 import log_util
+import comm_util
 import csv_util
 
 logger = log_util.logger
@@ -6,6 +7,9 @@ logger = log_util.logger
 
 def main():
     logger.info('Test go!')
+
+    comm_util.log_print('get_cur_timestamp: %d' % comm_util.get_cur_timestamp())
+    comm_util.log_print('get_cur_timestamp_millis: %d' % comm_util.get_cur_timestamp_millis())
 
     test_datas = []
     
