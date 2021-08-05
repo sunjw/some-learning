@@ -1,4 +1,5 @@
 import datetime
+import hashlib
 import io
 import json
 import math
@@ -47,3 +48,9 @@ def is_ipv4(input_str):
         return True
     else:
         return False
+
+
+def md5_str(input_str, encode='utf-8'):
+    md5hash = hashlib.md5()
+    md5hash.update(input_str.encode(encode))
+    return md5hash.hexdigest()
