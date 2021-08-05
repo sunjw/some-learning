@@ -10,8 +10,16 @@ import subprocess
 import time
 
 
+def log_print(message):
+    print(message)
+
+
 def get_cur_timestamp():
     return math.floor(time.mktime(datetime.datetime.today().timetuple()))
+
+
+def get_cur_timestamp_millis():
+    return int(round(time.time() * 1000))
 
 
 def read_file_text(file_path):
