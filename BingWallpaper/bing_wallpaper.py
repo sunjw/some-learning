@@ -184,7 +184,7 @@ def main():
                         help='get bing wallpaper json over ssh')
 
     args = vars(parser.parse_args())
-    logger.debug('args\n%s', comm_util.pprint_dict_to_string(args))
+    # logger.debug('args\n%s', comm_util.pprint_dict_to_string(args))
 
     logger.info('BingWallpaper go!')
 
