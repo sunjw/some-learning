@@ -81,6 +81,16 @@ def call_command(args_list, is_shell=False):
     subprocess.call(args_list, shell=is_shell)
 
 
+def call_command_with_output(args_list, is_shell=False):
+    process = subprocess.Popen(args_list, shell=is_shell,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+    # wait for the process to terminate
+    stdout, stderr = process.communicate()
+    returncode = process.returncode
+    return (returncode, stdout.decode('utf-8'), stderr.decode('utf-8'))
+
+
 def md5_str(input_str, encode='utf-8'):
     md5hash = hashlib.md5()
     md5hash.update(input_str.encode(encode))
