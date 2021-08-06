@@ -11,14 +11,14 @@ import log_util
 logger = log_util.logger
 
 BING_BASE_URL = 'https://www.bing.com'
+BING_WALLPAPER_META_PATH = '/HPImageArchive.aspx?format=js&idx=0&n=10&nc=1612409408851&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160'
+
 WALLPAPER_DIR = 'wallpaper'
 OPEN_WALLPAPER_DIR = True
 
 
 def get_bing_wallpaper_json():
-    bing_wallpaper_meta_path = '/HPImageArchive.aspx?format=js&idx=0&n=10&nc=1612409408851&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160'
-
-    bing_wallpaper_meta_json_path = BING_BASE_URL + bing_wallpaper_meta_path
+    bing_wallpaper_meta_json_path = BING_BASE_URL + BING_WALLPAPER_META_PATH
     logger.info('bing_wallpaper_meta_json_path=[%s]', bing_wallpaper_meta_json_path)
     resp = urlopen(bing_wallpaper_meta_json_path)
     str_body = resp.read().decode('utf-8')
