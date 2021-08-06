@@ -1,7 +1,9 @@
+import argparse
 import hashlib
 import json
 import os
 import requests
+import shlex
 import sys
 from urllib.request import urlopen
 
@@ -17,9 +19,32 @@ WALLPAPER_DIR = 'wallpaper'
 OPEN_WALLPAPER_DIR = True
 
 
-def get_bing_wallpaper_json():
+def gen_bing_wallpaper_json_url():
     bing_wallpaper_meta_json_path = BING_BASE_URL + BING_WALLPAPER_META_PATH
     logger.info('bing_wallpaper_meta_json_path=[%s]', bing_wallpaper_meta_json_path)
+    return bing_wallpaper_meta_json_path
+
+
+def get_bing_wallpaper_json_over_ssh(ssh_cmd):
+    logger.info('Get Bing wallpaper json over ssh, ssh_cmd=[%s]', ssh_cmd)
+    bing_wallpaper_meta_json_path = gen_bing_wallpaper_json_url()
+
+    remote_curl_cmd = 'curl -s "%s"' % (bing_wallpaper_meta_json_path)
+    remote_cmd_list = shlex.split(ssh_cmd)
+    remote_cmd_list.append(remote_curl_cmd)
+    # logger.debug('remote_cmd_list\n%s', comm_util.pprint_dict_to_string(remote_cmd_list))
+
+    returncode, stdout, stderr = comm_util.call_command_with_output(remote_cmd_list)
+    logger.debug('stdout\n%s', stdout)
+    wallpaper_json_body = json.loads(stdout)
+    # logger.debug('wallpaper_json_body\n%s', comm_util.pprint_dict_to_string(wallpaper_json_body))
+
+    return wallpaper_json_body
+
+
+def get_bing_wallpaper_json():
+    logger.info('Get Bing wallpaper json')
+    bing_wallpaper_meta_json_path = gen_bing_wallpaper_json_url()
     resp = urlopen(bing_wallpaper_meta_json_path)
     str_body = resp.read().decode('utf-8')
     wallpaper_json_body = json.loads(str_body)
@@ -28,9 +53,13 @@ def get_bing_wallpaper_json():
     return wallpaper_json_body
 
 
-def get_bing_wallpaper(download_count):
+def get_bing_wallpaper(download_count, over_ssh=False, ssh_cmd=None):
     wallpaper_list = []
-    wallpaper_json_body = get_bing_wallpaper_json()
+    wallpaper_json_body = {}
+    if not over_ssh:
+        wallpaper_json_body = get_bing_wallpaper_json()
+    else:
+        wallpaper_json_body = get_bing_wallpaper_json_over_ssh(ssh_cmd)
 
     images_list = wallpaper_json_body['images']
     images_list_len = len(images_list)
@@ -72,7 +101,7 @@ def get_bing_wallpaper(download_count):
 def open_wallpaper_dir(wallpaper_dir):
     logger.info('Open [%s]', wallpaper_dir)
     if comm_util.is_windows():
-        comm_util.call_command(['explorer', wallpaper_dir], True)
+        comm_util.call_command(['explorer', wallpaper_dir])
     if comm_util.is_macos():
         comm_util.call_command(['open', wallpaper_dir])
 
@@ -148,16 +177,27 @@ def download_wallpaper_list(wallpaper_list):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('download_count', metavar='N', type=int,
+                        help='download count')
+    parser.add_argument('--ssh', dest='ssh_cmd', required=False,
+                        help='get bing wallpaper json over ssh')
+
+    args = vars(parser.parse_args())
+    logger.debug('args\n%s', comm_util.pprint_dict_to_string(args))
+
     logger.info('BingWallpaper go!')
 
-    if len(sys.argv) != 2:
-        logger.error('Usage: python3 bing_wallpaper.py [download count]')
-        return
-
-    download_count = int(sys.argv[1])
+    download_count = args['download_count']
     logger.info('download_count=%d', download_count)
 
-    wallpaper_list = get_bing_wallpaper(download_count)
+    wallpaper_list = []
+    ssh_cmd = args['ssh_cmd']
+    if ssh_cmd == None:
+        wallpaper_list = get_bing_wallpaper(download_count)
+    else:
+        wallpaper_list = get_bing_wallpaper(download_count, True, ssh_cmd)
+
     download_wallpaper_list(wallpaper_list)
 
 
