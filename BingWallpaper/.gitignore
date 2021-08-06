@@ -80,3 +80,5 @@ dist/**
 wallpaper/
 
 *.spec
+
+run_*.sh
