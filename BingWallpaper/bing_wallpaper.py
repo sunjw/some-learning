@@ -35,7 +35,7 @@ def get_bing_wallpaper_json_over_ssh(ssh_cmd):
     # logger.debug('remote_cmd_list\n%s', comm_util.pprint_dict_to_string(remote_cmd_list))
 
     returncode, stdout, stderr = comm_util.call_command_with_output(remote_cmd_list)
-    logger.debug('stdout\n%s', stdout)
+    # logger.debug('stdout\n%s', stdout)
     wallpaper_json_body = json.loads(stdout)
     # logger.debug('wallpaper_json_body\n%s', comm_util.pprint_dict_to_string(wallpaper_json_body))
 
