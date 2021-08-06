@@ -10,24 +10,29 @@ import log_util
 
 logger = log_util.logger
 
+BING_BASE_URL = 'https://www.bing.com'
 WALLPAPER_DIR = 'wallpaper'
 OPEN_WALLPAPER_DIR = True
 
 
-def get_bing_wallpaper(download_count):
-    bing_base_url = 'https://www.bing.com'
+def get_bing_wallpaper_json():
     bing_wallpaper_meta_path = '/HPImageArchive.aspx?format=js&idx=0&n=10&nc=1612409408851&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160'
 
-    wallpaper_list = []
-
-    bing_wallpaper_meta_json_path = bing_base_url + bing_wallpaper_meta_path
+    bing_wallpaper_meta_json_path = BING_BASE_URL + bing_wallpaper_meta_path
     logger.info('bing_wallpaper_meta_json_path=[%s]', bing_wallpaper_meta_json_path)
     resp = urlopen(bing_wallpaper_meta_json_path)
     str_body = resp.read().decode('utf-8')
-    json_body = json.loads(str_body)
-    # logger.debug('json_body\n%s', comm_util.pprint_dict_to_string(json_body))
+    wallpaper_json_body = json.loads(str_body)
+    # logger.debug('wallpaper_json_body\n%s', comm_util.pprint_dict_to_string(wallpaper_json_body))
 
-    images_list = json_body['images']
+    return wallpaper_json_body
+
+
+def get_bing_wallpaper(download_count):
+    wallpaper_list = []
+    wallpaper_json_body = get_bing_wallpaper_json()
+
+    images_list = wallpaper_json_body['images']
     images_list_len = len(images_list)
     if images_list_len < download_count:
         logger.error('No enough images, images_list_len=%d, download_count=%d', images_list_len, download_count)
@@ -51,7 +56,7 @@ def get_bing_wallpaper(download_count):
             return wallpaper_list
         image_name = image_name[idx + len(name_key):]
 
-        image_url = bing_base_url + image_url
+        image_url = BING_BASE_URL + image_url
         image_data['url'] = image_url
         image_data['name'] = image_name
         # logger.info('image_data\n%s', comm_util.pprint_dict_to_string(image_data))
