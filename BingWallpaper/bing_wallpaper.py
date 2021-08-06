@@ -16,7 +16,7 @@ OPEN_WALLPAPER_DIR = True
 
 def get_bing_wallpaper(download_count):
     bing_base_url = 'https://www.bing.com'
-    bing_wallpaper_meta_path = '/HPImageArchive.aspx?format=js&idx=0&n=10&nc=1612409408851&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160';
+    bing_wallpaper_meta_path = '/HPImageArchive.aspx?format=js&idx=0&n=10&nc=1612409408851&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160'
 
     wallpaper_list = []
 
