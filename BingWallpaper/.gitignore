@@ -82,3 +82,4 @@ wallpaper/
 *.spec
 
 run_*.sh
+run_*.ps1
