@@ -2,6 +2,12 @@ package org.sunjw.example.demo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.sunjw.example.demo.consumingrest.Quote;
+import org.sunjw.example.demo.messagingrabbitmq.RabbitReceiver;
 import org.sunjw.example.demo.messagingredis.Receiver;
 import org.sunjw.example.demo.relationaldataaccess.Customer;
 import org.sunjw.example.demo.uploadingfiles.StorageProperties;
@@ -38,6 +45,9 @@ import java.util.stream.Collectors;
 public class DemoApplication implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DemoApplication.class);
+
+    public static final String topicExchangeName = "spring-boot-exchange";
+    public static final String queueName = "spring-boot";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -138,5 +148,35 @@ public class DemoApplication implements CommandLineRunner {
     @Bean
     StringRedisTemplate template(RedisConnectionFactory connectionFactory) {
         return new StringRedisTemplate(connectionFactory);
+    }
+
+    @Bean
+    Queue queue() {
+        return new Queue(queueName, false);
+    }
+
+    @Bean
+    TopicExchange exchange() {
+        return new TopicExchange(topicExchangeName);
+    }
+
+    @Bean
+    Binding binding(Queue queue, TopicExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with("foo.bar.#");
+    }
+
+    @Bean
+    SimpleMessageListenerContainer rabbitContainer(ConnectionFactory connectionFactory,
+                                                   org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter rabbitListenerAdapter) {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.setQueueNames(queueName);
+        container.setMessageListener(rabbitListenerAdapter);
+        return container;
+    }
+
+    @Bean
+    org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter rabbitListenerAdapter(RabbitReceiver rabbitReceiver) {
+        return new org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter(rabbitReceiver, "receiveMessage");
     }
 }
