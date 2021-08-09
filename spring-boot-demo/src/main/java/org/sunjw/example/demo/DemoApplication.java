@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.sunjw.example.demo.accessingdataneo4j.Person;
+import org.sunjw.example.demo.accessingdataneo4j.PersonRepository;
 import org.sunjw.example.demo.consumingrest.Quote;
 import org.sunjw.example.demo.messagingrabbitmq.RabbitReceiver;
 import org.sunjw.example.demo.messagingredis.Receiver;
@@ -178,5 +180,47 @@ public class DemoApplication implements CommandLineRunner {
     @Bean
     org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter rabbitListenerAdapter(RabbitReceiver rabbitReceiver) {
         return new org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter(rabbitReceiver, "receiveMessage");
+    }
+
+    @Bean
+    CommandLineRunner neo4jDemo(PersonRepository personRepository) {
+        return args -> {
+
+            personRepository.deleteAll();
+
+            Person greg = new Person("Greg");
+            Person roy = new Person("Roy");
+            Person craig = new Person("Craig");
+
+            List<Person> team = Arrays.asList(greg, roy, craig);
+
+            log.info("Before linking up with Neo4j...");
+
+            team.stream().forEach(person -> log.info("\t" + person.toString()));
+
+            personRepository.save(greg);
+            personRepository.save(roy);
+            personRepository.save(craig);
+
+            greg = personRepository.findByName(greg.getName());
+            greg.worksWith(roy);
+            greg.worksWith(craig);
+            personRepository.save(greg);
+
+            roy = personRepository.findByName(roy.getName());
+            roy.worksWith(craig);
+            // We already know that roy works with greg
+            personRepository.save(roy);
+
+            // We already know craig works with roy and greg
+
+            log.info("Lookup each person by name...");
+            team.stream().forEach(person -> log.info(
+                    "\t" + personRepository.findByName(person.getName()).toString()));
+
+            List<Person> teammates = personRepository.findByTeammatesName(greg.getName());
+            log.info("The following have Greg as a teammate...");
+            teammates.stream().forEach(person -> log.info("\t" + person.getName()));
+        };
     }
 }

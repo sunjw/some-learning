@@ -3,3 +3,9 @@ rabbitmq:
   ports:
     - "5672:5672"
     - "15672:15672"
+
+neo4j:
+  image: neo4j:community
+  ports:
+    - "7474:7474"
+    - "7687:7687"
