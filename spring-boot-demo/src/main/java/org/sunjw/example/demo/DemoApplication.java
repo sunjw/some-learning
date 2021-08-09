@@ -8,7 +8,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.sunjw.example.demo.consumingrest.Quote;
+import org.sunjw.example.demo.messagingredis.Receiver;
 import org.sunjw.example.demo.relationaldataaccess.Customer;
 import org.sunjw.example.demo.uploadingfiles.StorageProperties;
 import org.sunjw.example.demo.uploadingfiles.StorageService;
@@ -34,6 +41,9 @@ public class DemoApplication implements CommandLineRunner {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private ApplicationContext context;
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
@@ -83,6 +93,16 @@ public class DemoApplication implements CommandLineRunner {
                 (rs, rowNum) -> new Customer(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name")),
                 "Josh"
         ).forEach(customer -> log.info(customer.toString()));
+
+        StringRedisTemplate template = context.getBean(StringRedisTemplate.class);
+        Receiver receiver = context.getBean(Receiver.class);
+
+        while (receiver.getCount() == 0) {
+
+            log.info("Sending message...");
+            template.convertAndSend("chat", "Hello from Redis!");
+            Thread.sleep(500L);
+        }
     }
 
     @Bean
@@ -92,5 +112,31 @@ public class DemoApplication implements CommandLineRunner {
             storageService.init();
             log.info("StorageService init");
         };
+    }
+
+    @Bean
+    RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
+                                            MessageListenerAdapter listenerAdapter) {
+
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(listenerAdapter, new PatternTopic("chat"));
+
+        return container;
+    }
+
+    @Bean
+    MessageListenerAdapter listenerAdapter(Receiver receiver) {
+        return new MessageListenerAdapter(receiver, "receiveMessage");
+    }
+
+    @Bean
+    Receiver receiver() {
+        return new Receiver();
+    }
+
+    @Bean
+    StringRedisTemplate template(RedisConnectionFactory connectionFactory) {
+        return new StringRedisTemplate(connectionFactory);
     }
 }
