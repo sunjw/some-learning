@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.sunjw.example.demo.accessingdatajpa.CustomerRepository;
+import org.sunjw.example.demo.accessingdatajpa.JpaCustomer;
 import org.sunjw.example.demo.accessingdataneo4j.Person;
 import org.sunjw.example.demo.accessingdataneo4j.PersonRepository;
 import org.sunjw.example.demo.consumingrest.Quote;
@@ -221,6 +223,44 @@ public class DemoApplication implements CommandLineRunner {
             List<Person> teammates = personRepository.findByTeammatesName(greg.getName());
             log.info("The following have Greg as a teammate...");
             teammates.stream().forEach(person -> log.info("\t" + person.getName()));
+        };
+    }
+
+    @Bean
+    public CommandLineRunner jpaDemo(CustomerRepository repository) {
+        return (args) -> {
+            // save a few customers
+            repository.save(new JpaCustomer("Jack", "Bauer"));
+            repository.save(new JpaCustomer("Chloe", "O'Brian"));
+            repository.save(new JpaCustomer("Kim", "Bauer"));
+            repository.save(new JpaCustomer("David", "Palmer"));
+            repository.save(new JpaCustomer("Michelle", "Dessler"));
+
+            // fetch all customers
+            log.info("Customers found with findAll():");
+            log.info("-------------------------------");
+            for (JpaCustomer jpaCustomer : repository.findAll()) {
+                log.info(jpaCustomer.toString());
+            }
+            log.info("");
+
+            // fetch an individual customer by ID
+            JpaCustomer jpaCustomer = repository.findById(1L);
+            log.info("Customer found with findById(1L):");
+            log.info("--------------------------------");
+            log.info(jpaCustomer.toString());
+            log.info("");
+
+            // fetch customers by last name
+            log.info("Customer found with findByLastName('Bauer'):");
+            log.info("--------------------------------------------");
+            repository.findByLastName("Bauer").forEach(bauer -> {
+                log.info(bauer.toString());
+            });
+            // for (Customer bauer : repository.findByLastName("Bauer")) {
+            //  log.info(bauer.toString());
+            // }
+            log.info("");
         };
     }
 }
