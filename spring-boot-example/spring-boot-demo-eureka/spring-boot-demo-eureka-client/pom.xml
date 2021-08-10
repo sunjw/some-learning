@@ -11,7 +11,7 @@
 	<groupId>org.sunjw.example</groupId>
 	<artifactId>service-registration-and-discovery-client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
+	<name>service-registration-and-discovery-client</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
