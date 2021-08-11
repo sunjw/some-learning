@@ -4,7 +4,6 @@ import json
 import os
 import requests
 import shlex
-import sys
 from urllib.request import urlopen
 
 import comm_util
