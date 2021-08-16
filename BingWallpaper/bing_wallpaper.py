@@ -130,7 +130,7 @@ def clean_the_same_wallpaper(wallpaper_dir):
                     os.remove(os.path.join(file_path_2))
 
 
-def download_wallpaper_list(wallpaper_list):
+def download_wallpaper_by_list(wallpaper_list):
     wallpaper_dir = WALLPAPER_DIR
 
     wallpaper_list_len = len(wallpaper_list)
@@ -197,7 +197,7 @@ def main():
     else:
         wallpaper_list = get_bing_wallpaper(download_count, True, ssh_cmd)
 
-    download_wallpaper_list(wallpaper_list)
+    download_wallpaper_by_list(wallpaper_list)
 
 
 if __name__ == '__main__':
