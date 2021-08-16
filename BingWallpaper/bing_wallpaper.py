@@ -142,6 +142,9 @@ def download_wallpaper_by_list(wallpaper_list):
     else:
         logger.info('[%s] exists.', wallpaper_dir)
 
+    if not comm_util.query_yes_no('Continue download wallpapers?'):
+        return
+
     if OPEN_WALLPAPER_DIR:
         open_wallpaper_dir(wallpaper_dir)
 
