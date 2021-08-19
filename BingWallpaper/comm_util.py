@@ -83,6 +83,7 @@ def call_command(args_list, is_shell=False):
 
 def call_command_with_output(args_list, is_shell=False):
     process = subprocess.Popen(args_list, shell=is_shell,
+                                stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
     # wait for the process to terminate
