@@ -98,6 +98,11 @@ def md5_str(input_str, encode='utf-8'):
     return md5hash.hexdigest()
 
 
+def md5_file(file_path):
+    filemd5 = hashlib.md5(open(file_path, 'rb').read()).hexdigest()
+    return filemd5
+
+
 def query_yes_no(question, default='yes'):
     # Ask a yes/no question via raw_input() and return their answer.
     # "question" is a string that is presented to the user.
