@@ -1,10 +1,13 @@
 ## Libraries for daily development.
 
 #### cpp
- * Including strhelper, IniProcessor, IniFileProcessor, IniStringProcessor, SimpleHttp and urlencode.
+ * Include strhelper, IniProcessor, IniFileProcessor, IniStringProcessor, SimpleHttp and urlencode.
+
+#### java
+ * Include CommUtil, FileUtil, HttpUtil, JsonUtil and UnicodeUtil.
 
 #### js
- * Including util.
+ * Include util.
 
 #### python 3
- * Including comm_util, csv_util and log_util.
+ * Include comm_util, csv_util and log_util.
