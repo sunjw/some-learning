@@ -93,14 +93,15 @@ def find_data_pair_in_test_distances(test_distances, test_data1, test_data2, by_
     return False
 
 
-def do_distance_by(bookmarks, by_col):
+def do_distance_by(bookmarks, by_col, distance_threshold):
     simple_bookmarks = extract_bookmarks(bookmarks)
     bookmark_distances = calculate_distance_by(simple_bookmarks, by_col)
     bookmark_distances_count = len(bookmark_distances)
     logger.info('got bookmark_distances, len=%d', bookmark_distances_count)
 
     test_distances = []
-    test_distance_threshold = 1
+    test_distance_threshold = distance_threshold
+    logger.info('find distance, test_distance_threshold=%d', test_distance_threshold)
     for i in range(bookmark_distances_count):
         bookmark_distance = bookmark_distances[i]
         if bookmark_distance['distance'] <= test_distance_threshold:
@@ -138,22 +139,25 @@ def do_distance_by(bookmarks, by_col):
 
 
 def do_distance_by_url(bookmarks):
-    do_distance_by(bookmarks, 'url')
+    do_distance_by(bookmarks, 'url', 1)
 
 
 def do_distance_by_title(bookmarks):
-    do_distance_by(bookmarks, 'title')
+    do_distance_by(bookmarks, 'title', 1)
 
 
 def main():
-    logger.info('SQLiteEditDistance go!')
-
-    if len(sys.argv) != 2:
-        logger.error('Usage: python3 sqlite_edit_distance.py [input.sqlite]')
+    if len(sys.argv) != 4:
+        logger.error('Usage: python3 sqlite_edit_distance.py [input.sqlite] [by_col] [distance]')
         return
 
+    logger.info('SQLiteEditDistance go!')
+
     sqlite_db_path = os.path.realpath(sys.argv[1])
-    logger.info('sqlite_db_path=[%s]', sqlite_db_path)
+    by_col = sys.argv[2]
+    distance_threshold = int(sys.argv[3])
+    logger.info('\nsqlite_db_path=[%s], by_col=[%s], distance_threshold=[%d]',
+                sqlite_db_path, by_col, distance_threshold)
 
     bookmarks = read_bookmarks_from_sqlite(sqlite_db_path)
     # row_count = 0
@@ -163,8 +167,9 @@ def main():
     #                  bookmark['url'])
     #     row_count = row_count + 1
 
-    do_distance_by_url(bookmarks)
+    # do_distance_by_url(bookmarks)
     # do_distance_by_title(bookmarks)
+    do_distance_by(bookmarks, by_col, distance_threshold)
 
 
 if __name__ == '__main__':
