@@ -5,4 +5,4 @@ dist/**
 !dist/WinSpotlightWallpaper.zip
 spotlight_wallpapers/
 
-Win10SpotLightWallpaper.spec
+*.spec
