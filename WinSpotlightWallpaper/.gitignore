@@ -2,7 +2,7 @@
 __pycache__/
 build/
 dist/**
-!dist/Win10SpotLightWallpaper.zip
+!dist/WinSpotlightWallpaper.zip
 spotlight_wallpapers/
 
 Win10SpotLightWallpaper.spec
