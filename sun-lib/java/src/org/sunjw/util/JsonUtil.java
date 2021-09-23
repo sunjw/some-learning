@@ -1,7 +1,8 @@
 package org.sunjw.util;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
+
+import java.util.List;
 
 public class JsonUtil {
 
@@ -38,5 +39,28 @@ public class JsonUtil {
             return defaultValue;
         }
         return jsonObject.get(memberName).getAsLong();
+    }
+
+    public static String toString(JsonObject jsonObject) {
+        Gson gson = new Gson();
+        return gson.toJson(jsonObject);
+    }
+
+    public static String toPrettyString(JsonObject jsonObject) {
+        Gson gsonPretty = new GsonBuilder().setPrettyPrinting().create();
+        return gsonPretty.toJson(jsonObject);
+    }
+
+    public static JsonElement parseJsonString(String jsonString) {
+        JsonParser jsonParser = new JsonParser();
+        return jsonParser.parse(jsonString);
+    }
+
+    public static JsonArray convertStringListToJsonArray(List<String> stringList) {
+        JsonArray jsonArray = new JsonArray();
+        for (String item : stringList) {
+            jsonArray.add(item);
+        }
+        return jsonArray;
     }
 }
