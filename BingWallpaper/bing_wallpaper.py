@@ -195,7 +195,7 @@ def main():
 
     wallpaper_list = []
     ssh_cmd = args['ssh_cmd']
-    if ssh_cmd == None:
+    if ssh_cmd is None:
         wallpaper_list = get_bing_wallpaper(download_count)
     else:
         wallpaper_list = get_bing_wallpaper(download_count, True, ssh_cmd)
