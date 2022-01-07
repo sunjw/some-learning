@@ -1,0 +1,32 @@
+{
+  "name": "wallpicker",
+  "version": "0.1.0",
+  "description": "A wallpaper picker",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/sunjw/some-learning",
+  "keywords": [
+    "Electron",
+    "wallpaper",
+    "image",
+    "utility"
+  ],
+  "author": "Sun Junwen",
+  "license": "GPL-2.0",
+  "devDependencies": {
+    "@electron/remote": "^1.2.1",
+    "electron": "^13.5.1",
+    "electron-rebuild": "^2.3.5",
+    "node-abi": "^2.30.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.1.0",
+    "bootstrap-icons": "^1.5.0",
+    "electron-localshortcut": "^3.2.1",
+    "electron-window-state": "^5.0.3",
+    "fix-path": "^3.0.0",
+    "jquery": "^3.5.0"
+  }
+}
