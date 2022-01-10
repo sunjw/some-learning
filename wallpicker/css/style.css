@@ -56,6 +56,15 @@ body {
     display: none;
     line-height: 60px;
 }
+#divToolbarWrapper #divPathContent {
+    line-height: 60px;
+}
+#divToolbarWrapper.dropInfo #divPathDropInfo {
+    display: block;
+}
+#divToolbarWrapper.dropInfo #divPathContent {
+    display: none;
+}
 /* Toolbar */
 
 /* Dialog */

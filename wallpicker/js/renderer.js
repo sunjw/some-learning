@@ -31,6 +31,7 @@ class WallpickerPage {
         this.divToolbarWrapper = null;
         this.divPathWrapper = null;
         this.divPathDropInfo = null;
+        this.divPathContent = null;
         this.divContentWrapper = null;
 
         this.initLayout();
@@ -49,10 +50,12 @@ class WallpickerPage {
 
     initLayout() {
         // init layout.
+
         // init toolbar.
         this.divToolbarWrapper = $('<div/>')
             .attr('id', 'divToolbarWrapper')
             .addClass('d-flex');
+
         // init path.
         this.divPathWrapper = $('<div/>')
             .attr('id', 'divPathWrapper')
@@ -60,7 +63,10 @@ class WallpickerPage {
         this.divPathDropInfo = $('<div/>')
             .attr('id', 'divPathDropInfo')
             .text('Drop folder to scan...');
+        this.divPathContent = $('<div/>').attr('id', 'divPathContent');
         this.divPathWrapper.append(this.divPathDropInfo);
+        this.divPathWrapper.append(this.divPathContent);
+
         this.divToolbarWrapper.append(this.divPathWrapper);
         this.body.append(this.divToolbarWrapper);
 
@@ -76,22 +82,22 @@ class WallpickerPage {
         bodyDom.ondragover = function (e) {
             e.stopPropagation();
             // utils.log('ondragover, body.ondragover');
-            that.divPathDropInfo.show();
+            that.divToolbarWrapper.addClass('dropInfo');
             return false;
         };
         bodyDom.ondragleave = function () {
             // utils.log('ondragleave, body.ondragleave');
-            that.divPathDropInfo.hide();
+            that.divToolbarWrapper.removeClass('dropInfo');
             return false;
         };
         bodyDom.ondragend = function () {
             // utils.log('ondragend, body.ondragend');
-            that.divPathDropInfo.hide();
+            that.divToolbarWrapper.removeClass('dropInfo');
             return false;
         };
         bodyDom.ondrop = function (e) {
             e.preventDefault();
-            that.divPathDropInfo.hide();
+            that.divToolbarWrapper.removeClass('dropInfo');
             that.onDropFiles(e.dataTransfer.files);
             return false;
         };
@@ -133,6 +139,9 @@ class WallpickerPage {
                 });
                 return;
             }
+
+            // a foler, go!
+            this.divPathContent.text(dropPath);
         });
     }
 }
