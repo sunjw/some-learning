@@ -4,6 +4,7 @@ const {
 } = require('electron');
 const remote = require('@electron/remote');
 
+const fs = require('fs');
 const path = require('path');
 
 window.$ = window.jQuery = require('jquery');
@@ -73,27 +74,24 @@ class WallpickerPage {
         let bodyDom = this.body.get(0);
         bodyDom.ondragover = function (e) {
             e.stopPropagation();
-            // utils.log('body.ondragover');
+            // utils.log('ondragover, body.ondragover');
             that.divPathDropInfo.show();
             return false;
         };
         bodyDom.ondragleave = function () {
-            utils.log('body.ondragleave');
+            // utils.log('ondragleave, body.ondragleave');
             that.divPathDropInfo.hide();
             return false;
         };
         bodyDom.ondragend = function () {
-            utils.log('body.ondragend');
+            // utils.log('ondragend, body.ondragend');
             that.divPathDropInfo.hide();
             return false;
         };
         bodyDom.ondrop = function (e) {
             e.preventDefault();
             that.divPathDropInfo.hide();
-            utils.log('body.ondrop, [%s]', e.dataTransfer.files[0].path);
-            // for (let f of e.dataTransfer.files) {
-            //     pushFile(f.path);
-            // }
+            that.onDropFiles(e.dataTransfer.files);
             return false;
         };
     }
@@ -104,6 +102,25 @@ class WallpickerPage {
         let divContentWrapperHeight = windowHeight - divContentWrapperTop - 3;
         this.divContentWrapper.css('height', divContentWrapperHeight + 'px');
     }
+
+    onDropFiles(dropFiles) {
+        if (dropFiles.length <= 0) {
+            alert('No folder dropped!');
+            return;
+        }
+        if (dropFiles.length > 1) {
+            alert('Drop only one folder!');
+            return;
+        }
+        let dropPath = dropFiles[0].path;
+        utils.log('onDropFiles, dropPath=[%s]', dropPath);
+        fs.stat(dropPath, (err, stats) => {
+            if (!stats.isDirectory()) {
+                alert('Drop only one folder!');
+                return;
+            }
+        });
+    }
 }
 
 let wallpickerPage = new WallpickerPage();
@@ -113,7 +130,7 @@ let wallpickerPage = new WallpickerPage();
 // });
 
 ipcRenderer.on('set-userData-path', (event, arg) => {
-    utils.log('set-userData-path=[' + arg + ']');
+    utils.log('set-userData-path, arg=[%s]', arg);
 
     // let's go.
     wallpickerPage.init({
