@@ -38,6 +38,7 @@ class WallpickerPage {
 
     onWindowResize() {
         // on window resize.
+        this.fitContentHeight();
     }
 
     initLayout() {
@@ -49,6 +50,13 @@ class WallpickerPage {
         this.divContentWrapper = $('<div/>').attr('id', 'divContentWrapper');
 
         this.body.append(this.divContentWrapper);
+    }
+
+    fitContentHeight() {
+        let windowHeight = $(window).height();
+        let divContentWrapperTop = this.divContentWrapper.offset().top;
+        let divContentWrapperHeight = windowHeight - divContentWrapperTop - 3;
+        this.divContentWrapper.css('height', divContentWrapperHeight + 'px');
     }
 }
 

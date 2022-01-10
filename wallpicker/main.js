@@ -15,8 +15,8 @@ const {app, BrowserWindow} = require('electron')
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
-let minWindowWidth = 1080
-let minWindowHeight = 760
+let minWindowWidth = 800
+let minWindowHeight = 600
 
 function createWindow () {
   // Load the previous state with fallback to defaults
