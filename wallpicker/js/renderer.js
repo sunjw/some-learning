@@ -27,6 +27,8 @@ class WallpickerPage {
 
         this.body = $('body');
         this.divToolbarWrapper = null;
+        this.divPathWrapper = null;
+        this.divPathDropInfo = null;
         this.divContentWrapper = null;
 
         this.initLayout();
@@ -45,32 +47,49 @@ class WallpickerPage {
 
     initLayout() {
         // init layout.
-        this.divToolbarWrapper = $('<div/>').attr('id', 'divToolbarWrapper');
-
+        // init toolbar.
+        this.divToolbarWrapper = $('<div/>')
+            .attr('id', 'divToolbarWrapper')
+            .addClass('d-flex');
+        // init path.
+        this.divPathWrapper = $('<div/>')
+            .attr('id', 'divPathWrapper')
+            .addClass('flex-grow-1');
+        this.divPathDropInfo = $('<div/>')
+            .attr('id', 'divPathDropInfo')
+            .text('Drop folder to scan...');
+        this.divPathWrapper.append(this.divPathDropInfo);
+        this.divToolbarWrapper.append(this.divPathWrapper);
         this.body.append(this.divToolbarWrapper);
 
+        // init content.
         this.divContentWrapper = $('<div/>').attr('id', 'divContentWrapper');
-
         this.body.append(this.divContentWrapper);
     }
 
     initHandler() {
+        let that = this;
+
         let bodyDom = this.body.get(0);
         bodyDom.ondragover = function (e) {
             e.stopPropagation();
-            utils.log('body.ondragover');
+            // utils.log('body.ondragover');
+            that.divPathDropInfo.show();
             return false;
         };
         bodyDom.ondragleave = function () {
             utils.log('body.ondragleave');
+            that.divPathDropInfo.hide();
             return false;
         };
         bodyDom.ondragend = function () {
             utils.log('body.ondragend');
+            that.divPathDropInfo.hide();
             return false;
         };
         bodyDom.ondrop = function (e) {
             e.preventDefault();
+            that.divPathDropInfo.hide();
             utils.log('body.ondrop, [%s]', e.dataTransfer.files[0].path);
             // for (let f of e.dataTransfer.files) {
             //     pushFile(f.path);
