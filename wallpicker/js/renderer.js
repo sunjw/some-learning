@@ -30,6 +30,8 @@ class WallpickerPage {
         this.divContentWrapper = null;
 
         this.initLayout();
+        this.initHandler();
+
         this.onWindowResize();
         $(window).on('resize', function () {
             that.onWindowResize();
@@ -50,6 +52,31 @@ class WallpickerPage {
         this.divContentWrapper = $('<div/>').attr('id', 'divContentWrapper');
 
         this.body.append(this.divContentWrapper);
+    }
+
+    initHandler() {
+        let bodyDom = this.body.get(0);
+        bodyDom.ondragover = function (e) {
+            e.stopPropagation();
+            utils.log('body.ondragover');
+            return false;
+        };
+        bodyDom.ondragleave = function () {
+            utils.log('body.ondragleave');
+            return false;
+        };
+        bodyDom.ondragend = function () {
+            utils.log('body.ondragend');
+            return false;
+        };
+        bodyDom.ondrop = function (e) {
+            e.preventDefault();
+            utils.log('body.ondrop, [%s]', e.dataTransfer.files[0].path);
+            // for (let f of e.dataTransfer.files) {
+            //     pushFile(f.path);
+            // }
+            return false;
+        };
     }
 
     fitContentHeight() {
