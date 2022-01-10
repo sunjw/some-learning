@@ -1,0 +1,122 @@
+/* Defines */
+:root {
+    --color-xxx: #006ee8;
+}
+/* Defines */
+
+/* Common */
+* {
+    padding: 0;
+    margin: 0;
+}
+body {
+    line-height: 1.4em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    cursor: default;
+}
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+a {
+    color: var(--color-android);
+    text-decoration: none;
+}
+a:hover {
+    color: var(--color-android-light);
+}
+a:active {
+    color: var(--color-android-dark);
+}
+
+img {
+    border: 0;
+}
+ul {
+    list-style-type: none;
+}
+/* Common */
+
+/* Wrapper */
+#bodyWrapper {
+    width: 100%;
+}
+/* Wrapper */
+
+/* Toolbar */
+
+/* Toolbar */
+
+/* Dialog */
+
+/* Dialog */
+
+/* File list */
+
+/* File list */
+
+/* Footer */
+/* Footer */
+
+/* Filter */
+.filterBox {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 275px;
+    height: 48px;
+    line-height: 48px;
+    background-color: white;
+    border-radius: 6px 0 0 0;
+    box-shadow: 0 0 30px rgba(0,0,0,0.6);
+    user-select: none;
+    overflow: hidden;
+    display: none;
+}
+.filterBox.filterShow {
+    display: block;
+}
+.filterBox input[type='text'] {
+    float: left;
+    width: 160px;
+    height: 20px;
+    margin: 14px 10px 0 16px;
+    border: 0;
+    border-bottom: 1px solid var(--color-light-gray);
+    border-radius: 0;
+    outline: none;
+    font-size: 16px;
+}
+.filterBox input[type='text']:focus {
+    border-color: var(--color-android);
+}
+.filterBox .filterButton {
+    display: block;
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin: 14px 10px 0 0;
+    cursor: pointer;
+}
+.filterBox .filterButton .materialIcons {
+    font-size: 20px;
+}
+.filterBox #filterBtnClose {
+    margin-left: 10px;
+    color: var(--color-gray);
+}
+.filterBox #filterBtnClose:hover {
+    color: var(--color-android-light);
+}
+.filterBox #filterBtnClose:active {
+    color: var(--color-android-dark);
+}
+/* Filter */
+
+/* Others */
+
+/* Others */
