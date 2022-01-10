@@ -67,7 +67,7 @@ function createWindow () {
 
   // Send Message
   mainWindow.webContents.on('did-finish-load', () => {
-    mainWindow.webContents.send('set-documents-path', app.getPath('documents'))
+    mainWindow.webContents.send('set-userData-path', app.getPath('userData'))
   })
 
   let accelerator = 'Ctrl+F'

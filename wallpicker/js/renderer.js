@@ -15,10 +15,6 @@ const {
     threadId
 } = require('worker_threads');
 
-// ipcRenderer.on('on-find', (e, args) => {
-//     dirListFilter.openFilterBox();
-// });
-
 class WallpickerPage {
 
     constructor() {
@@ -55,7 +51,22 @@ class WallpickerPage {
     }
 }
 
-$(function () {
-    let wallpickerPage = new WallpickerPage();
+let userDataPath = null;
+let wallpickerPage = new WallpickerPage();
+
+// ipcRenderer.on('on-find', (e, args) => {
+//     dirListFilter.openFilterBox();
+// });
+
+ipcRenderer.on('set-userData-path', (event, arg) => {
+    utils.log('set-userData-path=[' + arg + ']');
+    userDataPath = arg;
+
+    // let's go.
     wallpickerPage.init();
+});
+
+$(function () {
+    // wallpickerPage = new WallpickerPage();
+    // wallpickerPage.init();
 });
