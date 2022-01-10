@@ -11,9 +11,7 @@ const bootstrap = require('bootstrap');
 const fixPath = require('fix-path')();
 
 const utils = require('./utils');
-const {
-    threadId
-} = require('worker_threads');
+const eleUtils = require('./eleUtils');
 
 class WallpickerPage {
 
@@ -21,8 +19,11 @@ class WallpickerPage {
         // init consts.
     }
 
-    init() {
+    init(options) {
         let that = this;
+
+        this.options = options;
+        this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
 
         this.body = $('body');
         this.divToolbarWrapper = null;
@@ -51,7 +52,6 @@ class WallpickerPage {
     }
 }
 
-let userDataPath = null;
 let wallpickerPage = new WallpickerPage();
 
 // ipcRenderer.on('on-find', (e, args) => {
@@ -60,13 +60,13 @@ let wallpickerPage = new WallpickerPage();
 
 ipcRenderer.on('set-userData-path', (event, arg) => {
     utils.log('set-userData-path=[' + arg + ']');
-    userDataPath = arg;
 
     // let's go.
-    wallpickerPage.init();
+    wallpickerPage.init({
+        userDataPath: arg
+    });
 });
 
 $(function () {
-    // wallpickerPage = new WallpickerPage();
-    // wallpickerPage.init();
+    utils.log('finish loading.');
 });
