@@ -1,6 +1,6 @@
 /* Defines */
 :root {
-    --color-xxx: #006ee8;
+    --color-light-gray: #e0e0e0;
 }
 /* Defines */
 
@@ -41,23 +41,26 @@ ul {
 }
 /* Common */
 
-/* Wrapper */
+/* Body */
 #bodyWrapper {
     width: 100%;
 }
-/* Wrapper */
+/* Body */
 
 /* Toolbar */
-
+#divToolbarWrapper {
+    height: 60px;
+    border-bottom: 1px solid var(--color-light-gray);
+}
 /* Toolbar */
 
 /* Dialog */
 
 /* Dialog */
 
-/* File list */
+/* Image list */
 
-/* File list */
+/* Image list */
 
 /* Footer */
 /* Footer */
