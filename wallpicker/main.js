@@ -9,7 +9,7 @@ const windowStateKeeper = require('electron-window-state')
 const utils = require('./js/utils')
 
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, dialog, ipcMain} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -103,6 +103,16 @@ app.on('activate', function () {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow()
+})
+
+ipcMain.on('dialog', (event, arg) => {
+  dialog.showMessageBox(
+    mainWindow, {
+    type: arg.type,
+    buttons: ['OK'],
+    title: arg.title,
+    message: arg.message
+  })
 })
 
 // In this file you can include the rest of your app's specific main process

@@ -1,3 +1,7 @@
+const {
+    ipcRenderer
+} = require('electron');
+
 const fs = require('fs');
 const path = require('path');
 
@@ -27,4 +31,9 @@ class EleConfig {
     }
 }
 
+function sendToMain(message) {
+    ipcRenderer.send('dialog', message);
+}
+
 exports.EleConfig = EleConfig;
+exports.sendToMain = sendToMain;

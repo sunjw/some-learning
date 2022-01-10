@@ -1,6 +1,5 @@
 const {
-    ipcRenderer,
-    shell
+    ipcRenderer
 } = require('electron');
 const remote = require('@electron/remote');
 
@@ -22,6 +21,8 @@ class WallpickerPage {
 
     init(options) {
         let that = this;
+
+        this.title = 'Wallpicker';
 
         this.options = options;
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
@@ -104,19 +105,32 @@ class WallpickerPage {
     }
 
     onDropFiles(dropFiles) {
+        let that = this;
         if (dropFiles.length <= 0) {
-            alert('No folder dropped!');
+            eleUtils.sendToMain({
+                type: 'warning',
+                title: that.title,
+                message: 'No folder dropped!'
+            });
             return;
         }
         if (dropFiles.length > 1) {
-            alert('Drop only one folder!');
+            eleUtils.sendToMain({
+                type: 'warning',
+                title: that.title,
+                message: 'Drop only one folder!'
+            });
             return;
         }
         let dropPath = dropFiles[0].path;
         utils.log('onDropFiles, dropPath=[%s]', dropPath);
         fs.stat(dropPath, (err, stats) => {
             if (!stats.isDirectory()) {
-                alert('Drop only one folder!');
+                eleUtils.sendToMain({
+                    type: 'warning',
+                    title: that.title,
+                    message: 'Drop only one folder!'
+                });
                 return;
             }
         });
