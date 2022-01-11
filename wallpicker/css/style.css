@@ -78,11 +78,18 @@ body {
 }
 #divImageList .imageBlock {
     width: 200px;
-    height: 200px;
+    height: 180px;
     overflow: hidden;
 }
-/* #divImageList .imageBlock .imageContent {
-    background-color: var(--color-light-gray);
+#divImageList .imageBlock .imageWrapper {
+    height: 140px;
+}
+#divImageList .imageBlock .infoWrapper {
+    height: 40px;
+}
+/* #divImageList .imageBlock .infoWrapper .imageInfo {
+    text-overflow: ellipsis;
+    white-space: nowrap;
 } */
 /* Image list */
 

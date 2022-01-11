@@ -31,8 +31,9 @@ class WallpickerPage {
         this.tipNoDirDrop = 'No directory dropped.';
         this.tipDropOneDir = 'Drop only one directory.';
         this.tipReadDirError = 'Read directory error.';
-        this.maxImagePreviewWidth = 160;
-        this.maxImagePreviewHeight = 160;
+        this.maxImagePreviewWidth = 180;
+        this.maxImagePreviewHeight = 140;
+        this.maxImagePreviewRatio = this.maxImagePreviewWidth / this.maxImagePreviewHeight;
 
         this.options = options;
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
@@ -283,16 +284,20 @@ class WallpickerPage {
             // fileObjJson = utils.escapeHtml(fileObjJson);
             // fileObjJson = utils.stringReplaceAll(fileObjJson, '\n', '<br/>');
             // divImageBlock.html(fileObjJson);
+
+            let divImageWrapper = $('<div/>').addClass('d-flex justify-content-center imageWrapper');
+            let divInfoWrapper = $('<div/>').addClass('d-flex justify-content-center infoWrapper');
+
             let imgContent = $('<img/>')
                 .attr({
                     'src': 'assets/placeholder.png',
                     'data-src': fileObj.path
                 })
-                .addClass('lazyload imageContent');
+                .addClass('align-self-end lazyload imageContent');
             let imagePreviewWidth = fileObj.width;
             let imagePreviewHeight = fileObj.height;
             let imageRatio = fileObj.width / fileObj.height;
-            if (imageRatio > 1) {
+            if (imageRatio > this.maxImagePreviewRatio) {
                 imagePreviewWidth = this.maxImagePreviewWidth;
                 imagePreviewHeight = imagePreviewWidth / imageRatio;
             } else {
@@ -303,8 +308,15 @@ class WallpickerPage {
                 'width': imagePreviewWidth + 'px',
                 'height': imagePreviewHeight + 'px'
             });
-            imgContent.lazyload();
-            divImageBlock.append(imgContent);
+            imgContent.lazyload(); // lazy
+            divImageWrapper.append(imgContent);
+
+            let divInfo = $('<div/>').addClass('align-self-center text-center imageInfo');
+            divInfo.html(utils.escapeHtml(fileObj.basename));
+            divInfoWrapper.append(divInfo);
+
+            divImageBlock.append(divImageWrapper);
+            divImageBlock.append(divInfoWrapper);
 
             this.divImageList.append(divImageBlock);
         }
