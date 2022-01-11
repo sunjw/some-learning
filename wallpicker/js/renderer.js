@@ -18,7 +18,7 @@ const eleUtils = require('./eleUtils');
 class WallpickerPage {
 
     constructor() {
-        // init consts.
+        // init consts
     }
 
     init(options) {
@@ -70,20 +70,20 @@ class WallpickerPage {
     }
 
     onWindowResize() {
-        // on window resize.
+        // on window resize
         this.fitContentHeight();
         this.fitImageListWidth();
     }
 
     initLayout() {
-        // init layout.
+        // init layout
 
-        // init toolbar.
+        // init toolbar
         this.divToolbarWrapper = $('<div/>')
             .attr('id', 'divToolbarWrapper')
             .addClass('d-flex');
 
-        // init path.
+        // init path
         this.divPathWrapper = $('<div/>')
             .attr('id', 'divPathWrapper')
             .addClass('flex-grow-1');
@@ -100,12 +100,17 @@ class WallpickerPage {
         this.divToolbarWrapper.append(this.divPathWrapper);
         this.body.append(this.divToolbarWrapper);
 
-        // init content.
+        // init content
         this.divContentWrapper = $('<div/>').attr('id', 'divContentWrapper');
+
+        // image list
         this.divImageList = $('<div/>')
             .attr('id', 'divImageList')
             .addClass('ms-auto me-auto d-flex align-content-start flex-wrap');
         this.divContentWrapper.append(this.divImageList);
+
+        // loading
+
         this.body.append(this.divContentWrapper);
     }
 
@@ -228,7 +233,7 @@ class WallpickerPage {
                 return;
             }
 
-            // top level.
+            // top level
             utils.log('scanDir, finished, found %d images.', that.curImageList.length);
             that.renderImageList();
         });
@@ -255,7 +260,7 @@ class WallpickerPage {
         }
         let extnameLower = extname.toLowerCase();
         if (!this.imageExts.includes(extnameLower)) {
-            // not image.
+            // not image
             utils.log('processFile, not an image, filePath=[%s]', filePath);
             return;
         }
