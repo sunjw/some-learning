@@ -84,6 +84,9 @@ body {
     top: 0;
     left: 0;
 }
+#divLoadingWrapper #divLoadingBlock {
+    width: 100%;
+}
 #divImageList .imageBlock {
     width: 200px;
     height: 200px;

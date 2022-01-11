@@ -49,6 +49,7 @@ class WallpickerPage {
         this.divContentWrapper = null;
         this.divImageList = null;
         this.divLoadingWrapper = null;
+        this.divLoadingBlock = null;
 
         this.initLayout();
         this.initHandler();
@@ -114,13 +115,17 @@ class WallpickerPage {
 
         // loading
         this.divLoadingWrapper = $('<div/>').attr('id', 'divLoadingWrapper');
+        this.divLoadingBlock = $('<div/>')
+            .attr('id', 'divLoadingBlock')
+            .addClass('d-flex justify-content-center align-items-center');
         let divLoading = $('<div/>')
             .attr({
                 'role': 'status',
                 'aria-hidden': 'true'
             })
             .addClass('spinner-border');
-        this.divLoadingWrapper.append(divLoading);
+        this.divLoadingBlock.append(divLoading);
+        this.divLoadingWrapper.append(this.divLoadingBlock);
         this.divContentWrapper.append(this.divLoadingWrapper);
 
         this.body.append(this.divContentWrapper);
@@ -159,7 +164,7 @@ class WallpickerPage {
         let divContentWrapperTop = this.divContentWrapper.offset().top;
         let contentHeight = windowHeight - divContentWrapperTop - 3;
         this.divContentWrapper.css('height', contentHeight + 'px');
-        this.divLoadingWrapper.css('height', contentHeight + 'px');
+        this.divLoadingBlock.css('height', contentHeight + 'px');
     }
 
     fitImageListWidth() {
@@ -170,11 +175,13 @@ class WallpickerPage {
     }
 
     showLoading() {
-        //this.divLoadingWrapper.show();
+        utils.log('showLoading');
+        this.divLoadingWrapper.show();
     }
 
     hideLoading() {
-        //this.divLoadingWrapper.hide();
+        utils.log('hideLoading');
+        this.divLoadingWrapper.hide();
     }
 
     onDropFiles(dropFiles) {
