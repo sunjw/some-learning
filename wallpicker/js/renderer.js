@@ -9,6 +9,7 @@ const path = require('path');
 window.$ = window.jQuery = require('jquery');
 const bootstrap = require('bootstrap');
 const fixPath = require('fix-path')();
+const imageSize = require('image-size');
 
 const utils = require('./utils');
 const eleUtils = require('./eleUtils');
@@ -239,15 +240,22 @@ class WallpickerPage {
             utils.log('processFile, not an image, filePath=[%s]', filePath);
             return;
         }
+
         let fileObj = {
             path: filePath,
             basename: basename,
             extname: extname,
             size: stat.size,
-            atime: stat.atime,
-            mtime: stat.mtime,
-            ctime: stat.ctime
+            atime: stat.atime.getTime(),
+            mtime: stat.mtime.getTime(),
+            ctime: stat.ctime.getTime()
         }
+
+        let imgDim = imageSize(filePath);
+        fileObj.width = imgDim.width;
+        fileObj.height = imgDim.height;
+
+        utils.log('processFile, image, fileObj=\n%s', JSON.stringify(fileObj, null, 2));
         this.curImageList.push(fileObj);
     }
 
