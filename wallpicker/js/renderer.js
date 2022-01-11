@@ -265,6 +265,12 @@ class WallpickerPage {
     }
 
     renderImageList() {
+        // sort
+        this.curImageList.sort((fo1, fo2) => {
+            return (fo2.ctime - fo1.ctime); // create time reverse
+        });
+
+        // render
         for (let fileObj of this.curImageList) {
             let divImageBlock = $('<div/>');
             let fileObjJson = JSON.stringify(fileObj, null, 2);
