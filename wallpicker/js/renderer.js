@@ -61,6 +61,11 @@ class WallpickerPage {
         });
 
         this.hideLoading();
+
+        if (this.curImageDir) {
+            // we have one, go!
+            this.loadImageDir();
+        }
     }
 
     getConfig(key) {
