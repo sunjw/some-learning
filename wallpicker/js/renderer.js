@@ -31,6 +31,7 @@ class WallpickerPage {
         this.tipNoDirDrop = 'No directory dropped.';
         this.tipDropOneDir = 'Drop only one directory.';
         this.tipReadDirError = 'Read directory error.';
+        this.minScanTime = 2000;
         this.imageBlockWidth = 200;
         this.maxImagePreviewWidth = 200;
         this.maxImagePreviewHeight = 160;
@@ -239,6 +240,8 @@ class WallpickerPage {
     scanDir(dirPath, deep) {
         let that = this;
 
+        let scanStart = new Date().getTime();
+
         utils.log('scanDir, dirPath=[%s], deep=%d', dirPath, deep);
         this.readdirEx(dirPath, (deep != 0), (err, files) => {
             if (err) {
@@ -269,7 +272,17 @@ class WallpickerPage {
 
             // top level
             utils.log('scanDir, finished, found %d images.', that.curImageList.length);
-            that.renderImageList();
+            let scanEnd = new Date().getTime();
+            let scanDuration = scanEnd - scanStart;
+            if (scanDuration < that.minScanTime) {
+                let waitSome = that.minScanTime - scanDuration;
+                utils.log('scanDir, waitSome=%dms', waitSome);
+                setTimeout(() => {
+                    that.renderImageList();
+                }, waitSome);
+            } else {
+                that.renderImageList();
+            }
         });
     }
 
