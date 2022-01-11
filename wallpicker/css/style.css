@@ -81,9 +81,9 @@ body {
     height: 200px;
     overflow: hidden;
 }
-#divImageList .imageBlock .imageContent {
+/* #divImageList .imageBlock .imageContent {
     background-color: var(--color-light-gray);
-}
+} */
 /* Image list */
 
 /* Footer */

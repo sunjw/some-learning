@@ -284,7 +284,10 @@ class WallpickerPage {
             // fileObjJson = utils.stringReplaceAll(fileObjJson, '\n', '<br/>');
             // divImageBlock.html(fileObjJson);
             let imgContent = $('<img/>')
-                .attr('data-src', fileObj.path)
+                .attr({
+                    'src': 'assets/placeholder.png',
+                    'data-src': fileObj.path
+                })
                 .addClass('lazyload imageContent');
             let imagePreviewWidth = fileObj.width;
             let imagePreviewHeight = fileObj.height;
