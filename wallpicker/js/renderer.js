@@ -24,6 +24,7 @@ class WallpickerPage {
 
         this.title = 'Wallpicker';
         this.keyImageDir = 'imageDir';
+        this.imageExts = ['jpg', 'jpeg', 'png'];
         this.tipDropScan = 'Drop a directory to scan...';
         this.tipNoDirDrop = 'No directory dropped.';
         this.tipDropOneDir = 'Drop only one directory.';
@@ -198,8 +199,8 @@ class WallpickerPage {
                     that.scanDir(filePath, deep + 1);
                 } else {
                     // file
-                    utils.log('scanDir, found filePath=[%s]', filePath);
-                    that.curImageList.push(filePath);
+                    // utils.log('scanDir, found filePath=[%s]', filePath);
+                    that.processFile(filePath, stat);
                 }
             }
 
@@ -209,6 +210,7 @@ class WallpickerPage {
 
             // top level.
             utils.log('scanDir, finished, found %d images.', that.curImageList.length);
+            that.renderImageList();
         });
     }
 
@@ -224,6 +226,32 @@ class WallpickerPage {
             callback(null, files);
         }
     }
+
+    processFile(filePath, stat) {
+        let basename = path.basename(filePath);
+        let extname = path.extname(filePath);
+        if (extname.startsWith('.')) {
+            extname = extname.substring(1);
+        }
+        let extnameLower = extname.toLowerCase();
+        if (!this.imageExts.includes(extnameLower)) {
+            // not image.
+            utils.log('processFile, not an image, filePath=[%s]', filePath);
+            return;
+        }
+        let fileObj = {
+            path: filePath,
+            basename: basename,
+            extname: extname,
+            size: stat.size,
+            atime: stat.atime,
+            mtime: stat.mtime,
+            ctime: stat.ctime
+        }
+        this.curImageList.push(fileObj);
+    }
+
+    renderImageList() {}
 }
 
 let wallpickerPage = new WallpickerPage();
