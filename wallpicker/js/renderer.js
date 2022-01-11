@@ -180,9 +180,12 @@ class WallpickerPage {
     }
 
     loadImageDir() {
+        let that = this;
         this.curImageList = [];
         this.divPathContent.text(this.curImageDir);
-        this.scanDir(this.curImageDir, 0);
+        setTimeout(() => {
+            that.scanDir(this.curImageDir, 0);
+        }, 100);
     }
 
     scanDir(dirPath, deep) {
