@@ -60,7 +60,7 @@ class WallpickerPage {
             that.onWindowResize();
         });
 
-        this.showLoading();
+        this.hideLoading();
     }
 
     getConfig(key) {
