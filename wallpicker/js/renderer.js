@@ -9,7 +9,7 @@ const path = require('path');
 window.$ = window.jQuery = require('jquery');
 const bootstrap = require('bootstrap');
 const fixPath = require('fix-path')();
-const imageSize = require('image-size');
+const probeImageSize = require('probe-image-size');
 
 const utils = require('./utils');
 const eleUtils = require('./eleUtils');
@@ -254,7 +254,9 @@ class WallpickerPage {
             ctime: stat.ctime.getTime()
         }
 
-        let imgDim = imageSize(filePath);
+        // utils.log('processFile, image, filePath=[%s]', filePath);
+        let imgData = fs.readFileSync(filePath);
+        let imgDim = probeImageSize.sync(imgData);
         fileObj.width = imgDim.width;
         fileObj.height = imgDim.height;
 
