@@ -176,17 +176,17 @@ class WallpickerPage {
     }
 
     scanDir(dirPath, deep) {
-        utils.log('scanDir, dirPath=[%s], deep=%d', dirPath, deep);
         let that = this;
 
-        fs.readdir(dirPath, (err, files) => {
+        utils.log('scanDir, dirPath=[%s], deep=%d', dirPath, deep);
+        this.readdirEx(dirPath, (deep != 0), (err, files) => {
             if (err) {
                 eleUtils.sendToMain({
                     type: 'warning',
                     title: that.title,
                     message: that.tipReadDirError
                 });
-                return false;
+                return;
             }
 
             for (let fileName of files) {
@@ -201,7 +201,18 @@ class WallpickerPage {
         });
     }
 
-    readdirEx() {}
+    readdirEx(dirPath, isSync, callback) {
+        if (!isSync) {
+            // async
+            fs.readdir(dirPath, (err, files) => {
+                callback(err, files);
+            });
+        } else {
+            // sync
+            let files = fs.readdirSync(dirPath);
+            callback(null, files);
+        }
+    }
 }
 
 let wallpickerPage = new WallpickerPage();

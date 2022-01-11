@@ -29,7 +29,7 @@ class EleConfig {
     setConfig(key, value) {
         this.loadConfig();
         this.configJson[key] = value;
-        fs.writeFileSync(this.configPath, JSON.stringify(this.configJson));
+        fs.writeFileSync(this.configPath, JSON.stringify(this.configJson, null, 2));
     }
 }
 
