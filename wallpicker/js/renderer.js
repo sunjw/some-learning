@@ -30,6 +30,8 @@ class WallpickerPage {
         this.tipNoDirDrop = 'No directory dropped.';
         this.tipDropOneDir = 'Drop only one directory.';
         this.tipReadDirError = 'Read directory error.';
+        this.maxImagePreviewWidth = 160;
+        this.maxImagePreviewHeight = 160;
 
         this.options = options;
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
@@ -275,10 +277,29 @@ class WallpickerPage {
         // render
         for (let fileObj of this.curImageList) {
             let divImageBlock = $('<div/>').addClass('imageBlock');
-            let fileObjJson = JSON.stringify(fileObj, null, 2);
-            fileObjJson = utils.escapeHtml(fileObjJson);
-            fileObjJson = utils.stringReplaceAll(fileObjJson, '\n', '<br/>');
-            divImageBlock.html(fileObjJson);
+            // let fileObjJson = JSON.stringify(fileObj, null, 2);
+            // fileObjJson = utils.escapeHtml(fileObjJson);
+            // fileObjJson = utils.stringReplaceAll(fileObjJson, '\n', '<br/>');
+            // divImageBlock.html(fileObjJson);
+            let imgContent = $('<img/>')
+                .attr('src', fileObj.path)
+                .addClass('imageContent');
+            let imagePreviewWidth = fileObj.width;
+            let imagePreviewHeight = fileObj.height;
+            let imageRatio = fileObj.width / fileObj.height;
+            if (imageRatio > 1) {
+                imagePreviewWidth = this.maxImagePreviewWidth;
+                imagePreviewHeight = imagePreviewWidth / imageRatio;
+            } else {
+                imagePreviewHeight = this.maxImagePreviewHeight;
+                imagePreviewWidth = imagePreviewHeight * imageRatio;
+            }
+            imgContent.css({
+                'width': imagePreviewWidth + 'px',
+                'height': imagePreviewHeight + 'px'
+            });
+            divImageBlock.append(imgContent);
+
             this.divImageList.append(divImageBlock);
         }
     }
