@@ -10,6 +10,7 @@ window.$ = window.jQuery = require('jquery');
 const bootstrap = require('bootstrap');
 const fixPath = require('fix-path')();
 const probeImageSize = require('probe-image-size');
+const lazyload = require('lazyload');
 
 const utils = require('./utils');
 const eleUtils = require('./eleUtils');
@@ -178,10 +179,8 @@ class WallpickerPage {
     }
 
     loadImageDir() {
-        let that = this;
-
+        this.curImageList = [];
         this.divPathContent.text(this.curImageDir);
-
         this.scanDir(this.curImageDir, 0);
     }
 
@@ -269,6 +268,9 @@ class WallpickerPage {
     }
 
     renderImageList() {
+        // clear
+        this.divImageList.empty();
+
         // sort
         this.curImageList.sort((fo1, fo2) => {
             return (fo2.ctime - fo1.ctime); // create time reverse
@@ -282,8 +284,8 @@ class WallpickerPage {
             // fileObjJson = utils.stringReplaceAll(fileObjJson, '\n', '<br/>');
             // divImageBlock.html(fileObjJson);
             let imgContent = $('<img/>')
-                .attr('src', fileObj.path)
-                .addClass('imageContent');
+                .attr('data-src', fileObj.path)
+                .addClass('lazyload imageContent');
             let imagePreviewWidth = fileObj.width;
             let imagePreviewHeight = fileObj.height;
             let imageRatio = fileObj.width / fileObj.height;
@@ -298,6 +300,7 @@ class WallpickerPage {
                 'width': imagePreviewWidth + 'px',
                 'height': imagePreviewHeight + 'px'
             });
+            imgContent.lazyload();
             divImageBlock.append(imgContent);
 
             this.divImageList.append(divImageBlock);
