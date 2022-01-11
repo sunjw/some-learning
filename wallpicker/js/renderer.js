@@ -23,14 +23,15 @@ class WallpickerPage {
         let that = this;
 
         this.title = 'Wallpicker';
-        this.keyImageFolder = 'imageFolder';
-        this.tipDropScan = 'Drop a folder to scan...';
-        this.tipNoFolderDrop = 'No folder dropped!';
-        this.tipDropOneFolder = 'Drop only one folder!';
+        this.keyImageDir = 'imageDir';
+        this.tipDropScan = 'Drop a directory to scan...';
+        this.tipNoDirDrop = 'No directory dropped.';
+        this.tipDropOneDir = 'Drop only one directory.';
+        this.tipReadDirError = 'Read directory error.';
 
         this.options = options;
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
-        this.curImageFolder = this.getConfig(this.keyImageFolder);
+        this.curImageDir = this.getConfig(this.keyImageDir);
 
         this.body = $('body');
         this.divToolbarWrapper = null;
@@ -80,7 +81,7 @@ class WallpickerPage {
             .attr('id', 'divPathDropInfo')
             .text(this.tipDropScan);
         this.divPathContent = $('<div/>').attr('id', 'divPathContent');
-        if (!this.curImageFolder) {
+        if (!this.curImageDir) {
             this.divPathContent.text(this.tipDropScan);
         }
         this.divPathWrapper.append(this.divPathDropInfo);
@@ -135,7 +136,7 @@ class WallpickerPage {
             eleUtils.sendToMain({
                 type: 'warning',
                 title: this.title,
-                message: this.tipNoFolderDrop
+                message: this.tipNoDirDrop
             });
             return;
         }
@@ -143,32 +144,64 @@ class WallpickerPage {
             eleUtils.sendToMain({
                 type: 'warning',
                 title: this.title,
-                message: this.tipDropOneFolder
+                message: this.tipDropOneDir
             });
             return;
         }
         let dropPath = dropFiles[0].path;
         utils.log('onDropFiles, dropPath=[%s]', dropPath);
         fs.stat(dropPath, (err, stats) => {
-            if (!stats.isDirectory()) {
+            if (err || !stats.isDirectory()) {
                 eleUtils.sendToMain({
                     type: 'warning',
                     title: that.title,
-                    message: that.tipDropOneFolder
+                    message: that.tipDropOneDir
                 });
                 return;
             }
 
             // a foler, go!
-            that.curImageFolder = dropPath;
-            that.setConfig(that.keyImageFolder, that.curImageFolder);
-            that.loadImageFolder();
+            that.curImageDir = dropPath;
+            that.setConfig(that.keyImageDir, that.curImageDir);
+            that.loadImageDir();
         });
     }
 
-    loadImageFolder() {
-        this.divPathContent.text(this.curImageFolder);
+    loadImageDir() {
+        let that = this;
+
+        this.divPathContent.text(this.curImageDir);
+
+        this.scanDir(this.curImageDir, 0);
     }
+
+    scanDir(dirPath, deep) {
+        utils.log('scanDir, dirPath=[%s], deep=%d', dirPath, deep);
+        let that = this;
+
+        fs.readdir(dirPath, (err, files) => {
+            if (err) {
+                eleUtils.sendToMain({
+                    type: 'warning',
+                    title: that.title,
+                    message: that.tipReadDirError
+                });
+                return false;
+            }
+
+            for (let fileName of files) {
+                let filePath = path.join(dirPath, fileName);
+                let stat = fs.statSync(filePath);
+                if (stat.isDirectory()) {
+                    that.scanDir(filePath, deep + 1);
+                } else {
+                    utils.log('scanDir, found filePath=[%s]', filePath);
+                }
+            }
+        });
+    }
+
+    readdirEx() {}
 }
 
 let wallpickerPage = new WallpickerPage();
