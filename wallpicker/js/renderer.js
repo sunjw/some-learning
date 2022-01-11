@@ -71,6 +71,7 @@ class WallpickerPage {
     onWindowResize() {
         // on window resize.
         this.fitContentHeight();
+        this.fitImageListWidth();
     }
 
     initLayout() {
@@ -102,7 +103,7 @@ class WallpickerPage {
         this.divContentWrapper = $('<div/>').attr('id', 'divContentWrapper');
         this.divImageList = $('<div/>')
             .attr('id', 'divImageList')
-            .addClass('d-flex align-content-start flex-wrap');
+            .addClass('ms-auto me-auto d-flex align-content-start flex-wrap');
         this.divContentWrapper.append(this.divImageList);
         this.body.append(this.divContentWrapper);
     }
@@ -140,6 +141,13 @@ class WallpickerPage {
         let divContentWrapperTop = this.divContentWrapper.offset().top;
         let divContentWrapperHeight = windowHeight - divContentWrapperTop - 3;
         this.divContentWrapper.css('height', divContentWrapperHeight + 'px');
+    }
+
+    fitImageListWidth() {
+        let contentWrapperWidth = this.divContentWrapper.width();
+        let imagePerLine = Math.floor(contentWrapperWidth / this.maxImagePreviewWidth);
+        let divImageListWidth = imagePerLine * this.maxImagePreviewWidth + 6;
+        this.divImageList.css('width', divImageListWidth + 'px');
     }
 
     onDropFiles(dropFiles) {
