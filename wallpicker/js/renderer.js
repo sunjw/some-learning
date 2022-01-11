@@ -31,6 +31,7 @@ class WallpickerPage {
         this.tipNoDirDrop = 'No directory dropped.';
         this.tipDropOneDir = 'Drop only one directory.';
         this.tipReadDirError = 'Read directory error.';
+        this.imageBlockWidth = 200;
         this.maxImagePreviewWidth = 200;
         this.maxImagePreviewHeight = 160;
         this.maxImagePreviewRatio = this.maxImagePreviewWidth / this.maxImagePreviewHeight;
@@ -145,8 +146,8 @@ class WallpickerPage {
 
     fitImageListWidth() {
         let contentWrapperWidth = this.divContentWrapper.width();
-        let imagePerLine = Math.floor(contentWrapperWidth / this.maxImagePreviewWidth);
-        let divImageListWidth = imagePerLine * this.maxImagePreviewWidth + 2;
+        let imagePerLine = Math.floor(contentWrapperWidth / this.imageBlockWidth);
+        let divImageListWidth = imagePerLine * this.imageBlockWidth + 2;
         this.divImageList.css('width', divImageListWidth + 'px');
     }
 
