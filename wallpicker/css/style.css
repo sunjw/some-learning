@@ -75,6 +75,14 @@ body {
 #divContentWrapper {
     overflow-x: hidden;
     overflow-y: auto;
+    position: relative;
+}
+#divLoadingWrapper {
+    display: block;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 #divImageList .imageBlock {
     width: 200px;

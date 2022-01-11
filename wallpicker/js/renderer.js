@@ -57,6 +57,8 @@ class WallpickerPage {
         $(window).on('resize', function () {
             that.onWindowResize();
         });
+
+        this.showLoading();
     }
 
     getConfig(key) {
@@ -108,7 +110,6 @@ class WallpickerPage {
         this.divImageList = $('<div/>')
             .attr('id', 'divImageList')
             .addClass('ms-auto me-auto d-flex align-content-start flex-wrap');
-        this.divImageList.hide();
         this.divContentWrapper.append(this.divImageList);
 
         // loading
@@ -156,8 +157,9 @@ class WallpickerPage {
     fitContentHeight() {
         let windowHeight = $(window).height();
         let divContentWrapperTop = this.divContentWrapper.offset().top;
-        let divContentWrapperHeight = windowHeight - divContentWrapperTop - 3;
-        this.divContentWrapper.css('height', divContentWrapperHeight + 'px');
+        let contentHeight = windowHeight - divContentWrapperTop - 3;
+        this.divContentWrapper.css('height', contentHeight + 'px');
+        this.divLoadingWrapper.css('height', contentHeight + 'px');
     }
 
     fitImageListWidth() {
@@ -165,6 +167,14 @@ class WallpickerPage {
         let imagePerLine = Math.floor(contentWrapperWidth / this.imageBlockWidth);
         let divImageListWidth = imagePerLine * this.imageBlockWidth + 2;
         this.divImageList.css('width', divImageListWidth + 'px');
+    }
+
+    showLoading() {
+        //this.divLoadingWrapper.show();
+    }
+
+    hideLoading() {
+        //this.divLoadingWrapper.hide();
     }
 
     onDropFiles(dropFiles) {
@@ -208,6 +218,8 @@ class WallpickerPage {
         let that = this;
         this.curImageList = [];
         this.divPathContent.text(this.curImageDir);
+        this.divImageList.empty();
+        this.showLoading();
         setTimeout(() => {
             that.scanDir(this.curImageDir, 0);
         }, 100);
@@ -297,10 +309,6 @@ class WallpickerPage {
     }
 
     renderImageList() {
-        // clear
-        this.divImageList.hide();
-        this.divImageList.empty();
-
         // sort
         this.curImageList.sort((fo1, fo2) => {
             return (fo2.ctime - fo1.ctime); // create time reverse
@@ -350,7 +358,7 @@ class WallpickerPage {
             this.divImageList.append(divImageBlock);
         }
 
-        this.divImageList.show();
+        this.hideLoading();
     }
 }
 
