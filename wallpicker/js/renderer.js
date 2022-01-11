@@ -31,8 +31,8 @@ class WallpickerPage {
         this.tipNoDirDrop = 'No directory dropped.';
         this.tipDropOneDir = 'Drop only one directory.';
         this.tipReadDirError = 'Read directory error.';
-        this.maxImagePreviewWidth = 180;
-        this.maxImagePreviewHeight = 140;
+        this.maxImagePreviewWidth = 200;
+        this.maxImagePreviewHeight = 160;
         this.maxImagePreviewRatio = this.maxImagePreviewWidth / this.maxImagePreviewHeight;
 
         this.options = options;
@@ -311,7 +311,7 @@ class WallpickerPage {
             imgContent.lazyload(); // lazy
             divImageWrapper.append(imgContent);
 
-            let divInfo = $('<div/>').addClass('align-self-center text-center imageInfo');
+            let divInfo = $('<div/>').addClass('align-self-start imageInfo');
             divInfo.html(utils.escapeHtml(fileObj.basename));
             divInfoWrapper.append(divInfo);
 

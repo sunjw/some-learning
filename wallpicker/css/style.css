@@ -78,11 +78,11 @@ body {
 }
 #divImageList .imageBlock {
     width: 200px;
-    height: 180px;
+    height: 200px;
     overflow: hidden;
 }
 #divImageList .imageBlock .imageWrapper {
-    height: 140px;
+    height: 160px;
 }
 #divImageList .imageBlock .infoWrapper {
     height: 40px;
