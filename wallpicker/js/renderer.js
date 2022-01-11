@@ -23,9 +23,14 @@ class WallpickerPage {
         let that = this;
 
         this.title = 'Wallpicker';
+        this.keyImageFolder = 'imageFolder';
+        this.tipDropScan = 'Drop a folder to scan...';
+        this.tipNoFolderDrop = 'No folder dropped!';
+        this.tipDropOneFolder = 'Drop only one folder!';
 
         this.options = options;
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
+        this.curImageFolder = this.getConfig(this.keyImageFolder);
 
         this.body = $('body');
         this.divToolbarWrapper = null;
@@ -41,6 +46,17 @@ class WallpickerPage {
         $(window).on('resize', function () {
             that.onWindowResize();
         });
+    }
+
+    getConfig(key) {
+        let value = this.eleConfig.getConfig(key);
+        utils.log('getConfig, [%s]=[%s]', key, value);
+        return value;
+    }
+
+    setConfig(key, value) {
+        utils.log('setConfig, [%s]=[%s]', key, value);
+        this.eleConfig.setConfig(key, value);
     }
 
     onWindowResize() {
@@ -62,8 +78,11 @@ class WallpickerPage {
             .addClass('flex-grow-1');
         this.divPathDropInfo = $('<div/>')
             .attr('id', 'divPathDropInfo')
-            .text('Drop folder to scan...');
+            .text(this.tipDropScan);
         this.divPathContent = $('<div/>').attr('id', 'divPathContent');
+        if (!this.curImageFolder) {
+            this.divPathContent.text(this.tipDropScan);
+        }
         this.divPathWrapper.append(this.divPathDropInfo);
         this.divPathWrapper.append(this.divPathContent);
 
@@ -115,16 +134,16 @@ class WallpickerPage {
         if (dropFiles.length <= 0) {
             eleUtils.sendToMain({
                 type: 'warning',
-                title: that.title,
-                message: 'No folder dropped!'
+                title: this.title,
+                message: this.tipNoFolderDrop
             });
             return;
         }
         if (dropFiles.length > 1) {
             eleUtils.sendToMain({
                 type: 'warning',
-                title: that.title,
-                message: 'Drop only one folder!'
+                title: this.title,
+                message: this.tipDropOneFolder
             });
             return;
         }
@@ -135,14 +154,20 @@ class WallpickerPage {
                 eleUtils.sendToMain({
                     type: 'warning',
                     title: that.title,
-                    message: 'Drop only one folder!'
+                    message: that.tipDropOneFolder
                 });
                 return;
             }
 
             // a foler, go!
-            this.divPathContent.text(dropPath);
+            that.curImageFolder = dropPath;
+            that.setConfig(that.keyImageFolder, that.curImageFolder);
+            that.loadImageFolder();
         });
+    }
+
+    loadImageFolder() {
+        this.divPathContent.text(this.curImageFolder);
     }
 }
 

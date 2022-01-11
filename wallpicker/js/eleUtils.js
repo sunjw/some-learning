@@ -15,7 +15,9 @@ class EleConfig {
     loadConfig() {
         if (fs.existsSync(this.configPath)) {
             let configData = fs.readFileSync(this.configPath);
-            this.configJson = JSON.parse(configData);
+            try {
+                this.configJson = JSON.parse(configData);
+            } catch (e) {}
         }
     }
 
