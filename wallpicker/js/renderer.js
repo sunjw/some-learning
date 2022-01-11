@@ -48,6 +48,7 @@ class WallpickerPage {
         this.divPathContent = null;
         this.divContentWrapper = null;
         this.divImageList = null;
+        this.divLoadingWrapper = null;
 
         this.initLayout();
         this.initHandler();
@@ -107,9 +108,19 @@ class WallpickerPage {
         this.divImageList = $('<div/>')
             .attr('id', 'divImageList')
             .addClass('ms-auto me-auto d-flex align-content-start flex-wrap');
+        this.divImageList.hide();
         this.divContentWrapper.append(this.divImageList);
 
         // loading
+        this.divLoadingWrapper = $('<div/>').attr('id', 'divLoadingWrapper');
+        let divLoading = $('<div/>')
+            .attr({
+                'role': 'status',
+                'aria-hidden': 'true'
+            })
+            .addClass('spinner-border');
+        this.divLoadingWrapper.append(divLoading);
+        this.divContentWrapper.append(this.divLoadingWrapper);
 
         this.body.append(this.divContentWrapper);
     }
@@ -287,6 +298,7 @@ class WallpickerPage {
 
     renderImageList() {
         // clear
+        this.divImageList.hide();
         this.divImageList.empty();
 
         // sort
@@ -337,6 +349,8 @@ class WallpickerPage {
 
             this.divImageList.append(divImageBlock);
         }
+
+        this.divImageList.show();
     }
 }
 
