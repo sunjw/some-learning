@@ -96,7 +96,9 @@ class WallpickerPage {
 
         // init content.
         this.divContentWrapper = $('<div/>').attr('id', 'divContentWrapper');
-        this.divImageList = $('<div/>').attr('id', 'divImageList');
+        this.divImageList = $('<div/>')
+            .attr('id', 'divImageList')
+            .addClass('d-flex align-content-start flex-wrap');
         this.divContentWrapper.append(this.divImageList);
         this.body.append(this.divContentWrapper);
     }
@@ -272,7 +274,7 @@ class WallpickerPage {
 
         // render
         for (let fileObj of this.curImageList) {
-            let divImageBlock = $('<div/>');
+            let divImageBlock = $('<div/>').addClass('imageBlock');
             let fileObjJson = JSON.stringify(fileObj, null, 2);
             fileObjJson = utils.escapeHtml(fileObjJson);
             fileObjJson = utils.stringReplaceAll(fileObjJson, '\n', '<br/>');

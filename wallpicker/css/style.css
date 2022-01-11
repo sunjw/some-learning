@@ -76,6 +76,11 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
 }
+#divImageList .imageBlock {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+}
 /* Image list */
 
 /* Footer */
