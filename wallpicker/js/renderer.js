@@ -146,7 +146,7 @@ class WallpickerPage {
     fitImageListWidth() {
         let contentWrapperWidth = this.divContentWrapper.width();
         let imagePerLine = Math.floor(contentWrapperWidth / this.maxImagePreviewWidth);
-        let divImageListWidth = imagePerLine * this.maxImagePreviewWidth + 6;
+        let divImageListWidth = imagePerLine * this.maxImagePreviewWidth + 2;
         this.divImageList.css('width', divImageListWidth + 'px');
     }
 
