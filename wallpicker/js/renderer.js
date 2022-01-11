@@ -42,6 +42,7 @@ class WallpickerPage {
         this.divPathDropInfo = null;
         this.divPathContent = null;
         this.divContentWrapper = null;
+        this.divImageList = null;
 
         this.initLayout();
         this.initHandler();
@@ -95,6 +96,8 @@ class WallpickerPage {
 
         // init content.
         this.divContentWrapper = $('<div/>').attr('id', 'divContentWrapper');
+        this.divImageList = $('<div/>').attr('id', 'divImageList');
+        this.divContentWrapper.append(this.divImageList);
         this.body.append(this.divContentWrapper);
     }
 
@@ -255,11 +258,20 @@ class WallpickerPage {
         fileObj.width = imgDim.width;
         fileObj.height = imgDim.height;
 
-        utils.log('processFile, image, fileObj=\n%s', JSON.stringify(fileObj, null, 2));
+        // utils.log('processFile, image, fileObj=\n%s', JSON.stringify(fileObj, null, 2));
         this.curImageList.push(fileObj);
     }
 
-    renderImageList() {}
+    renderImageList() {
+        for (let fileObj of this.curImageList) {
+            let divImageBlock = $('<div/>');
+            let fileObjJson = JSON.stringify(fileObj, null, 2);
+            fileObjJson = utils.escapeHtml(fileObjJson);
+            fileObjJson = utils.stringReplaceAll(fileObjJson, '\n', '<br/>');
+            divImageBlock.html(fileObjJson);
+            this.divImageList.append(divImageBlock);
+        }
+    }
 }
 
 let wallpickerPage = new WallpickerPage();

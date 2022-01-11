@@ -73,7 +73,8 @@ body {
 
 /* Image list */
 #divContentWrapper {
-
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 /* Image list */
 
