@@ -118,13 +118,17 @@ class WallpickerPage {
         this.divLoadingBlock = $('<div/>')
             .attr('id', 'divLoadingBlock')
             .addClass('d-flex justify-content-center align-items-center');
-        let divLoading = $('<div/>')
+        let divLoadingSpinner = $('<div/>')
             .attr({
                 'role': 'status',
                 'aria-hidden': 'true'
             })
             .addClass('spinner-border');
-        this.divLoadingBlock.append(divLoading);
+        let divLoadingText = $('<div/>')
+            .attr('id', 'divLoadingText')
+            .text('Scanning...');
+        this.divLoadingBlock.append(divLoadingSpinner);
+        this.divLoadingBlock.append(divLoadingText);
         this.divLoadingWrapper.append(this.divLoadingBlock);
         this.divContentWrapper.append(this.divLoadingWrapper);
 

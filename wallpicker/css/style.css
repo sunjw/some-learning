@@ -1,5 +1,6 @@
 /* Defines */
 :root {
+    --color-windows-blue: #0078d7;
     --color-light-gray: #e0e0e0;
 }
 /* Defines */
@@ -23,14 +24,14 @@ body {
 }
 
 a {
-    color: var(--color-android);
+    color: black;
     text-decoration: none;
 }
 a:hover {
-    color: var(--color-android-light);
+    color: var(--color-windows-blue);
 }
 a:active {
-    color: var(--color-android-dark);
+    color: var(--color-windows-blue);
 }
 
 img {
@@ -87,6 +88,12 @@ body {
 #divLoadingWrapper #divLoadingBlock {
     width: 100%;
 }
+#divLoadingWrapper #divLoadingBlock .spinner-border {
+    color: var(--color-windows-blue);
+}
+#divLoadingWrapper #divLoadingBlock #divLoadingText {
+    margin-left: 10px;
+}
 #divImageList .imageBlock {
     width: 200px;
     height: 200px;
@@ -137,7 +144,7 @@ body {
     font-size: 16px;
 }
 .filterBox input[type='text']:focus {
-    border-color: var(--color-android);
+    border-color: var(--color-windows-blue);
 }
 .filterBox .filterButton {
     display: block;
@@ -155,10 +162,10 @@ body {
     color: var(--color-gray);
 }
 .filterBox #filterBtnClose:hover {
-    color: var(--color-android-light);
+    color: var(--color-windows-blue);
 }
 .filterBox #filterBtnClose:active {
-    color: var(--color-android-dark);
+    color: var(--color-windows-blue);
 }
 /* Filter */
 
