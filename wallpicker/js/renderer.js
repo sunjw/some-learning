@@ -32,6 +32,7 @@ class WallpickerPage {
         this.options = options;
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
         this.curImageDir = this.getConfig(this.keyImageDir);
+        this.curImageList = [];
 
         this.body = $('body');
         this.divToolbarWrapper = null;
@@ -193,11 +194,21 @@ class WallpickerPage {
                 let filePath = path.join(dirPath, fileName);
                 let stat = fs.statSync(filePath);
                 if (stat.isDirectory()) {
+                    // dir
                     that.scanDir(filePath, deep + 1);
                 } else {
+                    // file
                     utils.log('scanDir, found filePath=[%s]', filePath);
+                    that.curImageList.push(filePath);
                 }
             }
+
+            if (deep > 0) {
+                return;
+            }
+
+            // top level.
+            utils.log('scanDir, finished, found %d images.', that.curImageList.length);
         });
     }
 
