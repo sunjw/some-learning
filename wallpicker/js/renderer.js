@@ -12,6 +12,11 @@ const fixPath = require('fix-path')();
 const probeImageSize = require('probe-image-size');
 const lazyload = require('lazyload');
 
+import {
+    setWallpaper
+}
+from 'wallpaper';
+
 const utils = require('./utils');
 const eleUtils = require('./eleUtils');
 
@@ -127,7 +132,7 @@ class WallpickerPage {
         this.setButtonDisabled(this.buttonSetWallpaper, true);
         this.autoBlurButtonClick(this.buttonSetWallpaper, function () {
             utils.log('buttonSetWallpaper.click');
-            that.clearSelection();
+            that.setOsWallpaper();
         });
 
         this.divToolsWrapper.append(this.buttonSetWallpaper);
@@ -544,6 +549,12 @@ class WallpickerPage {
         this.selectedImageBlock = imageBlock;
         imageBlock.addClass(this.classImageSelected);
         this.refreshButtonState();
+    }
+
+    setOsWallpaper() {
+        let imagePath = imageBlock.attr('data-ref');
+        utils.log('setWallpaper, imagePath=[%s]', imagePath);
+        setWallpaper(imagePath);
     }
 }
 
