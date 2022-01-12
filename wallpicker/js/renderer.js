@@ -73,6 +73,7 @@ class WallpickerPage {
             that.onWindowResize();
         });
 
+        this.disableAllButtons();
         this.hideLoading();
 
         if (this.curImageDir) {
@@ -328,6 +329,7 @@ class WallpickerPage {
         let that = this;
         this.renderPath();
         this.clearImageList();
+        this.disableAllButtons();
         this.showLoading();
         setTimeout(() => {
             that.scanDir(this.curImageDir, 0);
@@ -545,6 +547,7 @@ class WallpickerPage {
         }
 
         this.hideLoading();
+        this.refreshButtonState();
     }
 
     refreshButtonState() {
@@ -560,6 +563,13 @@ class WallpickerPage {
             this.setButtonDisabled(this.btnToolbarShowSelected, true);
         }
         this.setButtonDisabled(this.btnToolbarRandom, false);
+    }
+
+    disableAllButtons() {
+        this.setButtonDisabled(this.btnToolbarSetWallpaper, true);
+        this.setButtonDisabled(this.btnToolbarShowFile, true);
+        this.setButtonDisabled(this.btnToolbarShowSelected, true);
+        this.setButtonDisabled(this.btnToolbarRandom, true);
     }
 
     clearSelection(refreshButton = true) {
