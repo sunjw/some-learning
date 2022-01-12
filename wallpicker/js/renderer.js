@@ -46,6 +46,7 @@ class WallpickerPage {
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
         this.curImageDir = this.getConfig(this.keyImageDir);
         this.curImageList = [];
+        this.selectedImageBlock = null;
 
         this.body = $('body');
         this.divToolbarWrapper = null;
@@ -296,9 +297,8 @@ class WallpickerPage {
 
     loadImageDir() {
         let that = this;
-        this.curImageList = [];
         this.renderPath();
-        this.divImageList.empty();
+        this.clearImageList();
         this.showLoading();
         setTimeout(() => {
             that.scanDir(this.curImageDir, 0);
@@ -431,6 +431,12 @@ class WallpickerPage {
         this.divPathContent.append($('<span/>').addClass('pathDirname').html(utils.escapeHtml(pathParts[pathParts.length - 1])));
     }
 
+    clearImageList() {
+        this.curImageList = [];
+        this.divImageList.empty();
+        this.clearSelection();
+    }
+
     renderImageList() {
         let that = this;
 
@@ -512,16 +518,32 @@ class WallpickerPage {
         this.hideLoading();
     }
 
-    clearSelection() {
+    refreshButtonState() {
+        if (this.selectedImageBlock) {
+            // selected
+            this.setButtonDisabled(this.buttonSetWallpaper, false);
+        } else {
+            // no selection
+            this.setButtonDisabled(this.buttonSetWallpaper, true);
+        }
+    }
+
+    clearSelection(refreshButton = true) {
         utils.log('clearSelection');
         let imageBlocks = this.divImageList.find('.imageBlock');
         imageBlocks.removeClass(this.classImageSelected);
+        this.selectedImageBlock = null;
+        if (refreshButton) {
+            this.refreshButtonState();
+        }
     }
 
     selectImage(imageBlock) {
-        this.clearSelection();
+        this.clearSelection(false);
         utils.log('selectImage, imageBlock=[%s]', imageBlock.attr('data-ref'));
+        this.selectedImageBlock = imageBlock;
         imageBlock.addClass(this.classImageSelected);
+        this.refreshButtonState();
     }
 }
 
