@@ -338,6 +338,10 @@ class WallpickerPage {
     }
 
     renderPath() {
+        // clear
+        this.divPathContent.empty();
+
+        // render
         let pathParts = this.curImageDir.split(path.sep);
         if (pathParts[0] == '') {
             pathParts = pathParts.slice(1);
