@@ -122,7 +122,8 @@ class WallpickerPage {
             .attr('id', 'divToolsWrapper')
             .addClass('d-flex');
         this.buttonSetWallpaper = this.generateToolbarButton('buttonSetWallpaper', 'bi-image', 'Set Wallpaper');
-        this.onButtonClick(this.buttonSetWallpaper, function () {
+        this.buttonSetWallpaper.on('click', function () {
+            utils.log('buttonSetWallpaper.click');
             that.clearSelection();
         });
         this.divToolsWrapper.append(this.buttonSetWallpaper);
@@ -209,7 +210,7 @@ class WallpickerPage {
         this.divImageList.css('width', divImageListWidth + 'px');
     }
 
-    generateToolbarButton(buttonId, iconName, title = null) {
+    generateToolbarButton(buttonId, iconName, title) {
         let button = $('<button/>').attr({
             'id': buttonId,
             'type': 'button'
@@ -220,31 +221,6 @@ class WallpickerPage {
         let buttonIcon = $('<i/>').addClass('bi').addClass(iconName);
         button.append(buttonIcon);
         return button;
-    }
-
-    onButtonClick(button, handler) {
-        let that = this;
-        button.on('click', function () {
-            if (that.needFixButtonFocus()) {
-                button.addClass('focus');
-            }
-            handler();
-            that.resetButtonStat(button);
-        });
-    }
-
-    resetButtonStat(button) {
-        let that = this;
-        setTimeout(function () {
-            if (that.needFixButtonFocus()) {
-                button.removeClass('focus');
-            }
-            button.blur();
-        }, 250);
-    }
-
-    needFixButtonFocus() {
-        return utils.isMacOS();
     }
 
     showLoading() {
