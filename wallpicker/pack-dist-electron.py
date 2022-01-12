@@ -101,7 +101,7 @@ APP_FILES = ['index.html', 'main.js',
             'README.md', 'LICENSE']
 
 EXEC_FIX_PATHS = ['./node_modules/.bin/electron-rebuild',
-                    './node_modules/wallpaper/source/macos-wallpaper']
+                './node_modules/wallpaper/source/macos-wallpaper']
 
 REBUILD_CMD = ''
 REBUILD_CLEAN_PATHS_WIN = []
