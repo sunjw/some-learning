@@ -340,7 +340,7 @@ class WallpickerPage {
     renderImageList() {
         // sort
         this.curImageList.sort((fo1, fo2) => {
-            return (fo2.ctime - fo1.ctime); // create time reverse
+            return (fo2.mtime - fo1.mtime); // modified time reverse
         });
 
         // render
