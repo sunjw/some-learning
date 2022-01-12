@@ -101,7 +101,7 @@ body {
 }
 #divImageList .imageBlock .infoWrapper .imageInfo {
     max-width: 200px;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
     user-select: text;
 }
 #divLoadingWrapper #divLoadingBlock {

@@ -381,7 +381,11 @@ class WallpickerPage {
             let imageBasename = fileObj.basename;
             // let imageExtname = fileObj.extname;
             if (imageBasename.length > 45) {
-                let imageBasenameFix = imageBasename.substring(0, 36);
+                let imageBasenameShortLen = 36;
+                if (utils.isMacOS()) {
+                    imageBasenameShortLen = 32;
+                }
+                let imageBasenameFix = imageBasename.substring(0, imageBasenameShortLen);
                 imageBasenameFix += '...';
                 imageBasenameFix += imageBasename.substring(imageBasename.length - 8, imageBasename.length);
                 imageBasename = imageBasenameFix;
