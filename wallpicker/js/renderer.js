@@ -11,11 +11,7 @@ const bootstrap = require('bootstrap');
 const fixPath = require('fix-path')();
 const probeImageSize = require('probe-image-size');
 const lazyload = require('lazyload');
-
-import {
-    setWallpaper
-}
-from 'wallpaper';
+const wallpaper = require('wallpaper');
 
 const utils = require('./utils');
 const eleUtils = require('./eleUtils');
@@ -128,7 +124,7 @@ class WallpickerPage {
             .attr('id', 'divToolsWrapper')
             .addClass('d-flex');
 
-        this.buttonSetWallpaper = this.generateToolbarButton('buttonSetWallpaper', 'bi-image', 'Set Wallpaper');
+        this.buttonSetWallpaper = this.generateToolbarButton('buttonSetWallpaper', 'bi-image', 'Set wallpaper');
         this.setButtonDisabled(this.buttonSetWallpaper, true);
         this.autoBlurButtonClick(this.buttonSetWallpaper, function () {
             utils.log('buttonSetWallpaper.click');
@@ -552,9 +548,9 @@ class WallpickerPage {
     }
 
     setOsWallpaper() {
-        let imagePath = imageBlock.attr('data-ref');
+        let imagePath = this.selectedImageBlock.attr('data-ref');
         utils.log('setWallpaper, imagePath=[%s]', imagePath);
-        setWallpaper(imagePath);
+        wallpaper.set(imagePath);
     }
 }
 
