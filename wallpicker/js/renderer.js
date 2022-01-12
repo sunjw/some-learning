@@ -26,6 +26,7 @@ class WallpickerPage {
 
         this.title = 'Wallpicker';
         this.keyImageDir = 'imageDir';
+        this.classImageSelected = 'imageSelected';
         this.imageExts = ['jpg', 'jpeg', 'png'];
         this.tipDropScan = 'Drop a directory to scan...';
         this.tipNoDirDrop = 'No directory dropped.';
@@ -369,6 +370,8 @@ class WallpickerPage {
     }
 
     renderImageList() {
+        let that = this;
+
         // sort
         this.curImageList.sort((fo1, fo2) => {
             return (fo2.mtime - fo1.mtime); // modified time reverse
@@ -380,6 +383,7 @@ class WallpickerPage {
             let divImageBlock = $('<div/>')
                 .attr('data-ref', filePath)
                 .addClass('imageBlock');
+
             // let fileObjJson = JSON.stringify(fileObj, null, 2);
             // fileObjJson = utils.escapeHtml(fileObjJson);
             // fileObjJson = utils.stringReplaceAll(fileObjJson, '\n', '<br/>');
@@ -409,9 +413,13 @@ class WallpickerPage {
                 'height': imagePreviewHeight + 'px'
             });
             imgContent.lazyload(); // lazy
+            imgContent.on('click', function () {
+                let imgParentBlock = divImageBlock;
+                imgParentBlock.addClass(that.classImageSelected);
+            });
             divImageWrapper.append(imgContent);
 
-            let divInfo = $('<div/>').addClass('align-self-start imageInfo');
+            let divImageInfo = $('<div/>').addClass('align-self-start imageInfo');
             let imageBasename = fileObj.basename;
             // let imageExtname = fileObj.extname;
             if (imageBasename.length > 45) {
@@ -424,8 +432,12 @@ class WallpickerPage {
                 imageBasenameFix += imageBasename.substring(imageBasename.length - 8, imageBasename.length);
                 imageBasename = imageBasenameFix;
             }
-            divInfo.html(utils.escapeHtml(imageBasename));
-            divInfoWrapper.append(divInfo);
+            divImageInfo.html(utils.escapeHtml(imageBasename));
+            divImageInfo.on('click', function () {
+                let imgParentBlock = divImageBlock;
+                imgParentBlock.addClass(that.classImageSelected);
+            });
+            divInfoWrapper.append(divImageInfo);
 
             divImageBlock.append(divImageWrapper);
             divImageBlock.append(divInfoWrapper);
