@@ -11,7 +11,6 @@ window.$ = window.jQuery = require('jquery');
 const bootstrap = require('bootstrap');
 const fixPath = require('fix-path')();
 const probeImageSize = require('probe-image-size');
-// const lazyload = require('lazyload');
 const wallpaper = require('wallpaper');
 
 const utils = require('./utils');
@@ -530,7 +529,6 @@ class WallpickerPage {
                 'height': imagePreviewHeight + 'px'
             });
             // lazy
-            // imgContent.lazyload();
             obsImageLazyload.observe(imgContent.get(0));
             imgContent.on('click', function (e) {
                 stopBubble(e);
