@@ -79,6 +79,9 @@ body {
     border-color: white;
     cursor: default;
 }
+#divToolbarWrapper .toolbarBtn:disabled, #divToolbarWrapper .toolbarBtn.disabled {
+    color: gray;
+}
 #divToolbarWrapper .toolbarBtn:hover {
     background-color: var(--color-lighter-gray);
     border-color: var(--color-lighter-gray);

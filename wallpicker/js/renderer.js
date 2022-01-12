@@ -121,13 +121,15 @@ class WallpickerPage {
         this.divToolsWrapper = $('<div/>')
             .attr('id', 'divToolsWrapper')
             .addClass('d-flex');
+
         this.buttonSetWallpaper = this.generateToolbarButton('buttonSetWallpaper', 'bi-image', 'Set Wallpaper');
+        this.setButtonDisabled(this.buttonSetWallpaper, true);
         this.autoBlurButtonClick(this.buttonSetWallpaper, function () {
             utils.log('buttonSetWallpaper.click');
             that.clearSelection();
         });
-        this.divToolsWrapper.append(this.buttonSetWallpaper);
 
+        this.divToolsWrapper.append(this.buttonSetWallpaper);
         this.divToolbarWrapper.append(this.divToolsWrapper);
 
         this.body.append(this.divToolbarWrapper);
@@ -227,14 +229,22 @@ class WallpickerPage {
         let that = this;
         button.on('click', function () {
             handler();
-            that.resetButtonStat(button);
+            that.resetButtonBlur(button);
         });
     }
 
-    resetButtonStat(button) {
+    resetButtonBlur(button) {
         setTimeout(function () {
             button.blur();
         }, 250);
+    }
+
+    setButtonDisabled(button, disabled) {
+        if (disabled) {
+            button.attr('disabled', 'disabled');
+        } else {
+            button.removeAttr('disabled');
+        }
     }
 
     showLoading() {
