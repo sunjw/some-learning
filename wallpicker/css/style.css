@@ -2,6 +2,7 @@
 :root {
     --color-windows-blue: #0078d7;
     --color-light-gray: #e0e0e0;
+    --color-lighter-gray: #f0f0f0;
     --height-toolbar: 48px;
 }
 /* Defines */
@@ -72,6 +73,15 @@ body {
 }
 #divToolbarWrapper.dropInfo #divPathContent {
     display: none;
+}
+#divToolbarWrapper .toolbarBtn {
+    background-color: white;
+    border-color: white;
+    cursor: default;
+}
+#divToolbarWrapper .toolbarBtn:hover {
+    background-color: var(--color-lighter-gray);
+    border-color: var(--color-lighter-gray);
 }
 /* Toolbar */
 
