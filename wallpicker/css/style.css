@@ -88,7 +88,7 @@ body {
 }
 #divImageList .imageBlock {
     width: 220px;
-    height: 220px;
+    /* height: 225px; */
     overflow: hidden;
     padding: 10px 10px;
     margin: 5px 5px;
@@ -98,6 +98,7 @@ body {
 }
 #divImageList .imageBlock .infoWrapper {
     height: 40px;
+    margin-top: 5px;
 }
 /* #divImageList .imageBlock .infoWrapper .imageInfo {
     text-overflow: ellipsis;
