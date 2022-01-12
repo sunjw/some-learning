@@ -132,7 +132,7 @@ class WallpickerPage {
         this.btnToolbarRandom = this.generateButton('btnToolbarRandom', 'bi-lightbulb', 'Random select');
         this.autoBlurButtonClick(this.btnToolbarRandom, function () {
             utils.log('btnToolbarRandom.click');
-            that.setOsWallpaper();
+            that.randomSelect();
         });
         this.divToolsWrapper.append(this.btnToolbarRandom);
 
@@ -588,6 +588,15 @@ class WallpickerPage {
         this.selectedImageBlock = imageBlock;
         imageBlock.addClass(this.classImageSelected);
         this.refreshButtonState();
+    }
+
+    randomSelect() {
+        if (this.curImageList.length == 0) {
+            return;
+        }
+        let randomImage = this.curImageList[utils.getRandomInt(this.curImageList.length)];
+        let imagePath = randomImage.path;
+        utils.log('randomSelect, imagePath=[%s]', imagePath);
     }
 
     setOsWallpaper() {
