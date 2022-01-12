@@ -415,7 +415,7 @@ class WallpickerPage {
             imgContent.lazyload(); // lazy
             imgContent.on('click', function () {
                 let imgParentBlock = divImageBlock;
-                imgParentBlock.addClass(that.classImageSelected);
+                that.selectImage(imgParentBlock);
             });
             divImageWrapper.append(imgContent);
 
@@ -435,7 +435,7 @@ class WallpickerPage {
             divImageInfo.html(utils.escapeHtml(imageBasename));
             divImageInfo.on('click', function () {
                 let imgParentBlock = divImageBlock;
-                imgParentBlock.addClass(that.classImageSelected);
+                that.selectImage(imgParentBlock);
             });
             divInfoWrapper.append(divImageInfo);
 
@@ -446,6 +446,18 @@ class WallpickerPage {
         }
 
         this.hideLoading();
+    }
+
+    clearSelection() {
+        utils.log('clearSelection');
+        let imageBlocks = this.divImageList.find('.imageBlock');
+        imageBlocks.removeClass(this.classImageSelected);
+    }
+
+    selectImage(imageBlock) {
+        this.clearSelection();
+        utils.log('selectImage, imageBlock=[%s]', imageBlock.attr('data-ref'));
+        imageBlock.addClass(this.classImageSelected);
     }
 }
 
