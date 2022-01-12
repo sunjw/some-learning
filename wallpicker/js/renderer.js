@@ -1,5 +1,6 @@
 const {
-    ipcRenderer
+    ipcRenderer,
+    shell
 } = require('electron');
 const remote = require('@electron/remote');
 
@@ -56,6 +57,7 @@ class WallpickerPage {
         this.divPathDropInfo = null;
         this.divPathContent = null;
         this.btnToolbarSetWallpaper = null;
+        this.btnToolbarShowFile = null;
         this.divContentWrapper = null;
         this.divImageList = null;
         this.divLoadingWrapper = null;
@@ -130,8 +132,16 @@ class WallpickerPage {
             utils.log('btnToolbarSetWallpaper.click');
             that.setOsWallpaper();
         });
-
         this.divToolsWrapper.append(this.btnToolbarSetWallpaper);
+
+        this.btnToolbarShowFile = this.generateButton('btnToolbarShowFile', 'bi-folder2-open', 'Show file');
+        this.setButtonDisabled(this.btnToolbarShowFile, true);
+        this.autoBlurButtonClick(this.btnToolbarShowFile, function () {
+            utils.log('btnToolbarShowFile.click');
+            that.openImageInDirectory();
+        });
+        this.divToolsWrapper.append(this.btnToolbarShowFile);
+
         this.divToolbarWrapper.append(this.divToolsWrapper);
 
         this.body.append(this.divToolbarWrapper);
@@ -523,9 +533,11 @@ class WallpickerPage {
         if (this.selectedImageBlock) {
             // selected
             this.setButtonDisabled(this.btnToolbarSetWallpaper, false);
+            this.setButtonDisabled(this.btnToolbarShowFile, false);
         } else {
             // no selection
             this.setButtonDisabled(this.btnToolbarSetWallpaper, true);
+            this.setButtonDisabled(this.btnToolbarShowFile, true);
         }
     }
 
@@ -553,6 +565,12 @@ class WallpickerPage {
         setTimeout(() => {
             wallpaper.set(imagePath);
         }, 1000);
+    }
+
+    openImageInDirectory() {
+        let imagePath = this.selectedImageBlock.attr('data-ref');
+        utils.log('openImageInDirectory, imagePath=[%s]', imagePath);
+        shell.showItemInFolder(imagePath);
     }
 }
 
