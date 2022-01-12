@@ -19,7 +19,6 @@ body {
 :not(input):not(textarea),
 :not(input):not(textarea)::after,
 :not(input):not(textarea)::before {
-    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -100,10 +99,11 @@ body {
     height: 40px;
     margin-top: 5px;
 }
-/* #divImageList .imageBlock .infoWrapper .imageInfo {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-} */
+#divImageList .imageBlock .infoWrapper .imageInfo {
+    max-width: 200px;
+    overflow-wrap: break-word;
+    user-select: text;
+}
 #divLoadingWrapper #divLoadingBlock {
     width: 100%;
 }
