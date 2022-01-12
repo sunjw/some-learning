@@ -100,8 +100,7 @@ APP_FILES = ['index.html', 'main.js',
             'package.json', 'package-lock.json',
             'README.md', 'LICENSE']
 
-EXEC_FIX_PATHS = ['./node_modules/.bin/electron-rebuild',
-                './node_modules/.bin/node-pre-gyp']
+EXEC_FIX_PATHS = ['./node_modules/.bin/electron-rebuild']
 
 REBUILD_CMD = ''
 REBUILD_CLEAN_PATHS_WIN = []
