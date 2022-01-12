@@ -58,6 +58,7 @@ class WallpickerPage {
         this.divPathContent = null;
         this.btnToolbarSetWallpaper = null;
         this.btnToolbarShowFile = null;
+        this.btnToolbarShowSelected = null;
         this.divContentWrapper = null;
         this.divImageList = null;
         this.divLoadingWrapper = null;
@@ -141,6 +142,14 @@ class WallpickerPage {
             that.openImageInDirectory();
         });
         this.divToolsWrapper.append(this.btnToolbarShowFile);
+
+        this.btnToolbarShowSelected = this.generateButton('btnToolbarShowSelected', 'bi-fullscreen-exit', 'Show selected image');
+        this.setButtonDisabled(this.btnToolbarShowSelected, true);
+        this.autoBlurButtonClick(this.btnToolbarShowSelected, function () {
+            utils.log('btnToolbarShowSelected.click');
+            // that.openImageInDirectory();
+        });
+        this.divToolsWrapper.append(this.btnToolbarShowSelected);
 
         this.divToolbarWrapper.append(this.divToolsWrapper);
 
@@ -534,10 +543,12 @@ class WallpickerPage {
             // selected
             this.setButtonDisabled(this.btnToolbarSetWallpaper, false);
             this.setButtonDisabled(this.btnToolbarShowFile, false);
+            this.setButtonDisabled(this.btnToolbarShowSelected, false);
         } else {
             // no selection
             this.setButtonDisabled(this.btnToolbarSetWallpaper, true);
             this.setButtonDisabled(this.btnToolbarShowFile, true);
+            this.setButtonDisabled(this.btnToolbarShowSelected, true);
         }
     }
 
