@@ -15,6 +15,10 @@ const lazyload = require('lazyload');
 const utils = require('./utils');
 const eleUtils = require('./eleUtils');
 
+function stopBubble(event) {
+    event.stopPropagation();
+}
+
 class WallpickerPage {
 
     constructor() {
@@ -87,6 +91,7 @@ class WallpickerPage {
     }
 
     initLayout() {
+        let that = this;
         // init layout
 
         // init toolbar
@@ -117,7 +122,11 @@ class WallpickerPage {
         // image list
         this.divImageList = $('<div/>')
             .attr('id', 'divImageList')
-            .addClass('ms-auto me-auto d-flex align-content-start flex-wrap');
+            .addClass('ms-auto me-auto d-flex align-content-start flex-wrap')
+            .on('click', function () {
+                utils.log('divImageList click');
+                that.clearSelection();
+            });
         this.divContentWrapper.append(this.divImageList);
 
         // loading
@@ -147,7 +156,7 @@ class WallpickerPage {
 
         let bodyDom = this.body.get(0);
         bodyDom.ondragover = function (e) {
-            e.stopPropagation();
+            stopBubble(e);
             // utils.log('ondragover, body.ondragover');
             that.divToolbarWrapper.addClass('dropInfo');
             return false;
@@ -413,7 +422,8 @@ class WallpickerPage {
                 'height': imagePreviewHeight + 'px'
             });
             imgContent.lazyload(); // lazy
-            imgContent.on('click', function () {
+            imgContent.on('click', function (e) {
+                stopBubble(e);
                 let imgParentBlock = divImageBlock;
                 that.selectImage(imgParentBlock);
             });
@@ -433,7 +443,8 @@ class WallpickerPage {
                 imageBasename = imageBasenameFix;
             }
             divImageInfo.html(utils.escapeHtml(imageBasename));
-            divImageInfo.on('click', function () {
+            divImageInfo.on('click', function (e) {
+                stopBubble(e);
                 let imgParentBlock = divImageBlock;
                 that.selectImage(imgParentBlock);
             });
