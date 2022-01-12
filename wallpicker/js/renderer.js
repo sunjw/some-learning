@@ -147,7 +147,7 @@ class WallpickerPage {
         this.setButtonDisabled(this.btnToolbarShowSelected, true);
         this.autoBlurButtonClick(this.btnToolbarShowSelected, function () {
             utils.log('btnToolbarShowSelected.click');
-            // that.openImageInDirectory();
+            that.scrollToSelected();
         });
         this.divToolsWrapper.append(this.btnToolbarShowSelected);
 
@@ -582,6 +582,15 @@ class WallpickerPage {
         let imagePath = this.selectedImageBlock.attr('data-ref');
         utils.log('openImageInDirectory, imagePath=[%s]', imagePath);
         shell.showItemInFolder(imagePath);
+    }
+
+    scrollToSelected() {
+        utils.log('scrollToSelected');
+        let imageBlockDom = this.selectedImageBlock.get(0);
+        imageBlockDom.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
     }
 }
 
