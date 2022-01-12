@@ -11,7 +11,7 @@ window.$ = window.jQuery = require('jquery');
 const bootstrap = require('bootstrap');
 const fixPath = require('fix-path')();
 const probeImageSize = require('probe-image-size');
-const lazyload = require('lazyload');
+// const lazyload = require('lazyload');
 const wallpaper = require('wallpaper');
 
 const utils = require('./utils');
@@ -20,6 +20,22 @@ const eleUtils = require('./eleUtils');
 function stopBubble(event) {
     event.stopPropagation();
 }
+
+function handleImageIntersection(entries) {
+    // utils.log('handleImageIntersection');
+    for (let entryDom of entries) {
+        let entryObj = $(entryDom.target);
+        let entryDataSrc = entryObj.attr('data-src');
+        let entryDataPlaceholder = entryObj.attr('data-placeholder');
+        if (entryDom.isIntersecting) {
+            entryObj.attr('src', entryDataSrc);
+        } else {
+            entryObj.attr('src', entryDataPlaceholder);
+        }
+    }
+}
+
+const obsImageLazyload = new IntersectionObserver(handleImageIntersection);
 
 class WallpickerPage {
 
@@ -34,6 +50,7 @@ class WallpickerPage {
         this.keyImageDir = 'imageDir';
         this.classImageSelected = 'imageSelected';
         this.imageExts = ['jpg', 'jpeg', 'png'];
+        this.imagePlaceholder = 'assets/placeholder.png';
         this.tipDropScan = 'Drop a directory to scan...';
         this.tipNoDirDrop = 'No directory dropped.';
         this.tipDropOneDir = 'Drop only one directory.';
@@ -493,10 +510,11 @@ class WallpickerPage {
 
             let imgContent = $('<img/>')
                 .attr({
-                    'src': 'assets/placeholder.png',
-                    'data-src': filePath
+                    'src': this.imagePlaceholder,
+                    'data-src': filePath,
+                    'data-placeholder': this.imagePlaceholder,
                 })
-                .addClass('align-self-end lazyload imageContent');
+                .addClass('align-self-end imageContent');
             let imagePreviewWidth = fileObj.width;
             let imagePreviewHeight = fileObj.height;
             let imageRatio = fileObj.width / fileObj.height;
@@ -511,7 +529,9 @@ class WallpickerPage {
                 'width': imagePreviewWidth + 'px',
                 'height': imagePreviewHeight + 'px'
             });
-            imgContent.lazyload(); // lazy
+            // lazy
+            // imgContent.lazyload();
+            obsImageLazyload.observe(imgContent.get(0));
             imgContent.on('click', function (e) {
                 stopBubble(e);
                 let imgParentBlock = divImageBlock;
