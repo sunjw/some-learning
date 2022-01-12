@@ -115,7 +115,8 @@ body {
     overflow-wrap: anywhere;
     word-break: break-all;
     user-select: text;
-
+}
+#divImageList .imageSelected .imageInfo {
     color: white;
     background-color: var(--color-windows-blue);
     border-radius: 5px;

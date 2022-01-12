@@ -376,7 +376,10 @@ class WallpickerPage {
 
         // render
         for (let fileObj of this.curImageList) {
-            let divImageBlock = $('<div/>').addClass('imageBlock');
+            let filePath = fileObj.path;
+            let divImageBlock = $('<div/>')
+                .attr('data-ref', filePath)
+                .addClass('imageBlock');
             // let fileObjJson = JSON.stringify(fileObj, null, 2);
             // fileObjJson = utils.escapeHtml(fileObjJson);
             // fileObjJson = utils.stringReplaceAll(fileObjJson, '\n', '<br/>');
@@ -388,7 +391,7 @@ class WallpickerPage {
             let imgContent = $('<img/>')
                 .attr({
                     'src': 'assets/placeholder.png',
-                    'data-src': fileObj.path
+                    'data-src': filePath
                 })
                 .addClass('align-self-end lazyload imageContent');
             let imagePreviewWidth = fileObj.width;
