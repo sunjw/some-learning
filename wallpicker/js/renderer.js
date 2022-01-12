@@ -559,6 +559,7 @@ class WallpickerPage {
             this.setButtonDisabled(this.btnToolbarShowFile, true);
             this.setButtonDisabled(this.btnToolbarShowSelected, true);
         }
+        this.setButtonDisabled(this.btnToolbarRandom, false);
     }
 
     clearSelection(refreshButton = true) {
