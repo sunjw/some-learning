@@ -214,7 +214,7 @@ class WallpickerPage {
         }
         let dropPath = dropFiles[0].path;
         utils.log('onDropFiles, dropPath=[%s]', dropPath);
-        fs.stat(dropPath, (err, stats) => {
+        fs.lstat(dropPath, (err, stats) => {
             if (err || !stats.isDirectory()) {
                 eleUtils.sendToMain({
                     type: 'warning',
@@ -260,14 +260,16 @@ class WallpickerPage {
 
             for (let fileName of files) {
                 let filePath = path.join(dirPath, fileName);
-                let stat = fs.statSync(filePath);
-                if (stat.isDirectory()) {
+                let stat = fs.lstatSync(filePath);
+                if (stat.isDirectory() && !stat.isSymbolicLink()) {
                     // dir
                     that.scanDir(filePath, deep + 1);
-                } else {
+                } else if (stat.isFile()) {
                     // file
                     // utils.log('scanDir, found filePath=[%s]', filePath);
                     that.processFile(filePath, stat);
+                } else {
+                    utils.log('scanDir, ignore filePath=[%s]', filePath);
                 }
             }
 
@@ -292,15 +294,20 @@ class WallpickerPage {
     }
 
     readdirEx(dirPath, isSync, callback) {
-        if (!isSync) {
-            // async
-            fs.readdir(dirPath, (err, files) => {
-                callback(err, files);
-            });
-        } else {
-            // sync
-            let files = fs.readdirSync(dirPath);
-            callback(null, files);
+        try {
+            if (!isSync) {
+                // async
+                fs.readdir(dirPath, (err, files) => {
+                    callback(err, files);
+                });
+            } else {
+                // sync
+                let files = fs.readdirSync(dirPath);
+                callback(null, files);
+            }
+        } catch (e) {
+            utils.log('readdirEx, error, dirPath=[%s]', dirPath);
+            callback(null, []);
         }
     }
 
