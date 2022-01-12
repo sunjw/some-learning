@@ -463,11 +463,7 @@ class WallpickerPage {
 
 let wallpickerPage = new WallpickerPage();
 
-// ipcRenderer.on('on-find', (e, args) => {
-//     dirListFilter.openFilterBox();
-// });
-
-ipcRenderer.on('set-userData-path', (event, arg) => {
+ipcRenderer.on('set-userData-path', (e, arg) => {
     utils.log('set-userData-path, arg=[%s]', arg);
 
     // let's go.
@@ -475,6 +471,10 @@ ipcRenderer.on('set-userData-path', (event, arg) => {
         userDataPath: arg
     });
 });
+
+// ipcRenderer.on('on-find', (e, args) => {
+//     dirListFilter.openFilterBox();
+// });
 
 $(function () {
     utils.log('finish loading.');
