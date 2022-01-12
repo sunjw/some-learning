@@ -29,6 +29,7 @@
     "fix-path": "^3.0.0",
     "jquery": "^3.6.0",
     "lazyload": "^2.0.0-rc.2",
-    "probe-image-size": "^7.2.2"
+    "probe-image-size": "^7.2.2",
+    "wallpaper": "^6.1.0"
   }
 }
