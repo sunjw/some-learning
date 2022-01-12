@@ -137,6 +137,9 @@ def main():
     run_cmd('npm install')
 
     # Extract old package and remove old app.
+    if not os.path.exists(DIST_DIR):
+        os.mkdir(DIST_DIR)
+
     if extract_old:
         log_stage('Extract old package and remove old app...')
         os.chdir(DIST_DIR)
