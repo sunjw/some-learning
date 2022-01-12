@@ -595,8 +595,18 @@ class WallpickerPage {
             return;
         }
         let randomImage = this.curImageList[utils.getRandomInt(this.curImageList.length)];
-        let imagePath = randomImage.path;
-        utils.log('randomSelect, imagePath=[%s]', imagePath);
+        let randomImagePath = randomImage.path;
+        utils.log('randomSelect, randomImagePath=[%s]', randomImagePath);
+        let imageBlocks = this.divImageList.find('.imageBlock');
+        for (let imageBlockDom of imageBlocks) {
+            let imageBlock = $(imageBlockDom);
+            let imagePath = imageBlock.attr('data-ref');
+            if (imagePath == randomImagePath) {
+                this.selectImage(imageBlock);
+                this.scrollToSelected();
+                return;
+            }
+        }
     }
 
     setOsWallpaper() {
