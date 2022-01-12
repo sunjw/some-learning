@@ -55,7 +55,7 @@ class WallpickerPage {
         this.divToolsWrapper = null;
         this.divPathDropInfo = null;
         this.divPathContent = null;
-        this.buttonSetWallpaper = null;
+        this.btnToolbarSetWallpaper = null;
         this.divContentWrapper = null;
         this.divImageList = null;
         this.divLoadingWrapper = null;
@@ -124,14 +124,14 @@ class WallpickerPage {
             .attr('id', 'divToolsWrapper')
             .addClass('d-flex');
 
-        this.buttonSetWallpaper = this.generateToolbarButton('buttonSetWallpaper', 'bi-image', 'Set wallpaper');
-        this.setButtonDisabled(this.buttonSetWallpaper, true);
-        this.autoBlurButtonClick(this.buttonSetWallpaper, function () {
-            utils.log('buttonSetWallpaper.click');
+        this.btnToolbarSetWallpaper = this.generateButton('btnToolbarSetWallpaper', 'bi-image', 'Set wallpaper');
+        this.setButtonDisabled(this.btnToolbarSetWallpaper, true);
+        this.autoBlurButtonClick(this.btnToolbarSetWallpaper, function () {
+            utils.log('btnToolbarSetWallpaper.click');
             that.setOsWallpaper();
         });
 
-        this.divToolsWrapper.append(this.buttonSetWallpaper);
+        this.divToolsWrapper.append(this.btnToolbarSetWallpaper);
         this.divToolbarWrapper.append(this.divToolsWrapper);
 
         this.body.append(this.divToolbarWrapper);
@@ -214,7 +214,7 @@ class WallpickerPage {
         this.divImageList.css('width', divImageListWidth + 'px');
     }
 
-    generateToolbarButton(buttonId, iconName, title) {
+    generateButton(buttonId, iconName, title) {
         let button = $('<button/>').attr({
             'id': buttonId,
             'type': 'button'
@@ -522,10 +522,10 @@ class WallpickerPage {
     refreshButtonState() {
         if (this.selectedImageBlock) {
             // selected
-            this.setButtonDisabled(this.buttonSetWallpaper, false);
+            this.setButtonDisabled(this.btnToolbarSetWallpaper, false);
         } else {
             // no selection
-            this.setButtonDisabled(this.buttonSetWallpaper, true);
+            this.setButtonDisabled(this.btnToolbarSetWallpaper, true);
         }
     }
 
