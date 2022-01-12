@@ -86,19 +86,12 @@ body {
     top: 0;
     left: 0;
 }
-#divLoadingWrapper #divLoadingBlock {
-    width: 100%;
-}
-#divLoadingWrapper #divLoadingBlock .spinner-border {
-    color: var(--color-windows-blue);
-}
-#divLoadingWrapper #divLoadingBlock #divLoadingText {
-    margin-left: 10px;
-}
 #divImageList .imageBlock {
-    width: 200px;
-    height: 200px;
+    width: 220px;
+    height: 220px;
     overflow: hidden;
+    padding: 10px 10px;
+    margin: 5px 5px;
 }
 #divImageList .imageBlock .imageWrapper {
     height: 160px;
@@ -110,6 +103,15 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
 } */
+#divLoadingWrapper #divLoadingBlock {
+    width: 100%;
+}
+#divLoadingWrapper #divLoadingBlock .spinner-border {
+    color: var(--color-windows-blue);
+}
+#divLoadingWrapper #divLoadingBlock #divLoadingText {
+    margin-left: 10px;
+}
 /* Image list */
 
 /* Footer */

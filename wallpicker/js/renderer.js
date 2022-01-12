@@ -32,7 +32,7 @@ class WallpickerPage {
         this.tipDropOneDir = 'Drop only one directory.';
         this.tipReadDirError = 'Read directory error.';
         this.minScanTime = 2000;
-        this.imageBlockWidth = 200;
+        this.imageBlockWidth = 230; // width + margin
         this.maxImagePreviewWidth = 200;
         this.maxImagePreviewHeight = 160;
         this.maxImagePreviewRatio = this.maxImagePreviewWidth / this.maxImagePreviewHeight;
@@ -172,7 +172,7 @@ class WallpickerPage {
     fitContentHeight() {
         let windowHeight = $(window).height();
         let divContentWrapperTop = this.divContentWrapper.offset().top;
-        let contentHeight = windowHeight - divContentWrapperTop - 3;
+        let contentHeight = windowHeight - divContentWrapperTop - 2;
         this.divContentWrapper.css('height', contentHeight + 'px');
         this.divLoadingBlock.css('height', contentHeight + 'px');
     }
