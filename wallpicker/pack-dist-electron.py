@@ -156,7 +156,7 @@ def main():
         os.chdir(electron_node_module_dir)
         if is_windows_sys():
             electron_dist_package = 'dist.7z'
-            run_cmd('%s -t7z a -r %s %s' % (exe_7z_sys, electron_dist_package, electron_dist_dir))
+            run_cmd('%s -t7z a %s %s' % (exe_7z_sys, electron_dist_package, electron_dist_dir))
             os.chdir(cwd)
             electron_dist_package_path = os.path.join(electron_node_module_dir, electron_dist_package)
             copy_file(electron_dist_package_path, os.path.join(DIST_DIR, electron_dist_package))
@@ -247,7 +247,7 @@ def main():
     os.chdir(DIST_DIR)
     if is_windows_sys():
         remove_file('%s.7z' % (app_name))
-        run_cmd('%s -t7z -mx9 a -r %s.7z %s' % (exe_7z_sys, app_name, app_name))
+        run_cmd('%s -t7z -mx9 a %s.7z %s' % (exe_7z_sys, app_name, app_name))
     else:
         remove_file('%s.tar.%s' % (app_name, tar_ext))
         run_cmd('tar %s %s.tar.%s %s' % (tar_param, app_name, tar_ext, app_name))
