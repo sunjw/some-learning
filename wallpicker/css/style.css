@@ -2,6 +2,7 @@
 :root {
     --color-windows-blue: #0078d7;
     --color-light-gray: #e0e0e0;
+    --height-toolbar: 48px;
 }
 /* Defines */
 
@@ -49,16 +50,17 @@ body {
 
 /* Toolbar */
 #divToolbarWrapper {
-    height: 60px;
+    height: var(--height-toolbar);
+    padding: 0 20px;
     border-bottom: 1px solid var(--color-light-gray);
 }
 #divToolbarWrapper #divPathDropInfo {
     display: none;
-    line-height: 60px;
+    line-height: var(--height-toolbar);
     color: var(--color-windows-blue);
 }
 #divToolbarWrapper #divPathContent {
-    line-height: 60px;
+    line-height: var(--height-toolbar);
 }
 #divToolbarWrapper.dropInfo #divPathDropInfo {
     display: block;
