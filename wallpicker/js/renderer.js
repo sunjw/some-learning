@@ -234,7 +234,7 @@ class WallpickerPage {
     loadImageDir() {
         let that = this;
         this.curImageList = [];
-        this.divPathContent.text(this.curImageDir);
+        this.renderPath();
         this.divImageList.empty();
         this.showLoading();
         setTimeout(() => {
@@ -335,6 +335,23 @@ class WallpickerPage {
 
         // utils.log('processFile, image, fileObj=\n%s', JSON.stringify(fileObj, null, 2));
         this.curImageList.push(fileObj);
+    }
+
+    renderPath() {
+        let pathParts = this.curImageDir.split(path.sep);
+        utils.log('renderPath, pathPart=[%s]', pathParts.join(','));
+        let pathRender = '';
+        let pathPartsLen = pathParts.length;
+        for (let i = 0; i < pathPartsLen - 1; i++) {
+            pathRender += (' ' + path.sep + ' ' + pathParts[i]);
+        }
+        pathRender += (' ' + path.sep + ' ');
+        if (utils.isWindows()) {
+            pathRender = pathRender.substring(3);
+        }
+        pathRender = pathRender.trimStart();
+        this.divPathContent.append($('<span/>').html(utils.escapeHtml(pathRender)));
+        this.divPathContent.append($('<span/>').addClass('pathDirname').html(utils.escapeHtml(pathParts[pathParts.length - 1])));
     }
 
     renderImageList() {

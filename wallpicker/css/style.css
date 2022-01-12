@@ -60,7 +60,12 @@ body {
     color: var(--color-windows-blue);
 }
 #divToolbarWrapper #divPathContent {
+    color: gray;
     line-height: var(--height-toolbar);
+}
+#divToolbarWrapper #divPathContent .pathDirname {
+    color: black;
+    font-weight: bold;
 }
 #divToolbarWrapper.dropInfo #divPathDropInfo {
     display: block;
