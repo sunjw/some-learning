@@ -104,10 +104,14 @@ body {
 }
 #divImageList .imageBlock .infoWrapper {
     height: 40px;
-    margin-top: 5px;
+    margin-top: 2px;
+    padding: 4px;
+    overflow: hidden;
 }
 #divImageList .imageBlock .infoWrapper .imageInfo {
     max-width: 200px;
+    font-size: 14px;
+    line-height: 16px;
     overflow-wrap: anywhere;
     user-select: text;
 }
