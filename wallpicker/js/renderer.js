@@ -339,6 +339,9 @@ class WallpickerPage {
 
     renderPath() {
         let pathParts = this.curImageDir.split(path.sep);
+        if (pathParts[0] == '') {
+            pathParts = pathParts.slice(1);
+        }
         utils.log('renderPath, pathPart=[%s]', pathParts.join(','));
         let pathRender = '';
         let pathPartsLen = pathParts.length;
