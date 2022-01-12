@@ -83,6 +83,12 @@ body {
     background-color: var(--color-lighter-gray);
     border-color: var(--color-lighter-gray);
 }
+#divToolbarWrapper .toolbarBtn:focus, #divToolbarWrapper .toolbarBtn.focus {
+    /* color: var(--color-windows-blue); */
+    background-color: var(--color-light-gray);
+    border-color: var(--color-light-gray);
+    box-shadow: none !important;
+}
 /* Toolbar */
 
 /* Dialog */

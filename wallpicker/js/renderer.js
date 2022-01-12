@@ -122,7 +122,7 @@ class WallpickerPage {
             .attr('id', 'divToolsWrapper')
             .addClass('d-flex');
         this.buttonSetWallpaper = this.generateToolbarButton('buttonSetWallpaper', 'bi-image', 'Set Wallpaper');
-        this.buttonSetWallpaper.on('click', function () {
+        this.autoBlurButtonClick(this.buttonSetWallpaper, function () {
             utils.log('buttonSetWallpaper.click');
             that.clearSelection();
         });
@@ -221,6 +221,20 @@ class WallpickerPage {
         let buttonIcon = $('<i/>').addClass('bi').addClass(iconName);
         button.append(buttonIcon);
         return button;
+    }
+
+    autoBlurButtonClick(button, handler) {
+        let that = this;
+        button.on('click', function () {
+            handler();
+            that.resetButtonStat(button);
+        });
+    }
+
+    resetButtonStat(button) {
+        setTimeout(function () {
+            button.blur();
+        }, 250);
     }
 
     showLoading() {
