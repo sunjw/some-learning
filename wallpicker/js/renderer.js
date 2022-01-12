@@ -50,8 +50,10 @@ class WallpickerPage {
         this.body = $('body');
         this.divToolbarWrapper = null;
         this.divPathWrapper = null;
+        this.divToolsWrapper = null;
         this.divPathDropInfo = null;
         this.divPathContent = null;
+        this.buttonSetWallpaper = null;
         this.divContentWrapper = null;
         this.divImageList = null;
         this.divLoadingWrapper = null;
@@ -114,6 +116,19 @@ class WallpickerPage {
         this.divPathWrapper.append(this.divPathContent);
 
         this.divToolbarWrapper.append(this.divPathWrapper);
+
+        // init tools
+        this.divToolsWrapper = $('<div/>')
+            .attr('id', 'divToolsWrapper')
+            .addClass('d-flex');
+        this.buttonSetWallpaper = this.generateToolbarButton('buttonSetWallpaper', 'bi-image', 'Set Wallpaper');
+        this.onButtonClick(this.buttonSetWallpaper, function () {
+            that.clearSelection();
+        });
+        this.divToolsWrapper.append(this.buttonSetWallpaper);
+
+        this.divToolbarWrapper.append(this.divToolsWrapper);
+
         this.body.append(this.divToolbarWrapper);
 
         // init content
@@ -192,6 +207,44 @@ class WallpickerPage {
         let imagePerLine = Math.floor(contentWrapperWidth / this.imageBlockWidth);
         let divImageListWidth = imagePerLine * this.imageBlockWidth + 2;
         this.divImageList.css('width', divImageListWidth + 'px');
+    }
+
+    generateToolbarButton(buttonId, iconName, title = null) {
+        let button = $('<button/>').attr({
+            'id': buttonId,
+            'type': 'button'
+        }).addClass('btn btn-light align-self-center toolbarBtn');
+        if (title) {
+            button.attr('title', title);
+        }
+        let buttonIcon = $('<i/>').addClass('bi').addClass(iconName);
+        button.append(buttonIcon);
+        return button;
+    }
+
+    onButtonClick(button, handler) {
+        let that = this;
+        button.on('click', function () {
+            if (that.needFixButtonFocus()) {
+                button.addClass('focus');
+            }
+            handler();
+            that.resetButtonStat(button);
+        });
+    }
+
+    resetButtonStat(button) {
+        let that = this;
+        setTimeout(function () {
+            if (that.needFixButtonFocus()) {
+                button.removeClass('focus');
+            }
+            button.blur();
+        }, 250);
+    }
+
+    needFixButtonFocus() {
+        return utils.isMacOS();
     }
 
     showLoading() {
