@@ -104,16 +104,20 @@ body {
 }
 #divImageList .imageBlock .infoWrapper {
     height: 40px;
-    margin-top: 2px;
-    padding: 4px;
+    margin-top: 6px;
     overflow: hidden;
 }
 #divImageList .imageBlock .infoWrapper .imageInfo {
     max-width: 200px;
+    padding: 4px 6px;
     font-size: 14px;
     line-height: 16px;
     overflow-wrap: anywhere;
     user-select: text;
+
+    color: white;
+    background-color: var(--color-windows-blue);
+    border-radius: 5px;
 }
 #divLoadingWrapper #divLoadingBlock {
     width: 100%;
