@@ -56,6 +56,7 @@ class WallpickerPage {
         this.divToolsWrapper = null;
         this.divPathDropInfo = null;
         this.divPathContent = null;
+        this.btnToolbarRandom = null;
         this.btnToolbarSetWallpaper = null;
         this.btnToolbarShowFile = null;
         this.btnToolbarShowSelected = null;
@@ -127,6 +128,13 @@ class WallpickerPage {
             .attr('id', 'divToolsWrapper')
             .addClass('d-flex');
 
+        this.btnToolbarRandom = this.generateButton('btnToolbarRandom', 'bi-lightbulb', 'Random select');
+        this.autoBlurButtonClick(this.btnToolbarRandom, function () {
+            utils.log('btnToolbarRandom.click');
+            that.setOsWallpaper();
+        });
+        this.divToolsWrapper.append(this.btnToolbarRandom);
+
         this.btnToolbarSetWallpaper = this.generateButton('btnToolbarSetWallpaper', 'bi-image', 'Set wallpaper');
         this.setButtonDisabled(this.btnToolbarSetWallpaper, true);
         this.autoBlurButtonClick(this.btnToolbarSetWallpaper, function () {
@@ -156,16 +164,17 @@ class WallpickerPage {
         this.body.append(this.divToolbarWrapper);
 
         // init content
-        this.divContentWrapper = $('<div/>').attr('id', 'divContentWrapper');
+        this.divContentWrapper = $('<div/>')
+            .attr('id', 'divContentWrapper')
+            .on('click', function () {
+                utils.log('divContentWrapper click');
+                that.clearSelection();
+            });
 
         // image list
         this.divImageList = $('<div/>')
             .attr('id', 'divImageList')
-            .addClass('ms-auto me-auto d-flex align-content-start flex-wrap')
-            .on('click', function () {
-                utils.log('divImageList click');
-                that.clearSelection();
-            });
+            .addClass('ms-auto me-auto d-flex align-content-start flex-wrap');
         this.divContentWrapper.append(this.divImageList);
 
         // loading
