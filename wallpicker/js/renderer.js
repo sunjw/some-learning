@@ -550,7 +550,9 @@ class WallpickerPage {
     setOsWallpaper() {
         let imagePath = this.selectedImageBlock.attr('data-ref');
         utils.log('setWallpaper, imagePath=[%s]', imagePath);
-        wallpaper.set(imagePath);
+        setTimeout(() => {
+            wallpaper.set(imagePath);
+        }, 1000);
     }
 }
 
