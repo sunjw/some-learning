@@ -96,7 +96,7 @@ PACKAGE_NAME = 'wallpaper-picker'
 
 DIST_DIR = 'dist'
 APP_DIRS = ['node_modules', 'assets', 'css', 'js']
-APP_FILES = ['main.js',
+APP_FILES = ['index.html', 'main.js',
             'package.json', 'package-lock.json',
             'README.md', 'LICENSE']
 
