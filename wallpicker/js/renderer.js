@@ -644,6 +644,7 @@ class WallpickerPage {
         setTimeout(() => {
             wallpaper.set(imagePath);
         }, 1000);
+        this.showToast('Set wallpaper to "' + imagePath + '"');
     }
 
     openImageInDirectory() {
@@ -693,7 +694,7 @@ class WallpickerPage {
             'type': 'button',
             'data-bs-dismiss': 'toast',
             'aria-label': 'Close'
-        }).addClass('btn-close align-self-center me-2');
+        }).addClass('btn-close m-auto me-2');
         divToast.append(buttonToastClose);
 
         this.divToastWrapper.append(divToast);

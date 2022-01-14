@@ -159,6 +159,14 @@ body {
     margin-right: 22px;
     margin-bottom: 16px;
 }
+#divToastWrapper .toast {
+    margin-top: 20px;
+}
+#divToastWrapper .toast .toast-body {
+    overflow-wrap: anywhere;
+    word-break: break-all;
+    max-width: 320px;
+}
 #divToastWrapper .toast .btn-close,
 #divToastWrapper .toast .btn-close:hover,
 #divToastWrapper .toast .btn-close:active,
