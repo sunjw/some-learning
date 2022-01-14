@@ -534,9 +534,12 @@ class WallpickerPage {
     }
 
     clearImageList() {
+        utils.log('clearImageList');
         this.curImageList = [];
         this.divImageList.empty();
         this.clearSelection();
+        this.inputFilter.val('');
+        this.onFilterTextChanged();
     }
 
     renderImageList() {
