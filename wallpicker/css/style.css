@@ -151,6 +151,15 @@ body {
 }
 /* Image list */
 
+/* Others */
+#divToastWrapper {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 16px;
+}
+/* Others */
+
 /* Footer */
 /* Footer */
 
@@ -208,7 +217,3 @@ body {
     color: var(--color-windows-blue);
 }
 /* Filter */
-
-/* Others */
-
-/* Others */

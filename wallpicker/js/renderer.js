@@ -80,6 +80,7 @@ class WallpickerPage {
         this.divImageList = null;
         this.divLoadingWrapper = null;
         this.divLoadingBlock = null;
+        this.divToastWrapper = null;
 
         this.initLayout();
         this.initHandler();
@@ -217,6 +218,10 @@ class WallpickerPage {
         this.divContentWrapper.append(this.divLoadingWrapper);
 
         this.body.append(this.divContentWrapper);
+
+        // toast
+        this.divToastWrapper = $('<div/>').attr('id', 'divToastWrapper');
+        this.body.append(this.divToastWrapper);
     }
 
     initHandler() {
