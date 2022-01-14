@@ -681,17 +681,19 @@ class WallpickerPage {
             'role': 'alert',
             'aria-live': 'assertive',
             'aria-atomic': 'true',
-            'data-bs-autohide': 'false',
+            // 'data-bs-autohide': 'false',
             'data-delay': '5000'
-        }).addClass('toast');
+        }).addClass('toast d-flex');
 
-        let divToastBody = $('<div/>').addClass('toast-body').html(message);
+        let divToastBody = $('<div/>')
+            .addClass('toast-body flex-grow-1')
+            .html(utils.escapeHtml(message));
         divToast.append(divToastBody);
         let buttonToastClose = $('<button/>').attr({
             'type': 'button',
             'data-bs-dismiss': 'toast',
             'aria-label': 'Close'
-        }).addClass('btn-close');
+        }).addClass('btn-close align-self-center');
         divToast.append(buttonToastClose);
 
         this.divToastWrapper.append(divToast);

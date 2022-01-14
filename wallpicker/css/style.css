@@ -159,11 +159,16 @@ body {
     margin-right: 22px;
     margin-bottom: 16px;
 }
+#divToastWrapper .toast .btn-close {
+    margin-right: 10px;
+}
 #divToastWrapper .toast .btn-close,
 #divToastWrapper .toast .btn-close:hover,
 #divToastWrapper .toast .btn-close:active,
-#divToastWrapper .toast .btn-close:focus {
-    outline: none;
+#divToastWrapper .toast .btn-close:focus,
+#divToastWrapper .toast .btn-close.focus {
+    outline: 0 !important;
+    box-shadow: none !important;
 }
 /* Others */
 
