@@ -90,10 +90,15 @@ body {
     border-color: var(--color-windows-blue);
 }
 #divToolbarWrapper #divFilterBlock #divFilterClear {
-    color: gray;
     position: absolute;
     top: 13px;
     right: 6px;
+}
+#divToolbarWrapper #divFilterBlock .filterClear {
+    color: gray;
+}
+#divToolbarWrapper #divFilterBlock .filterClear.focus {
+    color: black;
 }
 #divToolbarWrapper .toolbarBtn {
     background-color: white;

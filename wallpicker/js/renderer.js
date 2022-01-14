@@ -163,7 +163,16 @@ class WallpickerPage {
         this.divFilterBlock.append(this.inputFilter);
         this.divFilterClear = $('<div/>')
             .attr('id', 'divFilterClear');
-        let iClose = $('<i/>').addClass('bi bi-x');
+        let iClose = $('<i/>').addClass('bi bi-x filterClear');
+        iClose.on('click', function () {
+            utils.log('iClose.click');
+            let thisObj = $(this);
+            thisObj.addClass('focus');
+            that.inputFilter.val('');
+            setTimeout(() => {
+                thisObj.removeClass('focus');
+            }, 250);
+        });
         this.divFilterClear.append(iClose);
         this.divFilterBlock.append(this.divFilterClear);
         this.divToolsWrapper.append(this.divFilterBlock);
