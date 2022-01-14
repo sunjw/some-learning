@@ -168,6 +168,11 @@ class WallpickerPage {
         this.inputFilter.on('input propertychange', function () {
             that.onFilterTextChanged();
         });
+        this.inputFilter.on('keydown', function (e) {
+            if (e.code == 'Enter' || e.code == 'NumpadEnter') {
+                that.onFilter();
+            }
+        });
         this.divFilterBlock.append(this.inputFilter);
         this.divFilterClear = $('<div/>')
             .attr('id', 'divFilterClear');
@@ -178,6 +183,7 @@ class WallpickerPage {
             thisObj.addClass('focus');
             that.inputFilter.val('');
             focusInput(that.inputFilter);
+            that.onFilter();
             setTimeout(() => {
                 that.onFilterTextChanged();
                 thisObj.removeClass('focus');
@@ -679,6 +685,11 @@ class WallpickerPage {
         } else {
             this.divFilterClear.hide();
         }
+    }
+
+    onFilter() {
+        let filterVal = this.inputFilter.val().trim();
+        utils.log('onFilter, filterVal=[%s]', filterVal);
     }
 
     randomSelect() {
