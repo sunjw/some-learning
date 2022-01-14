@@ -132,6 +132,9 @@ class WallpickerPage {
             .attr('id', 'divPathDropInfo')
             .text(this.tipDropScan);
         this.divPathContent = $('<div/>').attr('id', 'divPathContent');
+        this.divPathContent.on('click', function () {
+            that.scrollToTop();
+        });
         if (!this.curImageDir) {
             this.divPathContent.text(this.tipDropScan);
         }
@@ -641,13 +644,26 @@ class WallpickerPage {
         shell.showItemInFolder(imagePath);
     }
 
-    scrollToSelected() {
-        utils.log('scrollToSelected');
-        let imageBlockDom = this.selectedImageBlock.get(0);
+    scrollToImageBlockDom(imageBlockDom) {
         imageBlockDom.scrollIntoView({
             behavior: 'smooth',
             block: 'center'
         });
+    }
+
+    scrollToTop() {
+        utils.log('scrollToTop');
+        if (this.curImageList.length == 0) {
+            return;
+        }
+        let imageBlockFirstDom = this.divImageList.find('.imageBlock').get(0);
+        this.scrollToImageBlockDom(imageBlockFirstDom);
+    }
+
+    scrollToSelected() {
+        utils.log('scrollToSelected');
+        let imageBlockDom = this.selectedImageBlock.get(0);
+        this.scrollToImageBlockDom(imageBlockDom);
     }
 }
 
