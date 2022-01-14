@@ -160,6 +160,9 @@ class WallpickerPage {
                 'aria-label': '.form-control-sm'
             })
             .addClass('form-control form-control-sm mt-auto mb-auto noBsFocus');
+        this.inputFilter.on('input propertychange', function () {
+            that.onFilterTextChanged();
+        });
         this.divFilterBlock.append(this.inputFilter);
         this.divFilterClear = $('<div/>')
             .attr('id', 'divFilterClear');
@@ -170,11 +173,13 @@ class WallpickerPage {
             thisObj.addClass('focus');
             that.inputFilter.val('');
             setTimeout(() => {
+                that.onFilterTextChanged();
                 thisObj.removeClass('focus');
             }, 250);
         });
         this.divFilterClear.append(iClose);
         this.divFilterBlock.append(this.divFilterClear);
+        this.onFilterTextChanged();
         this.divToolsWrapper.append(this.divFilterBlock);
 
         this.btnToolbarRandom = this.generateButton('btnToolbarRandom', 'bi-lightbulb', 'Random select');
@@ -655,6 +660,16 @@ class WallpickerPage {
         this.selectedImageBlock = imageBlock;
         imageBlock.addClass(this.classImageSelected);
         this.refreshButtonState();
+    }
+
+    onFilterTextChanged() {
+        let filterVal = this.inputFilter.val();
+        utils.log('onFilterTextChanged, filterVal=[%s]', filterVal);
+        if (filterVal.length > 0) {
+            this.divFilterClear.show();
+        } else {
+            this.divFilterClear.hide();
+        }
     }
 
     randomSelect() {
