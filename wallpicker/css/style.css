@@ -138,7 +138,6 @@ body {
 #divImageList .imageSelected .imageInfo {
     color: white;
     background-color: var(--color-windows-blue);
-    border-radius: 5px;
 }
 #divLoadingWrapper #divLoadingBlock {
     width: 100%;

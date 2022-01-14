@@ -537,7 +537,7 @@ class WallpickerPage {
             });
             divImageWrapper.append(imgContent);
 
-            let divImageInfo = $('<div/>').addClass('align-self-start imageInfo');
+            let divImageInfo = $('<div/>').addClass('align-self-start rounded imageInfo');
             let imageBasename = fileObj.basename;
             // let imageExtname = fileObj.extname;
             if (imageBasename.length > 45) {
