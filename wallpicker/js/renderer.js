@@ -20,6 +20,11 @@ function stopBubble(event) {
     event.stopPropagation();
 }
 
+function focusInput(input) {
+    input.focus();
+    input.get(0).select();
+}
+
 function handleImageIntersection(entries) {
     // utils.log('handleImageIntersection');
     for (let entryDom of entries) {
@@ -172,6 +177,7 @@ class WallpickerPage {
             let thisObj = $(this);
             thisObj.addClass('focus');
             that.inputFilter.val('');
+            focusInput(that.inputFilter);
             setTimeout(() => {
                 that.onFilterTextChanged();
                 thisObj.removeClass('focus');
