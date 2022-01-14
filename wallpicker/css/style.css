@@ -77,12 +77,23 @@ body {
 #divToolbarWrapper.dropInfo #divPathContent {
     display: none;
 }
-#divToolbarWrapper #inputFilter {
+#divToolbarWrapper #divFilterBlock {
+    position: relative;
+}
+#divToolbarWrapper #divFilterBlock #inputFilter {
     width: 200px;
+    padding-right: 24px;
     border-color: var(--color-light-gray);
 }
-#divToolbarWrapper #inputFilter:focus, #divToolbarWrapper #inputFilter.focus {
+#divToolbarWrapper #divFilterBlock #inputFilter:focus,
+#divToolbarWrapper #divFilterBlock #inputFilter.focus {
     border-color: var(--color-windows-blue);
+}
+#divToolbarWrapper #divFilterBlock #divFilterClear {
+    color: gray;
+    position: absolute;
+    top: 13px;
+    right: 6px;
 }
 #divToolbarWrapper .toolbarBtn {
     background-color: white;

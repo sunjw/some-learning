@@ -74,6 +74,7 @@ class WallpickerPage {
         this.divPathContent = null;
         this.divFilterBlock = null;
         this.inputFilter = null;
+        this.divFilterClear = null;
         this.btnToolbarRandom = null;
         this.btnToolbarSetWallpaper = null;
         this.btnToolbarShowFile = null;
@@ -160,6 +161,11 @@ class WallpickerPage {
             })
             .addClass('form-control form-control-sm mt-auto mb-auto noBsFocus');
         this.divFilterBlock.append(this.inputFilter);
+        this.divFilterClear = $('<div/>')
+            .attr('id', 'divFilterClear');
+        let iClose = $('<i/>').addClass('bi bi-x');
+        this.divFilterClear.append(iClose);
+        this.divFilterBlock.append(this.divFilterClear);
         this.divToolsWrapper.append(this.divFilterBlock);
 
         this.btnToolbarRandom = this.generateButton('btnToolbarRandom', 'bi-lightbulb', 'Random select');
