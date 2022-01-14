@@ -41,6 +41,9 @@ img {
 ul {
     list-style-type: none;
 }
+.noBsFocus:focus, .noBsFocus.focus {
+    box-shadow: none !important;
+}
 /* Common */
 
 /* Body */
@@ -80,7 +83,6 @@ body {
 }
 #divToolbarWrapper #inputFilter:focus, #divToolbarWrapper #inputFilter.focus {
     border-color: var(--color-windows-blue);
-    box-shadow: none !important;
 }
 #divToolbarWrapper .toolbarBtn {
     background-color: white;
@@ -98,7 +100,6 @@ body {
     /* color: var(--color-windows-blue); */
     background-color: var(--color-light-gray);
     border-color: var(--color-light-gray);
-    box-shadow: none !important;
 }
 /* Toolbar */
 
@@ -177,14 +178,6 @@ body {
 }
 #divToastWrapper .toast .toast-body .highlight {
     color: var(--color-windows-blue);
-}
-#divToastWrapper .toast .btn-close,
-#divToastWrapper .toast .btn-close:hover,
-#divToastWrapper .toast .btn-close:active,
-#divToastWrapper .toast .btn-close:focus,
-#divToastWrapper .toast .btn-close.focus {
-    outline: 0 !important;
-    box-shadow: none !important;
 }
 /* Others */
 

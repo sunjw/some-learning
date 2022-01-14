@@ -158,7 +158,7 @@ class WallpickerPage {
                 'placeholder': 'filter...',
                 'aria-label': '.form-control-sm'
             })
-            .addClass('form-control form-control-sm mt-auto mb-auto');
+            .addClass('form-control form-control-sm mt-auto mb-auto noBsFocus');
         this.divFilterBlock.append(this.inputFilter);
         this.divToolsWrapper.append(this.divFilterBlock);
 
@@ -284,7 +284,7 @@ class WallpickerPage {
         let button = $('<button/>').attr({
             'id': buttonId,
             'type': 'button'
-        }).addClass('btn btn-light align-self-center toolbarBtn');
+        }).addClass('btn btn-light align-self-center noBsFocus toolbarBtn');
         if (title) {
             button.attr('title', title);
         }
@@ -715,7 +715,7 @@ class WallpickerPage {
             'type': 'button',
             'data-bs-dismiss': 'toast',
             'aria-label': 'Close'
-        }).addClass('btn-close m-auto me-2');
+        }).addClass('btn-close m-auto me-2 noBsFocus');
         divToast.append(buttonToastClose);
 
         this.divToastWrapper.append(divToast);
