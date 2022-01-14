@@ -27,15 +27,20 @@ function focusInput(input) {
 
 function handleImageIntersection(entries) {
     // utils.log('handleImageIntersection');
+    let showCount = 0;
+    let hideCount = 0;
     for (let entryDom of entries) {
         let entryObj = $(entryDom.target);
         let entryDataSrc = entryObj.attr('data-src');
         let entryDataPlaceholder = entryObj.attr('data-placeholder');
         if (entryDom.isIntersecting) {
             entryObj.attr('src', entryDataSrc);
+            showCount++;
         } else {
             entryObj.attr('src', entryDataPlaceholder);
+            hideCount++;
         }
+        // utils.log('handleImageIntersection, showCount=%d, hideCount=%d', showCount, hideCount);
     }
 }
 
