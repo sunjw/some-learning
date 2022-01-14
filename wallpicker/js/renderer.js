@@ -513,7 +513,7 @@ class WallpickerPage {
                     'data-src': filePath,
                     'data-placeholder': this.imagePlaceholder,
                 })
-                .addClass('align-self-end imageContent');
+                .addClass('align-self-end rounded imageContent');
             let imagePreviewWidth = fileObj.width;
             let imagePreviewHeight = fileObj.height;
             let imageRatio = fileObj.width / fileObj.height;
