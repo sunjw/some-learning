@@ -167,6 +167,9 @@ body {
     word-break: break-all;
     max-width: 320px;
 }
+#divToastWrapper .toast .toast-body .highlight {
+    color: var(--color-windows-blue);
+}
 #divToastWrapper .toast .btn-close,
 #divToastWrapper .toast .btn-close:hover,
 #divToastWrapper .toast .btn-close:active,

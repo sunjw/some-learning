@@ -576,7 +576,7 @@ class WallpickerPage {
         this.refreshButtonState();
 
         // toast
-        this.showToast('Found ' + this.curImageList.length + ' images.');
+        this.showToast('Found <span class="highlight">' + this.curImageList.length + '</span> images.');
     }
 
     refreshButtonState() {
@@ -644,7 +644,7 @@ class WallpickerPage {
         setTimeout(() => {
             wallpaper.set(imagePath);
         }, 1000);
-        this.showToast('Set wallpaper to "' + imagePath + '"');
+        this.showToast('Set wallpaper to "<span class="highlight">' + imagePath + '</span>".');
     }
 
     openImageInDirectory() {
@@ -683,12 +683,12 @@ class WallpickerPage {
             'aria-live': 'assertive',
             'aria-atomic': 'true',
             // 'data-bs-autohide': 'false',
-            'data-delay': '10000'
+            'data-bs-delay': '10000'
         }).addClass('toast d-flex');
 
         let divToastBody = $('<div/>')
             .addClass('toast-body flex-grow-1')
-            .html(utils.escapeHtml(message));
+            .html(message);
         divToast.append(divToastBody);
         let buttonToastClose = $('<button/>').attr({
             'type': 'button',
