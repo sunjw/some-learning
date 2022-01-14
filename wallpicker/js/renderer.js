@@ -72,6 +72,8 @@ class WallpickerPage {
         this.divToolsWrapper = null;
         this.divPathDropInfo = null;
         this.divPathContent = null;
+        this.divFilterBlock = null;
+        this.inputFilter = null;
         this.btnToolbarRandom = null;
         this.btnToolbarSetWallpaper = null;
         this.btnToolbarShowFile = null;
@@ -133,9 +135,6 @@ class WallpickerPage {
             .attr('id', 'divPathDropInfo')
             .text(this.tipDropScan);
         this.divPathContent = $('<div/>').attr('id', 'divPathContent');
-        this.divPathContent.on('click', function () {
-            that.scrollToTop();
-        });
         if (!this.curImageDir) {
             this.divPathContent.text(this.tipDropScan);
         }
@@ -148,6 +147,20 @@ class WallpickerPage {
         this.divToolsWrapper = $('<div/>')
             .attr('id', 'divToolsWrapper')
             .addClass('d-flex');
+
+        this.divFilterBlock = $('<div/>')
+            .attr('id', 'divFilterBlock')
+            .addClass('d-flex me-2');
+        this.inputFilter = $('<input/>')
+            .attr({
+                'id': 'inputFilter',
+                'typ': 'text',
+                'placeholder': 'filter...',
+                'aria-label': '.form-control-sm'
+            })
+            .addClass('form-control form-control-sm mt-auto mb-auto');
+        this.divFilterBlock.append(this.inputFilter);
+        this.divToolsWrapper.append(this.divFilterBlock);
 
         this.btnToolbarRandom = this.generateButton('btnToolbarRandom', 'bi-lightbulb', 'Random select');
         this.autoBlurButtonClick(this.btnToolbarRandom, function () {
@@ -463,6 +476,8 @@ class WallpickerPage {
     }
 
     renderPath() {
+        let that = this;
+
         // clear
         this.divPathContent.empty();
 
@@ -483,7 +498,13 @@ class WallpickerPage {
         }
         pathRender = pathRender.trimStart();
         this.divPathContent.append($('<span/>').html(utils.escapeHtml(pathRender)));
-        this.divPathContent.append($('<span/>').addClass('pathDirname').html(utils.escapeHtml(pathParts[pathParts.length - 1])));
+        let spanPathDirname = $('<span/>')
+            .addClass('pathDirname')
+            .html(utils.escapeHtml(pathParts[pathParts.length - 1]));
+        spanPathDirname.on('click', function () {
+            that.scrollToTop();
+        });
+        this.divPathContent.append(spanPathDirname);
     }
 
     clearImageList() {

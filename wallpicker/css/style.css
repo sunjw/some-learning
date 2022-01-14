@@ -74,6 +74,13 @@ body {
 #divToolbarWrapper.dropInfo #divPathContent {
     display: none;
 }
+#divToolbarWrapper #inputFilter {
+    border-color: var(--color-light-gray);
+}
+#divToolbarWrapper #inputFilter:focus, #divToolbarWrapper #inputFilter.focus {
+    border-color: var(--color-windows-blue);
+    box-shadow: none !important;
+}
 #divToolbarWrapper .toolbarBtn {
     background-color: white;
     border-color: white;
