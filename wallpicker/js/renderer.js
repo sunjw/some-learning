@@ -614,6 +614,7 @@ class WallpickerPage {
                 imageBasenameFix += imageBasename.substring(imageBasename.length - 8, imageBasename.length);
                 imageBasename = imageBasenameFix;
             }
+            divImageInfo.attr('data-ref', imageBasename);
             divImageInfo.html(utils.escapeHtml(imageBasename));
             divImageInfo.on('click', function (e) {
                 stopBubble(e);
@@ -659,9 +660,13 @@ class WallpickerPage {
         this.setControlDisabled(this.btnToolbarRandom, true);
     }
 
+    getAllImageBlocks() {
+        return this.divImageList.find('.imageBlock');
+    }
+
     clearSelection(refreshButton = true) {
         utils.log('clearSelection');
-        let imageBlocks = this.divImageList.find('.imageBlock');
+        let imageBlocks = this.getAllImageBlocks();
         imageBlocks.removeClass(this.classImageSelected);
         this.selectedImageBlock = null;
         if (refreshButton) {
@@ -690,6 +695,20 @@ class WallpickerPage {
     onFilter() {
         let filterVal = this.inputFilter.val().trim();
         utils.log('onFilter, filterVal=[%s]', filterVal);
+        let imageBlocks = this.getAllImageBlocks();
+        if (filterVal == '') {
+            imageBlocks.removeClass('filterOut');
+        } else {
+            for (let imageBlockDom of imageBlocks) {
+                let imageBlock = $(imageBlockDom);
+                let imageInfo = imageBlock.find('.imageInfo');
+                let imageName = imageInfo.attr('data-ref');
+                imageName = imageName.toLowerCase();
+                if (!imageName.includes(filterVal)) {
+                    imageBlock.addClass('filterOut');
+                }
+            }
+        }
     }
 
     randomSelect() {
@@ -699,7 +718,7 @@ class WallpickerPage {
         let randomImage = this.curImageList[utils.getRandomInt(this.curImageList.length)];
         let randomImagePath = randomImage.path;
         utils.log('randomSelect, randomImagePath=[%s]', randomImagePath);
-        let imageBlocks = this.divImageList.find('.imageBlock');
+        let imageBlocks = this.getAllImageBlocks();
         for (let imageBlockDom of imageBlocks) {
             let imageBlock = $(imageBlockDom);
             let imagePath = imageBlock.attr('data-ref');
@@ -738,7 +757,7 @@ class WallpickerPage {
         if (this.curImageList.length == 0) {
             return;
         }
-        let imageBlockFirstDom = this.divImageList.find('.imageBlock').get(0);
+        let imageBlockFirstDom = this.getAllImageBlocks().get(0);
         this.scrollToImageBlockDom(imageBlockFirstDom);
     }
 
