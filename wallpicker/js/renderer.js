@@ -709,7 +709,9 @@ class WallpickerPage {
                 let imageInfo = imageBlock.find('.imageInfo');
                 let imageName = imageInfo.attr('data-ref');
                 imageName = imageName.toLowerCase();
-                if (!imageName.includes(filterVal)) {
+                if (imageName.includes(filterVal)) {
+                    imageBlock.removeClass('filterOut');
+                } else {
                     imageBlock.addClass('filterOut');
                 }
             }
