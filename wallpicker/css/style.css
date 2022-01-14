@@ -159,6 +159,12 @@ body {
     margin-right: 22px;
     margin-bottom: 16px;
 }
+#divToastWrapper .toast .btn-close,
+#divToastWrapper .toast .btn-close:hover,
+#divToastWrapper .toast .btn-close:active,
+#divToastWrapper .toast .btn-close:focus {
+    outline: none;
+}
 /* Others */
 
 /* Footer */
