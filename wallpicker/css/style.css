@@ -159,9 +159,6 @@ body {
     margin-right: 22px;
     margin-bottom: 16px;
 }
-#divToastWrapper .toast .btn-close {
-    margin-right: 10px;
-}
 #divToastWrapper .toast .btn-close,
 #divToastWrapper .toast .btn-close:hover,
 #divToastWrapper .toast .btn-close:active,
