@@ -75,6 +75,7 @@ body {
     display: none;
 }
 #divToolbarWrapper #inputFilter {
+    width: 200px;
     border-color: var(--color-light-gray);
 }
 #divToolbarWrapper #inputFilter:focus, #divToolbarWrapper #inputFilter.focus {
