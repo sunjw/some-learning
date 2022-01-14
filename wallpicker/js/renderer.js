@@ -702,6 +702,7 @@ class WallpickerPage {
         utils.log('onFilter, filterVal=[%s]', filterVal);
         let imageBlocks = this.getAllImageBlocks();
         if (filterVal == '') {
+            // show all
             imageBlocks.removeClass('filterOut');
         } else {
             for (let imageBlockDom of imageBlocks) {
@@ -710,11 +711,19 @@ class WallpickerPage {
                 let imageName = imageInfo.attr('data-ref');
                 imageName = imageName.toLowerCase();
                 if (imageName.includes(filterVal)) {
+                    // show
                     imageBlock.removeClass('filterOut');
                 } else {
+                    // hide
                     imageBlock.addClass('filterOut');
                 }
             }
+        }
+
+        if (this.selectedImageBlock &&
+            this.selectedImageBlock.hasClass('filterOut')) {
+            // selection is hidden
+            this.clearSelection();
         }
     }
 
