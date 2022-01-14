@@ -156,7 +156,8 @@ body {
     position: absolute;
     bottom: 0;
     right: 0;
-    margin: 16px;
+    margin-right: 22px;
+    margin-bottom: 16px;
 }
 /* Others */
 
