@@ -144,6 +144,7 @@ body {
 }
 #divLoadingWrapper #divLoadingBlock .spinner-border {
     color: var(--color-windows-blue);
+    border-width: 2px;
 }
 #divLoadingWrapper #divLoadingBlock #divLoadingText {
     margin-left: 10px;
