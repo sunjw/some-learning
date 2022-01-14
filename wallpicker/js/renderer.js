@@ -170,7 +170,7 @@ class WallpickerPage {
         this.divToolsWrapper.append(this.btnToolbarRandom);
 
         this.btnToolbarSetWallpaper = this.generateButton('btnToolbarSetWallpaper', 'bi-image', 'Set wallpaper');
-        this.setButtonDisabled(this.btnToolbarSetWallpaper, true);
+        this.setControlDisabled(this.btnToolbarSetWallpaper, true);
         this.autoBlurButtonClick(this.btnToolbarSetWallpaper, function () {
             utils.log('btnToolbarSetWallpaper.click');
             that.setOsWallpaper();
@@ -178,7 +178,7 @@ class WallpickerPage {
         this.divToolsWrapper.append(this.btnToolbarSetWallpaper);
 
         this.btnToolbarShowFile = this.generateButton('btnToolbarShowFile', 'bi-folder2-open', 'Show file');
-        this.setButtonDisabled(this.btnToolbarShowFile, true);
+        this.setControlDisabled(this.btnToolbarShowFile, true);
         this.autoBlurButtonClick(this.btnToolbarShowFile, function () {
             utils.log('btnToolbarShowFile.click');
             that.openImageInDirectory();
@@ -186,7 +186,7 @@ class WallpickerPage {
         this.divToolsWrapper.append(this.btnToolbarShowFile);
 
         this.btnToolbarShowSelected = this.generateButton('btnToolbarShowSelected', 'bi-fullscreen-exit', 'Show selected image');
-        this.setButtonDisabled(this.btnToolbarShowSelected, true);
+        this.setControlDisabled(this.btnToolbarShowSelected, true);
         this.autoBlurButtonClick(this.btnToolbarShowSelected, function () {
             utils.log('btnToolbarShowSelected.click');
             that.scrollToSelected();
@@ -307,11 +307,11 @@ class WallpickerPage {
         }, 250);
     }
 
-    setButtonDisabled(button, disabled) {
+    setControlDisabled(control, disabled) {
         if (disabled) {
-            button.attr('disabled', 'disabled');
+            control.attr('disabled', 'disabled');
         } else {
-            button.removeAttr('disabled');
+            control.removeAttr('disabled');
         }
     }
 
@@ -603,23 +603,25 @@ class WallpickerPage {
     refreshButtonState() {
         if (this.selectedImageBlock) {
             // selected
-            this.setButtonDisabled(this.btnToolbarSetWallpaper, false);
-            this.setButtonDisabled(this.btnToolbarShowFile, false);
-            this.setButtonDisabled(this.btnToolbarShowSelected, false);
+            this.setControlDisabled(this.btnToolbarSetWallpaper, false);
+            this.setControlDisabled(this.btnToolbarShowFile, false);
+            this.setControlDisabled(this.btnToolbarShowSelected, false);
         } else {
             // no selection
-            this.setButtonDisabled(this.btnToolbarSetWallpaper, true);
-            this.setButtonDisabled(this.btnToolbarShowFile, true);
-            this.setButtonDisabled(this.btnToolbarShowSelected, true);
+            this.setControlDisabled(this.btnToolbarSetWallpaper, true);
+            this.setControlDisabled(this.btnToolbarShowFile, true);
+            this.setControlDisabled(this.btnToolbarShowSelected, true);
         }
-        this.setButtonDisabled(this.btnToolbarRandom, false);
+        this.setControlDisabled(this.inputFilter, false);
+        this.setControlDisabled(this.btnToolbarRandom, false);
     }
 
     disableAllButtons() {
-        this.setButtonDisabled(this.btnToolbarSetWallpaper, true);
-        this.setButtonDisabled(this.btnToolbarShowFile, true);
-        this.setButtonDisabled(this.btnToolbarShowSelected, true);
-        this.setButtonDisabled(this.btnToolbarRandom, true);
+        this.setControlDisabled(this.inputFilter, true);
+        this.setControlDisabled(this.btnToolbarSetWallpaper, true);
+        this.setControlDisabled(this.btnToolbarShowFile, true);
+        this.setControlDisabled(this.btnToolbarShowSelected, true);
+        this.setControlDisabled(this.btnToolbarRandom, true);
     }
 
     clearSelection(refreshButton = true) {
