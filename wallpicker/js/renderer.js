@@ -500,6 +500,9 @@ class WallpickerPage {
             return (fo2.mtime - fo1.mtime); // modified time reverse
         });
 
+        // toast
+        this.showToast('test', 'Found ' + this.curImageList.length + ' images.');
+
         // render
         for (let fileObj of this.curImageList) {
             let filePath = fileObj.path;
@@ -669,6 +672,46 @@ class WallpickerPage {
         utils.log('scrollToSelected');
         let imageBlockDom = this.selectedImageBlock.get(0);
         this.scrollToImageBlockDom(imageBlockDom);
+    }
+
+    showToast(title, message) {
+        utils.log('showToast');
+
+        let divToast = $('<div/>').attr({
+            'role': 'alert',
+            'aria-live': 'assertive',
+            'aria-atomic': 'true',
+            'data-bs-autohide': 'false',
+            'data-delay': '5000'
+        }).addClass('toast');
+
+        let divToastHeader = $('<div/>').addClass('toast-header');
+        let iToastIcon = $('<i/>').addClass('toastIcon bi bi-bell');
+        divToastHeader.append(iToastIcon);
+        let strongToastTitle = $('<strong/>').addClass('toastTitle mr-auto').text(title);
+        divToastHeader.append(strongToastTitle);
+        let buttonToastClose = $('<button/>').attr({
+            'type': 'button',
+            'data-dismiss': 'toast',
+            'aria-label': 'Close'
+        }).addClass('noOutline ml-2 mb-1 close');
+        let spanClose = $('<span/>').attr('aria-hidden', 'true').html('&times;');
+        buttonToastClose.append(spanClose);
+        divToastHeader.append(buttonToastClose);
+        divToast.append(divToastHeader);
+
+        let divToastBody = $('<div/>').addClass('toast-body').html(message);
+        divToast.append(divToastBody);
+
+        this.divToastWrapper.append(divToast);
+
+        divToast.on('hidden.bs.toast', function () {
+            // remove self
+            utils.log('showToast, clear.');
+            divToast.remove();
+        });
+
+        divToast.toast('show');
     }
 }
 
