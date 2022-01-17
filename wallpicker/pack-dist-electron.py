@@ -93,6 +93,7 @@ USING_XZ_MACOS = True
 
 APP_TITLE = 'wallpaper-picker'
 PACKAGE_NAME = 'wallpaper-picker'
+APP_BUNDLE_ID_MACOS = 'org.sunjw.WallpaperPicker'
 
 DIST_DIR = 'dist'
 APP_DIRS = ['node_modules', 'assets', 'css', 'js']
@@ -239,6 +240,8 @@ def main():
         info_plist_content = read_file_content(info_plist_path)
         info_plist_content = info_plist_content.replace(b'>Electron<',
                                 bytes('>%s<' % (APP_TITLE), encoding='utf8'))
+        info_plist_content = info_plist_content.replace(b'>com.github.Electron<',
+                                bytes('>%s<' % (APP_BUNDLE_ID_MACOS), encoding='utf8'))
         write_file_content(info_plist_path, info_plist_content)
     os.chdir(cwd)
 
