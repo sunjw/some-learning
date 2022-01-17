@@ -148,7 +148,7 @@ def download_wallpaper_by_list(wallpaper_list):
     if OPEN_WALLPAPER_DIR:
         open_wallpaper_dir(wallpaper_dir)
 
-    for wallpaper_data in wallpaper_list:
+    for wallpaper_data in reversed(wallpaper_list):
         # logger.debug('wallpaper_data\n%s', comm_util.pprint_dict_to_string(wallpaper_data))
         image_url = wallpaper_data['url']
         image_name = wallpaper_data['name']
