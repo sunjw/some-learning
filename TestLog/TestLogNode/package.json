@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
-    "log4js": "^6.2.1"
+    "log4js": "^6.4.0"
   },
   "author": "Sun Junwen"
 }
