@@ -125,7 +125,7 @@ class WallpickerPage {
 
     onWindowResize() {
         // on window resize
-        //this.fitContentHeight();
+        this.fitContentHeight();
         this.fitImageListWidth();
     }
 
@@ -306,7 +306,7 @@ class WallpickerPage {
         let windowHeight = $(window).height();
         let divContentWrapperTop = this.divContentWrapper.offset().top;
         let contentHeight = windowHeight - divContentWrapperTop - 2;
-        this.divContentWrapper.css('height', contentHeight + 'px');
+        // this.divContentWrapper.css('height', contentHeight + 'px');
         this.divLoadingBlock.css('height', contentHeight + 'px');
     }
 
