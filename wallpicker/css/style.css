@@ -54,9 +54,15 @@ body {
 
 /* Toolbar */
 #divToolbarWrapper {
+    width: 100%;
     height: var(--height-toolbar);
     padding: 0 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
     border-bottom: 1px solid var(--color-light-gray);
+    background-color: rgba(255, 255, 255, 0.95);
 }
 #divToolbarWrapper #divPathDropInfo {
     display: none;
@@ -125,8 +131,9 @@ body {
 
 /* Image list */
 #divContentWrapper {
-    overflow-x: hidden;
-    overflow-y: auto;
+    /* overflow-x: hidden;
+    overflow-y: auto; */
+    margin-top: var(--height-toolbar);
     position: relative;
 }
 #divLoadingWrapper {
@@ -181,7 +188,7 @@ body {
 
 /* Others */
 #divToastWrapper {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 0;
     margin-right: 22px;

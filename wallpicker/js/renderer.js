@@ -125,7 +125,7 @@ class WallpickerPage {
 
     onWindowResize() {
         // on window resize
-        this.fitContentHeight();
+        //this.fitContentHeight();
         this.fitImageListWidth();
     }
 
