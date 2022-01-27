@@ -20,6 +20,12 @@ function formOnSubmit(form, submitCallback) {
     });
 }
 
+function inputOnTextChanged(input, changedCallback) {
+    input.on('input propertychange', function (e) {
+        changedCallback(e);
+    });
+}
+
 function inputOnEnter(input, enterCallback) {
     input.on('keydown', function (e) {
         if (e.code == 'Enter' || e.code == 'NumpadEnter') {
@@ -33,4 +39,5 @@ function inputOnEnter(input, enterCallback) {
 exports.focusOnInput = focusOnInput;
 exports.stopBubble = stopBubble;
 exports.formOnSubmit = formOnSubmit;
+exports.inputOnTextChanged = inputOnTextChanged;
 exports.inputOnEnter = inputOnEnter;

@@ -162,7 +162,7 @@ class WallpickerPage {
                 'aria-label': '.form-control-sm'
             })
             .addClass('form-control form-control-sm mt-auto mb-auto noBsFocus');
-        this.inputFilter.on('input propertychange', function () {
+        jqueryUtils.inputOnTextChanged(this.inputFilter, function () {
             that.onFilterTextChanged();
         });
         jqueryUtils.inputOnEnter(this.inputFilter, function () {
