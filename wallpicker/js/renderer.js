@@ -165,10 +165,8 @@ class WallpickerPage {
         this.inputFilter.on('input propertychange', function () {
             that.onFilterTextChanged();
         });
-        this.inputFilter.on('keydown', function (e) {
-            if (e.code == 'Enter' || e.code == 'NumpadEnter') {
-                that.onFilter();
-            }
+        jqueryUtils.inputOnEnter(this.inputFilter, function () {
+            that.onFilter();
         });
         this.divFilterBlock.append(this.inputFilter);
         this.divFilterClear = $('<div/>')
