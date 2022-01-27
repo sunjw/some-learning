@@ -16,10 +16,6 @@ const wallpaper = require('wallpaper');
 const utils = require('./utils');
 const eleUtils = require('./eleUtils');
 
-function stopBubble(event) {
-    event.stopPropagation();
-}
-
 function focusInput(input) {
     input.focus();
     input.get(0).select();
@@ -279,7 +275,7 @@ class WallpickerPage {
 
         let bodyDom = this.body.get(0);
         bodyDom.ondragover = function (e) {
-            stopBubble(e);
+            eleUtils.stopBubble(e);
             // utils.log('ondragover, body.ondragover');
             that.divToolbarWrapper.addClass('dropInfo');
             return false;
@@ -600,7 +596,7 @@ class WallpickerPage {
             // lazy
             obsImageLazyload.observe(imgContent.get(0));
             imgContent.on('click', function (e) {
-                stopBubble(e);
+                eleUtils.stopBubble(e);
                 let imgParentBlock = divImageBlock;
                 that.selectImage(imgParentBlock);
             });
@@ -622,7 +618,7 @@ class WallpickerPage {
             divImageInfo.attr('data-ref', imageBasename);
             divImageInfo.html(utils.escapeHtml(imageBasename));
             divImageInfo.on('click', function (e) {
-                stopBubble(e);
+                eleUtils.stopBubble(e);
                 let imgParentBlock = divImageBlock;
                 that.selectImage(imgParentBlock);
             });

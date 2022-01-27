@@ -37,5 +37,11 @@ function sendToMain(message) {
     ipcRenderer.send('dialog', message);
 }
 
+function stopBubble(event) {
+    // only for electron
+    event.stopPropagation();
+}
+
 exports.EleConfig = EleConfig;
 exports.sendToMain = sendToMain;
+exports.stopBubble = stopBubble;
