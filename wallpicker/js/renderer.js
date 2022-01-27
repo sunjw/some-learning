@@ -14,12 +14,8 @@ const probeImageSize = require('probe-image-size');
 const wallpaper = require('wallpaper');
 
 const utils = require('./utils');
+const jqueryUtils = require('./jqueryUtils');
 const eleUtils = require('./eleUtils');
-
-function focusInput(input) {
-    input.focus();
-    input.get(0).select();
-}
 
 function handleImageIntersection(entries) {
     // utils.log('handleImageIntersection');
@@ -183,7 +179,7 @@ class WallpickerPage {
             let thisObj = $(this);
             thisObj.addClass('focus');
             that.inputFilter.val('');
-            focusInput(that.inputFilter);
+            jqueryUtils.focusOnInput(that.inputFilter);
             that.onFilter();
             setTimeout(() => {
                 that.onFilterTextChanged();
