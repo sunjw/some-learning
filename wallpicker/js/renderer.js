@@ -4,6 +4,7 @@ const {
 } = require('electron');
 const remote = require('@electron/remote');
 
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
@@ -20,6 +21,12 @@ const eleUtils = require('./eleUtils');
 
 const TAG_IMAGE_SRC = 'data-image-src';
 const TAG_IMAGE_PLACEHOLDER = 'data-image-placeholder';
+
+function stringMd5(str) {
+    let md5 = crypto.createHash('md5');
+    md5.update(str);
+    return md5.digest('hex');
+}
 
 function handleImageIntersection(entries) {
     // utils.log('handleImageIntersection');
@@ -74,10 +81,11 @@ class WallpickerPage {
 
         this.options = options;
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
-        this.imageThumbDir = path.join(this.options.userDataPath, 'imageThumb');
         this.curImageDir = this.getConfig(this.keyImageDir);
         this.curImageList = [];
         this.selectedImageBlock = null;
+        this.imageThumbDir = path.join(this.options.userDataPath, 'imageThumb');
+        this.curThumbIndex = 0;
 
         this.body = $('body');
         this.divToolbarWrapper = null;
@@ -603,8 +611,9 @@ class WallpickerPage {
                 imagePreviewHeight = this.maxImagePreviewHeight;
                 imagePreviewWidth = imagePreviewHeight * imageRatio;
             }
-            fileObj.previewWidth = imagePreviewWidth;
-            fileObj.previewHeight = imagePreviewHeight;
+            fileObj.thumbWidth = imagePreviewWidth;
+            fileObj.thumbHeight = imagePreviewHeight;
+            fileObj.thumbPath = null;
             imgContent.css({
                 'width': imagePreviewWidth + 'px',
                 'height': imagePreviewHeight + 'px'
@@ -653,6 +662,9 @@ class WallpickerPage {
 
         // toast
         this.showToast('Found <span class="highlight">' + this.curImageList.length + '</span> images.');
+
+        // start generate thumbnail
+        this.generateImageThumbnailInWorker();
     }
 
     refreshButtonState() {
@@ -844,7 +856,15 @@ class WallpickerPage {
         divToast.toast('show');
     }
 
-    generateImageThumbnailInWorker() {}
+    generateImageThumbnailInWorker() {
+        let imageListLen = this.curImageList.length;
+        if (this.curThumbIndex >= imageListLen) {
+            utils.log('generateImageThumbnailInWorker, finished.');
+            return;
+        }
+
+        utils.log('generateImageThumbnailInWorker, %d/%d', (this.curThumbIndex + 1), imageListLen);
+    }
 }
 
 let wallpickerPage = new WallpickerPage();
