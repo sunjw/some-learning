@@ -27,13 +27,15 @@ function handleImageIntersection(entries) {
     let hideCount = 0;
     for (let entryDom of entries) {
         let entryObj = $(entryDom.target);
-        let entryDataSrc = entryObj.attr(TAG_IMAGE_SRC);
-        let entryDataPlaceholder = entryObj.attr(TAG_IMAGE_PLACEHOLDER);
+        let entryImageSrc = entryObj.attr(TAG_IMAGE_SRC);
+        let entryImagePlaceholder = entryObj.attr(TAG_IMAGE_PLACEHOLDER);
         if (entryDom.isIntersecting) {
-            entryObj.attr('src', entryDataSrc);
+            entryObj.attr('src', entryImageSrc);
+            entryObj.addClass('imageFull');
             showCount++;
         } else {
-            entryObj.attr('src', entryDataPlaceholder);
+            entryObj.attr('src', entryImagePlaceholder);
+            entryObj.removeClass('imageFull');
             hideCount++;
         }
         // utils.log('handleImageIntersection, showCount=%d, hideCount=%d', showCount, hideCount);
