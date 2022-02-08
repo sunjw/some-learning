@@ -72,6 +72,7 @@ class WallpickerPage {
 
         this.options = options;
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
+        this.imageThumbDir = path.join(this.options.userDataPath, 'imageThumb');
         this.curImageDir = this.getConfig(this.keyImageDir);
         this.curImageList = [];
         this.selectedImageBlock = null;
@@ -125,6 +126,10 @@ class WallpickerPage {
     }
 
     initWorker() {
+        if (!fs.existsSync(this.imageThumbDir)) {
+            utils.log('initWorker, make thumbnail directory [%s]', this.imageThumbDir);
+            fs.mkdirSync(this.imageThumbDir);
+        }
         this.imageWorker.onmessage = function (e) {
             utils.log('initWorker.imageWorker, [%s]', e.data);
         };
@@ -596,6 +601,8 @@ class WallpickerPage {
                 imagePreviewHeight = this.maxImagePreviewHeight;
                 imagePreviewWidth = imagePreviewHeight * imageRatio;
             }
+            fileObj.previewWidth = imagePreviewWidth;
+            fileObj.previewHeight = imagePreviewHeight;
             imgContent.css({
                 'width': imagePreviewWidth + 'px',
                 'height': imagePreviewHeight + 'px'
@@ -834,6 +841,8 @@ class WallpickerPage {
 
         divToast.toast('show');
     }
+
+    generateImageThumbnailInWorker() {}
 }
 
 let wallpickerPage = new WallpickerPage();
