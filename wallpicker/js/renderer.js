@@ -43,6 +43,7 @@ class WallpickerPage {
     constructor() {
         // init consts
         this.TAG_IMAGE_PATH = 'data-image-path';
+        this.TAG_IMAGE_NAME = 'data-image-name';
     }
 
     init(options) {
@@ -598,7 +599,8 @@ class WallpickerPage {
             divImageWrapper.append(imgContent);
 
             let divImageInfo = $('<div/>').addClass('align-self-start rounded imageInfo');
-            let imageBasename = fileObj.basename;
+            let imageBasenameFull = fileObj.basename;
+            let imageBasename = imageBasenameFull;
             // let imageExtname = fileObj.extname;
             if (imageBasename.length > 45) {
                 let imageBasenameShortLen = 36;
@@ -610,7 +612,7 @@ class WallpickerPage {
                 imageBasenameFix += imageBasename.substring(imageBasename.length - 8, imageBasename.length);
                 imageBasename = imageBasenameFix;
             }
-            divImageInfo.attr('data-ref', imageBasename);
+            divImageInfo.attr(this.TAG_IMAGE_NAME, imageBasenameFull);
             divImageInfo.html(utils.escapeHtml(imageBasename));
             divImageInfo.on('click', function (e) {
                 eleUtils.stopBubble(e);
@@ -699,7 +701,7 @@ class WallpickerPage {
             for (let imageBlockDom of imageBlocks) {
                 let imageBlock = $(imageBlockDom);
                 let imageInfo = imageBlock.find('.imageInfo');
-                let imageName = imageInfo.attr('data-ref');
+                let imageName = imageInfo.attr(this.TAG_IMAGE_NAME);
                 imageName = imageName.toLowerCase();
                 if (imageName.includes(filterVal)) {
                     // show
