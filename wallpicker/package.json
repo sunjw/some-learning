@@ -29,6 +29,7 @@
     "fix-path": "^3.0.0",
     "jquery": "^3.6.0",
     "probe-image-size": "^7.2.2",
+    "sharp": "^0.30.0",
     "wallpaper": "^5.0.1"
   }
 }
