@@ -111,8 +111,6 @@ class WallpickerPage {
             // we have one, go!
             this.loadImageDir();
         }
-
-        this.imageWorker.postMessage('Hello');
     }
 
     getConfig(key) {
