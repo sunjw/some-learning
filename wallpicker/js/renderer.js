@@ -12,6 +12,7 @@ const bootstrap = require('bootstrap');
 const fixPath = require('fix-path')();
 const probeImageSize = require('probe-image-size');
 const wallpaper = require('wallpaper');
+const sharp = require('sharp');
 
 const utils = require('./utils');
 const jqueryUtils = require('./jqueryUtils');
