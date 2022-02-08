@@ -95,6 +95,7 @@ class WallpickerPage {
         this.divLoadingBlock = null;
         this.divToastWrapper = null;
 
+        this.initWorker();
         this.initLayout();
         this.initHandler();
 
@@ -110,6 +111,8 @@ class WallpickerPage {
             // we have one, go!
             this.loadImageDir();
         }
+
+        this.imageWorker.postMessage('Hello');
     }
 
     getConfig(key) {
@@ -121,6 +124,12 @@ class WallpickerPage {
     setConfig(key, value) {
         utils.log('setConfig, [%s]=[%s]', key, value);
         this.eleConfig.setConfig(key, value);
+    }
+
+    initWorker() {
+        this.imageWorker.onmessage = function (e) {
+            utils.log('initWorker.imageWorker, [%s]', e.data);
+        };
     }
 
     onWindowResize() {
