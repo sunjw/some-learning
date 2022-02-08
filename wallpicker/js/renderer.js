@@ -17,14 +17,17 @@ const utils = require('./utils');
 const jqueryUtils = require('./jqueryUtils');
 const eleUtils = require('./eleUtils');
 
+const TAG_IMAGE_SRC = 'data-image-src';
+const TAG_IMAGE_PLACEHOLDER = 'data-image-placeholder';
+
 function handleImageIntersection(entries) {
     // utils.log('handleImageIntersection');
     let showCount = 0;
     let hideCount = 0;
     for (let entryDom of entries) {
         let entryObj = $(entryDom.target);
-        let entryDataSrc = entryObj.attr('data-src');
-        let entryDataPlaceholder = entryObj.attr('data-placeholder');
+        let entryDataSrc = entryObj.attr(TAG_IMAGE_SRC);
+        let entryDataPlaceholder = entryObj.attr(TAG_IMAGE_PLACEHOLDER);
         if (entryDom.isIntersecting) {
             entryObj.attr('src', entryDataSrc);
             showCount++;
@@ -569,12 +572,10 @@ class WallpickerPage {
             let divInfoWrapper = $('<div/>').addClass('d-flex justify-content-center infoWrapper');
 
             let imgContent = $('<img/>')
-                .attr({
-                    'src': this.imagePlaceholder,
-                    'data-src': filePath,
-                    'data-placeholder': this.imagePlaceholder,
-                })
+                .attr('src', this.imagePlaceholder)
                 .addClass('align-self-end rounded imageContent');
+            imgContent.attr(TAG_IMAGE_SRC, filePath);
+            imgContent.attr(TAG_IMAGE_PLACEHOLDER, this.imagePlaceholder);
             let imagePreviewWidth = fileObj.width;
             let imagePreviewHeight = fileObj.height;
             let imageRatio = fileObj.width / fileObj.height;
