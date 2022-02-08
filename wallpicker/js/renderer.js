@@ -612,6 +612,7 @@ class WallpickerPage {
                 imageBasenameFix += imageBasename.substring(imageBasename.length - 8, imageBasename.length);
                 imageBasename = imageBasenameFix;
             }
+            divImageInfo.attr('title', imageBasenameFull);
             divImageInfo.attr(this.TAG_IMAGE_NAME, imageBasenameFull);
             divImageInfo.html(utils.escapeHtml(imageBasename));
             divImageInfo.on('click', function (e) {
