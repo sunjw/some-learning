@@ -4,7 +4,8 @@
   "description": "A wallpaper picker",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "rebuild-sharp": "electron-rebuild -f -w sharp -p"
   },
   "repository": "https://github.com/sunjw/some-learning",
   "keywords": [
