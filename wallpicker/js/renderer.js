@@ -42,6 +42,7 @@ class WallpickerPage {
 
     constructor() {
         // init consts
+        this.TAG_IMAGE_PATH = 'data-image-path';
     }
 
     init(options) {
@@ -555,7 +556,7 @@ class WallpickerPage {
         for (let fileObj of this.curImageList) {
             let filePath = fileObj.path;
             let divImageBlock = $('<div/>')
-                .attr('data-ref', filePath)
+                .attr(this.TAG_IMAGE_PATH, filePath)
                 .addClass('imageBlock');
 
             // let fileObjJson = JSON.stringify(fileObj, null, 2);
@@ -671,7 +672,7 @@ class WallpickerPage {
 
     selectImage(imageBlock) {
         this.clearSelection(false);
-        utils.log('selectImage, imageBlock=[%s]', imageBlock.attr('data-ref'));
+        utils.log('selectImage, imageBlock=[%s]', imageBlock.attr(this.TAG_IMAGE_PATH));
         this.selectedImageBlock = imageBlock;
         imageBlock.addClass(this.classImageSelected);
         this.refreshButtonState();
@@ -733,7 +734,7 @@ class WallpickerPage {
                     // filter out, skip
                     continue;
                 }
-                let imagePath = imageBlock.attr('data-ref');
+                let imagePath = imageBlock.attr(this.TAG_IMAGE_PATH);
                 if (imagePath == randomImagePath) {
                     imageBlockRandom = imageBlock;
                     break;
@@ -749,7 +750,7 @@ class WallpickerPage {
     }
 
     setOsWallpaper() {
-        let imagePath = this.selectedImageBlock.attr('data-ref');
+        let imagePath = this.selectedImageBlock.attr(this.TAG_IMAGE_PATH);
         utils.log('setWallpaper, imagePath=[%s]', imagePath);
         setTimeout(() => {
             wallpaper.set(imagePath);
@@ -758,7 +759,7 @@ class WallpickerPage {
     }
 
     openImageInDirectory() {
-        let imagePath = this.selectedImageBlock.attr('data-ref');
+        let imagePath = this.selectedImageBlock.attr(this.TAG_IMAGE_PATH);
         utils.log('openImageInDirectory, imagePath=[%s]', imagePath);
         shell.showItemInFolder(imagePath);
     }
