@@ -712,6 +712,15 @@ class WallpickerPage {
         this.setControlDisabled(this.btnToolbarRandom, true);
     }
 
+    getImageObjectByImagePath(imagePath) {
+        for (let fileObj of this.curImageList) {
+            if (fileObj.path == imagePath) {
+                return fileObj;
+            }
+        }
+        return null;
+    }
+
     getAllImageBlocks() {
         return this.divImageList.find('.imageBlock');
     }
@@ -980,6 +989,8 @@ class WallpickerPage {
         if (imageThumbItemArray.length > 1) {
             utils.log('initWorker.imageWorker, found the same images\n%s', utils.objToJsonBeautify(imageThumbItemArray));
         }
+
+        this.processImageBlockThumb(imageSrcPath, imageThumbPath);
     }
 
     checkImageThumbnail(imageThumbPath) {
@@ -996,7 +1007,13 @@ class WallpickerPage {
         return true;
     }
 
-    processImageBlockThumb() {}
+    processImageBlockThumb(imageSrcPath, imageThumbPath) {
+        let fileObj = this.getImageObjectByImagePath(imageSrcPath);
+        if (!fileObj || fileObj.thumbPath) {
+            return;
+        }
+        fileObj.thumbPath = imageThumbPath;
+    }
 }
 
 let wallpickerPage = new WallpickerPage();
