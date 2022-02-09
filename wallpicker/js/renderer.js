@@ -139,6 +139,7 @@ class WallpickerPage {
         }
         this.imageWorker.onmessage = function (e) {
             that.processImageThumbnailResult(e.data);
+            that.generateImageThumbnailNext();
         };
     }
 
@@ -904,6 +905,7 @@ class WallpickerPage {
                 'imageThumbPath': imageThumbPath
             };
             this.processImageThumbnailResult(result);
+            this.generateImageThumbnailNext();
             return;
         }
 
@@ -951,7 +953,6 @@ class WallpickerPage {
                 utils.log('initWorker.imageWorker, found the same images\n%s', utils.objToJsonBeautify(imageThumbItemArray));
             }
         }
-        this.generateImageThumbnailNext();
     }
 
     checkImageThumbnail(imageThumbPath) {
