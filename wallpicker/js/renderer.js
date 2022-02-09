@@ -4,7 +4,6 @@ const {
 } = require('electron');
 const remote = require('@electron/remote');
 
-const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
@@ -21,12 +20,6 @@ const eleUtils = require('./eleUtils');
 
 const TAG_IMAGE_SRC = 'data-image-src';
 const TAG_IMAGE_PLACEHOLDER = 'data-image-placeholder';
-
-function stringMd5(str) {
-    let md5 = crypto.createHash('md5');
-    md5.update(str);
-    return md5.digest('hex');
-}
 
 function handleImageIntersection(entries) {
     // utils.log('handleImageIntersection');
@@ -471,11 +464,12 @@ class WallpickerPage {
             let scanDuration = scanEnd - scanStart;
             if (scanDuration < that.minScanTime) {
                 let waitSome = that.minScanTime - scanDuration;
-                utils.log('scanDir, waitSome=%dms', waitSome);
+                utils.log('scanDir, scanDuration=%dms, waitSome=%dms', scanDuration, waitSome);
                 setTimeout(() => {
                     that.renderImageList();
                 }, waitSome);
             } else {
+                utils.log('scanDir, scanDuration=%dms', scanDuration);
                 that.renderImageList();
             }
         });
@@ -524,11 +518,17 @@ class WallpickerPage {
 
         // utils.log('processFile, image, filePath=[%s]', filePath);
         let imgData = fs.readFileSync(filePath);
+
+        let imgDataHash = eleUtils.hashMd5(imgData);
+        fileObj.hash = imgDataHash;
+
         let imgDim = probeImageSize.sync(imgData);
         fileObj.width = imgDim.width;
         fileObj.height = imgDim.height;
 
-        // utils.log('processFile, image, fileObj=\n%s', JSON.stringify(fileObj, null, 2));
+        fileObj.thumbPath = null;
+
+        // utils.log('processFile, image, fileObj=\n%s', utils.objToJsonBeautify(fileObj, null, 2));
         this.curImageList.push(fileObj);
     }
 
@@ -588,7 +588,7 @@ class WallpickerPage {
                 .attr(this.TAG_IMAGE_PATH, filePath)
                 .addClass('imageBlock');
 
-            // let fileObjJson = JSON.stringify(fileObj, null, 2);
+            // let fileObjJson = utils.objToJsonBeautify(fileObj, null, 2);
             // fileObjJson = utils.escapeHtml(fileObjJson);
             // fileObjJson = utils.stringReplaceAll(fileObjJson, '\n', '<br/>');
             // divImageBlock.html(fileObjJson);
@@ -611,9 +611,8 @@ class WallpickerPage {
                 imagePreviewHeight = this.maxImagePreviewHeight;
                 imagePreviewWidth = imagePreviewHeight * imageRatio;
             }
-            fileObj.thumbWidth = imagePreviewWidth;
-            fileObj.thumbHeight = imagePreviewHeight;
-            fileObj.thumbPath = null;
+            fileObj.previewWidth = imagePreviewWidth;
+            fileObj.previewHeight = imagePreviewHeight;
             imgContent.css({
                 'width': imagePreviewWidth + 'px',
                 'height': imagePreviewHeight + 'px'
@@ -864,6 +863,8 @@ class WallpickerPage {
         }
 
         utils.log('generateImageThumbnailInWorker, %d/%d', (this.curThumbIndex + 1), imageListLen);
+        let fileObj = this.curImageList[this.curThumbIndex];
+        utils.log('generateImageThumbnailInWorker, fileObj=\n%s', utils.objToJsonBeautify(fileObj));
     }
 }
 

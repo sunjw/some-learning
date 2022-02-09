@@ -5,7 +5,7 @@ const sharp = require('sharp');
 const utils = require('./utils');
 
 function generateImageThumbnail(options) {
-    utils.log('generateImageThumbnail, options=\n%s', JSON.stringify(options, null, 2));
+    utils.log('generateImageThumbnail, options=\n%s', utils.objToJsonBeautify(options, null, 2));
 
     let imageSrcPath = options.imageSrcPath;
     let imageThumbPath = options.imageThumbPath;
