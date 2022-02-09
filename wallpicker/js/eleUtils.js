@@ -43,13 +43,13 @@ function stopBubble(event) {
     event.stopPropagation();
 }
 
-function stringMd5(str) {
+function hashMd5(strOrBuffer) {
     let md5 = crypto.createHash('md5');
-    md5.update(str);
+    md5.update(strOrBuffer);
     return md5.digest('hex');
 }
 
 exports.EleConfig = EleConfig;
 exports.sendToMain = sendToMain;
 exports.stopBubble = stopBubble;
-exports.stringMd5 = stringMd5;
+exports.hashMd5 = hashMd5;
