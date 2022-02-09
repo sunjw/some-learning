@@ -536,6 +536,11 @@ class WallpickerPage {
         fileObj.height = imgDim.height;
 
         fileObj.thumbPath = null;
+        let imageThumbPath = this.generateImageThumbnailPath(fileObj);
+        if (this.checkImageThumbnail(imageThumbPath)) {
+            // found thumbnail
+            fileObj.thumbPath = imageThumbPath;
+        }
 
         // utils.log('processFile, image, fileObj=\n%s', utils.objToJsonBeautify(fileObj));
         this.curImageList.push(fileObj);
@@ -888,6 +893,17 @@ class WallpickerPage {
         // utils.log('generateImageThumbnailInWorker, fileObj=\n%s', utils.objToJsonBeautify(fileObj));
 
         let imagePath = fileObj.path;
+        if (fileObj.thumbPath) {
+            utils.log('generateImageThumbnailInWorker, skip found thumbnail.');
+            let result = {
+                'imageSrcPath': imagePath,
+                'imageThumbPath': fileObj.thumbPath
+            };
+            this.processImageThumbnailResult(result);
+            this.generateImageThumbnailNext();
+            return;
+        }
+
         let imageThumbWidth = Math.floor(fileObj.previewWidth * 2);
         let imageThumbHeight = Math.floor(fileObj.previewHeight * 2);
         if (fileObj.width <= imageThumbWidth && fileObj.height <= imageThumbHeight) {
@@ -948,7 +964,9 @@ class WallpickerPage {
                 this.curImageThumbMap.set(imageThumbPath, []);
             }
             let imageThumbItemArray = this.curImageThumbMap.get(imageThumbPath);
-            imageThumbItemArray.push(imageSrcPath);
+            if (!imageThumbItemArray.includes(imageSrcPath)) {
+                imageThumbItemArray.push(imageSrcPath);
+            }
             if (imageThumbItemArray.length > 1) {
                 utils.log('initWorker.imageWorker, found the same images\n%s', utils.objToJsonBeautify(imageThumbItemArray));
             }
