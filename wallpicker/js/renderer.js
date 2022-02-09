@@ -712,7 +712,7 @@ class WallpickerPage {
         this.setControlDisabled(this.btnToolbarRandom, true);
     }
 
-    getImageObjectByImagePath(imagePath) {
+    getFileObjectByImagePath(imagePath) {
         for (let fileObj of this.curImageList) {
             if (fileObj.path == imagePath) {
                 return fileObj;
@@ -1008,7 +1008,7 @@ class WallpickerPage {
     }
 
     processImageBlockThumb(imageSrcPath, imageThumbPath) {
-        let fileObj = this.getImageObjectByImagePath(imageSrcPath);
+        let fileObj = this.getFileObjectByImagePath(imageSrcPath);
         if (!fileObj || fileObj.thumbPath) {
             return;
         }
