@@ -725,6 +725,19 @@ class WallpickerPage {
         return this.divImageList.find('.imageBlock');
     }
 
+    getImageBlockByFileObject(fileObj) {
+        let targetImagePath = fileObj.path;
+        let imageBlocks = this.getAllImageBlocks();
+        for (let imageBlockDom of imageBlocks) {
+            let imageBlock = $(imageBlockDom);
+            let imagePath = imageBlock.attr(this.TAG_IMAGE_PATH);
+            if (imagePath == targetImagePath) {
+                return imageBlock;
+            }
+        }
+        return null;
+    }
+
     clearSelection(refreshButton = true) {
         utils.log('clearSelection');
         let imageBlocks = this.getAllImageBlocks();
@@ -1013,6 +1026,13 @@ class WallpickerPage {
             return;
         }
         fileObj.thumbPath = imageThumbPath;
+
+        let imageBlock = this.getImageBlockByFileObject(fileObj);
+        if (!imageBlock) {
+            return;
+        }
+        let imageContent = imageBlock.find('.imageContent');
+        imageContent.attr(TAG_IMAGE_THUMB_SRC, fileObj.thumbPath);
     }
 }
 
