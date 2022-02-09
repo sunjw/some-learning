@@ -19,6 +19,7 @@ const jqueryUtils = require('./jqueryUtils');
 const eleUtils = require('./eleUtils');
 
 const TAG_IMAGE_SRC = 'data-image-src';
+const TAG_IMAGE_THUMB_SRC = 'data-image-thumb-src';
 const TAG_IMAGE_PLACEHOLDER = 'data-image-placeholder';
 
 function handleImageIntersection(entries) {
@@ -28,7 +29,11 @@ function handleImageIntersection(entries) {
     for (let entryDom of entries) {
         let entryObj = $(entryDom.target);
         let entryImageSrc = entryObj.attr(TAG_IMAGE_SRC);
+        let entryImageThumbSrc = entryObj.attr(TAG_IMAGE_THUMB_SRC);
         let entryImagePlaceholder = entryObj.attr(TAG_IMAGE_PLACEHOLDER);
+        if (entryImageThumbSrc) {
+            entryImageSrc = entryImageThumbSrc;
+        }
         if (entryDom.isIntersecting) {
             entryObj.attr('src', entryImageSrc);
             entryObj.addClass('imageFull');
@@ -615,6 +620,9 @@ class WallpickerPage {
                 .addClass('align-self-end rounded imageContent');
             imgContent.attr(TAG_IMAGE_SRC, filePath);
             imgContent.attr(TAG_IMAGE_PLACEHOLDER, this.imagePlaceholder);
+            if (fileObj.thumbPath) {
+                imgContent.attr(TAG_IMAGE_THUMB_SRC, fileObj.thumbPath);
+            }
             let imagePreviewWidth = fileObj.width;
             let imagePreviewHeight = fileObj.height;
             let imageRatio = fileObj.width / fileObj.height;
