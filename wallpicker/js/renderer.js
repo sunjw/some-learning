@@ -1035,6 +1035,7 @@ class WallpickerPage {
         imageContent.attr(TAG_IMAGE_THUMB_SRC, fileObj.thumbPath);
         if (imageContent.hasClass('imageFull')) {
             imageContent.attr('src', fileObj.thumbPath);
+            utils.log('processImageBlockThumb, replace shown image, imagePath=[%s]', fileObj.path);
         }
     }
 }
