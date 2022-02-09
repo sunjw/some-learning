@@ -136,7 +136,11 @@ class WallpickerPage {
         }
         this.imageWorker.onmessage = function (e) {
             let result = e.data;
-            utils.log('initWorker.imageWorker, result=\n%s', utils.objToJsonBeautify(result));
+            if (result.err) {
+                utils.log('initWorker.imageWorker, error=[%s]', result.err);
+            } else {
+                utils.log('initWorker.imageWorker, result=\n%s', utils.objToJsonBeautify(result));
+            }
         };
     }
 
