@@ -902,6 +902,12 @@ class WallpickerPage {
 
         let imageThumbWidth = Math.floor(fileObj.previewWidth * 2);
         let imageThumbHeight = Math.floor(fileObj.previewHeight * 2);
+        if (fileObj.width <= imageThumbWidth && fileObj.height <= imageThumbHeight) {
+            utils.log('generateImageThumbnailInWorker, skip small image, fileObj=[%s]', fileObj.path);
+            this.generateImageThumbnailNext();
+            return;
+        }
+
         let imageThumbOptions = {
             'imageSrcPath': fileObj.path,
             'imageThumbPath': this.generateImageThumbnailPath(fileObj),
