@@ -964,20 +964,21 @@ class WallpickerPage {
                     }
                 });
             }
-        } else {
-            // success
-            // utils.log('initWorker.imageWorker, result=\n%s', utils.objToJsonBeautify(result));
-            if (!this.curImageThumbMap.has(imageThumbPath)) {
-                // utils.log('initWorker.imageWorker, new imageThumbPath=[%s]', imageThumbPath);
-                this.curImageThumbMap.set(imageThumbPath, []);
-            }
-            let imageThumbItemArray = this.curImageThumbMap.get(imageThumbPath);
-            if (!imageThumbItemArray.includes(imageSrcPath)) {
-                imageThumbItemArray.push(imageSrcPath);
-            }
-            if (imageThumbItemArray.length > 1) {
-                utils.log('initWorker.imageWorker, found the same images\n%s', utils.objToJsonBeautify(imageThumbItemArray));
-            }
+            return;
+        }
+
+        // success
+        // utils.log('initWorker.imageWorker, result=\n%s', utils.objToJsonBeautify(result));
+        if (!this.curImageThumbMap.has(imageThumbPath)) {
+            // utils.log('initWorker.imageWorker, new imageThumbPath=[%s]', imageThumbPath);
+            this.curImageThumbMap.set(imageThumbPath, []);
+        }
+        let imageThumbItemArray = this.curImageThumbMap.get(imageThumbPath);
+        if (!imageThumbItemArray.includes(imageSrcPath)) {
+            imageThumbItemArray.push(imageSrcPath);
+        }
+        if (imageThumbItemArray.length > 1) {
+            utils.log('initWorker.imageWorker, found the same images\n%s', utils.objToJsonBeautify(imageThumbItemArray));
         }
     }
 
@@ -994,6 +995,8 @@ class WallpickerPage {
 
         return true;
     }
+
+    processImageBlockThumb() {}
 }
 
 let wallpickerPage = new WallpickerPage();
