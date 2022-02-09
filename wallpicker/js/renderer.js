@@ -80,6 +80,8 @@ class WallpickerPage {
         this.selectedImageBlock = null;
         this.imageThumbDir = path.join(this.options.userDataPath, 'imageThumb');
         this.curThumbIndex = 0;
+        this.genThumbStart = 0;
+        this.curImageThumbMap = new Map();
 
         this.body = $('body');
         this.divToolbarWrapper = null;
@@ -140,7 +142,19 @@ class WallpickerPage {
             if (result.err) {
                 utils.log('initWorker.imageWorker, error=[%s]', result.err);
             } else {
+                // success
                 utils.log('initWorker.imageWorker, result=\n%s', utils.objToJsonBeautify(result));
+                let imageSrcPath = result.imageSrcPath;
+                let imageThumbPath = result.imageThumbPath;
+                if (!that.curImageThumbMap.has(imageThumbPath)) {
+                    // utils.log('initWorker.imageWorker, new imageThumbPath=[%s]', imageThumbPath);
+                    that.curImageThumbMap.set(imageThumbPath, []);
+                }
+                let imageThumbItemArray = that.curImageThumbMap.get(imageThumbPath);
+                imageThumbItemArray.push(imageSrcPath);
+                if (imageThumbItemArray.length > 1) {
+                    utils.log('initWorker.imageWorker, imageThumbItemArray=\n%s', utils.objToJsonBeautify(imageThumbItemArray));
+                }
             }
             that.generateImageThumbnailNext();
         };
@@ -869,9 +883,17 @@ class WallpickerPage {
 
     generateImageThumbnailInWorker() {
         let imageListLen = this.curImageList.length;
+
         if (this.curThumbIndex >= imageListLen) {
-            utils.log('generateImageThumbnailInWorker, finished.');
+            let genThumbEnd = new Date().getTime();
+            let genThumbDuration = genThumbEnd - this.genThumbStart;
+            utils.log('generateImageThumbnailInWorker, finished, curImageThumbMap=[%d], genThumbDuration=%dms',
+                this.curImageThumbMap.size, genThumbDuration);
             return;
+        }
+
+        if (this.curThumbIndex == 0) {
+            this.genThumbStart = new Date().getTime();
         }
 
         utils.log('generateImageThumbnailInWorker, %d/%d', (this.curThumbIndex + 1), imageListLen);
