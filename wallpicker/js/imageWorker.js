@@ -27,20 +27,19 @@ function generateImageThumbnail(options) {
         break;
     }
     sharpImage.toFile(imageThumbPath, function (err, info) {
+        let result = {
+            'imageSrcPath': imageSrcPath,
+            'imageThumbPath': imageThumbPath
+        };
         if (err) {
             // utils.log('generateImageThumbnail, error=[%s]', err);
-            postMessage({
-                'imageSrcPath': imageSrcPath,
-                'err': err
-            });
+            result.err = err;
+            postMessage(result);
             return;
         }
 
         // utils.log('generateImageThumbnail, thumbnail generated, imageThumbPath=[%s]', imageThumbPath);
-        postMessage({
-            'imageSrcPath': imageSrcPath,
-            'imageThumbPath': imageThumbPath
-        });
+        postMessage(result);
     });
 }
 

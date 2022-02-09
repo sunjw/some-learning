@@ -139,13 +139,24 @@ class WallpickerPage {
         }
         this.imageWorker.onmessage = function (e) {
             let result = e.data;
+            let imageSrcPath = result.imageSrcPath;
+            let imageThumbPath = result.imageThumbPath;
             if (result.err) {
-                utils.log('initWorker.imageWorker, error, imageSrcPath=[%s], err=\n%s', result.imageSrcPath, result.err);
+                utils.log('initWorker.imageWorker, error, imageSrcPath=[%s], err=\n%s', imageSrcPath, result.err);
+                if (fs.existsSync(imageThumbPath)) {
+                    fs.unlink(imageThumbPath, (err) => {
+                        if (err) {
+                            utils.log('initWorker.imageWorker, unlink error, imageThumbPath=[%s], err=\n%s',
+                                imageThumbPath, err);
+                        } else {
+                            utils.log('initWorker.imageWorker, unlink imageThumbPath=[%s]',
+                                imageThumbPath);
+                        }
+                    });
+                }
             } else {
                 // success
                 // utils.log('initWorker.imageWorker, result=\n%s', utils.objToJsonBeautify(result));
-                let imageSrcPath = result.imageSrcPath;
-                let imageThumbPath = result.imageThumbPath;
                 if (!that.curImageThumbMap.has(imageThumbPath)) {
                     // utils.log('initWorker.imageWorker, new imageThumbPath=[%s]', imageThumbPath);
                     that.curImageThumbMap.set(imageThumbPath, []);
