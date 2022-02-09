@@ -140,10 +140,10 @@ class WallpickerPage {
         this.imageWorker.onmessage = function (e) {
             let result = e.data;
             if (result.err) {
-                utils.log('initWorker.imageWorker, error=[%s]', result.err);
+                utils.log('initWorker.imageWorker, error, imageSrcPath=[%s], err=\n%s', result.imageSrcPath, result.err);
             } else {
                 // success
-                utils.log('initWorker.imageWorker, result=\n%s', utils.objToJsonBeautify(result));
+                // utils.log('initWorker.imageWorker, result=\n%s', utils.objToJsonBeautify(result));
                 let imageSrcPath = result.imageSrcPath;
                 let imageThumbPath = result.imageThumbPath;
                 if (!that.curImageThumbMap.has(imageThumbPath)) {
@@ -153,7 +153,7 @@ class WallpickerPage {
                 let imageThumbItemArray = that.curImageThumbMap.get(imageThumbPath);
                 imageThumbItemArray.push(imageSrcPath);
                 if (imageThumbItemArray.length > 1) {
-                    utils.log('initWorker.imageWorker, imageThumbItemArray=\n%s', utils.objToJsonBeautify(imageThumbItemArray));
+                    utils.log('initWorker.imageWorker, found the same images\n%s', utils.objToJsonBeautify(imageThumbItemArray));
                 }
             }
             that.generateImageThumbnailNext();
@@ -898,7 +898,7 @@ class WallpickerPage {
 
         utils.log('generateImageThumbnailInWorker, %d/%d', (this.curThumbIndex + 1), imageListLen);
         let fileObj = this.curImageList[this.curThumbIndex];
-        utils.log('generateImageThumbnailInWorker, fileObj=\n%s', utils.objToJsonBeautify(fileObj));
+        // utils.log('generateImageThumbnailInWorker, fileObj=\n%s', utils.objToJsonBeautify(fileObj));
 
         let imageThumbWidth = Math.floor(fileObj.previewWidth * 2);
         let imageThumbHeight = Math.floor(fileObj.previewHeight * 2);

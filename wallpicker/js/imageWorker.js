@@ -5,7 +5,7 @@ const sharp = require('sharp');
 const utils = require('./utils');
 
 function generateImageThumbnail(options) {
-    utils.log('generateImageThumbnail, options=\n%s', utils.objToJsonBeautify(options));
+    // utils.log('generateImageThumbnail, options=\n%s', utils.objToJsonBeautify(options));
 
     let imageSrcPath = options.imageSrcPath;
     let imageThumbPath = options.imageThumbPath;
@@ -28,14 +28,15 @@ function generateImageThumbnail(options) {
     }
     sharpImage.toFile(imageThumbPath, function (err, info) {
         if (err) {
-            utils.log('generateImageThumbnail, error=[%s]', err);
+            // utils.log('generateImageThumbnail, error=[%s]', err);
             postMessage({
+                'imageSrcPath': imageSrcPath,
                 'err': err
             });
             return;
         }
 
-        utils.log('generateImageThumbnail, thumbnail generated, imageThumbPath=[%s]', imageThumbPath);
+        // utils.log('generateImageThumbnail, thumbnail generated, imageThumbPath=[%s]', imageThumbPath);
         postMessage({
             'imageSrcPath': imageSrcPath,
             'imageThumbPath': imageThumbPath
