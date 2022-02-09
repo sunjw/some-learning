@@ -464,11 +464,12 @@ class WallpickerPage {
             let scanDuration = scanEnd - scanStart;
             if (scanDuration < that.minScanTime) {
                 let waitSome = that.minScanTime - scanDuration;
-                utils.log('scanDir, waitSome=%dms', waitSome);
+                utils.log('scanDir, scanDuration=%dms, waitSome=%dms', scanDuration, waitSome);
                 setTimeout(() => {
                     that.renderImageList();
                 }, waitSome);
             } else {
+                utils.log('scanDir, scanDuration=%dms', scanDuration);
                 that.renderImageList();
             }
         });
