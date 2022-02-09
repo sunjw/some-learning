@@ -517,12 +517,17 @@ class WallpickerPage {
 
         // utils.log('processFile, image, filePath=[%s]', filePath);
         let imgData = fs.readFileSync(filePath);
+
+        let imgDataHash = eleUtils.hashMd5(imgData);
+        fileObj.hash = imgDataHash;
+
         let imgDim = probeImageSize.sync(imgData);
         fileObj.width = imgDim.width;
         fileObj.height = imgDim.height;
+
         fileObj.thumbPath = null;
 
-        // utils.log('processFile, image, fileObj=\n%s', JSON.stringify(fileObj, null, 2));
+        // utils.log('processFile, image, fileObj=\n%s', utils.objToJsonBeautify(fileObj, null, 2));
         this.curImageList.push(fileObj);
     }
 
@@ -582,7 +587,7 @@ class WallpickerPage {
                 .attr(this.TAG_IMAGE_PATH, filePath)
                 .addClass('imageBlock');
 
-            // let fileObjJson = JSON.stringify(fileObj, null, 2);
+            // let fileObjJson = utils.objToJsonBeautify(fileObj, null, 2);
             // fileObjJson = utils.escapeHtml(fileObjJson);
             // fileObjJson = utils.stringReplaceAll(fileObjJson, '\n', '<br/>');
             // divImageBlock.html(fileObjJson);
@@ -857,6 +862,8 @@ class WallpickerPage {
         }
 
         utils.log('generateImageThumbnailInWorker, %d/%d', (this.curThumbIndex + 1), imageListLen);
+        let fileObj = this.curImageList[this.curThumbIndex];
+        utils.log('generateImageThumbnailInWorker, fileObj=\n%s', utils.objToJsonBeautify(fileObj));
     }
 }
 
