@@ -527,6 +527,10 @@ class WallpickerPage {
         fileObj.hash = imgDataHash;
 
         let imgDim = probeImageSize.sync(imgData);
+        if (!imgDim) {
+            utils.log('processFile, corrupt image, filePath=[%s]', filePath);
+            return;
+        }
         fileObj.width = imgDim.width;
         fileObj.height = imgDim.height;
 
@@ -893,14 +897,21 @@ class WallpickerPage {
 
         let imageThumbPath = this.generateImageThumbnailPath(fileObj);
         if (fs.existsSync(imageThumbPath)) {
-            // already generated
-            utils.log('generateImageThumbnailInWorker, skip generated thumbnail');
-            let result = {
-                'imageSrcPath': imagePath,
-                'imageThumbPath': imageThumbPath
-            };
-            this.processImageThumbnailResult(result);
-            return;
+            let imgData = fs.readFileSync(imageThumbPath);
+            let imgDim = probeImageSize.sync(imgData);
+            if (!imgDim) {
+                // corrupt thumbnail
+                // utils.log('generateImageThumbnailInWorker, corrupt thumbnail.');
+            } else {
+                // already generated
+                utils.log('generateImageThumbnailInWorker, skip generated thumbnail.');
+                let result = {
+                    'imageSrcPath': imagePath,
+                    'imageThumbPath': imageThumbPath
+                };
+                this.processImageThumbnailResult(result);
+                return;
+            }
         }
 
         let imageThumbOptions = {
