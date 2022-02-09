@@ -130,6 +130,7 @@ class WallpickerPage {
     }
 
     initWorker() {
+        let that = this;
         if (!fs.existsSync(this.imageThumbDir)) {
             utils.log('initWorker, make thumbnail directory [%s]', this.imageThumbDir);
             fs.mkdirSync(this.imageThumbDir);
@@ -141,6 +142,7 @@ class WallpickerPage {
             } else {
                 utils.log('initWorker.imageWorker, result=\n%s', utils.objToJsonBeautify(result));
             }
+            that.generateImageThumbnailNext();
         };
     }
 
@@ -886,6 +888,11 @@ class WallpickerPage {
             'imageThumbFormat': this.THUMBNAIL_FORMAT
         }
         this.imageWorker.postMessage(imageThumbOptions);
+    }
+
+    generateImageThumbnailNext() {
+        this.curThumbIndex++;
+        this.generateImageThumbnailInWorker();
     }
 }
 
