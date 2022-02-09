@@ -896,22 +896,15 @@ class WallpickerPage {
         }
 
         let imageThumbPath = this.generateImageThumbnailPath(fileObj);
-        if (fs.existsSync(imageThumbPath)) {
-            let imgData = fs.readFileSync(imageThumbPath);
-            let imgDim = probeImageSize.sync(imgData);
-            if (!imgDim) {
-                // corrupt thumbnail
-                // utils.log('generateImageThumbnailInWorker, corrupt thumbnail.');
-            } else {
-                // already generated
-                utils.log('generateImageThumbnailInWorker, skip generated thumbnail.');
-                let result = {
-                    'imageSrcPath': imagePath,
-                    'imageThumbPath': imageThumbPath
-                };
-                this.processImageThumbnailResult(result);
-                return;
-            }
+        if (this.checkImageThumbnail(imageThumbPath)) {
+            // already generated
+            utils.log('generateImageThumbnailInWorker, skip generated thumbnail.');
+            let result = {
+                'imageSrcPath': imagePath,
+                'imageThumbPath': imageThumbPath
+            };
+            this.processImageThumbnailResult(result);
+            return;
         }
 
         let imageThumbOptions = {
@@ -959,6 +952,20 @@ class WallpickerPage {
             }
         }
         this.generateImageThumbnailNext();
+    }
+
+    checkImageThumbnail(imageThumbPath) {
+        if (!fs.existsSync(imageThumbPath)) {
+            return false;
+        }
+
+        let imgData = fs.readFileSync(imageThumbPath);
+        let imgDim = probeImageSize.sync(imgData);
+        if (!imgDim) {
+            return false;
+        }
+
+        return true;
     }
 }
 
