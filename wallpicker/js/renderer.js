@@ -50,6 +50,7 @@ class WallpickerPage {
         // init consts
         this.TAG_IMAGE_PATH = 'data-image-path';
         this.TAG_IMAGE_NAME = 'data-image-name';
+        this.THUMBNAIL_FORMAT = 'png';
     }
 
     init(options) {
@@ -134,7 +135,8 @@ class WallpickerPage {
             fs.mkdirSync(this.imageThumbDir);
         }
         this.imageWorker.onmessage = function (e) {
-            utils.log('initWorker.imageWorker, [%s]', e.data);
+            let result = e.data;
+            utils.log('initWorker.imageWorker, result=\n%s', utils.objToJsonBeautify(result));
         };
     }
 
@@ -528,7 +530,7 @@ class WallpickerPage {
 
         fileObj.thumbPath = null;
 
-        // utils.log('processFile, image, fileObj=\n%s', utils.objToJsonBeautify(fileObj, null, 2));
+        // utils.log('processFile, image, fileObj=\n%s', utils.objToJsonBeautify(fileObj));
         this.curImageList.push(fileObj);
     }
 
@@ -588,7 +590,7 @@ class WallpickerPage {
                 .attr(this.TAG_IMAGE_PATH, filePath)
                 .addClass('imageBlock');
 
-            // let fileObjJson = utils.objToJsonBeautify(fileObj, null, 2);
+            // let fileObjJson = utils.objToJsonBeautify(fileObj);
             // fileObjJson = utils.escapeHtml(fileObjJson);
             // fileObjJson = utils.stringReplaceAll(fileObjJson, '\n', '<br/>');
             // divImageBlock.html(fileObjJson);
@@ -855,6 +857,10 @@ class WallpickerPage {
         divToast.toast('show');
     }
 
+    generateImageThumbnailPath(fileObj) {
+        return path.join(this.imageThumbDir, fileObj.hash + '.' + this.THUMBNAIL_FORMAT);
+    }
+
     generateImageThumbnailInWorker() {
         let imageListLen = this.curImageList.length;
         if (this.curThumbIndex >= imageListLen) {
@@ -865,6 +871,17 @@ class WallpickerPage {
         utils.log('generateImageThumbnailInWorker, %d/%d', (this.curThumbIndex + 1), imageListLen);
         let fileObj = this.curImageList[this.curThumbIndex];
         utils.log('generateImageThumbnailInWorker, fileObj=\n%s', utils.objToJsonBeautify(fileObj));
+
+        let imageThumbWidth = Math.floor(fileObj.previewWidth * 2);
+        let imageThumbHeight = Math.floor(fileObj.previewHeight * 2);
+        let imageThumbOptions = {
+            'imageSrcPath': fileObj.path,
+            'imageThumbPath': this.generateImageThumbnailPath(fileObj),
+            'imageThumbWidth': imageThumbWidth,
+            'imageThumbHeight': imageThumbHeight,
+            'imageThumbFormat': this.THUMBNAIL_FORMAT
+        }
+        this.imageWorker.postMessage(imageThumbOptions);
     }
 }
 
