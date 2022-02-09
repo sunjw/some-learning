@@ -882,18 +882,29 @@ class WallpickerPage {
         let fileObj = this.curImageList[this.curThumbIndex];
         // utils.log('generateImageThumbnailInWorker, fileObj=\n%s', utils.objToJsonBeautify(fileObj));
 
+        let imagePath = fileObj.path;
         let imageThumbWidth = Math.floor(fileObj.previewWidth * 2);
         let imageThumbHeight = Math.floor(fileObj.previewHeight * 2);
         if (fileObj.width <= imageThumbWidth && fileObj.height <= imageThumbHeight) {
-            utils.log('generateImageThumbnailInWorker, skip small image, fileObj=[%s]', fileObj.path);
+            utils.log('generateImageThumbnailInWorker, skip small image, imagePath=[%s]', imagePath);
             this.generateImageThumbnailNext();
             return;
         }
 
         let imageThumbPath = this.generateImageThumbnailPath(fileObj);
+        if (fs.existsSync(imageThumbPath)) {
+            // already generated
+            utils.log('generateImageThumbnailInWorker, skip generated thumbnail');
+            let result = {
+                'imageSrcPath': imagePath,
+                'imageThumbPath': imageThumbPath
+            };
+            this.processImageThumbnailResult(result);
+            return;
+        }
 
         let imageThumbOptions = {
-            'imageSrcPath': fileObj.path,
+            'imageSrcPath': imagePath,
             'imageThumbPath': imageThumbPath,
             'imageThumbWidth': imageThumbWidth,
             'imageThumbHeight': imageThumbHeight,
