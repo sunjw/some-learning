@@ -138,36 +138,7 @@ class WallpickerPage {
             fs.mkdirSync(this.imageThumbDir);
         }
         this.imageWorker.onmessage = function (e) {
-            let result = e.data;
-            let imageSrcPath = result.imageSrcPath;
-            let imageThumbPath = result.imageThumbPath;
-            if (result.err) {
-                utils.log('initWorker.imageWorker, error, imageSrcPath=[%s], err=\n%s', imageSrcPath, result.err);
-                if (fs.existsSync(imageThumbPath)) {
-                    fs.unlink(imageThumbPath, (err) => {
-                        if (err) {
-                            utils.log('initWorker.imageWorker, unlink error, imageThumbPath=[%s], err=\n%s',
-                                imageThumbPath, err);
-                        } else {
-                            utils.log('initWorker.imageWorker, unlink imageThumbPath=[%s]',
-                                imageThumbPath);
-                        }
-                    });
-                }
-            } else {
-                // success
-                // utils.log('initWorker.imageWorker, result=\n%s', utils.objToJsonBeautify(result));
-                if (!that.curImageThumbMap.has(imageThumbPath)) {
-                    // utils.log('initWorker.imageWorker, new imageThumbPath=[%s]', imageThumbPath);
-                    that.curImageThumbMap.set(imageThumbPath, []);
-                }
-                let imageThumbItemArray = that.curImageThumbMap.get(imageThumbPath);
-                imageThumbItemArray.push(imageSrcPath);
-                if (imageThumbItemArray.length > 1) {
-                    utils.log('initWorker.imageWorker, found the same images\n%s', utils.objToJsonBeautify(imageThumbItemArray));
-                }
-            }
-            that.generateImageThumbnailNext();
+            that.processImageThumbnailResult(e.data);
         };
     }
 
@@ -919,9 +890,11 @@ class WallpickerPage {
             return;
         }
 
+        let imageThumbPath = this.generateImageThumbnailPath(fileObj);
+
         let imageThumbOptions = {
             'imageSrcPath': fileObj.path,
-            'imageThumbPath': this.generateImageThumbnailPath(fileObj),
+            'imageThumbPath': imageThumbPath,
             'imageThumbWidth': imageThumbWidth,
             'imageThumbHeight': imageThumbHeight,
             'imageThumbFormat': this.THUMBNAIL_FORMAT
@@ -932,6 +905,38 @@ class WallpickerPage {
     generateImageThumbnailNext() {
         this.curThumbIndex++;
         this.generateImageThumbnailInWorker();
+    }
+
+    processImageThumbnailResult(result) {
+        let imageSrcPath = result.imageSrcPath;
+        let imageThumbPath = result.imageThumbPath;
+        if (result.err) {
+            utils.log('initWorker.imageWorker, error, imageSrcPath=[%s], err=\n%s', imageSrcPath, result.err);
+            if (fs.existsSync(imageThumbPath)) {
+                fs.unlink(imageThumbPath, (err) => {
+                    if (err) {
+                        utils.log('initWorker.imageWorker, unlink error, imageThumbPath=[%s], err=\n%s',
+                            imageThumbPath, err);
+                    } else {
+                        utils.log('initWorker.imageWorker, unlink imageThumbPath=[%s]',
+                            imageThumbPath);
+                    }
+                });
+            }
+        } else {
+            // success
+            // utils.log('initWorker.imageWorker, result=\n%s', utils.objToJsonBeautify(result));
+            if (!this.curImageThumbMap.has(imageThumbPath)) {
+                // utils.log('initWorker.imageWorker, new imageThumbPath=[%s]', imageThumbPath);
+                this.curImageThumbMap.set(imageThumbPath, []);
+            }
+            let imageThumbItemArray = this.curImageThumbMap.get(imageThumbPath);
+            imageThumbItemArray.push(imageSrcPath);
+            if (imageThumbItemArray.length > 1) {
+                utils.log('initWorker.imageWorker, found the same images\n%s', utils.objToJsonBeautify(imageThumbItemArray));
+            }
+        }
+        this.generateImageThumbnailNext();
     }
 }
 
