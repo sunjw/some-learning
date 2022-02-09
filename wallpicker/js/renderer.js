@@ -4,7 +4,6 @@ const {
 } = require('electron');
 const remote = require('@electron/remote');
 
-const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
@@ -21,12 +20,6 @@ const eleUtils = require('./eleUtils');
 
 const TAG_IMAGE_SRC = 'data-image-src';
 const TAG_IMAGE_PLACEHOLDER = 'data-image-placeholder';
-
-function stringMd5(str) {
-    let md5 = crypto.createHash('md5');
-    md5.update(str);
-    return md5.digest('hex');
-}
 
 function handleImageIntersection(entries) {
     // utils.log('handleImageIntersection');
