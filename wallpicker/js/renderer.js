@@ -520,6 +520,7 @@ class WallpickerPage {
         let imgDim = probeImageSize.sync(imgData);
         fileObj.width = imgDim.width;
         fileObj.height = imgDim.height;
+        fileObj.thumbPath = null;
 
         // utils.log('processFile, image, fileObj=\n%s', JSON.stringify(fileObj, null, 2));
         this.curImageList.push(fileObj);
@@ -604,9 +605,8 @@ class WallpickerPage {
                 imagePreviewHeight = this.maxImagePreviewHeight;
                 imagePreviewWidth = imagePreviewHeight * imageRatio;
             }
-            fileObj.thumbWidth = imagePreviewWidth;
-            fileObj.thumbHeight = imagePreviewHeight;
-            fileObj.thumbPath = null;
+            fileObj.previewWidth = imagePreviewWidth;
+            fileObj.previewHeight = imagePreviewHeight;
             imgContent.css({
                 'width': imagePreviewWidth + 'px',
                 'height': imagePreviewHeight + 'px'
