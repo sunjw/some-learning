@@ -918,6 +918,7 @@ class WallpickerPage {
         if (this.curThumbIndex == 0) {
             this.genThumbStart = new Date().getTime();
             this.genThumbCount = 0;
+            utils.log('generateImageThumbnailInWorker, start...');
         }
 
         // utils.log('generateImageThumbnailInWorker, %d/%d', (this.curThumbIndex + 1), imageListLen);
@@ -926,7 +927,7 @@ class WallpickerPage {
 
         let imagePath = fileObj.path;
         if (fileObj.thumbPath) {
-            utils.log('generateImageThumbnailInWorker, skip found thumbnail.');
+            // utils.log('generateImageThumbnailInWorker, skip found thumbnail.');
             let result = {
                 'imageSrcPath': imagePath,
                 'imageThumbPath': fileObj.thumbPath
