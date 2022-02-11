@@ -19,8 +19,6 @@ const jqueryUtils = require('./jqueryUtils');
 const eleUtils = require('./eleUtils');
 const sqliteDb = require('./sqliteDb');
 
-const DB_THUMBNAIL = 'thumbnail.sqlite';
-
 const TAG_IMAGE_SRC = 'data-image-src';
 const TAG_IMAGE_THUMB_SRC = 'data-image-thumb-src';
 const TAG_IMAGE_PLACEHOLDER = 'data-image-placeholder';
@@ -87,6 +85,8 @@ class WallpickerPage {
         this.curImageList = [];
         this.selectedImageBlock = null;
         this.imageThumbDir = path.join(this.options.userDataPath, 'imageThumb');
+        this.imageThumbDbPath = path.join(this.options.userDataPath, 'thumbnail.sqlite');
+        this.imageThumbDb = new sqliteDb(this.imageThumbDbPath);
         this.curThumbIndex = 0;
         this.genThumbStart = 0;
         this.genThumbCount = 0;
@@ -111,6 +111,7 @@ class WallpickerPage {
         this.divLoadingBlock = null;
         this.divToastWrapper = null;
 
+        this.initDb();
         this.initWorker();
         this.initLayout();
         this.initHandler();
@@ -138,6 +139,10 @@ class WallpickerPage {
     setConfig(key, value) {
         utils.log('setConfig, [%s]=[%s]', key, value);
         this.eleConfig.setConfig(key, value);
+    }
+
+    initDb() {
+        this.imageThumbDb.open();
     }
 
     initWorker() {

@@ -10,7 +10,7 @@ class SqliteDb {
     }
 
     open() {
-        if (this.db != 0) {
+        if (this.db) {
             return;
         }
 
@@ -46,4 +46,4 @@ class SqliteDb {
 }
 
 // exports
-exports = SqliteDb;
+module.exports = SqliteDb;
