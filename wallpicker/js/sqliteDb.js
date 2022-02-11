@@ -40,8 +40,8 @@ class SqliteDb {
         }
 
         utils.log('SqliteDb.query:\n[' + sql + ']\n@[' + params + ']');
-        let stmt = this.prepare(sql);
         try {
+            let stmt = this.prepare(sql);
             let rows = stmt.all(params);
             callback(null, rows);
         } catch (err) {
@@ -56,8 +56,8 @@ class SqliteDb {
         }
 
         utils.log('SqliteDb.exec:\n[' + sql + ']\n@[' + params + ']');
-        let stmt = this.prepare(sql);
         try {
+            let stmt = this.prepare(sql);
             let info = stmt.run(params);
             callback(null, info);
         } catch (err) {
