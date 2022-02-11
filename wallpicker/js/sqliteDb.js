@@ -28,6 +28,11 @@ class SqliteDb {
         this.db = null;
     }
 
+    prepare(sql) {
+        let stmt = this.db.prepare(sql);
+        return stmt;
+    }
+
     query(sql, params, callback) {
         if (!this.db) {
             callback(new Error('No db opened.'), []);
@@ -35,10 +40,26 @@ class SqliteDb {
         }
 
         utils.log('SqliteDb.query:\n[' + sql + ']\n@[' + params + ']');
-        let stmt = this.db.prepare(sql);
+        let stmt = this.prepare(sql);
         try {
             let rows = stmt.all(params);
             callback(null, rows);
+        } catch (err) {
+            callback(err);
+        }
+    }
+
+    exec(sql, params, callback) {
+        if (!this.db) {
+            callback(new Error('No db opened.'), []);
+            return;
+        }
+
+        utils.log('SqliteDb.exec:\n[' + sql + ']\n@[' + params + ']');
+        let stmt = this.prepare(sql);
+        try {
+            let info = stmt.run(params);
+            callback(null, info);
         } catch (err) {
             callback(err);
         }
