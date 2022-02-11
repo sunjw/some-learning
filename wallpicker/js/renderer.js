@@ -19,6 +19,12 @@ const jqueryUtils = require('./jqueryUtils');
 const eleUtils = require('./eleUtils');
 const sqliteDb = require('./sqliteDb');
 
+const DB_CREATE_THUMBNAIL_TABLE = 'CREATE TABLE IF NOT EXISTS "thumbnail" (' +
+    '"id" INTEGER PRIMARY KEY AUTOINCREMENT,' +
+    '"hash" varchar(1024) NOT NULL,' +
+    '"path" varchar(1024) NOT NULL,' +
+    ')';
+
 const TAG_IMAGE_SRC = 'data-image-src';
 const TAG_IMAGE_THUMB_SRC = 'data-image-thumb-src';
 const TAG_IMAGE_PLACEHOLDER = 'data-image-placeholder';
@@ -445,7 +451,7 @@ class WallpickerPage {
     scanDir(dirPath, deep) {
         let that = this;
 
-        let scanStart = new Date().getTime();
+        let scanStart = utils.getCurTimestamp();
 
         utils.log('scanDir, dirPath=[%s], deep=%d', dirPath, deep);
         this.readdirEx(dirPath, (deep != 0), (err, files) => {
@@ -479,7 +485,7 @@ class WallpickerPage {
 
             // top level
             utils.log('scanDir, finished, found %d images.', that.curImageList.length);
-            let scanEnd = new Date().getTime();
+            let scanEnd = utils.getCurTimestamp();
             let scanDuration = scanEnd - scanStart;
             if (scanDuration < that.minScanTime) {
                 let waitSome = that.minScanTime - scanDuration;
@@ -916,7 +922,7 @@ class WallpickerPage {
         let imageListLen = this.curImageList.length;
 
         if (this.curThumbIndex >= imageListLen) {
-            let genThumbEnd = new Date().getTime();
+            let genThumbEnd = utils.getCurTimestamp();
             let genThumbDuration = genThumbEnd - this.genThumbStart;
             utils.log('generateImageThumbnailInWorker, finished, curImageThumbMap=[%d], genThumbDuration=%dms',
                 this.curImageThumbMap.size, genThumbDuration);
@@ -924,7 +930,7 @@ class WallpickerPage {
         }
 
         if (this.curThumbIndex == 0) {
-            this.genThumbStart = new Date().getTime();
+            this.genThumbStart = utils.getCurTimestamp();
             this.genThumbCount = 0;
             utils.log('generateImageThumbnailInWorker, start...');
         }
