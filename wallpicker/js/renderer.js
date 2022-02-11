@@ -21,9 +21,9 @@ const sqliteDb = require('./sqliteDb');
 
 const DB_CREATE_THUMBNAIL_TABLE = 'CREATE TABLE IF NOT EXISTS "thumbnail" (' +
     '"id" INTEGER PRIMARY KEY AUTOINCREMENT,' +
-    '"hash" varchar(1024) NOT NULL,' +
     '"path" varchar(1024) NOT NULL,' +
-    ')';
+    '"last_used" INTEGER NOT NULL' +
+    ');';
 
 const TAG_IMAGE_SRC = 'data-image-src';
 const TAG_IMAGE_THUMB_SRC = 'data-image-thumb-src';
@@ -149,6 +149,14 @@ class WallpickerPage {
 
     initDb() {
         this.imageThumbDb.open();
+        this.imageThumbDb.exec(DB_CREATE_THUMBNAIL_TABLE, [], (err, info) => {
+            if (err) {
+                utils.log('initDb, init table error, err=\n%s', err.message);
+                return;
+            }
+            // utils.log('initDb, info=\n%s', utils.objToJsonBeautify(info));
+            utils.log('initDb, create table success.');
+        });
     }
 
     initWorker() {
