@@ -86,6 +86,7 @@ class WallpickerPage {
         this.imageThumbDir = path.join(this.options.userDataPath, 'imageThumb');
         this.curThumbIndex = 0;
         this.genThumbStart = 0;
+        this.genThumbCount = 0;
         this.curImageThumbMap = new Map();
 
         this.body = $('body');
@@ -916,9 +917,10 @@ class WallpickerPage {
 
         if (this.curThumbIndex == 0) {
             this.genThumbStart = new Date().getTime();
+            this.genThumbCount = 0;
         }
 
-        utils.log('generateImageThumbnailInWorker, %d/%d', (this.curThumbIndex + 1), imageListLen);
+        // utils.log('generateImageThumbnailInWorker, %d/%d', (this.curThumbIndex + 1), imageListLen);
         let fileObj = this.curImageList[this.curThumbIndex];
         // utils.log('generateImageThumbnailInWorker, fileObj=\n%s', utils.objToJsonBeautify(fileObj));
 
@@ -955,6 +957,8 @@ class WallpickerPage {
             return;
         }
 
+        this.genThumbCount++;
+        utils.log('generateImageThumbnailInWorker, [%d]', this.genThumbCount);
         let imageThumbOptions = {
             'imageSrcPath': imagePath,
             'imageThumbPath': imageThumbPath,
