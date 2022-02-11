@@ -5,7 +5,9 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "rebuild-sharp": "electron-rebuild -f -w sharp -p"
+    "rebuild-sharp": "electron-rebuild -f -w sharp -p",
+    "rebuild-sqlite3": "electron-rebuild -f -w better-sqlite3 -p",
+    "rebuild-all": "npm run rebuild-sharp && npm run rebuild-sqlite3"
   },
   "repository": "https://github.com/sunjw/some-learning",
   "keywords": [
