@@ -24,6 +24,9 @@ const DB_CREATE_THUMBNAIL_TABLE = 'CREATE TABLE IF NOT EXISTS "thumbnail" (' +
     '"path" varchar(1024) NOT NULL,' +
     '"last_used" INTEGER NOT NULL' +
     ');';
+const DB_SELECT_THUMBNAIL_BY_PATH = 'SELECT * FROM thumbnail WHERE path=?';
+const DB_INSERT_THUMBNAIL = 'INSERT INTO thumbnail (path, last_used) VALUES (?, ?)';
+const DB_UPDATE_THUMBNAIL_LAST_USED_BY_ID = 'UPDATE thumbnail SET last_used=? WHERE id=?';
 
 const TAG_IMAGE_SRC = 'data-image-src';
 const TAG_IMAGE_THUMB_SRC = 'data-image-thumb-src';
@@ -1030,7 +1033,39 @@ class WallpickerPage {
             utils.log('initWorker.imageWorker, found the same images\n%s', utils.objToJsonBeautify(imageThumbItemArray));
         }
 
+        this.updateImageThumbnailDb(imageThumbPath);
         this.processImageBlockThumb(imageSrcPath, imageThumbPath);
+    }
+
+    updateImageThumbnailDb(imageThumbPath) {
+        this.imageThumbDb.query(DB_SELECT_THUMBNAIL_BY_PATH, [imageThumbPath], (err, rows) => {
+            if (err) {
+                utils.log('updateImageThumbnailDb, query error, err=\n%s', err.message);
+                return;
+            }
+
+            let curTimestamp = utils.getCurTimestamp();
+            if (rows.length == 0) {
+                // insert
+                this.imageThumbDb.exec(DB_INSERT_THUMBNAIL, [imageThumbPath, curTimestamp], (err, info) => {
+                    if (err) {
+                        utils.log('updateImageThumbnailDb, insert error, err=\n%s', err.message);
+                        return;
+                    }
+                    // utils.log('updateImageThumbnailDb, insert success, info=\n%s', utils.objToJsonBeautify(info));
+                });
+            } else {
+                // update
+                let thumbId = rows[0].id;
+                this.imageThumbDb.exec(DB_UPDATE_THUMBNAIL_LAST_USED_BY_ID, [curTimestamp, thumbId], (err, info) => {
+                    if (err) {
+                        utils.log('updateImageThumbnailDb, update error, err=\n%s', err.message);
+                        return;
+                    }
+                    // utils.log('updateImageThumbnailDb, update success, info=\n%s', utils.objToJsonBeautify(info));
+                });
+            }
+        });
     }
 
     checkImageThumbnail(imageThumbPath) {
