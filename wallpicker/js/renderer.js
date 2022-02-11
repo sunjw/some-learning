@@ -17,6 +17,9 @@ const sharp = require('sharp');
 const utils = require('./utils');
 const jqueryUtils = require('./jqueryUtils');
 const eleUtils = require('./eleUtils');
+const sqliteDb = require('./sqliteDb');
+
+const DB_THUMBNAIL = 'thumbnail.sqlite';
 
 const TAG_IMAGE_SRC = 'data-image-src';
 const TAG_IMAGE_THUMB_SRC = 'data-image-thumb-src';

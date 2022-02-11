@@ -46,4 +46,4 @@ class SqliteDb {
 }
 
 // exports
-exports.SqliteDb = SqliteDb;
+exports = SqliteDb;
