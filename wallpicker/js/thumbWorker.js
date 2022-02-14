@@ -43,8 +43,18 @@ function generateImageThumbnail(options) {
     });
 }
 
+let messageHandlerMap = {
+    'generateImageThumbnail': generateImageThumbnail
+};
+
 onmessage = function (e) {
-    // utils.log('imageWorker.onmessage, [%s]', e.data);
+    // utils.log('thumbWorker.onmessage, [%s]', e.data);
     // postMessage('Worker!');
-    generateImageThumbnail(e.data);
+    let messageData = e.data;
+    let messageHandler = messageHandlerMap[messageData.messageId];
+    if (!messageHandler) {
+        utils.log('thumbWorker.onmessage, unknown messageId=[%s]', messageData.messageId);
+        return;
+    }
+    messageHandler(messageData);
 };
