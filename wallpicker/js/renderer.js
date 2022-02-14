@@ -168,9 +168,24 @@ class WallpickerPage {
             utils.log('initWorker, make thumbnail directory [%s]', this.imageThumbDir);
             fs.mkdirSync(this.imageThumbDir);
         }
-        this.thumbWorker.onmessage = function (e) {
-            that.processImageThumbnailResult(e.data);
+
+        let onGenerateImageThumbnail = function (result) {
+            that.processImageThumbnailResult(result);
             that.generateImageThumbnailNext();
+        }
+
+        let messageHandlerMap = {
+            'generateImageThumbnail': onGenerateImageThumbnail
+        };
+
+        this.thumbWorker.onmessage = function (e) {
+            let messageData = e.data;
+            let messageHandler = messageHandlerMap[messageData.messageId];
+            if (!messageHandler) {
+                utils.log('initWorker.thumbWorker, unknown messageId=[%s]', messageData.messageId);
+                return;
+            }
+            messageHandler(messageData);
         };
     }
 
