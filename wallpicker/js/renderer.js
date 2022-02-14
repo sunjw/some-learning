@@ -19,15 +19,6 @@ const jqueryUtils = require('./jqueryUtils');
 const eleUtils = require('./eleUtils');
 const sqliteDb = require('./sqliteDb');
 
-const DB_CREATE_THUMBNAIL_TABLE = 'CREATE TABLE IF NOT EXISTS "thumbnail" (' +
-    '"id" INTEGER PRIMARY KEY AUTOINCREMENT,' +
-    '"path" varchar(1024) NOT NULL,' +
-    '"last_used" INTEGER NOT NULL' +
-    ');';
-const DB_SELECT_THUMBNAIL_BY_PATH = 'SELECT * FROM thumbnail WHERE path=?';
-const DB_INSERT_THUMBNAIL = 'INSERT INTO thumbnail (path, last_used) VALUES (?, ?)';
-const DB_UPDATE_THUMBNAIL_LAST_USED_BY_ID = 'UPDATE thumbnail SET last_used=? WHERE id=?';
-
 const TAG_IMAGE_SRC = 'data-image-src';
 const TAG_IMAGE_THUMB_SRC = 'data-image-thumb-src';
 const TAG_IMAGE_PLACEHOLDER = 'data-image-placeholder';
@@ -95,7 +86,6 @@ class WallpickerPage {
         this.selectedImageBlock = null;
         this.imageThumbDir = path.join(this.options.userDataPath, 'imageThumb');
         this.imageThumbDbPath = path.join(this.options.userDataPath, 'thumbnail.sqlite');
-        this.imageThumbDb = new sqliteDb(this.imageThumbDbPath);
         this.curThumbIndex = 0;
         this.genThumbStart = 0;
         this.genThumbCount = 0;
