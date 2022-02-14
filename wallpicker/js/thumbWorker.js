@@ -18,7 +18,7 @@ let imageThumbDb = null;
 
 function initWorker(options) {
     let imageThumbDbPath = options.imageThumbDbPath;
-    imageThumbDb = new sqliteDb(imageThumbDbPath);
+    imageThumbDb = new sqliteDb(imageThumbDbPath, true);
     imageThumbDb.open();
     imageThumbDb.exec(DB_CREATE_THUMBNAIL_TABLE, [], (err, info) => {
         let result = {
