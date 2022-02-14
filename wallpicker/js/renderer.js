@@ -169,12 +169,20 @@ class WallpickerPage {
             fs.mkdirSync(this.imageThumbDir);
         }
 
+        let onInitWorker = function (result) {
+            if (result.err) {
+                utils.log('initWorker.onInitWorker, init table error, err=\n%s', err.message);
+            } else {
+                utils.log('initWorker.onInitWorker, create table success.');
+            }
+        };
         let onGenerateImageThumbnail = function (result) {
             that.processImageThumbnailResult(result);
             that.generateImageThumbnailNext();
-        }
+        };
 
         let messageHandlerMap = {
+            'initWorker': onInitWorker,
             'generateImageThumbnail': onGenerateImageThumbnail
         };
 
@@ -187,6 +195,12 @@ class WallpickerPage {
             }
             messageHandler(messageData);
         };
+
+        let initWorkerOptions = {
+            'messageId': 'initWorker',
+            'imageThumbDbPath': imageThumbDbPath
+        }
+        this.thumbWorker.postMessage(initWorkerOptions);
     }
 
     onWindowResize() {
@@ -1000,7 +1014,7 @@ class WallpickerPage {
 
         this.genThumbCount++;
         utils.log('generateImageThumbnailInWorker, [%d]', this.genThumbCount);
-        let imageThumbOptions = {
+        let generateImageThumbnailOptions = {
             'messageId': 'generateImageThumbnail',
             'imageSrcPath': imagePath,
             'imageThumbPath': imageThumbPath,
@@ -1008,7 +1022,7 @@ class WallpickerPage {
             'imageThumbHeight': imageThumbHeight,
             'imageThumbFormat': this.THUMBNAIL_FORMAT
         }
-        this.thumbWorker.postMessage(imageThumbOptions);
+        this.thumbWorker.postMessage(generateImageThumbnailOptions);
     }
 
     generateImageThumbnailNext() {

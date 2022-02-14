@@ -3,6 +3,36 @@ const path = require('path');
 
 const sharp = require('sharp');
 const utils = require('./utils');
+const sqliteDb = require('./sqliteDb');
+
+const DB_CREATE_THUMBNAIL_TABLE = 'CREATE TABLE IF NOT EXISTS "thumbnail" (' +
+    '"id" INTEGER PRIMARY KEY AUTOINCREMENT,' +
+    '"path" varchar(1024) NOT NULL,' +
+    '"last_used" INTEGER NOT NULL' +
+    ');';
+const DB_SELECT_THUMBNAIL_BY_PATH = 'SELECT * FROM thumbnail WHERE path=?';
+const DB_INSERT_THUMBNAIL = 'INSERT INTO thumbnail (path, last_used) VALUES (?, ?)';
+const DB_UPDATE_THUMBNAIL_LAST_USED_BY_ID = 'UPDATE thumbnail SET last_used=? WHERE id=?';
+
+let imageThumbDb = null;
+
+function initWorker(options) {
+    let imageThumbDbPath = options.imageThumbDbPath;
+    imageThumbDb = new sqliteDb(imageThumbDbPath);
+    imageThumbDb.open();
+    imageThumbDb.exec(DB_CREATE_THUMBNAIL_TABLE, [], (err, info) => {
+        let result = {
+            'messageId': 'initWorker'
+        };
+        if (err) {
+            // utils.log('initWorker, init table error, err=\n%s', err.message);
+            result.err = err;
+        }
+        // utils.log('initWorker, info=\n%s', utils.objToJsonBeautify(info));
+        // utils.log('initWorker, create table success.');
+        postMessage(result);
+    });
+}
 
 function generateImageThumbnail(options) {
     // utils.log('generateImageThumbnail, options=\n%s', utils.objToJsonBeautify(options));
@@ -45,6 +75,7 @@ function generateImageThumbnail(options) {
 }
 
 let messageHandlerMap = {
+    'initWorker': initWorker,
     'generateImageThumbnail': generateImageThumbnail
 };
 
