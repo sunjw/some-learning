@@ -4,9 +4,10 @@ const utils = require('./utils');
 
 class SqliteDb {
 
-    constructor(dbPath) {
+    constructor(dbPath, printSql = false) {
         this.dbPath = dbPath;
         this.db = null;
+        this.printSql = printSql;
     }
 
     open() {
@@ -39,7 +40,9 @@ class SqliteDb {
             return;
         }
 
-        utils.log('SqliteDb.query:\n[' + sql + ']\n@[' + params + ']');
+        if (this.printSql) {
+            utils.log('SqliteDb.query:\n[' + sql + ']\n@[' + params + ']');
+        }
         try {
             let stmt = this.prepare(sql);
             let rows = stmt.all(params);
@@ -55,7 +58,9 @@ class SqliteDb {
             return;
         }
 
-        utils.log('SqliteDb.exec:\n[' + sql + ']\n@[' + params + ']');
+        if (this.printSql) {
+            utils.log('SqliteDb.exec:\n[' + sql + ']\n@[' + params + ']');
+        }
         try {
             let stmt = this.prepare(sql);
             let info = stmt.run(params);
