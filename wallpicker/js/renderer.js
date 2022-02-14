@@ -950,8 +950,8 @@ class WallpickerPage {
         if (this.curThumbIndex >= imageListLen) {
             let genThumbEnd = utils.getCurTimestamp();
             let genThumbDuration = genThumbEnd - this.genThumbStart;
-            utils.log('generateImageThumbnailInWorker, finished, curImageThumbMap=[%d], genThumbDuration=%dms',
-                this.curImageThumbMap.size, genThumbDuration);
+            utils.log('generateImageThumbnailInWorker, finished, genThumbCount=[%d], curImageThumbMap=[%d], genThumbDuration=%dms',
+                this.genThumbCount, this.curImageThumbMap.size, genThumbDuration);
             return;
         }
 
