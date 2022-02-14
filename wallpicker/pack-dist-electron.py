@@ -108,7 +108,8 @@ EXEC_FIX_PATHS = ['./node_modules/.bin/electron-rebuild',
                 './node_modules/wallpaper/source/macos-wallpaper']
 
 REBUILD_CMD = ''
-REBUILD_CLEAN_PATHS_WIN = []
+REBUILD_CLEAN_PATHS_WIN = ['./node_modules/better-sqlite3/build/Release/obj',
+                        './node_modules/better-sqlite3/build/deps/Release/obj']
 REBUILD_CLEAN_PATHS_MACOS = []
 
 def main():
