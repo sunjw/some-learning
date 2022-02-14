@@ -52,7 +52,10 @@ def find_strings_in_string(strings, in_string):
     return False
 
 def copy_file(source, dest):
-    shutil.copyfile(source, dest, follow_symlinks=False)
+    follow_symlinks_os = False
+    if is_windows_sys():
+        follow_symlinks_os = True
+    shutil.copyfile(source, dest, follow_symlinks=follow_symlinks_os)
 
 def copy_dir(source, dest):
     for filename in os.listdir(source):
