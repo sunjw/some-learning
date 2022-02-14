@@ -86,7 +86,7 @@ class WallpickerPage {
         this.maxImagePreviewHeight = 160;
         this.maxImagePreviewRatio = this.maxImagePreviewWidth / this.maxImagePreviewHeight;
 
-        this.imageWorker = new Worker('js/imageWorker.js');
+        this.thumbWorker = new Worker('js/thumbWorker.js');
 
         this.options = options;
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
@@ -168,7 +168,7 @@ class WallpickerPage {
             utils.log('initWorker, make thumbnail directory [%s]', this.imageThumbDir);
             fs.mkdirSync(this.imageThumbDir);
         }
-        this.imageWorker.onmessage = function (e) {
+        this.thumbWorker.onmessage = function (e) {
             that.processImageThumbnailResult(e.data);
             that.generateImageThumbnailNext();
         };
@@ -992,7 +992,7 @@ class WallpickerPage {
             'imageThumbHeight': imageThumbHeight,
             'imageThumbFormat': this.THUMBNAIL_FORMAT
         }
-        this.imageWorker.postMessage(imageThumbOptions);
+        this.thumbWorker.postMessage(imageThumbOptions);
     }
 
     generateImageThumbnailNext() {
@@ -1004,14 +1004,14 @@ class WallpickerPage {
         let imageSrcPath = result.imageSrcPath;
         let imageThumbPath = result.imageThumbPath;
         if (result.err) {
-            utils.log('initWorker.imageWorker, error, imageSrcPath=[%s], err=\n%s', imageSrcPath, result.err);
+            utils.log('initWorker.thumbWorker, error, imageSrcPath=[%s], err=\n%s', imageSrcPath, result.err);
             if (fs.existsSync(imageThumbPath)) {
                 fs.unlink(imageThumbPath, (err) => {
                     if (err) {
-                        utils.log('initWorker.imageWorker, unlink error, imageThumbPath=[%s], err=\n%s',
+                        utils.log('initWorker.thumbWorker, unlink error, imageThumbPath=[%s], err=\n%s',
                             imageThumbPath, err);
                     } else {
-                        utils.log('initWorker.imageWorker, unlink imageThumbPath=[%s]',
+                        utils.log('initWorker.thumbWorker, unlink imageThumbPath=[%s]',
                             imageThumbPath);
                     }
                 });
@@ -1020,9 +1020,9 @@ class WallpickerPage {
         }
 
         // success
-        // utils.log('initWorker.imageWorker, result=\n%s', utils.objToJsonBeautify(result));
+        // utils.log('initWorker.thumbWorker, result=\n%s', utils.objToJsonBeautify(result));
         if (!this.curImageThumbMap.has(imageThumbPath)) {
-            // utils.log('initWorker.imageWorker, new imageThumbPath=[%s]', imageThumbPath);
+            // utils.log('initWorker.thumbWorker, new imageThumbPath=[%s]', imageThumbPath);
             this.curImageThumbMap.set(imageThumbPath, []);
         }
         let imageThumbItemArray = this.curImageThumbMap.get(imageThumbPath);
@@ -1030,7 +1030,7 @@ class WallpickerPage {
             imageThumbItemArray.push(imageSrcPath);
         }
         if (imageThumbItemArray.length > 1) {
-            utils.log('initWorker.imageWorker, found the same images\n%s', utils.objToJsonBeautify(imageThumbItemArray));
+            utils.log('initWorker.thumbWorker, found the same images\n%s', utils.objToJsonBeautify(imageThumbItemArray));
         }
 
         this.updateImageThumbnailDb(imageThumbPath);
