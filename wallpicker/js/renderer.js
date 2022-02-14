@@ -184,7 +184,7 @@ class WallpickerPage {
         // init worker
         let initWorkerOptions = {
             'messageId': 'initWorker',
-            'imageThumbDbPath': imageThumbDbPath
+            'imageThumbDbPath': this.imageThumbDbPath
         }
         this.thumbWorker.postMessage(initWorkerOptions);
     }
