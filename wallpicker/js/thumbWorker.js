@@ -65,18 +65,58 @@ function generateImageThumbnail(options) {
         if (err) {
             // utils.log('generateImageThumbnail, error=[%s]', err);
             result.err = err;
+        } else {
+            // utils.log('generateImageThumbnail, thumbnail generated, imageThumbPath=[%s]', imageThumbPath);
+        }
+        postMessage(result);
+    });
+}
+
+function updateImageThumbnailDb(options) {
+    let imageThumbPath = options.imageThumbPath;
+    imageThumbDb.query(DB_SELECT_THUMBNAIL_BY_PATH, [imageThumbPath], (err, rows) => {
+        let result = {
+            'messageId': 'updateImageThumbnailDb'
+        };
+        if (err) {
+            // utils.log('updateImageThumbnailDb, query error, err=\n%s', err.message);
+            result.err = err;
             postMessage(result);
             return;
         }
 
-        // utils.log('generateImageThumbnail, thumbnail generated, imageThumbPath=[%s]', imageThumbPath);
-        postMessage(result);
+        let curTimestamp = utils.getCurTimestamp();
+        if (rows.length == 0) {
+            // insert
+            imageThumbDb.exec(DB_INSERT_THUMBNAIL, [imageThumbPath, curTimestamp], (err, info) => {
+                if (err) {
+                    // utils.log('updateImageThumbnailDb, insert error, err=\n%s', err.message);
+                    result.err = err;
+                } else {
+                    // utils.log('updateImageThumbnailDb, insert success, info=\n%s', utils.objToJsonBeautify(info));
+                }
+                postMessage(result);
+            });
+        } else {
+            // update
+            let thumbId = rows[0].id;
+            imageThumbDb.exec(DB_UPDATE_THUMBNAIL_LAST_USED_BY_ID, [curTimestamp, thumbId], (err, info) => {
+                if (err) {
+                    // utils.log('updateImageThumbnailDb, update error, err=\n%s', err.message);
+                    result.err = err;
+                } else {
+                    // utils.log('updateImageThumbnailDb, update success, info=\n%s', utils.objToJsonBeautify(info));
+                }
+                postMessage(result);
+            });
+        }
     });
 }
 
 let messageHandlerMap = {
     'initWorker': initWorker,
-    'generateImageThumbnail': generateImageThumbnail
+    'generateImageThumbnail': generateImageThumbnail,
+    'updateImageThumbnailDb': updateImageThumbnailDb
 };
 
 onmessage = function (e) {

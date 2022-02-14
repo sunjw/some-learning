@@ -120,7 +120,6 @@ class WallpickerPage {
         this.divLoadingBlock = null;
         this.divToastWrapper = null;
 
-        this.initDb();
         this.initWorker();
         this.initLayout();
         this.initHandler();
@@ -150,18 +149,6 @@ class WallpickerPage {
         this.eleConfig.setConfig(key, value);
     }
 
-    initDb() {
-        this.imageThumbDb.open();
-        this.imageThumbDb.exec(DB_CREATE_THUMBNAIL_TABLE, [], (err, info) => {
-            if (err) {
-                utils.log('initDb, init table error, err=\n%s', err.message);
-                return;
-            }
-            // utils.log('initDb, info=\n%s', utils.objToJsonBeautify(info));
-            utils.log('initDb, create table success.');
-        });
-    }
-
     initWorker() {
         let that = this;
         if (!fs.existsSync(this.imageThumbDir)) {
@@ -180,10 +167,18 @@ class WallpickerPage {
             that.processImageThumbnailResult(result);
             that.generateImageThumbnailNext();
         };
+        let onUpdateImageThumbnailDb = function (result) {
+            if (result.err) {
+                utils.log('initWorker.onUpdateImageThumbnailDb, error, err=\n%s', err.message);
+            } else {
+                // utils.log('initWorker.onUpdateImageThumbnailDb, create table success.');
+            }
+        };
 
         let messageHandlerMap = {
             'initWorker': onInitWorker,
-            'generateImageThumbnail': onGenerateImageThumbnail
+            'generateImageThumbnail': onGenerateImageThumbnail,
+            'updateImageThumbnailDb': onUpdateImageThumbnailDb
         };
 
         this.thumbWorker.onmessage = function (e) {
@@ -196,6 +191,7 @@ class WallpickerPage {
             messageHandler(messageData);
         };
 
+        // init worker
         let initWorkerOptions = {
             'messageId': 'initWorker',
             'imageThumbDbPath': imageThumbDbPath
@@ -1068,34 +1064,11 @@ class WallpickerPage {
     }
 
     updateImageThumbnailDb(imageThumbPath) {
-        this.imageThumbDb.query(DB_SELECT_THUMBNAIL_BY_PATH, [imageThumbPath], (err, rows) => {
-            if (err) {
-                utils.log('updateImageThumbnailDb, query error, err=\n%s', err.message);
-                return;
-            }
-
-            let curTimestamp = utils.getCurTimestamp();
-            if (rows.length == 0) {
-                // insert
-                this.imageThumbDb.exec(DB_INSERT_THUMBNAIL, [imageThumbPath, curTimestamp], (err, info) => {
-                    if (err) {
-                        utils.log('updateImageThumbnailDb, insert error, err=\n%s', err.message);
-                        return;
-                    }
-                    // utils.log('updateImageThumbnailDb, insert success, info=\n%s', utils.objToJsonBeautify(info));
-                });
-            } else {
-                // update
-                let thumbId = rows[0].id;
-                this.imageThumbDb.exec(DB_UPDATE_THUMBNAIL_LAST_USED_BY_ID, [curTimestamp, thumbId], (err, info) => {
-                    if (err) {
-                        utils.log('updateImageThumbnailDb, update error, err=\n%s', err.message);
-                        return;
-                    }
-                    // utils.log('updateImageThumbnailDb, update success, info=\n%s', utils.objToJsonBeautify(info));
-                });
-            }
-        });
+        let updateImageThumbnailDbOptions = {
+            'messageId': 'updateImageThumbnailDb',
+            'imageThumbPath': imageThumbPath
+        }
+        this.thumbWorker.postMessage(updateImageThumbnailDbOptions);
     }
 
     checkImageThumbnail(imageThumbPath) {
