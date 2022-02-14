@@ -28,6 +28,7 @@ function generateImageThumbnail(options) {
     }
     sharpImage.toFile(imageThumbPath, function (err, info) {
         let result = {
+            'messageId': 'generateImageThumbnail',
             'imageSrcPath': imageSrcPath,
             'imageThumbPath': imageThumbPath
         };

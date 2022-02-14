@@ -986,6 +986,7 @@ class WallpickerPage {
         this.genThumbCount++;
         utils.log('generateImageThumbnailInWorker, [%d]', this.genThumbCount);
         let imageThumbOptions = {
+            'messageId': 'generateImageThumbnail',
             'imageSrcPath': imagePath,
             'imageThumbPath': imageThumbPath,
             'imageThumbWidth': imageThumbWidth,
