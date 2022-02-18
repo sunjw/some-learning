@@ -969,6 +969,7 @@ class WallpickerPage {
 
         let imagePath = fileObj.path;
         if (fileObj.thumbPath) {
+            // found when init
             // utils.log('generateImageThumbnailInWorker, skip found thumbnail.');
             let result = {
                 'imageSrcPath': imagePath,
