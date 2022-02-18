@@ -817,10 +817,12 @@ class WallpickerPage {
         } else {
             for (let imageBlockDom of imageBlocks) {
                 let imageBlock = $(imageBlockDom);
-                let imageInfo = imageBlock.find('.imageInfo');
-                let imageName = imageInfo.attr(this.TAG_IMAGE_NAME);
-                imageName = imageName.toLowerCase();
-                if (imageName.includes(filterVal)) {
+                let imagePath = imageBlock.attr(this.TAG_IMAGE_PATH);
+                // let imageInfo = imageBlock.find('.imageInfo');
+                // let imageName = imageInfo.attr(this.TAG_IMAGE_NAME);
+                // let filterTarget = imageName.toLowerCase();
+                let filterTarget = imagePath.toLowerCase();
+                if (filterTarget.includes(filterVal)) {
                     // show
                     imageBlock.removeClass('filterOut');
                 } else {
