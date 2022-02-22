@@ -16,6 +16,7 @@ const sharp = require('sharp');
 
 const utils = require('./utils');
 const jqueryUtils = require('./jqueryUtils');
+const nodeUtils = require('./nodeUtils');
 const eleUtils = require('./eleUtils');
 const sqliteDb = require('./sqliteDb');
 
@@ -470,8 +471,20 @@ class WallpickerPage {
         this.disableAllButtons();
         this.showLoading();
         setTimeout(() => {
-            that.scanDir(this.curImageDir, 0);
+            // that.scanDir(this.curImageDir, 0);
+            that.scanDirInWorker();
         }, 100);
+    }
+
+    scanDirInWorker() {
+        let scanImageDirOptions = {
+            'messageId': 'scanImageDir',
+            'imageDirPath': this.curImageDir,
+            'imageExts': this.imageExts,
+            'imageThumbDir': this.imageThumbDir,
+            'imageThumbFormat': this.THUMBNAIL_FORMAT
+        }
+        this.webWorkerImage.postMessage(scanImageDirOptions);
     }
 
     scanDir(dirPath, deep) {
@@ -570,7 +583,7 @@ class WallpickerPage {
         // utils.log('processFile, image, filePath=[%s]', filePath);
         let imgData = fs.readFileSync(filePath);
 
-        let imgDataHash = eleUtils.hashMd5(imgData);
+        let imgDataHash = nodeUtils.hashMd5(imgData);
         fileObj.hash = imgDataHash;
 
         let imgDim = probeImageSize.sync(imgData);

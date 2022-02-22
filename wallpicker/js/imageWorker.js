@@ -1,8 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
+const probeImageSize = require('probe-image-size');
 const sharp = require('sharp');
+
 const utils = require('./utils');
+const nodeUtils = require('./nodeUtils');
 const sqliteDb = require('./sqliteDb');
 
 const DB_CREATE_THUMBNAIL_TABLE = 'CREATE TABLE IF NOT EXISTS "thumbnail" (' +
@@ -15,6 +18,7 @@ const DB_INSERT_THUMBNAIL = 'INSERT INTO thumbnail (path, last_used) VALUES (?, 
 const DB_UPDATE_THUMBNAIL_LAST_USED_BY_ID = 'UPDATE thumbnail SET last_used=? WHERE id=?';
 
 let imageThumbDb = null;
+let scanImageOptions = null;
 let scanImageList = [];
 
 function initWorker(options) {
@@ -35,7 +39,10 @@ function initWorker(options) {
     });
 }
 
-function scanImageDir(options) {}
+function scanImageDir(options) {
+    scanImageOptions = options;
+    scanDir(scanImageOptions.imageDirPath, 0);
+}
 
 function scanDir(dirPath, deep) {
     let scanStart = utils.getCurTimestamp();
@@ -72,18 +79,18 @@ function scanDir(dirPath, deep) {
 
         // top level
         utils.log('scanDir, finished, found %d images.', scanImageList.length);
-        let scanEnd = utils.getCurTimestamp();
-        let scanDuration = scanEnd - scanStart;
-        if (scanDuration < that.minScanTime) {
-            let waitSome = that.minScanTime - scanDuration;
-            utils.log('scanDir, scanDuration=%dms, waitSome=%dms', scanDuration, waitSome);
-            setTimeout(() => {
-                // that.renderImageList();
-            }, waitSome);
-        } else {
-            utils.log('scanDir, scanDuration=%dms', scanDuration);
-            // that.renderImageList();
-        }
+        // let scanEnd = utils.getCurTimestamp();
+        // let scanDuration = scanEnd - scanStart;
+        // if (scanDuration < that.minScanTime) {
+        //     let waitSome = that.minScanTime - scanDuration;
+        //     utils.log('scanDir, scanDuration=%dms, waitSome=%dms', scanDuration, waitSome);
+        //     setTimeout(() => {
+        //         that.renderImageList();
+        //     }, waitSome);
+        // } else {
+        //     utils.log('scanDir, scanDuration=%dms', scanDuration);
+        //     that.renderImageList();
+        // }
     });
 }
 
@@ -112,7 +119,7 @@ function processFile(filePath, stat) {
         extname = extname.substring(1);
     }
     let extnameLower = extname.toLowerCase();
-    if (!this.imageExts.includes(extnameLower)) {
+    if (!scanImageOptions.imageExts.includes(extnameLower)) {
         // not image
         utils.log('processFile, not an image, filePath=[%s]', filePath);
         return;
@@ -131,7 +138,7 @@ function processFile(filePath, stat) {
     // utils.log('processFile, image, filePath=[%s]', filePath);
     let imgData = fs.readFileSync(filePath);
 
-    let imgDataHash = eleUtils.hashMd5(imgData);
+    let imgDataHash = nodeUtils.hashMd5(imgData);
     fileObj.hash = imgDataHash;
 
     let imgDim = probeImageSize.sync(imgData);
@@ -143,14 +150,32 @@ function processFile(filePath, stat) {
     fileObj.height = imgDim.height;
 
     fileObj.thumbPath = null;
-    let imageThumbPath = this.generateImageThumbnailPath(fileObj);
-    if (this.checkImageThumbnail(imageThumbPath)) {
+    let imageThumbPath = generateImageThumbnailPath(fileObj);
+    if (checkImageThumbnail(imageThumbPath)) {
         // found thumbnail
         fileObj.thumbPath = imageThumbPath;
     }
 
     // utils.log('processFile, image, fileObj=\n%s', utils.objToJsonBeautify(fileObj));
     scanImageList.push(fileObj);
+}
+
+function generateImageThumbnailPath(fileObj) {
+    return path.join(scanImageOptions.imageThumbDir, fileObj.hash + '.' + scanImageOptions.imageThumbFormat);
+}
+
+function checkImageThumbnail(imageThumbPath) {
+    if (!fs.existsSync(imageThumbPath)) {
+        return false;
+    }
+
+    let imgData = fs.readFileSync(imageThumbPath);
+    let imgDim = probeImageSize.sync(imgData);
+    if (!imgDim) {
+        return false;
+    }
+
+    return true;
 }
 
 function generateImageThumbnail(options) {
