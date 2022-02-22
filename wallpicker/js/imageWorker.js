@@ -41,6 +41,7 @@ function initWorker(options) {
 
 function scanImageDir(options) {
     scanImageOptions = options;
+    scanImageList = [];
     scanDir(scanImageOptions.imageDirPath, 0);
 }
 
