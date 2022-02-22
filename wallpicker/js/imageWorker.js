@@ -113,7 +113,7 @@ function updateImageThumbnailDb(options) {
     });
 }
 
-let messageHandlerMap = {
+const messageHandlerMap = {
     'initWorker': initWorker,
     'generateImageThumbnail': generateImageThumbnail,
     'updateImageThumbnailDb': updateImageThumbnailDb

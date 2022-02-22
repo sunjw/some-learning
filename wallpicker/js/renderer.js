@@ -165,7 +165,7 @@ class WallpickerPage {
             }
         };
 
-        let messageHandlerMap = {
+        const messageHandlerMap = {
             'initWorker': onInitWorker,
             'generateImageThumbnail': onGenerateImageThumbnail,
             'updateImageThumbnailDb': onUpdateImageThumbnailDb
