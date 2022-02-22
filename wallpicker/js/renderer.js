@@ -77,7 +77,7 @@ class WallpickerPage {
         this.maxImagePreviewHeight = 160;
         this.maxImagePreviewRatio = this.maxImagePreviewWidth / this.maxImagePreviewHeight;
 
-        this.thumbWorker = new Worker('js/imageWorker.js');
+        this.webWorkerImage = new Worker('js/imageWorker.js');
 
         this.options = options;
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
@@ -171,11 +171,11 @@ class WallpickerPage {
             'updateImageThumbnailDb': onUpdateImageThumbnailDb
         };
 
-        this.thumbWorker.onmessage = function (e) {
+        this.webWorkerImage.onmessage = function (e) {
             let messageData = e.data;
             let messageHandler = messageHandlerMap[messageData.messageId];
             if (!messageHandler) {
-                utils.log('initWorker.thumbWorker, unknown messageId=[%s]', messageData.messageId);
+                utils.log('initWorker.webWorkerImage, unknown messageId=[%s]', messageData.messageId);
                 return;
             }
             messageHandler(messageData);
@@ -186,7 +186,7 @@ class WallpickerPage {
             'messageId': 'initWorker',
             'imageThumbDbPath': this.imageThumbDbPath
         }
-        this.thumbWorker.postMessage(initWorkerOptions);
+        this.webWorkerImage.postMessage(initWorkerOptions);
     }
 
     onWindowResize() {
@@ -1011,7 +1011,7 @@ class WallpickerPage {
             'imageThumbHeight': imageThumbHeight,
             'imageThumbFormat': this.THUMBNAIL_FORMAT
         }
-        this.thumbWorker.postMessage(generateImageThumbnailOptions);
+        this.webWorkerImage.postMessage(generateImageThumbnailOptions);
     }
 
     generateImageThumbnailNext() {
@@ -1023,14 +1023,14 @@ class WallpickerPage {
         let imageSrcPath = result.imageSrcPath;
         let imageThumbPath = result.imageThumbPath;
         if (result.err) {
-            utils.log('initWorker.thumbWorker, error, imageSrcPath=[%s], err=\n%s', imageSrcPath, result.err);
+            utils.log('initWorker.webWorkerImage, error, imageSrcPath=[%s], err=\n%s', imageSrcPath, result.err);
             if (fs.existsSync(imageThumbPath)) {
                 fs.unlink(imageThumbPath, (err) => {
                     if (err) {
-                        utils.log('initWorker.thumbWorker, unlink error, imageThumbPath=[%s], err=\n%s',
+                        utils.log('initWorker.webWorkerImage, unlink error, imageThumbPath=[%s], err=\n%s',
                             imageThumbPath, err);
                     } else {
-                        utils.log('initWorker.thumbWorker, unlink imageThumbPath=[%s]',
+                        utils.log('initWorker.webWorkerImage, unlink imageThumbPath=[%s]',
                             imageThumbPath);
                     }
                 });
@@ -1039,9 +1039,9 @@ class WallpickerPage {
         }
 
         // success
-        // utils.log('initWorker.thumbWorker, result=\n%s', utils.objToJsonBeautify(result));
+        // utils.log('initWorker.webWorkerImage, result=\n%s', utils.objToJsonBeautify(result));
         if (!this.curImageThumbMap.has(imageThumbPath)) {
-            // utils.log('initWorker.thumbWorker, new imageThumbPath=[%s]', imageThumbPath);
+            // utils.log('initWorker.webWorkerImage, new imageThumbPath=[%s]', imageThumbPath);
             this.curImageThumbMap.set(imageThumbPath, []);
         }
         let imageThumbItemArray = this.curImageThumbMap.get(imageThumbPath);
@@ -1049,7 +1049,7 @@ class WallpickerPage {
             imageThumbItemArray.push(imageSrcPath);
         }
         if (imageThumbItemArray.length > 1) {
-            utils.log('initWorker.thumbWorker, found the same images\n%s', utils.objToJsonBeautify(imageThumbItemArray));
+            utils.log('initWorker.webWorkerImage, found the same images\n%s', utils.objToJsonBeautify(imageThumbItemArray));
         }
 
         this.updateImageThumbnailDb(imageThumbPath);
@@ -1061,7 +1061,7 @@ class WallpickerPage {
             'messageId': 'updateImageThumbnailDb',
             'imageThumbPath': imageThumbPath
         }
-        this.thumbWorker.postMessage(updateImageThumbnailDbOptions);
+        this.webWorkerImage.postMessage(updateImageThumbnailDbOptions);
     }
 
     checkImageThumbnail(imageThumbPath) {
