@@ -16,7 +16,7 @@ const DB_CREATE_THUMBNAIL_TABLE = 'CREATE TABLE IF NOT EXISTS "thumbnail" (' +
 const DB_SELECT_THUMBNAIL_BY_PATH = 'SELECT * FROM thumbnail WHERE path = ?';
 const DB_INSERT_THUMBNAIL = 'INSERT INTO thumbnail (path, last_used) VALUES (?, ?)';
 const DB_UPDATE_THUMBNAIL_LAST_USED_BY_ID = 'UPDATE thumbnail SET last_used = ? WHERE id = ?';
-const DB_DELETE_THUMBNAIL_BY_LAST_USED = 'DELETE FROM thumbnail WHERE last_used < ?';
+const DB_DELETE_THUMBNAIL_BY_LAST_USED_BEFORE = 'DELETE FROM thumbnail WHERE last_used < ?';
 
 let imageThumbDb = null;
 let scanImageOptions = null;
@@ -247,7 +247,21 @@ function updateImageThumbnailDb(options) {
 }
 
 function clearImageThumbnail(options) {
+    let curTimestamp = utils.getCurTimestamp();
+    let deleteThumbnailThreshold = curTimestamp - scanImageOptions.imageThumbExpire * 1000;
+    imageThumbDb.exec(DB_DELETE_THUMBNAIL_BY_LAST_USED_BEFORE, [deleteThumbnailThreshold], (err, info) => {
+        let result = {
+            'messageId': 'clearImageThumbnail'
+        };
+        if (err) {
+            utils.log('clearImageThumbnail, delete error, err=\n%s', err.message);
+            result.err = err;
+            postMessage(result);
+            return;
+        }
 
+        utils.log('clearImageThumbnail, delete success, changes=%d', info.changes);
+    });
 }
 
 const messageHandlerMap = {

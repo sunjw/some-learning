@@ -58,6 +58,7 @@ class WallpickerPage {
         this.TAG_IMAGE_PATH = 'data-image-path';
         this.TAG_IMAGE_NAME = 'data-image-name';
         this.THUMBNAIL_FORMAT = 'png';
+        this.THUMBNAIL_EXPIRE = 60 * 60 * 24 * 7; // 7 days
     }
 
     init(options) {
@@ -511,7 +512,8 @@ class WallpickerPage {
             'imageDirPath': this.curImageDir,
             'imageExts': this.imageExts,
             'imageThumbDir': this.imageThumbDir,
-            'imageThumbFormat': this.THUMBNAIL_FORMAT
+            'imageThumbFormat': this.THUMBNAIL_FORMAT,
+            'imageThumbExpire': this.THUMBNAIL_EXPIRE
         }
         this.webWorkerImage.postMessage(scanImageDirOptions);
     }
