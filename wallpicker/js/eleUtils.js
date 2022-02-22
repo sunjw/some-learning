@@ -2,7 +2,6 @@ const {
     ipcRenderer
 } = require('electron');
 
-const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
@@ -43,13 +42,6 @@ function stopBubble(event) {
     event.stopPropagation();
 }
 
-function hashMd5(strOrBuffer) {
-    let md5 = crypto.createHash('md5');
-    md5.update(strOrBuffer);
-    return md5.digest('hex');
-}
-
 exports.EleConfig = EleConfig;
 exports.sendToMain = sendToMain;
 exports.stopBubble = stopBubble;
-exports.hashMd5 = hashMd5;
