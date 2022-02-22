@@ -245,11 +245,14 @@ function updateImageThumbnailDb(options) {
     });
 }
 
+function clearImageThumbnail(options) {}
+
 const messageHandlerMap = {
     'initWorker': initWorker,
     'scanImageDir': scanImageDir,
     'generateImageThumbnail': generateImageThumbnail,
-    'updateImageThumbnailDb': updateImageThumbnailDb
+    'updateImageThumbnailDb': updateImageThumbnailDb,
+    'clearImageThumbnail': clearImageThumbnail
 };
 
 onmessage = function (e) {
