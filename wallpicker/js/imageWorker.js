@@ -13,9 +13,10 @@ const DB_CREATE_THUMBNAIL_TABLE = 'CREATE TABLE IF NOT EXISTS "thumbnail" (' +
     '"path" varchar(1024) NOT NULL,' +
     '"last_used" INTEGER NOT NULL' +
     ');';
-const DB_SELECT_THUMBNAIL_BY_PATH = 'SELECT * FROM thumbnail WHERE path=?';
+const DB_SELECT_THUMBNAIL_BY_PATH = 'SELECT * FROM thumbnail WHERE path = ?';
 const DB_INSERT_THUMBNAIL = 'INSERT INTO thumbnail (path, last_used) VALUES (?, ?)';
-const DB_UPDATE_THUMBNAIL_LAST_USED_BY_ID = 'UPDATE thumbnail SET last_used=? WHERE id=?';
+const DB_UPDATE_THUMBNAIL_LAST_USED_BY_ID = 'UPDATE thumbnail SET last_used = ? WHERE id = ?';
+const DB_DELETE_THUMBNAIL_BY_LAST_USED = 'DELETE FROM thumbnail WHERE last_used < ?';
 
 let imageThumbDb = null;
 let scanImageOptions = null;
@@ -245,7 +246,9 @@ function updateImageThumbnailDb(options) {
     });
 }
 
-function clearImageThumbnail(options) {}
+function clearImageThumbnail(options) {
+
+}
 
 const messageHandlerMap = {
     'initWorker': initWorker,
