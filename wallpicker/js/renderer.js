@@ -488,7 +488,6 @@ class WallpickerPage {
         this.disableAllButtons();
         this.showLoading();
         setTimeout(() => {
-            // that.scanDir(this.curImageDir, 0);
             that.scanDirInWorker();
         }, 100);
     }
@@ -503,124 +502,6 @@ class WallpickerPage {
             'imageThumbFormat': this.THUMBNAIL_FORMAT
         }
         this.webWorkerImage.postMessage(scanImageDirOptions);
-    }
-
-    scanDir(dirPath, deep) {
-        let that = this;
-
-        let scanStart = utils.getCurTimestamp();
-
-        utils.log('scanDir, dirPath=[%s], deep=%d', dirPath, deep);
-        this.readdirEx(dirPath, (deep != 0), (err, files) => {
-            if (err) {
-                eleUtils.sendToMain({
-                    type: 'warning',
-                    title: that.title,
-                    message: that.tipReadDirError
-                });
-                return;
-            }
-
-            for (let fileName of files) {
-                let filePath = path.join(dirPath, fileName);
-                let stat = fs.lstatSync(filePath);
-                if (stat.isDirectory() && !stat.isSymbolicLink()) {
-                    // dir
-                    that.scanDir(filePath, deep + 1);
-                } else if (stat.isFile()) {
-                    // file
-                    // utils.log('scanDir, found filePath=[%s]', filePath);
-                    that.processFile(filePath, stat);
-                } else {
-                    utils.log('scanDir, ignore filePath=[%s]', filePath);
-                }
-            }
-
-            if (deep > 0) {
-                return;
-            }
-
-            // top level
-            utils.log('scanDir, finished, found %d images.', that.curImageList.length);
-            let scanEnd = utils.getCurTimestamp();
-            let scanDuration = scanEnd - scanStart;
-            if (scanDuration < that.scanMinTime) {
-                let waitSome = that.scanMinTime - scanDuration;
-                utils.log('scanDir, scanDuration=%dms, waitSome=%dms', scanDuration, waitSome);
-                setTimeout(() => {
-                    that.renderImageList();
-                }, waitSome);
-            } else {
-                utils.log('scanDir, scanDuration=%dms', scanDuration);
-                that.renderImageList();
-            }
-        });
-    }
-
-    readdirEx(dirPath, isSync, callback) {
-        try {
-            if (!isSync) {
-                // async
-                fs.readdir(dirPath, (err, files) => {
-                    callback(err, files);
-                });
-            } else {
-                // sync
-                let files = fs.readdirSync(dirPath);
-                callback(null, files);
-            }
-        } catch (e) {
-            utils.log('readdirEx, error, dirPath=[%s]', dirPath);
-            callback(null, []);
-        }
-    }
-
-    processFile(filePath, stat) {
-        let basename = path.basename(filePath);
-        let extname = path.extname(filePath);
-        if (extname.startsWith('.')) {
-            extname = extname.substring(1);
-        }
-        let extnameLower = extname.toLowerCase();
-        if (!this.imageExts.includes(extnameLower)) {
-            // not image
-            utils.log('processFile, not an image, filePath=[%s]', filePath);
-            return;
-        }
-
-        let fileObj = {
-            path: filePath,
-            basename: basename,
-            extname: extname,
-            size: stat.size,
-            atime: stat.atime.getTime(),
-            mtime: stat.mtime.getTime(),
-            ctime: stat.ctime.getTime()
-        }
-
-        // utils.log('processFile, image, filePath=[%s]', filePath);
-        let imgData = fs.readFileSync(filePath);
-
-        let imgDataHash = nodeUtils.hashMd5(imgData);
-        fileObj.hash = imgDataHash;
-
-        let imgDim = probeImageSize.sync(imgData);
-        if (!imgDim) {
-            utils.log('processFile, corrupt image, filePath=[%s]', filePath);
-            return;
-        }
-        fileObj.width = imgDim.width;
-        fileObj.height = imgDim.height;
-
-        fileObj.thumbPath = null;
-        let imageThumbPath = this.generateImageThumbnailPath(fileObj);
-        if (this.checkImageThumbnail(imageThumbPath)) {
-            // found thumbnail
-            fileObj.thumbPath = imageThumbPath;
-        }
-
-        // utils.log('processFile, image, fileObj=\n%s', utils.objToJsonBeautify(fileObj));
-        this.curImageList.push(fileObj);
     }
 
     renderPath() {
