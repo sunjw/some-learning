@@ -47,12 +47,11 @@ function scanImageDir(options) {
 function scanDir(dirPath, deep) {
     utils.log('scanDir, dirPath=[%s], deep=%d', dirPath, deep);
     readdirEx(dirPath, (deep != 0), (err, files) => {
+        let result = {
+            'messageId': 'scanImageDir'
+        };
         if (err) {
-            // eleUtils.sendToMain({
-            //     type: 'warning',
-            //     title: that.title,
-            //     message: that.tipReadDirError
-            // });
+            result.err = err;
             return;
         }
 
@@ -77,14 +76,7 @@ function scanDir(dirPath, deep) {
 
         // top level
         utils.log('scanDir, finished, found %d images.', scanImageList.length);
-        let result = {
-            'messageId': 'scanImageDir'
-        };
-        if (err) {
-            result.err = err;
-        } else {
-            result.scanImageList = scanImageList;
-        }
+        result.scanImageList = scanImageList;
         postMessage(result);
     });
 }

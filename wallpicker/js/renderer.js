@@ -156,6 +156,14 @@ class WallpickerPage {
             }
         };
         let onScanImageDir = function (result) {
+            if (result.err) {
+                eleUtils.sendToMain({
+                    type: 'warning',
+                    title: that.title,
+                    message: that.tipReadDirError
+                });
+                return;
+            }
             that.curImageList = result.scanImageList;
             let scanEnd = utils.getCurTimestamp();
             let scanDuration = scanEnd - that.scanStart;
