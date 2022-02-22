@@ -190,12 +190,20 @@ class WallpickerPage {
                 // utils.log('initWorker.onUpdateImageThumbnailDb, create table success.');
             }
         };
+        let onClearImageThumbnail = function (result) {
+            if (result.err) {
+                utils.log('initWorker.onClearImageThumbnail, error, err=\n%s', err.message);
+            } else {
+                utils.log('initWorker.onClearImageThumbnail, finished.');
+            }
+        };
 
         const messageHandlerMap = {
             'initWorker': onInitWorker,
             'scanImageDir': onScanImageDir,
             'generateImageThumbnail': onGenerateImageThumbnail,
-            'updateImageThumbnailDb': onUpdateImageThumbnailDb
+            'updateImageThumbnailDb': onUpdateImageThumbnailDb,
+            'clearImageThumbnail': onClearImageThumbnail
         };
 
         this.webWorkerImage.onmessage = function (e) {

@@ -261,6 +261,8 @@ function clearImageThumbnail(options) {
         }
 
         utils.log('clearImageThumbnail, delete success, changes=%d', info.changes);
+
+        postMessage(result);
     });
 }
 
