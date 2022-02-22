@@ -120,12 +120,12 @@ let messageHandlerMap = {
 };
 
 onmessage = function (e) {
-    // utils.log('thumbWorker.onmessage, [%s]', e.data);
+    // utils.log('imageWorker.onmessage, [%s]', e.data);
     // postMessage('Worker!');
     let messageData = e.data;
     let messageHandler = messageHandlerMap[messageData.messageId];
     if (!messageHandler) {
-        utils.log('thumbWorker.onmessage, unknown messageId=[%s]', messageData.messageId);
+        utils.log('imageWorker.onmessage, unknown messageId=[%s]', messageData.messageId);
         return;
     }
     messageHandler(messageData);
