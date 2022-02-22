@@ -77,7 +77,7 @@ class WallpickerPage {
         this.maxImagePreviewHeight = 160;
         this.maxImagePreviewRatio = this.maxImagePreviewWidth / this.maxImagePreviewHeight;
 
-        this.thumbWorker = new Worker('js/thumbWorker.js');
+        this.thumbWorker = new Worker('js/imageWorker.js');
 
         this.options = options;
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
