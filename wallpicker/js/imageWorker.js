@@ -271,6 +271,7 @@ function clearImageThumbnail(options) {
                 return;
             }
 
+            utils.log('clearImageThumbnail, found %d thumbnails.', files.length);
             for (let fileName of files) {
                 let imageThumbPath = path.join(curImageThumbDir, fileName);
                 let stat = fs.lstatSync(imageThumbPath);
