@@ -194,7 +194,8 @@ class WallpickerPage {
             if (result.err) {
                 utils.log('initWorker.onClearImageThumbnail, error, err=\n%s', err.message);
             } else {
-                utils.log('initWorker.onClearImageThumbnail, finished.');
+                utils.log('initWorker.onClearImageThumbnail, finished, dbChanges=%d, imageThumbDeleted=%d',
+                    result.dbChanges, result.imageThumbDeleted);
             }
         };
 

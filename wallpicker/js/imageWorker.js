@@ -299,8 +299,8 @@ function clearImageThumbnail(options) {
                 }
             }
 
-            utils.log('clearImageThumbnail, delete success, dbChanges=%d, imageThumbDeleted=%d',
-                result.dbChanges, result.imageThumbDeleted);
+            // utils.log('clearImageThumbnail, delete success, dbChanges=%d, imageThumbDeleted=%d',
+            //     result.dbChanges, result.imageThumbDeleted);
             postMessage(result);
         });
     });
