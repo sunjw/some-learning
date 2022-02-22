@@ -452,6 +452,10 @@ class WallpickerPage {
         this.divLoadingWrapper.hide();
     }
 
+    onFind() {
+        jqueryUtils.focusOnInput(this.inputFilter);
+    }
+
     onDropFiles(dropFiles) {
         let that = this;
         if (dropFiles.length <= 0) {
@@ -874,6 +878,7 @@ class WallpickerPage {
             let genThumbDuration = genThumbEnd - this.genThumbStart;
             utils.log('generateImageThumbnailInWorker, finished, genThumbCount=[%d], curImageThumbMap=[%d], genThumbDuration=%dms',
                 this.genThumbCount, this.curImageThumbMap.size, genThumbDuration);
+            this.clearImageThumbnailInWorker();
             return;
         }
 
@@ -1016,6 +1021,13 @@ class WallpickerPage {
             utils.log('processImageBlockThumb, replace shown image, imagePath=[%s]', fileObj.path);
         }
     }
+
+    clearImageThumbnailInWorker() {
+        let clearImageThumbnailOptions = {
+            'messageId': 'clearImageThumbnail'
+        }
+        this.webWorkerImage.postMessage(clearImageThumbnailOptions);
+    }
 }
 
 let wallpickerPage = new WallpickerPage();
@@ -1029,9 +1041,9 @@ ipcRenderer.on('set-userData-path', (e, arg) => {
     });
 });
 
-// ipcRenderer.on('on-find', (e, args) => {
-//     dirListFilter.openFilterBox();
-// });
+ipcRenderer.on('on-find', (e, args) => {
+    wallpickerPage.onFind();
+});
 
 $(function () {
     utils.log('finish loading.');
