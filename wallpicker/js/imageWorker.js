@@ -45,8 +45,6 @@ function scanImageDir(options) {
 }
 
 function scanDir(dirPath, deep) {
-    let scanStart = utils.getCurTimestamp();
-
     utils.log('scanDir, dirPath=[%s], deep=%d', dirPath, deep);
     readdirEx(dirPath, (deep != 0), (err, files) => {
         if (err) {
@@ -79,18 +77,15 @@ function scanDir(dirPath, deep) {
 
         // top level
         utils.log('scanDir, finished, found %d images.', scanImageList.length);
-        // let scanEnd = utils.getCurTimestamp();
-        // let scanDuration = scanEnd - scanStart;
-        // if (scanDuration < that.minScanTime) {
-        //     let waitSome = that.minScanTime - scanDuration;
-        //     utils.log('scanDir, scanDuration=%dms, waitSome=%dms', scanDuration, waitSome);
-        //     setTimeout(() => {
-        //         that.renderImageList();
-        //     }, waitSome);
-        // } else {
-        //     utils.log('scanDir, scanDuration=%dms', scanDuration);
-        //     that.renderImageList();
-        // }
+        let result = {
+            'messageId': 'scanImageDir'
+        };
+        if (err) {
+            result.err = err;
+        } else {
+            result.scanImageList = scanImageList;
+        }
+        postMessage(result);
     });
 }
 

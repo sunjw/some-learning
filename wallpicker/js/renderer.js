@@ -72,7 +72,6 @@ class WallpickerPage {
         this.tipNoDirDrop = 'No directory dropped.';
         this.tipDropOneDir = 'Drop only one directory.';
         this.tipReadDirError = 'Read directory error.';
-        this.minScanTime = 2000;
         this.imageBlockWidth = 230; // width + margin
         this.maxImagePreviewWidth = 200;
         this.maxImagePreviewHeight = 160;
@@ -84,6 +83,8 @@ class WallpickerPage {
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
         this.curImageDir = this.getConfig(this.keyImageDir);
         this.curImageList = [];
+        this.scanStart = 0;
+        this.scanMinTime = 2000; // ms
         this.selectedImageBlock = null;
         this.imageThumbDir = path.join(this.options.userDataPath, 'imageThumb');
         this.imageThumbDbPath = path.join(this.options.userDataPath, 'thumbnail.sqlite');
@@ -154,6 +155,21 @@ class WallpickerPage {
                 utils.log('initWorker.onInitWorker, create table success.');
             }
         };
+        let onScanImageDir = function (result) {
+            that.curImageList = result.scanImageList;
+            let scanEnd = utils.getCurTimestamp();
+            let scanDuration = scanEnd - that.scanStart;
+            if (scanDuration < that.scanMinTime) {
+                let waitSome = that.scanMinTime - scanDuration;
+                utils.log('initWorker.onScanImageDir, scanDuration=%dms, waitSome=%dms', scanDuration, waitSome);
+                setTimeout(() => {
+                    that.renderImageList();
+                }, waitSome);
+            } else {
+                utils.log('initWorker.onScanImageDir, scanDuration=%dms', scanDuration);
+                that.renderImageList();
+            }
+        };
         let onGenerateImageThumbnail = function (result) {
             that.processImageThumbnailResult(result);
             that.generateImageThumbnailNext();
@@ -168,6 +184,7 @@ class WallpickerPage {
 
         const messageHandlerMap = {
             'initWorker': onInitWorker,
+            'scanImageDir': onScanImageDir,
             'generateImageThumbnail': onGenerateImageThumbnail,
             'updateImageThumbnailDb': onUpdateImageThumbnailDb
         };
@@ -477,6 +494,7 @@ class WallpickerPage {
     }
 
     scanDirInWorker() {
+        this.scanStart = utils.getCurTimestamp();
         let scanImageDirOptions = {
             'messageId': 'scanImageDir',
             'imageDirPath': this.curImageDir,
@@ -526,8 +544,8 @@ class WallpickerPage {
             utils.log('scanDir, finished, found %d images.', that.curImageList.length);
             let scanEnd = utils.getCurTimestamp();
             let scanDuration = scanEnd - scanStart;
-            if (scanDuration < that.minScanTime) {
-                let waitSome = that.minScanTime - scanDuration;
+            if (scanDuration < that.scanMinTime) {
+                let waitSome = that.scanMinTime - scanDuration;
                 utils.log('scanDir, scanDuration=%dms, waitSome=%dms', scanDuration, waitSome);
                 setTimeout(() => {
                     that.renderImageList();
