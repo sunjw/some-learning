@@ -254,15 +254,55 @@ function clearImageThumbnail(options) {
             'messageId': 'clearImageThumbnail'
         };
         if (err) {
-            utils.log('clearImageThumbnail, delete error, err=\n%s', err.message);
+            // utils.log('clearImageThumbnail, delete error, err=\n%s', err.message);
             result.err = err;
             postMessage(result);
             return;
         }
 
-        utils.log('clearImageThumbnail, delete success, changes=%d', info.changes);
+        result.dbChanges = info.changes;
+        result.imageThumbDeleted = 0;
 
-        postMessage(result);
+        let curImageThumbDir = scanImageOptions.imageThumbDir;
+        readdirEx(curImageThumbDir, false, (err, files) => {
+            if (err) {
+                result.err = err;
+                postMessage(result);
+                return;
+            }
+
+            for (let fileName of files) {
+                let imageThumbPath = path.join(curImageThumbDir, fileName);
+                let stat = fs.lstatSync(imageThumbPath);
+                if (stat.isFile()) {
+                    // file
+                    imageThumbDb.query(DB_SELECT_THUMBNAIL_BY_PATH, [imageThumbPath], (err, rows) => {
+                        if (err) {
+                            result.err = err;
+                            postMessage(result);
+                            return;
+                        }
+                        if (rows.length == 0) {
+                            // not exists in db, to delete
+                            fs.unlink(imageThumbPath, (err) => {
+                                if (err) {
+                                    utils.log('clearImageThumbnail, unlink error, imageThumbPath=[%s], err=\n%s',
+                                        imageThumbPath, err);
+                                } else {
+                                    utils.log('clearImageThumbnail, unlink imageThumbPath=[%s]',
+                                        imageThumbPath);
+                                }
+                            });
+                            result.imageThumbDeleted++;
+                        }
+                    });
+                }
+            }
+
+            utils.log('clearImageThumbnail, delete success, dbChanges=%d, imageThumbDeleted=%d',
+                result.dbChanges, result.imageThumbDeleted);
+            postMessage(result);
+        });
     });
 }
 
