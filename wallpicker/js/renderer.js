@@ -59,13 +59,16 @@ class WallpickerPage {
         this.TAG_IMAGE_NAME = 'data-image-name';
         this.THUMBNAIL_FORMAT = 'png';
         this.THUMBNAIL_EXPIRE = 60 * 60 * 24 * 7; // 7 days
+
+        this.KEY_IMAGE_DIR = 'imageDir';
+        this.SCAN_MIN_TIME = 2000; // ms
     }
 
     init(options) {
         let that = this;
 
         this.title = 'Wallpicker';
-        this.keyImageDir = 'imageDir';
+
         this.classImageSelected = 'imageSelected';
         this.imageExts = ['jpg', 'jpeg', 'png'];
         this.imagePlaceholder = 'assets/placeholder.png';
@@ -82,10 +85,10 @@ class WallpickerPage {
 
         this.options = options;
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
-        this.curImageDir = this.getConfig(this.keyImageDir);
+        this.curImageDir = this.getConfig(this.KEY_IMAGE_DIR);
         this.curImageList = [];
         this.scanStart = 0;
-        this.scanMinTime = 2000; // ms
+
         this.selectedImageBlock = null;
         this.imageThumbDir = path.join(this.options.userDataPath, 'imageThumb');
         this.imageThumbDbPath = path.join(this.options.userDataPath, 'thumbnail.sqlite');
@@ -168,8 +171,8 @@ class WallpickerPage {
             that.curImageList = result.scanImageList;
             let scanEnd = utils.getCurTimestamp();
             let scanDuration = scanEnd - that.scanStart;
-            if (scanDuration < that.scanMinTime) {
-                let waitSome = that.scanMinTime - scanDuration;
+            if (scanDuration < that.SCAN_MIN_TIME) {
+                let waitSome = that.SCAN_MIN_TIME - scanDuration;
                 utils.log('initWorker.onScanImageDir, scanDuration=%dms, waitSome=%dms', scanDuration, waitSome);
                 setTimeout(() => {
                     that.renderImageList();
@@ -498,7 +501,7 @@ class WallpickerPage {
 
             // a foler, go!
             that.curImageDir = dropPath;
-            that.setConfig(that.keyImageDir, that.curImageDir);
+            that.setConfig(that.KEY_IMAGE_DIR, that.curImageDir);
             that.loadImageDir();
         });
     }
