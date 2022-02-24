@@ -59,9 +59,13 @@ class WallpickerPage {
         this.TAG_IMAGE_NAME = 'data-image-name';
         this.THUMBNAIL_FORMAT = 'png';
         this.THUMBNAIL_EXPIRE = 60 * 60 * 24 * 7; // 7 days
-
         this.KEY_IMAGE_DIR = 'imageDir';
         this.SCAN_MIN_TIME = 2000; // ms
+
+        this.TIP_DROP_SCAN = 'Drop a directory to scan...';
+        this.TIP_NO_DIR_DROP = 'No directory dropped.';
+        this.TIP_DROP_ONE_DIR = 'Drop only one directory.';
+        this.TIP_READ_DIR_ERROR = 'Read directory error.';
     }
 
     init(options) {
@@ -72,10 +76,7 @@ class WallpickerPage {
         this.classImageSelected = 'imageSelected';
         this.imageExts = ['jpg', 'jpeg', 'png'];
         this.imagePlaceholder = 'assets/placeholder.png';
-        this.tipDropScan = 'Drop a directory to scan...';
-        this.tipNoDirDrop = 'No directory dropped.';
-        this.tipDropOneDir = 'Drop only one directory.';
-        this.tipReadDirError = 'Read directory error.';
+
         this.imageBlockWidth = 230; // width + margin
         this.maxImagePreviewWidth = 200;
         this.maxImagePreviewHeight = 160;
@@ -164,7 +165,7 @@ class WallpickerPage {
                 eleUtils.sendToMain({
                     type: 'warning',
                     title: that.title,
-                    message: that.tipReadDirError
+                    message: that.TIP_READ_DIR_ERROR
                 });
                 return;
             }
@@ -249,10 +250,10 @@ class WallpickerPage {
             .addClass('flex-grow-1');
         this.divPathDropInfo = $('<div/>')
             .attr('id', 'divPathDropInfo')
-            .text(this.tipDropScan);
+            .text(this.TIP_DROP_SCAN);
         this.divPathContent = $('<div/>').attr('id', 'divPathContent');
         if (!this.curImageDir) {
-            this.divPathContent.text(this.tipDropScan);
+            this.divPathContent.text(this.TIP_DROP_SCAN);
         }
         this.divPathWrapper.append(this.divPathDropInfo);
         this.divPathWrapper.append(this.divPathContent);
@@ -475,7 +476,7 @@ class WallpickerPage {
             eleUtils.sendToMain({
                 type: 'warning',
                 title: this.title,
-                message: this.tipNoDirDrop
+                message: this.TIP_NO_DIR_DROP
             });
             return;
         }
@@ -483,7 +484,7 @@ class WallpickerPage {
             eleUtils.sendToMain({
                 type: 'warning',
                 title: this.title,
-                message: this.tipDropOneDir
+                message: this.TIP_DROP_ONE_DIR
             });
             return;
         }
@@ -494,7 +495,7 @@ class WallpickerPage {
                 eleUtils.sendToMain({
                     type: 'warning',
                     title: that.title,
-                    message: that.tipDropOneDir
+                    message: that.TIP_DROP_ONE_DIR
                 });
                 return;
             }
