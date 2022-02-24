@@ -664,7 +664,7 @@ class WallpickerPage {
         this.showToast('Found <span class="highlight">' + this.curImageList.length + '</span> images.');
 
         // start generate thumbnail
-        this.generateImageThumbnailInWorker();
+        this.generateImageThumbnailStart();
     }
 
     refreshButtonState() {
@@ -951,6 +951,11 @@ class WallpickerPage {
             'imageThumbFormat': this.THUMBNAIL_FORMAT
         }
         this.webWorkerImage.postMessage(generateImageThumbnailOptions);
+    }
+
+    generateImageThumbnailStart() {
+        this.curGenThumbIndex = 0;
+        this.generateImageThumbnailInWorker();
     }
 
     generateImageThumbnailNext() {
