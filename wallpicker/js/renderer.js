@@ -76,7 +76,6 @@ class WallpickerPage {
         this.classImageSelected = 'imageSelected';
         this.imageExts = ['jpg', 'jpeg', 'png'];
         this.imagePlaceholder = 'assets/placeholder.png';
-
         this.imageBlockWidth = 230; // width + margin
         this.maxImagePreviewWidth = 200;
         this.maxImagePreviewHeight = 160;
@@ -93,7 +92,7 @@ class WallpickerPage {
         this.selectedImageBlock = null;
         this.imageThumbDir = path.join(this.options.userDataPath, 'imageThumb');
         this.imageThumbDbPath = path.join(this.options.userDataPath, 'thumbnail.sqlite');
-        this.curThumbIndex = 0;
+        this.curGenThumbIndex = 0;
         this.genThumbStart = 0;
         this.genThumbCount = 0;
         this.curImageThumbMap = new Map();
@@ -888,7 +887,7 @@ class WallpickerPage {
     generateImageThumbnailInWorker() {
         let imageListLen = this.curImageList.length;
 
-        if (this.curThumbIndex >= imageListLen) {
+        if (this.curGenThumbIndex >= imageListLen) {
             let genThumbEnd = utils.getCurTimestamp();
             let genThumbDuration = genThumbEnd - this.genThumbStart;
             utils.log('generateImageThumbnailInWorker, finished, genThumbCount=[%d], curImageThumbMap=[%d], genThumbDuration=%dms',
@@ -897,14 +896,14 @@ class WallpickerPage {
             return;
         }
 
-        if (this.curThumbIndex == 0) {
+        if (this.curGenThumbIndex == 0) {
             this.genThumbStart = utils.getCurTimestamp();
             this.genThumbCount = 0;
             utils.log('generateImageThumbnailInWorker, start...');
         }
 
-        // utils.log('generateImageThumbnailInWorker, %d/%d', (this.curThumbIndex + 1), imageListLen);
-        let fileObj = this.curImageList[this.curThumbIndex];
+        // utils.log('generateImageThumbnailInWorker, %d/%d', (this.curGenThumbIndex + 1), imageListLen);
+        let fileObj = this.curImageList[this.curGenThumbIndex];
         // utils.log('generateImageThumbnailInWorker, fileObj=\n%s', utils.objToJsonBeautify(fileObj));
 
         let imagePath = fileObj.path;
@@ -955,7 +954,7 @@ class WallpickerPage {
     }
 
     generateImageThumbnailNext() {
-        this.curThumbIndex++;
+        this.curGenThumbIndex++;
         this.generateImageThumbnailInWorker();
     }
 
