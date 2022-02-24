@@ -380,24 +380,24 @@ class WallpickerPage {
     initHandler() {
         let that = this;
 
-        let bodyDom = this.body.get(0);
-        bodyDom.ondragover = function (e) {
+        let divToolbarWrapperDom = this.divToolbarWrapper.get(0);
+        divToolbarWrapperDom.ondragover = function (e) {
             eleUtils.stopBubble(e);
             // utils.log('ondragover, body.ondragover');
             that.divToolbarWrapper.addClass('dropInfo');
             return false;
         };
-        bodyDom.ondragleave = function () {
+        divToolbarWrapperDom.ondragleave = function () {
             // utils.log('ondragleave, body.ondragleave');
             that.divToolbarWrapper.removeClass('dropInfo');
             return false;
         };
-        bodyDom.ondragend = function () {
+        divToolbarWrapperDom.ondragend = function () {
             // utils.log('ondragend, body.ondragend');
             that.divToolbarWrapper.removeClass('dropInfo');
             return false;
         };
-        bodyDom.ondrop = function (e) {
+        divToolbarWrapperDom.ondrop = function (e) {
             e.preventDefault();
             that.divToolbarWrapper.removeClass('dropInfo');
             that.onDropFiles(e.dataTransfer.files);
