@@ -508,6 +508,7 @@ class WallpickerPage {
 
     loadImageDir() {
         let that = this;
+        this.curGenThumbIndex = -100;
         this.renderPath();
         this.clearImageList();
         this.disableAllButtons();
@@ -885,8 +886,12 @@ class WallpickerPage {
     }
 
     generateImageThumbnailInWorker() {
-        let imageListLen = this.curImageList.length;
+        if (this.curGenThumbIndex < 0) {
+            utils.log('generateImageThumbnailInWorker, stop');
+            return;
+        }
 
+        let imageListLen = this.curImageList.length;
         if (this.curGenThumbIndex >= imageListLen) {
             let genThumbEnd = utils.getCurTimestamp();
             let genThumbDuration = genThumbEnd - this.genThumbStart;
