@@ -440,8 +440,15 @@ class WallpickerPage {
             that.btnToolbarSort.attr('title', nextSortOption.title);
             // render
             that.curSortId = nextSortOption.id;
+            let oldSelectedImageBlock = that.selectedImageBlock;
             that.clearDisplayImageList();
             that.renderImageList();
+            if (oldSelectedImageBlock) {
+                // restore select
+                let imagePath = oldSelectedImageBlock.attr(that.TAG_IMAGE_PATH);
+                let imageBlock = that.getImageBlockByImagePath(imagePath);
+                that.selectImage(imageBlock);
+            }
         });
         this.divToolsWrapper.append(this.btnToolbarSort);
     }
@@ -795,7 +802,10 @@ class WallpickerPage {
     }
 
     getImageBlockByFileObject(fileObj) {
-        let targetImagePath = fileObj.path;
+        return this.getImageBlockByImagePath(fileObj.path);
+    }
+
+    getImageBlockByImagePath(targetImagePath) {
         let imageBlocks = this.getAllImageBlocks();
         for (let imageBlockDom of imageBlocks) {
             let imageBlock = $(imageBlockDom);
