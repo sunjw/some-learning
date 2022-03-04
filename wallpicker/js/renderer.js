@@ -66,6 +66,8 @@ class WallpickerPage {
         this.TIP_NO_DIR_DROP = 'No directory dropped.';
         this.TIP_DROP_ONE_DIR = 'Drop only one directory.';
         this.TIP_READ_DIR_ERROR = 'Read directory error.';
+
+        this.CLASS_FILETER_OUT = 'filterOut';
     }
 
     init(options) {
@@ -758,10 +760,14 @@ class WallpickerPage {
     onFilter() {
         this.curFilter = this.inputFilter.val().trim();
         utils.log('onFilter, curFilter=[%s]', this.curFilter);
+        this.filterAllImageBlocks();
+    }
+
+    filterAllImageBlocks() {
         let imageBlocks = this.getAllImageBlocks();
         if (this.curFilter == '') {
             // show all
-            imageBlocks.removeClass('filterOut');
+            imageBlocks.removeClass(this.CLASS_FILETER_OUT);
         } else {
             for (let imageBlockDom of imageBlocks) {
                 let imageBlock = $(imageBlockDom);
@@ -772,16 +778,16 @@ class WallpickerPage {
                 let filterTarget = imagePath.toLowerCase();
                 if (filterTarget.includes(this.curFilter)) {
                     // show
-                    imageBlock.removeClass('filterOut');
+                    imageBlock.removeClass(this.CLASS_FILETER_OUT);
                 } else {
                     // hide
-                    imageBlock.addClass('filterOut');
+                    imageBlock.addClass(this.CLASS_FILETER_OUT);
                 }
             }
         }
 
         if (this.selectedImageBlock &&
-            this.selectedImageBlock.hasClass('filterOut')) {
+            this.selectedImageBlock.hasClass(this.CLASS_FILETER_OUT)) {
             // selection is hidden
             this.clearSelection();
         }
@@ -799,7 +805,7 @@ class WallpickerPage {
             randomImagePath = randomImage.path;
             for (let imageBlockDom of imageBlocks) {
                 let imageBlock = $(imageBlockDom);
-                if (imageBlock.hasClass('filterOut')) {
+                if (imageBlock.hasClass(this.CLASS_FILETER_OUT)) {
                     // filter out, skip
                     continue;
                 }
