@@ -386,6 +386,7 @@ class WallpickerPage {
     }
 
     initSort() {
+        let that = this;
         let sortByTime = {
             'id': 'sortByTime',
             'icon': 'bi-sort-numeric-down-alt',
@@ -408,8 +409,17 @@ class WallpickerPage {
 
         let savedSortOption = this.sortOptions[savedSort];
         this.btnToolbarSort = this.generateButton('btnToolbarSort', savedSortOption.icon, savedSortOption.title);
-        this.autoBlurButtonClick(this.btnToolbarSort, function () {
-            utils.log('btnToolbarSort.click');
+        this.btnToolbarSort.attr(this.TAG_SORT_ID, savedSortOption.id);
+        this.autoBlurButtonClick(this.btnToolbarSort, function (button) {
+            let sortId = button.attr(that.TAG_SORT_ID);
+            let curSortOption = that.sortOptions[sortId];
+            let nextSortOption = that.sortOptions[curSortOption.next];
+            utils.log('btnToolbarSort.click, sortId=[%s], nextSortId=[%s]', curSortOption.id, nextSortOption.id);
+            that.setConfig(that.KEY_SORT, nextSortOption.id);
+            that.btnToolbarSort.attr(that.TAG_SORT_ID, nextSortOption.id);
+            that.btnToolbarSort.find('i').removeClass(curSortOption.icon);
+            that.btnToolbarSort.find('i').addClass(nextSortOption.icon);
+            that.btnToolbarSort.attr('title', nextSortOption.title);
         });
         this.divToolsWrapper.append(this.btnToolbarSort);
     }
@@ -479,7 +489,7 @@ class WallpickerPage {
     autoBlurButtonClick(button, handler) {
         let that = this;
         button.on('click', function () {
-            handler();
+            handler($(this));
             that.resetButtonBlur(button);
         });
     }
