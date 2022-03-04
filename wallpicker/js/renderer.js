@@ -69,6 +69,7 @@ class WallpickerPage {
         this.TIP_DROP_ONE_DIR = 'Drop only one directory.';
         this.TIP_READ_DIR_ERROR = 'Read directory error.';
 
+        this.CLASS_IMAGE_SELECTED = 'imageSelected';
         this.CLASS_FILETER_OUT = 'filterOut';
     }
 
@@ -77,7 +78,6 @@ class WallpickerPage {
 
         this.title = 'Wallpicker';
 
-        this.classImageSelected = 'imageSelected';
         this.imageExts = ['jpg', 'jpeg', 'png'];
         this.imagePlaceholder = 'assets/placeholder.png';
         this.imageBlockWidth = 230; // width + margin
@@ -810,7 +810,7 @@ class WallpickerPage {
     clearSelection(refreshButton = true) {
         utils.log('clearSelection');
         let imageBlocks = this.getAllImageBlocks();
-        imageBlocks.removeClass(this.classImageSelected);
+        imageBlocks.removeClass(this.CLASS_IMAGE_SELECTED);
         this.selectedImageBlock = null;
         if (refreshButton) {
             this.refreshButtonState();
@@ -821,7 +821,7 @@ class WallpickerPage {
         this.clearSelection(false);
         utils.log('selectImage, imageBlock=[%s]', imageBlock.attr(this.TAG_IMAGE_PATH));
         this.selectedImageBlock = imageBlock;
-        imageBlock.addClass(this.classImageSelected);
+        imageBlock.addClass(this.CLASS_IMAGE_SELECTED);
         this.refreshButtonState();
     }
 
