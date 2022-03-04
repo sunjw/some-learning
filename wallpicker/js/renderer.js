@@ -183,11 +183,11 @@ class WallpickerPage {
                 let waitSome = that.SCAN_MIN_TIME - scanDuration;
                 utils.log('initWorker.onScanImageDir, scanDuration=%dms, waitSome=%dms', scanDuration, waitSome);
                 setTimeout(() => {
-                    that.renderImageList();
+                    that.renderAll();
                 }, waitSome);
             } else {
                 utils.log('initWorker.onScanImageDir, scanDuration=%dms', scanDuration);
-                that.renderImageList();
+                that.renderAll();
             }
         };
         let onGenerateImageThumbnail = function (result) {
@@ -402,7 +402,16 @@ class WallpickerPage {
             'icon': 'bi-sort-alpha-down',
             'title': 'Sort by name',
             'sortImageFunc': function (fo1, fo2) {
-                return (fo1.basename - fo2.basename); // basename
+                // basename
+                let bn1 = fo1.basename;
+                let bn2 = fo2.basename;
+                if (bn1 < bn2) {
+                    return -1;
+                }
+                if (bn1 > bn2) {
+                    return 1;
+                }
+                return 0;
             },
             'next': 'sortByTime'
         };
@@ -424,10 +433,15 @@ class WallpickerPage {
             let nextSortOption = that.sortOptions[curSortOption.next];
             utils.log('btnToolbarSort.click, sortId=[%s], nextSortId=[%s]', curSortOption.id, nextSortOption.id);
             that.setConfig(that.KEY_SORT, nextSortOption.id);
+            // change button
             that.btnToolbarSort.attr(that.TAG_SORT_ID, nextSortOption.id);
             that.btnToolbarSort.find('i').removeClass(curSortOption.icon);
             that.btnToolbarSort.find('i').addClass(nextSortOption.icon);
             that.btnToolbarSort.attr('title', nextSortOption.title);
+            // render
+            that.curSortId = nextSortOption.id;
+            that.clearDisplayImageList();
+            that.renderImageList();
         });
         this.divToolsWrapper.append(this.btnToolbarSort);
     }
@@ -571,7 +585,7 @@ class WallpickerPage {
         let that = this;
         this.curGenThumbIndex = -100;
         this.renderPath();
-        this.clearImageList(true);
+        this.clearImageList();
         this.disableAllButtons();
         this.showLoading();
         setTimeout(() => {
@@ -624,20 +638,36 @@ class WallpickerPage {
         this.divPathContent.append(spanPathDirname);
     }
 
-    clearImageList(clearFilter) {
+    clearImageList() {
         utils.log('clearImageList');
         this.curImageList = [];
+        this.clearDisplayImageList();
+        this.inputFilter.val('');
+        this.onFilterTextChanged();
+    }
+
+    clearDisplayImageList() {
         this.divImageList.empty();
         this.clearSelection();
-        if (clearFilter) {
-            this.inputFilter.val('');
-            this.onFilterTextChanged();
-        }
     }
 
     sortImageList() {
         let curSortOption = this.sortOptions[this.curSortId];
+        utils.log('sortImageList, sortId=[%s]', curSortOption.id);
         this.curImageList.sort(curSortOption.sortImageFunc);
+    }
+
+    renderAll() {
+        this.renderImageList();
+
+        this.hideLoading();
+        this.refreshButtonState();
+
+        // toast
+        this.showToast('Found <span class="highlight">' + this.curImageList.length + '</span> images.');
+
+        // start generate thumbnail
+        this.generateImageThumbnailStart();
     }
 
     renderImageList() {
@@ -723,15 +753,6 @@ class WallpickerPage {
 
             this.divImageList.append(divImageBlock);
         }
-
-        this.hideLoading();
-        this.refreshButtonState();
-
-        // toast
-        this.showToast('Found <span class="highlight">' + this.curImageList.length + '</span> images.');
-
-        // start generate thumbnail
-        this.generateImageThumbnailStart();
     }
 
     refreshButtonState() {
