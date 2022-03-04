@@ -264,7 +264,7 @@ class WallpickerPage {
         // init tools
         this.divToolsWrapper = $('<div/>')
             .attr('id', 'divToolsWrapper')
-            .addClass('d-flex');
+            .addClass('d-flex ps-2');
 
         this.divFilterBlock = $('<div/>')
             .attr('id', 'divFilterBlock')
