@@ -241,16 +241,18 @@ class WallpickerPage {
         // init toolbar
         this.divToolbarWrapper = $('<div/>')
             .attr('id', 'divToolbarWrapper')
-            .addClass('d-flex');
+            .addClass('d-flex justify-content-between');
 
         // init path
         this.divPathWrapper = $('<div/>')
             .attr('id', 'divPathWrapper')
-            .addClass('flex-grow-1');
+            .addClass('flex-shrink-1 overflow-hidden');
         this.divPathDropInfo = $('<div/>')
             .attr('id', 'divPathDropInfo')
             .text(this.TIP_DROP_SCAN);
-        this.divPathContent = $('<div/>').attr('id', 'divPathContent');
+        this.divPathContent = $('<div/>')
+            .attr('id', 'divPathContent')
+            .addClass('text-truncate');
         if (!this.curImageDir) {
             this.divPathContent.text(this.TIP_DROP_SCAN);
         }
