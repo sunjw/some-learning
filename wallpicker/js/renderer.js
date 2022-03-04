@@ -57,10 +57,12 @@ class WallpickerPage {
         // init consts
         this.TAG_IMAGE_PATH = 'data-image-path';
         this.TAG_IMAGE_NAME = 'data-image-name';
+        this.TAG_SORT_ID = 'data-sort-id';
         this.THUMBNAIL_FORMAT = 'png';
         this.THUMBNAIL_EXPIRE = 60 * 60 * 24 * 7; // 7 days
-        this.KEY_IMAGE_DIR = 'imageDir';
         this.SCAN_MIN_TIME = 2000; // ms
+        this.KEY_IMAGE_DIR = 'imageDir';
+        this.KEY_SORT = 'sort';
 
         this.TIP_DROP_SCAN = 'Drop a directory to scan...';
         this.TIP_NO_DIR_DROP = 'No directory dropped.';
@@ -91,6 +93,7 @@ class WallpickerPage {
         this.curImageList = [];
         this.scanStart = 0;
         this.curFilter = '';
+        this.sortOptions = {};
 
         this.selectedImageBlock = null;
         this.imageThumbDir = path.join(this.options.userDataPath, 'imageThumb');
@@ -336,8 +339,7 @@ class WallpickerPage {
         });
         this.divToolsWrapper.append(this.btnToolbarShowSelected);
 
-        this.btnToolbarSort = this.initSortButton();
-        this.divToolsWrapper.append(this.btnToolbarSort);
+        this.initSort();
 
         this.divToolbarWrapper.append(this.divToolsWrapper);
 
@@ -383,12 +385,33 @@ class WallpickerPage {
         this.body.append(this.divToastWrapper);
     }
 
-    initSortButton() {
-        let btnToolbarSort = this.generateButton('btnToolbarSort', 'bi-sort-alpha-down', 'Sort by name');
-        this.autoBlurButtonClick(btnToolbarSort, function () {
+    initSort() {
+        let sortByTime = {
+            'id': 'sortByTime',
+            'icon': 'bi-sort-numeric-down-alt',
+            'title': 'Sort by time',
+            'next': 'sortByName'
+        };
+        let sortByName = {
+            'id': 'sortByName',
+            'icon': 'bi-sort-alpha-down',
+            'title': 'Sort by name',
+            'next': 'sortByTime'
+        };
+        this.sortOptions[sortByTime.id] = sortByTime;
+        this.sortOptions[sortByName.id] = sortByName;
+
+        let savedSort = this.getConfig(this.KEY_SORT);
+        if (!savedSort || savedSort == '') {
+            savedSort = sortByTime.id;
+        }
+
+        let savedSortOption = this.sortOptions[savedSort];
+        this.btnToolbarSort = this.generateButton('btnToolbarSort', savedSortOption.icon, savedSortOption.title);
+        this.autoBlurButtonClick(this.btnToolbarSort, function () {
             utils.log('btnToolbarSort.click');
         });
-        return btnToolbarSort;
+        this.divToolsWrapper.append(this.btnToolbarSort);
     }
 
     initHandler() {
