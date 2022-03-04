@@ -847,6 +847,7 @@ class WallpickerPage {
 
     onFilter() {
         this.curFilter = this.inputFilter.val().trim();
+        this.curFilter = this.curFilter.toLowerCase();
         utils.log('onFilter, curFilter=[%s]', this.curFilter);
         this.filterAllImageBlocks();
     }
