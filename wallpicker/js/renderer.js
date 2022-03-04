@@ -758,6 +758,8 @@ class WallpickerPage {
             divImageBlock.append(divImageWrapper);
             divImageBlock.append(divInfoWrapper);
 
+            this.filterImageBlock(divImageBlock);
+
             this.divImageList.append(divImageBlock);
         }
     }
