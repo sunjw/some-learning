@@ -94,6 +94,7 @@ class WallpickerPage {
         this.scanStart = 0;
         this.curFilter = '';
         this.sortOptions = {};
+        this.curSortId = '';
 
         this.selectedImageBlock = null;
         this.imageThumbDir = path.join(this.options.userDataPath, 'imageThumb');
@@ -391,12 +392,18 @@ class WallpickerPage {
             'id': 'sortByTime',
             'icon': 'bi-sort-numeric-down-alt',
             'title': 'Sort by time',
+            'sortImageFunc': function (fo1, fo2) {
+                return (fo2.mtime - fo1.mtime); // modified time reverse
+            },
             'next': 'sortByName'
         };
         let sortByName = {
             'id': 'sortByName',
             'icon': 'bi-sort-alpha-down',
             'title': 'Sort by name',
+            'sortImageFunc': function (fo1, fo2) {
+                return (fo1.basename - fo2.basename); // basename
+            },
             'next': 'sortByTime'
         };
         this.sortOptions[sortByTime.id] = sortByTime;
@@ -407,7 +414,8 @@ class WallpickerPage {
             savedSort = sortByTime.id;
         }
 
-        let savedSortOption = this.sortOptions[savedSort];
+        this.curSortId = savedSort;
+        let savedSortOption = this.sortOptions[this.curSortId];
         this.btnToolbarSort = this.generateButton('btnToolbarSort', savedSortOption.icon, savedSortOption.title);
         this.btnToolbarSort.attr(this.TAG_SORT_ID, savedSortOption.id);
         this.autoBlurButtonClick(this.btnToolbarSort, function (button) {
@@ -627,13 +635,16 @@ class WallpickerPage {
         }
     }
 
+    sortImageList() {
+        let curSortOption = this.sortOptions[this.curSortId];
+        this.curImageList.sort(curSortOption.sortImageFunc);
+    }
+
     renderImageList() {
         let that = this;
 
         // sort
-        this.curImageList.sort((fo1, fo2) => {
-            return (fo2.mtime - fo1.mtime); // modified time reverse
-        });
+        this.sortImageList();
 
         // render
         for (let fileObj of this.curImageList) {
