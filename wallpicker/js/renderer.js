@@ -88,6 +88,7 @@ class WallpickerPage {
         this.curImageDir = this.getConfig(this.KEY_IMAGE_DIR);
         this.curImageList = [];
         this.scanStart = 0;
+        this.curFilter = '';
 
         this.selectedImageBlock = null;
         this.imageThumbDir = path.join(this.options.userDataPath, 'imageThumb');
@@ -755,10 +756,10 @@ class WallpickerPage {
     }
 
     onFilter() {
-        let filterVal = this.inputFilter.val().trim();
-        utils.log('onFilter, filterVal=[%s]', filterVal);
+        this.curFilter = this.inputFilter.val().trim();
+        utils.log('onFilter, curFilter=[%s]', this.curFilter);
         let imageBlocks = this.getAllImageBlocks();
-        if (filterVal == '') {
+        if (this.curFilter == '') {
             // show all
             imageBlocks.removeClass('filterOut');
         } else {
@@ -769,7 +770,7 @@ class WallpickerPage {
                 // let imageName = imageInfo.attr(this.TAG_IMAGE_NAME);
                 // let filterTarget = imageName.toLowerCase();
                 let filterTarget = imagePath.toLowerCase();
-                if (filterTarget.includes(filterVal)) {
+                if (filterTarget.includes(this.curFilter)) {
                     // show
                     imageBlock.removeClass('filterOut');
                 } else {
