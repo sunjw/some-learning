@@ -273,7 +273,7 @@ class WallpickerPage {
             .attr({
                 'id': 'inputFilter',
                 'typ': 'text',
-                'placeholder': 'filter...',
+                'placeholder': 'filter path...',
                 'aria-label': '.form-control-sm'
             })
             .addClass('form-control form-control-sm mt-auto mb-auto noBsFocus');
