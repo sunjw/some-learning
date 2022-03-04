@@ -859,18 +859,7 @@ class WallpickerPage {
         } else {
             for (let imageBlockDom of imageBlocks) {
                 let imageBlock = $(imageBlockDom);
-                let imagePath = imageBlock.attr(this.TAG_IMAGE_PATH);
-                // let imageInfo = imageBlock.find('.imageInfo');
-                // let imageName = imageInfo.attr(this.TAG_IMAGE_NAME);
-                // let filterTarget = imageName.toLowerCase();
-                let filterTarget = imagePath.toLowerCase();
-                if (filterTarget.includes(this.curFilter)) {
-                    // show
-                    imageBlock.removeClass(this.CLASS_FILETER_OUT);
-                } else {
-                    // hide
-                    imageBlock.addClass(this.CLASS_FILETER_OUT);
-                }
+                this.filterImageBlock(imageBlock);
             }
         }
 
@@ -878,6 +867,21 @@ class WallpickerPage {
             this.selectedImageBlock.hasClass(this.CLASS_FILETER_OUT)) {
             // selection is hidden
             this.clearSelection();
+        }
+    }
+
+    filterImageBlock(imageBlock) {
+        let imagePath = imageBlock.attr(this.TAG_IMAGE_PATH);
+        // let imageInfo = imageBlock.find('.imageInfo');
+        // let imageName = imageInfo.attr(this.TAG_IMAGE_NAME);
+        // let filterTarget = imageName.toLowerCase();
+        let filterTarget = imagePath.toLowerCase();
+        if (filterTarget.includes(this.curFilter)) {
+            // show
+            imageBlock.removeClass(this.CLASS_FILETER_OUT);
+        } else {
+            // hide
+            imageBlock.addClass(this.CLASS_FILETER_OUT);
         }
     }
 
