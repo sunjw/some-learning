@@ -113,6 +113,7 @@ class WallpickerPage {
         this.btnToolbarSetWallpaper = null;
         this.btnToolbarShowFile = null;
         this.btnToolbarShowSelected = null;
+        this.btnToolbarSort = null;
         this.divContentWrapper = null;
         this.divImageList = null;
         this.divLoadingWrapper = null;
@@ -315,7 +316,6 @@ class WallpickerPage {
         this.divToolsWrapper.append(this.btnToolbarRandom);
 
         this.btnToolbarSetWallpaper = this.generateButton('btnToolbarSetWallpaper', 'bi-image', 'Set wallpaper');
-        this.setControlDisabled(this.btnToolbarSetWallpaper, true);
         this.autoBlurButtonClick(this.btnToolbarSetWallpaper, function () {
             utils.log('btnToolbarSetWallpaper.click');
             that.setOsWallpaper();
@@ -323,7 +323,6 @@ class WallpickerPage {
         this.divToolsWrapper.append(this.btnToolbarSetWallpaper);
 
         this.btnToolbarShowFile = this.generateButton('btnToolbarShowFile', 'bi-folder2-open', 'Show file');
-        this.setControlDisabled(this.btnToolbarShowFile, true);
         this.autoBlurButtonClick(this.btnToolbarShowFile, function () {
             utils.log('btnToolbarShowFile.click');
             that.openImageInDirectory();
@@ -331,12 +330,14 @@ class WallpickerPage {
         this.divToolsWrapper.append(this.btnToolbarShowFile);
 
         this.btnToolbarShowSelected = this.generateButton('btnToolbarShowSelected', 'bi-fullscreen-exit', 'Show selected image');
-        this.setControlDisabled(this.btnToolbarShowSelected, true);
         this.autoBlurButtonClick(this.btnToolbarShowSelected, function () {
             utils.log('btnToolbarShowSelected.click');
             that.scrollToSelected();
         });
         this.divToolsWrapper.append(this.btnToolbarShowSelected);
+
+        this.btnToolbarSort = this.initSortButton();
+        this.divToolsWrapper.append(this.btnToolbarSort);
 
         this.divToolbarWrapper.append(this.divToolsWrapper);
 
@@ -380,6 +381,14 @@ class WallpickerPage {
         // toast
         this.divToastWrapper = $('<div/>').attr('id', 'divToastWrapper');
         this.body.append(this.divToastWrapper);
+    }
+
+    initSortButton() {
+        let btnToolbarSort = this.generateButton('btnToolbarSort', 'bi-sort-alpha-down', 'Sort by name');
+        this.autoBlurButtonClick(btnToolbarSort, function () {
+            utils.log('btnToolbarSort.click');
+        });
+        return btnToolbarSort;
     }
 
     initHandler() {
@@ -695,6 +704,7 @@ class WallpickerPage {
         }
         this.setControlDisabled(this.inputFilter, false);
         this.setControlDisabled(this.btnToolbarRandom, false);
+        this.setControlDisabled(this.btnToolbarSort, false);
     }
 
     disableAllButtons() {
@@ -703,6 +713,7 @@ class WallpickerPage {
         this.setControlDisabled(this.btnToolbarShowFile, true);
         this.setControlDisabled(this.btnToolbarShowSelected, true);
         this.setControlDisabled(this.btnToolbarRandom, true);
+        this.setControlDisabled(this.btnToolbarSort, true);
     }
 
     getFileObjectByImagePath(imagePath) {
