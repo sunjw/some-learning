@@ -521,7 +521,7 @@ class WallpickerPage {
         let that = this;
         this.curGenThumbIndex = -100;
         this.renderPath();
-        this.clearImageList();
+        this.clearImageList(true);
         this.disableAllButtons();
         this.showLoading();
         setTimeout(() => {
@@ -574,13 +574,15 @@ class WallpickerPage {
         this.divPathContent.append(spanPathDirname);
     }
 
-    clearImageList() {
+    clearImageList(clearFilter) {
         utils.log('clearImageList');
         this.curImageList = [];
         this.divImageList.empty();
         this.clearSelection();
-        this.inputFilter.val('');
-        this.onFilterTextChanged();
+        if (clearFilter) {
+            this.inputFilter.val('');
+            this.onFilterTextChanged();
+        }
     }
 
     renderImageList() {
