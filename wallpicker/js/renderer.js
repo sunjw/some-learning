@@ -803,6 +803,17 @@ class WallpickerPage {
         return this.divImageList.find('.imageBlock');
     }
 
+    getFirstVisibleImageBlock() {
+        let imageBlocks = this.getAllImageBlocks();
+        for (let imageBlockDom of imageBlocks) {
+            let imageBlock = $(imageBlockDom);
+            if (!imageBlock.hasClass(this.CLASS_FILETER_OUT)) {
+                return imageBlock;
+            }
+        }
+        return null;
+    }
+
     getImageBlockByFileObject(fileObj) {
         return this.getImageBlockByImagePath(fileObj.path);
     }
@@ -943,11 +954,11 @@ class WallpickerPage {
 
     scrollToTop() {
         utils.log('scrollToTop');
-        if (this.curImageList.length == 0) {
-            return;
+        let imageBlockFirstVis = this.getFirstVisibleImageBlock();
+        if (imageBlockFirstVis) {
+            let imageBlockFirstVisDom = imageBlockFirstVis.get(0);
+            this.scrollToImageBlockDom(imageBlockFirstVisDom);
         }
-        let imageBlockFirstDom = this.getAllImageBlocks().get(0);
-        this.scrollToImageBlockDom(imageBlockFirstDom);
     }
 
     scrollToSelected() {
