@@ -115,7 +115,7 @@ def clean_the_same_wallpaper(wallpaper_dir):
         file_path = os.path.join(wallpaper_dir, file_name)
         file_md5 = hashlib.md5(open(file_path, 'rb').read()).hexdigest()
         files_in_wallpaper_md5[file_name] = file_md5
-    logger.info('files_in_wallpaper_md5\n%s', comm_util.pprint_dict_to_string(files_in_wallpaper_md5))
+    # logger.info('files_in_wallpaper_md5\n%s', comm_util.pprint_dict_to_string(files_in_wallpaper_md5))
 
     files_in_wallpaper_dir_count = len(files_in_wallpaper_dir)
     for i in range(files_in_wallpaper_dir_count):
