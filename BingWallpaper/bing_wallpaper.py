@@ -62,6 +62,8 @@ def get_bing_wallpaper(download_count, over_ssh=False, ssh_cmd=None):
 
     images_list = wallpaper_json_body['images']
     images_list_len = len(images_list)
+    if download_count == -1:
+        download_count = images_list_len
     if images_list_len < download_count:
         logger.error('No enough images, images_list_len=%d, download_count=%d', images_list_len, download_count)
         return wallpaper_list
@@ -180,10 +182,10 @@ def download_wallpaper_by_list(wallpaper_list):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('download_count', metavar='N', type=int,
-                        help='download count')
     parser.add_argument('--ssh', dest='ssh_cmd', required=False,
                         help='get bing wallpaper json over ssh')
+    parser.add_argument('download_count', metavar='N', type=int,
+                        nargs='?', default=-1, help='download count')
 
     args = vars(parser.parse_args())
     # logger.debug('args\n%s', comm_util.pprint_dict_to_string(args))
