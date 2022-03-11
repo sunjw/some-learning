@@ -150,6 +150,7 @@ def download_wallpaper_by_list(wallpaper_list):
     if OPEN_WALLPAPER_DIR:
         open_wallpaper_dir(wallpaper_dir)
 
+    downloaded_file_count = 0
     for wallpaper_data in reversed(wallpaper_list):
         # logger.debug('wallpaper_data\n%s', comm_util.pprint_dict_to_string(wallpaper_data))
         image_url = wallpaper_data['url']
@@ -176,6 +177,10 @@ def download_wallpaper_by_list(wallpaper_list):
 
         image_file_size = os.path.getsize(image_path)
         logger.info('[%s], image_file_size=%d', image_name, image_file_size)
+
+        downloaded_file_count = downloaded_file_count + 1
+
+    logger.info('Download %d files.', downloaded_file_count)
 
     clean_the_same_wallpaper(wallpaper_dir)
 
