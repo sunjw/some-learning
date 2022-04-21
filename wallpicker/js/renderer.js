@@ -690,6 +690,12 @@ class WallpickerPage {
                 .attr(this.TAG_IMAGE_PATH, filePath)
                 .addClass('imageBlock');
 
+            let fnClickToSelectImage = function () {
+                utils.log('renderImageList, fnClickToSelectImage.');
+                let imgParentBlock = divImageBlock;
+                that.selectImage(imgParentBlock);
+            };
+
             // let fileObjJson = utils.objToJsonBeautify(fileObj);
             // fileObjJson = utils.escapeHtml(fileObjJson);
             // fileObjJson = utils.stringReplaceAll(fileObjJson, '\n', '<br/>');
@@ -726,8 +732,12 @@ class WallpickerPage {
             obsImageLazyload.observe(imgContent.get(0));
             imgContent.on('click', function (e) {
                 eleUtils.stopBubble(e);
-                let imgParentBlock = divImageBlock;
-                that.selectImage(imgParentBlock);
+                fnClickToSelectImage();
+            });
+            imgContent.on("dblclick", function (e) {
+                eleUtils.stopBubble(e);
+                fnClickToSelectImage();
+                that.openImage();
             });
             divImageWrapper.append(imgContent);
 
@@ -750,8 +760,12 @@ class WallpickerPage {
             divImageInfo.html(utils.escapeHtml(imageBasename));
             divImageInfo.on('click', function (e) {
                 eleUtils.stopBubble(e);
-                let imgParentBlock = divImageBlock;
-                that.selectImage(imgParentBlock);
+                fnClickToSelectImage();
+            });
+            divImageInfo.on("dblclick", function (e) {
+                eleUtils.stopBubble(e);
+                fnClickToSelectImage();
+                that.openImage();
             });
             divInfoWrapper.append(divImageInfo);
 
@@ -943,6 +957,12 @@ class WallpickerPage {
         let imagePath = this.selectedImageBlock.attr(this.TAG_IMAGE_PATH);
         utils.log('openImageInDirectory, imagePath=[%s]', imagePath);
         shell.showItemInFolder(imagePath);
+    }
+
+    openImage() {
+        let imagePath = this.selectedImageBlock.attr(this.TAG_IMAGE_PATH);
+        utils.log('openImage, imagePath=[%s]', imagePath);
+        shell.openPath(imagePath);
     }
 
     scrollToImageBlockDom(imageBlockDom) {
