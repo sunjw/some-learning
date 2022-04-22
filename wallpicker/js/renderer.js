@@ -1,6 +1,5 @@
 const {
-    ipcRenderer,
-    shell
+    ipcRenderer
 } = require('electron');
 const remote = require('@electron/remote');
 
@@ -956,13 +955,13 @@ class WallpickerPage {
     openImageInDirectory() {
         let imagePath = this.selectedImageBlock.attr(this.TAG_IMAGE_PATH);
         utils.log('openImageInDirectory, imagePath=[%s]', imagePath);
-        shell.showItemInFolder(imagePath);
+        remote.shell.showItemInFolder(imagePath);
     }
 
     openImage() {
         let imagePath = this.selectedImageBlock.attr(this.TAG_IMAGE_PATH);
         utils.log('openImage, imagePath=[%s]', imagePath);
-        shell.openPath(imagePath);
+        remote.shell.openPath(imagePath);
     }
 
     scrollToImageBlockDom(imageBlockDom) {

@@ -1,4 +1,5 @@
-require('@electron/remote/main').initialize()
+const remoteMain = require('@electron/remote/main')
+remoteMain.initialize()
 
 const fs = require('fs')
 const path = require('path')
@@ -9,7 +10,7 @@ const windowStateKeeper = require('electron-window-state')
 const utils = require('./js/utils')
 
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, dialog, ipcMain} = require('electron')
+const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -40,6 +41,8 @@ function createWindow () {
       enableRemoteModule: true
     }
   })
+
+  remoteMain.enable(mainWindow.webContents)
 
   if (mainWindowState.isMaximized) {
     mainWindow.maximize()
