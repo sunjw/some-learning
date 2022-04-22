@@ -734,9 +734,9 @@ class WallpickerPage {
                 eleUtils.stopBubble(e);
                 fnClickToSelectImage();
             });
-            imgContent.on("dblclick", function (e) {
+            imgContent.on('dblclick', function (e) {
                 eleUtils.stopBubble(e);
-                fnClickToSelectImage();
+                // fnClickToSelectImage();
                 that.openImage();
             });
             divImageWrapper.append(imgContent);
@@ -762,9 +762,9 @@ class WallpickerPage {
                 eleUtils.stopBubble(e);
                 fnClickToSelectImage();
             });
-            divImageInfo.on("dblclick", function (e) {
+            divImageInfo.on('dblclick', function (e) {
                 eleUtils.stopBubble(e);
-                fnClickToSelectImage();
+                // fnClickToSelectImage();
                 that.openImage();
             });
             divInfoWrapper.append(divImageInfo);
