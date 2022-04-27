@@ -263,6 +263,9 @@ class WallpickerPage {
         if (!this.curImageDir) {
             this.divPathContent.text(this.TIP_DROP_SCAN);
         }
+        this.divPathContent.on('click', function () {
+            that.scrollToTop();
+        });
         this.divPathWrapper.append(this.divPathDropInfo);
         this.divPathWrapper.append(this.divPathContent);
 
@@ -638,9 +641,9 @@ class WallpickerPage {
         let spanPathDirname = $('<span/>')
             .addClass('pathDirname')
             .html(utils.escapeHtml(pathParts[pathParts.length - 1]));
-        spanPathDirname.on('click', function () {
-            that.scrollToTop();
-        });
+        // spanPathDirname.on('click', function () {
+        //     that.scrollToTop();
+        // });
         this.divPathContent.append(spanPathDirname);
     }
 
