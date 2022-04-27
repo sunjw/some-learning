@@ -800,12 +800,14 @@ class WallpickerPage {
             this.setControlDisabled(this.btnToolbarShowSelected, true);
         }
         this.setControlDisabled(this.inputFilter, false);
+        this.setControlDisabled(this.btnToolbarRefresh, false);
         this.setControlDisabled(this.btnToolbarRandom, false);
         this.setControlDisabled(this.btnToolbarSort, false);
     }
 
     disableAllButtons() {
         this.setControlDisabled(this.inputFilter, true);
+        this.setControlDisabled(this.btnToolbarRefresh, true);
         this.setControlDisabled(this.btnToolbarSetWallpaper, true);
         this.setControlDisabled(this.btnToolbarShowFile, true);
         this.setControlDisabled(this.btnToolbarShowSelected, true);
