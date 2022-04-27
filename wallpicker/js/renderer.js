@@ -136,10 +136,7 @@ class WallpickerPage {
         this.disableAllButtons();
         this.hideLoading();
 
-        if (this.curImageDir) {
-            // we have one, go!
-            this.loadImageDir();
-        }
+        this.checkAndLoadImageDir();
     }
 
     getConfig(key) {
@@ -318,6 +315,7 @@ class WallpickerPage {
         this.btnToolbarRefresh = this.generateButton('btnToolbarRefresh', 'bi-arrow-clockwise', 'Random select');
         this.autoBlurButtonClick(this.btnToolbarRefresh, function () {
             utils.log('btnToolbarRefresh.click');
+            that.checkAndLoadImageDir();
         });
         this.divToolsWrapper.append(this.btnToolbarRefresh);
 
@@ -595,6 +593,12 @@ class WallpickerPage {
             that.setConfig(that.KEY_IMAGE_DIR, that.curImageDir);
             that.loadImageDir();
         });
+    }
+
+    checkAndLoadImageDir() {
+        if (this.curImageDir) {
+            this.loadImageDir();
+        }
     }
 
     loadImageDir() {
