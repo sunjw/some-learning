@@ -112,6 +112,7 @@ class WallpickerPage {
         this.divFilterBlock = null;
         this.inputFilter = null;
         this.divFilterClear = null;
+        this.btnToolbarRefresh = null;
         this.btnToolbarRandom = null;
         this.btnToolbarSetWallpaper = null;
         this.btnToolbarShowFile = null;
@@ -313,6 +314,12 @@ class WallpickerPage {
         this.divFilterBlock.append(this.divFilterClear);
         this.onFilterTextChanged();
         this.divToolsWrapper.append(this.divFilterBlock);
+
+        this.btnToolbarRefresh = this.generateButton('btnToolbarRefresh', 'bi-arrow-clockwise', 'Random select');
+        this.autoBlurButtonClick(this.btnToolbarRefresh, function () {
+            utils.log('btnToolbarRefresh.click');
+        });
+        this.divToolsWrapper.append(this.btnToolbarRefresh);
 
         this.btnToolbarRandom = this.generateButton('btnToolbarRandom', 'bi-lightbulb', 'Random select');
         this.autoBlurButtonClick(this.btnToolbarRandom, function () {
