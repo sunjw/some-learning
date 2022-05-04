@@ -107,7 +107,7 @@ def open_wallpaper_dir(wallpaper_dir):
         comm_util.call_command(['open', wallpaper_dir])
 
 
-def clean_the_same_wallpaper(wallpaper_dir):
+def clean_duplicated_wallpaper(wallpaper_dir):
     files_in_wallpaper_md5 = {}
     files_in_wallpaper_dir = comm_util.list_file(wallpaper_dir)
     files_in_wallpaper_dir.sort()
@@ -128,7 +128,7 @@ def clean_the_same_wallpaper(wallpaper_dir):
             if file_md5_1 == file_md5_2 and file_name_1 != file_name_2:
                 file_path_2 = os.path.join(wallpaper_dir, file_name_2)
                 if os.path.exists(file_path_2):
-                    logger.info('Found the same wallpapers [%s, %s]', file_name_1, file_name_2)
+                    logger.info('Found duplicated wallpapers [%s, %s]', file_name_1, file_name_2)
                     logger.info('Delete [%s]', file_name_2)
                     os.remove(os.path.join(file_path_2))
                     delete_count = delete_count + 1
@@ -184,9 +184,9 @@ def download_wallpaper_by_list(wallpaper_list):
 
         downloaded_file_count = downloaded_file_count + 1
 
-    logger.info('Download %d files.', downloaded_file_count)
+    delete_count = clean_duplicated_wallpaper(wallpaper_dir)
 
-    delete_count = clean_the_same_wallpaper(wallpaper_dir)
+    logger.info('Download %d files, delete %d duplicated files.', downloaded_file_count, delete_count)
 
 
 def main():
