@@ -117,6 +117,7 @@ def clean_the_same_wallpaper(wallpaper_dir):
         files_in_wallpaper_md5[file_name] = file_md5
     # logger.info('files_in_wallpaper_md5\n%s', comm_util.pprint_dict_to_string(files_in_wallpaper_md5))
 
+    delete_count = 0
     files_in_wallpaper_dir_count = len(files_in_wallpaper_dir)
     for i in range(files_in_wallpaper_dir_count):
         file_name_1 = files_in_wallpaper_dir[i]
@@ -127,9 +128,12 @@ def clean_the_same_wallpaper(wallpaper_dir):
             if file_md5_1 == file_md5_2 and file_name_1 != file_name_2:
                 file_path_2 = os.path.join(wallpaper_dir, file_name_2)
                 if os.path.exists(file_path_2):
-                    logger.info('found the same wallpapers [%s, %s]', file_name_1, file_name_2)
-                    logger.info('delete [%s]', file_name_2)
+                    logger.info('Found the same wallpapers [%s, %s]', file_name_1, file_name_2)
+                    logger.info('Delete [%s]', file_name_2)
                     os.remove(os.path.join(file_path_2))
+                    delete_count = delete_count + 1
+
+    return delete_count
 
 
 def download_wallpaper_by_list(wallpaper_list):
@@ -182,7 +186,7 @@ def download_wallpaper_by_list(wallpaper_list):
 
     logger.info('Download %d files.', downloaded_file_count)
 
-    clean_the_same_wallpaper(wallpaper_dir)
+    delete_count = clean_the_same_wallpaper(wallpaper_dir)
 
 
 def main():
