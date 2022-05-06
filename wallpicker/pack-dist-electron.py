@@ -113,13 +113,7 @@ REBUILD_CLEAN_PATHS_WIN = ['./node_modules/better-sqlite3/build/Release/obj',
 REBUILD_CLEAN_PATHS_MACOS = []
 
 def main():
-    extract_old = True
-
-    argc = len(sys.argv)
-    if argc >= 2:
-        for arg in sys.argv:
-            if arg == '--no-extract-old':
-                extract_old = False
+    extract_old = False # Always using new Electron
 
     exe_7z_sys = EXE_7Z_WIN # 7z is not supported on macOS
     tar_ext = 'gz'
