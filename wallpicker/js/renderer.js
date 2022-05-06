@@ -663,6 +663,7 @@ class WallpickerPage {
         this.curImageList = [];
         this.clearDisplayImageList();
         this.inputFilter.val('');
+        this.curFilter = '';
         this.onFilterTextChanged();
     }
 
