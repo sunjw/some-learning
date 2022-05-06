@@ -52,8 +52,7 @@ public class JsonUtil {
     }
 
     public static JsonElement parseJsonString(String jsonString) {
-        JsonParser jsonParser = new JsonParser();
-        return jsonParser.parse(jsonString);
+        return JsonParser.parseString(jsonString);
     }
 
     public static JsonArray convertStringListToJsonArray(List<String> stringList) {
