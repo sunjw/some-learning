@@ -51,17 +51,19 @@
                 </Paragraph>
             </RichTextBlock>
             <muxc:ProgressBar
+                x:Name="ProgressMain"
                 Width="Auto"
                 Height="0"
                 Margin="10,0,10,52"
                 VerticalAlignment="Bottom"
-                Value="33" />
+                Value="0" />
             <Button
                 x:Name="ButtonTest"
                 Margin="0,0,10,10"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Content="Button" />
+                Click="ButtonTest_Click"
+                Content="Test" />
         </Grid>
     </Grid>
 </Page>

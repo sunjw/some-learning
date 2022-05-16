@@ -52,5 +52,13 @@ namespace TestUWP1
             appTitleBar.ButtonPressedBackgroundColor = pressedbgColor;
             appTitleBar.ButtonPressedForegroundColor = pressedfgColor;
         }
+
+        private void ButtonTest_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProgressMain.Value < 100)
+            {
+                ProgressMain.Value += 10;
+            }
+        }
     }
 }
