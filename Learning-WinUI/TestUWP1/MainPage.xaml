@@ -64,6 +64,11 @@
                 VerticalAlignment="Bottom"
                 Click="ButtonTest_Click"
                 Content="Test" />
+            <Button
+                x:Name="ButtonAbout"
+                Margin="10,0,0,10"
+                VerticalAlignment="Bottom"
+                Content="About" />
         </Grid>
     </Grid>
 </Page>
