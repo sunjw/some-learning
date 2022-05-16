@@ -68,7 +68,24 @@
                 x:Name="ButtonAbout"
                 Margin="10,0,0,10"
                 VerticalAlignment="Bottom"
+                Click="ButtonAbout_Click"
                 Content="About" />
+
+            <Popup
+                x:Name="PopupAbout"
+                HorizontalOffset="0"
+                IsLightDismissEnabled="False"
+                LightDismissOverlayMode="Off"
+                VerticalOffset="0">
+                <Popup.ChildTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition />
+                    </TransitionCollection>
+                </Popup.ChildTransitions>
+                <Grid x:Name="PopupAboutContent">
+                    <local:About />
+                </Grid>
+            </Popup>
         </Grid>
     </Grid>
 </Page>

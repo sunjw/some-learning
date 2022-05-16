@@ -60,5 +60,22 @@ namespace TestUWP1
                 ProgressMain.Value += 10;
             }
         }
+
+        private void ButtonAbout_Click(object sender, RoutedEventArgs e)
+        {
+            if (PopupAboutContent == null)
+            {
+                FindName("PopupAboutContent");
+            }
+
+            var windowBounds = Window.Current.Bounds;
+            PopupAboutContent.Width = windowBounds.Width;
+            PopupAboutContent.Height = windowBounds.Height;
+
+            if (!PopupAbout.IsOpen)
+            {
+                PopupAbout.IsOpen = true;
+            }
+        }
     }
 }
