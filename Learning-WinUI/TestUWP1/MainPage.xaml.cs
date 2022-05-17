@@ -38,6 +38,8 @@ namespace TestUWP1
             ApplicationView.PreferredLaunchViewSize = new Size(640, 400);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
+            Window.Current.SizeChanged += WindowSizeChanged;
+
             InitCustomTitleBar();
         }
 
@@ -61,6 +63,11 @@ namespace TestUWP1
             m_appTitleBar.ButtonPressedForegroundColor = pressedfgColor;
         }
 
+        private void WindowSizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
+        {
+            UpdatePopupAboutSize();
+        }
+
         private void ButtonTest_Click(object sender, RoutedEventArgs e)
         {
             if (ProgressBarMain.Value < 100)
@@ -76,21 +83,27 @@ namespace TestUWP1
 
         private void ShowPopupAbout()
         {
-            if (PopupAboutContent == null)
-            {
-                FindName("PopupAboutContent");
-            }
-
-            var windowBounds = Window.Current.Bounds;
-            PopupAboutContent.Width = windowBounds.Width;
-            PopupAboutContent.Height = windowBounds.Height;
-            PopupAbout.VerticalOffset = m_coreTitleBar.Height;
+            UpdatePopupAboutSize();
 
             if (!PopupAbout.IsOpen)
             {
                 GridMain.Visibility = Visibility.Collapsed;
                 PopupAbout.IsOpen = true;
             }
+        }
+
+        private void UpdatePopupAboutSize()
+        {
+            if (PopupAboutContent == null)
+            {
+                FindName("PopupAboutContent");
+            }
+
+            var windowBounds = Window.Current.Bounds;
+            var titleBarHeight = m_coreTitleBar.Height;
+            PopupAbout.VerticalOffset = titleBarHeight;
+            PopupAboutContent.Width = windowBounds.Width;
+            PopupAboutContent.Height = windowBounds.Height - titleBarHeight;
         }
     }
 }

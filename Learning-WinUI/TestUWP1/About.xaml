@@ -14,5 +14,10 @@
             VerticalAlignment="Top"
             Text="About!"
             TextWrapping="Wrap" />
+        <Button
+            Margin="0,0,10,10"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Content="OK" />
     </Grid>
 </UserControl>
