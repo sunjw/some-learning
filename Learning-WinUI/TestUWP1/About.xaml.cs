@@ -7,11 +7,6 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -25,6 +20,25 @@ namespace TestUWP1
         public About()
         {
             this.InitializeComponent();
+        }
+
+        private MainPage GetMainPage()
+        {
+            Frame frame = (Frame)Window.Current.Content;
+
+            if (frame != null)
+            {
+                MainPage mainPage = (MainPage)frame.Content;
+                return mainPage;
+            }
+
+            return null;
+        }
+
+        private void ButtonOK_Click(object sender, RoutedEventArgs e)
+        {
+            MainPage mainPage = GetMainPage();
+            mainPage?.HidePopupAbout();
         }
     }
 }

@@ -15,9 +15,11 @@
             Text="About!"
             TextWrapping="Wrap" />
         <Button
+            x:Name="ButtonOK"
             Margin="0,0,10,10"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
+            Click="ButtonOK_Click"
             Content="OK" />
     </Grid>
 </UserControl>

@@ -68,19 +68,6 @@ namespace TestUWP1
             UpdatePopupAboutSize();
         }
 
-        private void ButtonTest_Click(object sender, RoutedEventArgs e)
-        {
-            if (ProgressBarMain.Value < 100)
-            {
-                ProgressBarMain.Value += 10;
-            }
-        }
-
-        private void ButtonAbout_Click(object sender, RoutedEventArgs e)
-        {
-            ShowPopupAbout();
-        }
-
         private void ShowPopupAbout()
         {
             UpdatePopupAboutSize();
@@ -92,6 +79,15 @@ namespace TestUWP1
             }
         }
 
+        public void HidePopupAbout()
+        {
+            if (PopupAbout.IsOpen)
+            {
+                PopupAbout.IsOpen = false;
+                GridMain.Visibility = Visibility.Visible;
+            }
+        }
+
         private void UpdatePopupAboutSize()
         {
             if (PopupAboutContent == null)
@@ -99,11 +95,24 @@ namespace TestUWP1
                 FindName("PopupAboutContent");
             }
 
-            var windowBounds = Window.Current.Bounds;
-            var titleBarHeight = m_coreTitleBar.Height;
+            Rect windowBounds = Window.Current.Bounds;
+            double titleBarHeight = m_coreTitleBar.Height;
             PopupAbout.VerticalOffset = titleBarHeight;
             PopupAboutContent.Width = windowBounds.Width;
             PopupAboutContent.Height = windowBounds.Height - titleBarHeight;
+        }
+
+        private void ButtonTest_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProgressBarMain.Value < 100)
+            {
+                ProgressBarMain.Value += 10;
+            }
+        }
+
+        private void ButtonAbout_Click(object sender, RoutedEventArgs e)
+        {
+            ShowPopupAbout();
         }
     }
 }
