@@ -86,7 +86,7 @@
                 </TransitionCollection>
             </Popup.ChildTransitions>
             <Grid x:Name="PopupAboutContent">
-                <local:About />
+                <local:AboutPage />
             </Grid>
         </Popup>
     </Grid>
