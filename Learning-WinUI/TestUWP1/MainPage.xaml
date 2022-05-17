@@ -43,7 +43,7 @@
             </Grid>
         </Grid>
 
-        <Grid Margin="0,32,0,0">
+        <Grid x:Name="GridMain" Margin="0,32,0,0">
 
             <RichTextBlock Margin="10,0,10,60">
                 <Paragraph>
@@ -71,21 +71,23 @@
                 Click="ButtonAbout_Click"
                 Content="About" />
 
-            <Popup
-                x:Name="PopupAbout"
-                HorizontalOffset="0"
-                IsLightDismissEnabled="False"
-                LightDismissOverlayMode="Off"
-                VerticalOffset="0">
-                <Popup.ChildTransitions>
-                    <TransitionCollection>
-                        <EntranceThemeTransition />
-                    </TransitionCollection>
-                </Popup.ChildTransitions>
-                <Grid x:Name="PopupAboutContent">
-                    <local:About />
-                </Grid>
-            </Popup>
+
         </Grid>
+
+        <Popup
+            x:Name="PopupAbout"
+            HorizontalOffset="0"
+            IsLightDismissEnabled="False"
+            LightDismissOverlayMode="Off"
+            VerticalOffset="32">
+            <Popup.ChildTransitions>
+                <TransitionCollection>
+                    <EntranceThemeTransition />
+                </TransitionCollection>
+            </Popup.ChildTransitions>
+            <Grid x:Name="PopupAboutContent">
+                <local:About />
+            </Grid>
+        </Popup>
     </Grid>
 </Page>

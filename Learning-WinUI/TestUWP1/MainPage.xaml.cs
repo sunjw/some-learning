@@ -63,6 +63,11 @@ namespace TestUWP1
 
         private void ButtonAbout_Click(object sender, RoutedEventArgs e)
         {
+            ShowPopupAbout();
+        }
+
+        private void ShowPopupAbout()
+        {
             if (PopupAboutContent == null)
             {
                 FindName("PopupAboutContent");
@@ -74,6 +79,7 @@ namespace TestUWP1
 
             if (!PopupAbout.IsOpen)
             {
+                GridMain.Visibility = Visibility.Collapsed;
                 PopupAbout.IsOpen = true;
             }
         }
