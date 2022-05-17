@@ -11,27 +11,27 @@
 
     <Grid>
         <Grid
-            x:Name="TitleBarCustom"
+            x:Name="GridTitleBarCustom"
             Grid.Column="1"
             Height="32"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top">
 
-            <Grid x:Name="TitleHolder">
+            <Grid x:Name="GridTitleHolder">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Image
-                    x:Name="AppIcon"
+                    x:Name="ImageAppIcon"
                     Width="20"
                     Height="20"
                     Margin="16,0,0,0"
                     VerticalAlignment="Center"
                     Source="ms-appx:///Assets/StoreLogo.png" />
                 <TextBlock
-                    x:Name="AppName"
+                    x:Name="TextBlockAppName"
                     x:Uid="AppName"
                     Grid.Column="1"
                     Margin="12,0,0,0"
@@ -51,7 +51,7 @@
                 </Paragraph>
             </RichTextBlock>
             <muxc:ProgressBar
-                x:Name="ProgressMain"
+                x:Name="ProgressBarMain"
                 Width="Auto"
                 Height="0"
                 Margin="10,0,10,52"
