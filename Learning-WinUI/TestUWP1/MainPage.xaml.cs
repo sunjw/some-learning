@@ -32,11 +32,11 @@ namespace TestUWP1
         {
             this.InitializeComponent();
 
-            ApplicationView.PreferredLaunchViewSize = new Size(640, 400);
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-
             m_coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             m_appTitleBar = ApplicationView.GetForCurrentView().TitleBar;
+
+            ApplicationView.PreferredLaunchViewSize = new Size(640, 400);
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
             InitCustomTitleBar();
         }
