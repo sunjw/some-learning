@@ -33,7 +33,7 @@
                         x:Name="ImageAppIcon"
                         Width="20"
                         Height="20"
-                        Margin="48,0,0,0"
+                        Margin="16,0,0,0"
                         VerticalAlignment="Center"
                         Source="ms-appx:///Assets/StoreLogo.png" />
 

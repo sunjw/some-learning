@@ -25,15 +25,17 @@ namespace TestUWP1
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private CoreApplicationViewTitleBar m_coreTitleBar;
-        private ApplicationViewTitleBar m_appTitleBar;
+        private CoreApplicationViewTitleBar m_coreAppViewTitleBar;
+        private ApplicationViewTitleBar m_appViewTitleBar;
+
+        private Thickness m_imageAppIconMargin;
 
         public MainPage()
         {
             this.InitializeComponent();
 
-            m_coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            m_appTitleBar = ApplicationView.GetForCurrentView().TitleBar;
+            m_coreAppViewTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            m_appViewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
 
             ApplicationView.PreferredLaunchViewSize = new Size(640, 400);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
@@ -41,11 +43,13 @@ namespace TestUWP1
             Window.Current.SizeChanged += WindowSizeChanged;
 
             InitCustomTitleBar();
+
+            m_imageAppIconMargin = ImageAppIcon.Margin;
         }
 
         private void InitCustomTitleBar()
         {
-            m_coreTitleBar.ExtendViewIntoTitleBar = true;
+            m_coreAppViewTitleBar.ExtendViewIntoTitleBar = true;
             Window.Current.SetTitleBar(GridTitleBarCustom);
 
             Color bgColor = Colors.Transparent;
@@ -55,14 +59,14 @@ namespace TestUWP1
             Color hoverfgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"]).Color;
             Color pressedbgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlBackgroundListMediumBrush"]).Color;
             Color pressedfgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"]).Color;
-            m_appTitleBar.ButtonBackgroundColor = bgColor;
-            m_appTitleBar.ButtonForegroundColor = fgColor;
-            m_appTitleBar.ButtonInactiveBackgroundColor = bgColor;
-            m_appTitleBar.ButtonInactiveForegroundColor = inactivefgColor;
-            m_appTitleBar.ButtonHoverBackgroundColor = hoverbgColor;
-            m_appTitleBar.ButtonHoverForegroundColor = hoverfgColor;
-            m_appTitleBar.ButtonPressedBackgroundColor = pressedbgColor;
-            m_appTitleBar.ButtonPressedForegroundColor = pressedfgColor;
+            m_appViewTitleBar.ButtonBackgroundColor = bgColor;
+            m_appViewTitleBar.ButtonForegroundColor = fgColor;
+            m_appViewTitleBar.ButtonInactiveBackgroundColor = bgColor;
+            m_appViewTitleBar.ButtonInactiveForegroundColor = inactivefgColor;
+            m_appViewTitleBar.ButtonHoverBackgroundColor = hoverbgColor;
+            m_appViewTitleBar.ButtonHoverForegroundColor = hoverfgColor;
+            m_appViewTitleBar.ButtonPressedBackgroundColor = pressedbgColor;
+            m_appViewTitleBar.ButtonPressedForegroundColor = pressedfgColor;
         }
 
         private void WindowSizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
@@ -77,6 +81,7 @@ namespace TestUWP1
             if (!PopupAbout.IsOpen)
             {
                 GridMain.Visibility = Visibility.Collapsed;
+                ImageAppIcon.Margin = new Thickness(48, 0, 0, 0);
                 PopupAbout.IsOpen = true;
             }
         }
@@ -86,6 +91,7 @@ namespace TestUWP1
             if (PopupAbout.IsOpen)
             {
                 PopupAbout.IsOpen = false;
+                ImageAppIcon.Margin = m_imageAppIconMargin;
                 GridMain.Visibility = Visibility.Visible;
             }
         }
