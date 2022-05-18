@@ -35,10 +35,20 @@ namespace TestUWP1
             return null;
         }
 
-        private void ButtonOK_Click(object sender, RoutedEventArgs e)
+        private void HideSelf()
         {
             MainPage mainPage = GetMainPage();
             mainPage?.HidePopupAbout();
+        }
+
+        private void ButtonOK_Click(object sender, RoutedEventArgs e)
+        {
+            HideSelf();
+        }
+
+        private void ButtonBack_Click(object sender, RoutedEventArgs e)
+        {
+            HideSelf();
         }
     }
 }
