@@ -11,47 +11,43 @@
 
     <Grid>
         <Grid
-            x:Name="GridTitleBarCustom"
-            Grid.Column="1"
+            x:Name="GridTitleBarHolder"
             Height="32"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top">
 
-            <Grid x:Name="GridTitleHolder">
+            <Grid x:Name="GridTitleBarCustom" Background="Transparent">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition x:Name="LeftPaddingColumn" Width="0" />
+                    <ColumnDefinition />
+                    <ColumnDefinition x:Name="RightPaddingColumn" Width="0" />
                 </Grid.ColumnDefinitions>
 
-                <Button
-                    x:Name="ButtonBack"
-                    Grid.Row="0"
-                    Width="44"
-                    Height="32"
-                    Margin="0,0,4,0"
-                    Padding="2,0,0,0"
-                    Content="&#xE72B;"
-                    FontSize="12"
-                    Style="{StaticResource SquareIconButtonStyle}" />
+                <Grid x:Name="GridTitleHolder" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                <Image
-                    x:Name="ImageAppIcon"
-                    Width="20"
-                    Height="20"
-                    Margin="16,0,0,0"
-                    VerticalAlignment="Center"
-                    Source="ms-appx:///Assets/StoreLogo.png" />
+                    <Image
+                        x:Name="ImageAppIcon"
+                        Width="20"
+                        Height="20"
+                        Margin="48,0,0,0"
+                        VerticalAlignment="Center"
+                        Source="ms-appx:///Assets/StoreLogo.png" />
 
-                <TextBlock
-                    x:Name="TextBlockAppName"
-                    x:Uid="AppName"
-                    Grid.Column="1"
-                    Margin="12,0,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    FontSize="12"
-                    Text="TestUWP1"
-                    TextTrimming="CharacterEllipsis" />
+                    <TextBlock
+                        x:Name="TextBlockAppName"
+                        x:Uid="AppName"
+                        Grid.Column="1"
+                        Margin="12,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Text="TestUWP1"
+                        TextTrimming="CharacterEllipsis" />
+                </Grid>
             </Grid>
         </Grid>
 
@@ -91,7 +87,7 @@
             HorizontalOffset="0"
             IsLightDismissEnabled="False"
             LightDismissOverlayMode="Off"
-            VerticalOffset="32">
+            VerticalOffset="0">
             <Popup.ChildTransitions>
                 <TransitionCollection>
                     <EntranceThemeTransition />

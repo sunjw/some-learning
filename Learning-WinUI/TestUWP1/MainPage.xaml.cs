@@ -46,6 +46,8 @@ namespace TestUWP1
         private void InitCustomTitleBar()
         {
             m_coreTitleBar.ExtendViewIntoTitleBar = true;
+            Window.Current.SetTitleBar(GridTitleBarCustom);
+
             Color bgColor = Colors.Transparent;
             Color fgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlPageTextBaseHighBrush"]).Color;
             Color inactivefgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundChromeDisabledLowBrush"]).Color;
@@ -96,10 +98,8 @@ namespace TestUWP1
             }
 
             Rect windowBounds = Window.Current.Bounds;
-            double titleBarHeight = m_coreTitleBar.Height;
-            PopupAbout.VerticalOffset = titleBarHeight;
             PopupAboutContent.Width = windowBounds.Width;
-            PopupAboutContent.Height = windowBounds.Height - titleBarHeight;
+            PopupAboutContent.Height = windowBounds.Height;
         }
 
         private void ButtonTest_Click(object sender, RoutedEventArgs e)
