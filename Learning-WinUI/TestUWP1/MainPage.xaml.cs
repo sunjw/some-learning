@@ -52,6 +52,11 @@ namespace TestUWP1
             m_coreAppViewTitleBar.ExtendViewIntoTitleBar = true;
             Window.Current.SetTitleBar(GridTitleBarCustom);
 
+            UpdateTitleBarColor();
+        }
+
+        private void UpdateTitleBarColor()
+        {
             Color bgColor = Colors.Transparent;
             Color fgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlPageTextBaseHighBrush"]).Color;
             Color inactivefgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundChromeDisabledLowBrush"]).Color;
@@ -67,11 +72,6 @@ namespace TestUWP1
             m_appViewTitleBar.ButtonHoverForegroundColor = hoverfgColor;
             m_appViewTitleBar.ButtonPressedBackgroundColor = pressedbgColor;
             m_appViewTitleBar.ButtonPressedForegroundColor = pressedfgColor;
-        }
-
-        private void WindowSizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
-        {
-            UpdatePopupAboutSize();
         }
 
         private void ShowPopupAbout()
@@ -106,6 +106,11 @@ namespace TestUWP1
             Rect windowBounds = Window.Current.Bounds;
             PopupAboutContent.Width = windowBounds.Width;
             PopupAboutContent.Height = windowBounds.Height;
+        }
+
+        private void WindowSizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
+        {
+            UpdatePopupAboutSize();
         }
 
         private void ButtonTest_Click(object sender, RoutedEventArgs e)
