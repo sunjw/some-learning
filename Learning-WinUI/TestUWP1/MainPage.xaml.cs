@@ -7,6 +7,7 @@ using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -28,6 +29,8 @@ namespace TestUWP1
         private CoreApplicationViewTitleBar m_coreAppViewTitleBar;
         private ApplicationViewTitleBar m_appViewTitleBar;
 
+        private UISettings m_uiSettings;
+        private long m_tokenThemeChanged;
         private Thickness m_imageAppIconMargin;
 
         public MainPage()
@@ -57,6 +60,11 @@ namespace TestUWP1
 
         private void UpdateTitleBarColor()
         {
+            if (m_appViewTitleBar == null)
+            {
+                return;
+            }
+
             Color bgColor = Colors.Transparent;
             Color fgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlPageTextBaseHighBrush"]).Color;
             Color inactivefgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundChromeDisabledLowBrush"]).Color;
@@ -108,9 +116,35 @@ namespace TestUWP1
             PopupAboutContent.Height = windowBounds.Height;
         }
 
+        private void ColorValuesChanged(Windows.UI.ViewManagement.UISettings sender, object e)
+        {
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
+                UpdateTitleBarColor(); 
+            }));
+        }
+
+        private void RequestedThemeChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            if (RequestedThemeProperty == dp)
+            {
+                _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
+                    UpdateTitleBarColor();
+                }));
+            }
+        }
+
         private void WindowSizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
         {
             UpdatePopupAboutSize();
+        }
+
+        private void GridRoot_Loaded(object sender, RoutedEventArgs e)
+        {
+            m_uiSettings = new UISettings();
+            Frame rootFrame = (Frame)Window.Current.Content;
+            m_uiSettings.ColorValuesChanged += ColorValuesChanged;
+            // RequestedThemeProperty seems not work at all...
+            m_tokenThemeChanged = rootFrame.RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedThemeChanged);
         }
 
         private void ButtonTest_Click(object sender, RoutedEventArgs e)
@@ -125,5 +159,6 @@ namespace TestUWP1
         {
             ShowPopupAbout();
         }
+
     }
 }

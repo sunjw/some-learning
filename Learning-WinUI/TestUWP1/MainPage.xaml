@@ -9,7 +9,7 @@
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     mc:Ignorable="d">
 
-    <Grid>
+    <Grid x:Name="GridRoot" Loaded="GridRoot_Loaded">
         <Grid
             x:Name="GridTitleBarHolder"
             Height="32"
