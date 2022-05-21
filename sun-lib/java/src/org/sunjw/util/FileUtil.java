@@ -40,8 +40,7 @@ public class FileUtil {
             return null;
         }
 
-        JsonParser jsonParser = new JsonParser();
-        JsonElement jsonElement = jsonParser.parse(jsonData);
+        JsonElement jsonElement = JsonParser.parseString(jsonData);
 
         return jsonElement;
     }
