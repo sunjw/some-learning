@@ -7,6 +7,7 @@ using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -25,17 +26,45 @@ namespace TestUWP1
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private CoreApplicationViewTitleBar m_coreAppViewTitleBar;
+        private ApplicationViewTitleBar m_appViewTitleBar;
+
+        private UISettings m_uiSettings;
+        private long m_tokenThemeChanged;
+        private Thickness m_imageAppIconMargin;
+
         public MainPage()
         {
             this.InitializeComponent();
 
+            m_coreAppViewTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            m_appViewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
+
             ApplicationView.PreferredLaunchViewSize = new Size(640, 400);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
-            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
-            
-            ApplicationViewTitleBar appTitleBar = ApplicationView.GetForCurrentView().TitleBar;
+            Window.Current.SizeChanged += WindowSizeChanged;
+
+            InitCustomTitleBar();
+
+            m_imageAppIconMargin = ImageAppIcon.Margin;
+        }
+
+        private void InitCustomTitleBar()
+        {
+            m_coreAppViewTitleBar.ExtendViewIntoTitleBar = true;
+            Window.Current.SetTitleBar(GridTitleBarCustom);
+
+            UpdateTitleBarColor();
+        }
+
+        private void UpdateTitleBarColor()
+        {
+            if (m_appViewTitleBar == null)
+            {
+                return;
+            }
+
             Color bgColor = Colors.Transparent;
             Color fgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlPageTextBaseHighBrush"]).Color;
             Color inactivefgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundChromeDisabledLowBrush"]).Color;
@@ -43,14 +72,93 @@ namespace TestUWP1
             Color hoverfgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"]).Color;
             Color pressedbgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlBackgroundListMediumBrush"]).Color;
             Color pressedfgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"]).Color;
-            appTitleBar.ButtonBackgroundColor = bgColor;
-            appTitleBar.ButtonForegroundColor = fgColor;
-            appTitleBar.ButtonInactiveBackgroundColor = bgColor;
-            appTitleBar.ButtonInactiveForegroundColor = inactivefgColor;
-            appTitleBar.ButtonHoverBackgroundColor = hoverbgColor;
-            appTitleBar.ButtonHoverForegroundColor = hoverfgColor;
-            appTitleBar.ButtonPressedBackgroundColor = pressedbgColor;
-            appTitleBar.ButtonPressedForegroundColor = pressedfgColor;
+            m_appViewTitleBar.ButtonBackgroundColor = bgColor;
+            m_appViewTitleBar.ButtonForegroundColor = fgColor;
+            m_appViewTitleBar.ButtonInactiveBackgroundColor = bgColor;
+            m_appViewTitleBar.ButtonInactiveForegroundColor = inactivefgColor;
+            m_appViewTitleBar.ButtonHoverBackgroundColor = hoverbgColor;
+            m_appViewTitleBar.ButtonHoverForegroundColor = hoverfgColor;
+            m_appViewTitleBar.ButtonPressedBackgroundColor = pressedbgColor;
+            m_appViewTitleBar.ButtonPressedForegroundColor = pressedfgColor;
         }
+
+        private void ShowPopupAbout()
+        {
+            UpdatePopupAboutSize();
+
+            if (!PopupAbout.IsOpen)
+            {
+                GridMain.Visibility = Visibility.Collapsed;
+                ImageAppIcon.Margin = new Thickness(48, 0, 0, 0);
+                PopupAbout.IsOpen = true;
+            }
+        }
+
+        public void HidePopupAbout()
+        {
+            if (PopupAbout.IsOpen)
+            {
+                PopupAbout.IsOpen = false;
+                ImageAppIcon.Margin = m_imageAppIconMargin;
+                GridMain.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void UpdatePopupAboutSize()
+        {
+            if (PopupAboutContent == null)
+            {
+                FindName("PopupAboutContent");
+            }
+
+            Rect windowBounds = Window.Current.Bounds;
+            PopupAboutContent.Width = windowBounds.Width;
+            PopupAboutContent.Height = windowBounds.Height;
+        }
+
+        private void ColorValuesChanged(Windows.UI.ViewManagement.UISettings sender, object e)
+        {
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
+                UpdateTitleBarColor(); 
+            }));
+        }
+
+        private void RequestedThemeChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            if (RequestedThemeProperty == dp)
+            {
+                _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
+                    UpdateTitleBarColor();
+                }));
+            }
+        }
+
+        private void WindowSizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
+        {
+            UpdatePopupAboutSize();
+        }
+
+        private void GridRoot_Loaded(object sender, RoutedEventArgs e)
+        {
+            m_uiSettings = new UISettings();
+            Frame rootFrame = (Frame)Window.Current.Content;
+            m_uiSettings.ColorValuesChanged += ColorValuesChanged;
+            // RequestedThemeProperty seems not work at all...
+            m_tokenThemeChanged = rootFrame.RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedThemeChanged);
+        }
+
+        private void ButtonTest_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProgressBarMain.Value < 100)
+            {
+                ProgressBarMain.Value += 10;
+            }
+        }
+
+        private void ButtonAbout_Click(object sender, RoutedEventArgs e)
+        {
+            ShowPopupAbout();
+        }
+
     }
 }
