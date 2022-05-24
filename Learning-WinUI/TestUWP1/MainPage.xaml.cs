@@ -228,6 +228,12 @@ namespace TestUWP1
             return underline;
         }
 
+        private void ScrollTextMainToBottom()
+        {
+            ScrollViewerMain.Measure(ScrollViewerMain.RenderSize);
+            ScrollViewerMain.ChangeView(null, ScrollViewerMain.ScrollableHeight, null);
+        }
+
         private void DoTest1()
         {
             Span span1 = new Span();
@@ -250,6 +256,7 @@ namespace TestUWP1
 
             m_paragraphMain.Inlines.Clear();
             m_paragraphMain.Inlines.Add(span1);
+            ScrollTextMainToBottom();
             ProgressBarMain.Value = 30;
         }
 
@@ -274,6 +281,7 @@ namespace TestUWP1
             span2.Inlines.Add(GenRunFromString("\r\n\r\n"));
 
             m_paragraphMain.Inlines.Add(span2);
+            ScrollTextMainToBottom();
             ProgressBarMain.Value = 60;
         }
 
@@ -299,6 +307,7 @@ namespace TestUWP1
             span3.Inlines.Add(GenRunFromString("\r\n\r\n"));
 
             m_paragraphMain.Inlines.Add(span3);
+            ScrollTextMainToBottom();
             ProgressBarMain.Value = 100;
         }
     }
