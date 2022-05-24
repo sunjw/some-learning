@@ -34,6 +34,9 @@ namespace TestUWP1
         private long m_tokenThemeChanged;
         private Thickness m_imageAppIconMargin;
 
+        private Paragraph m_paragraphMain;
+        private int m_testCount = 0;
+
         public MainPage()
         {
             InitializeComponent();
@@ -173,16 +176,26 @@ namespace TestUWP1
             // Init ui
             RichTextMain.TextWrapping = TextWrapping.NoWrap;
 
-            // Test content
-            InitTestContent();
+            // Init content
+            InitContent();
         }
 
         private void ButtonTest_Click(object sender, RoutedEventArgs e)
         {
-            if (ProgressBarMain.Value < 100)
+            switch (m_testCount)
             {
-                ProgressBarMain.Value += 10;
+                case 0:
+                    DoTest1();
+                    break;
+                case 1:
+                    DoTest2();
+                    break;
+                case 2:
+                    DoTest3();
+                    break;
             }
+
+            m_testCount++;
         }
 
         private void ButtonAbout_Click(object sender, RoutedEventArgs e)
@@ -190,10 +203,19 @@ namespace TestUWP1
             ShowPopupAbout();
         }
 
-        private void InitTestContent()
+        private void InitContent()
         {
-            Paragraph paragraph = new Paragraph();
+            m_paragraphMain = new Paragraph();
 
+            Run runInit = new Run();
+            runInit.Text = "将文件拖入或点击打开，开始计算。";
+            m_paragraphMain.Inlines.Add(runInit);
+
+            RichTextMain.Blocks.Add(m_paragraphMain);
+        }
+
+        private void DoTest1()
+        {
             Run run1 = new Run();
             string strRun1 = "文件名: C:\\Users\\Sun Junwen\\OneDrive\\Apps\\fHash\\fHash64-2.3.0-win64.zip\r\n";
             strRun1 += "文件大小: 383692 字节(374.70 KB)\r\n";
@@ -204,8 +226,14 @@ namespace TestUWP1
             strRun1 += "SHA512: aeda1930fc0ae1feda19b68170b78074f4a408ec50080256110dd0d9eda005abaa7167ae6d62ca302f6995f60f3d038af6c21667ea922e1206bb3670bc1c5e71\r\n";
             strRun1 += "\r\n";
             run1.Text = strRun1;
-            paragraph.Inlines.Add(run1);
+            m_paragraphMain.Inlines.Clear();
+            m_paragraphMain.Inlines.Add(run1);
 
+            ProgressBarMain.Value = 30;
+        }
+
+        private void DoTest2()
+        {
             Run run2 = new Run();
             string strRun2 = "Name: /Users/sunjw/Library/CloudStorage/OneDrive-个人/Apps/fHash/fHash-2.3.0-macOS.dmg\r\n";
             strRun2 += "File Size: 656793 Byte(s)(656.79 KB)\r\n";
@@ -216,8 +244,13 @@ namespace TestUWP1
             strRun2 += "SHA512: 15F634DF65D0A41E943A9024CA69FF5C31E4B05446180FE5900B7CB0068CFF9DF2820EFD3F8AFCB48924C3FE45D0113FDC8E81F5E4E6CDD60830BE4581F8B11C\r\n";
             strRun2 += "\r\n";
             run2.Text = strRun2;
-            paragraph.Inlines.Add(run2);
+            m_paragraphMain.Inlines.Add(run2);
 
+            ProgressBarMain.Value = 60;
+        }
+
+        private void DoTest3()
+        {
             Run run3 = new Run();
             string strRun3 = "文件名: C:\\Users\\Sun Junwen\\OneDrive\\新建文件夹\\jstool\\JSMinNPP.dll\r\n";
             strRun3 += "文件大小: 432640 字节(422.50 KB)\r\n";
@@ -229,10 +262,9 @@ namespace TestUWP1
             strRun3 += "SHA512: e2f8f248b0dbada7799f02eeacccd53ca4d5ef4296504e6826e72cb6aa1259ad61d15c222f9ea1638d06990328a433e3dc871761fc38aef22dfa7bc786145213\r\n";
             strRun3 += "\r\n";
             run3.Text = strRun3;
-            paragraph.Inlines.Add(run3);
+            m_paragraphMain.Inlines.Add(run3);
 
-            RichTextMain.Blocks.Add(paragraph);
+            ProgressBarMain.Value = 100;
         }
-
     }
 }
