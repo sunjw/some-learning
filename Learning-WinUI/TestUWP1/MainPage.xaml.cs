@@ -221,6 +221,13 @@ namespace TestUWP1
             return run;
         }
 
+        private Underline GenUnderlineFromString(string strContent)
+        {
+            Underline underline = new Underline();
+            underline.Inlines.Add(GenRunFromString(strContent));
+            return underline;
+        }
+
         private void DoTest1()
         {
             Span span1 = new Span();
@@ -228,11 +235,18 @@ namespace TestUWP1
             span1.Inlines.Add(GenRunFromString("文件名: C:\\Users\\Sun Junwen\\OneDrive\\Apps\\fHash\\fHash64-2.3.0-win64.zip\r\n"));
             span1.Inlines.Add(GenRunFromString("文件大小: 383692 字节(374.70 KB)\r\n"));
             span1.Inlines.Add(GenRunFromString("修改日期: 2022-03-28 15:17\r\n"));
-            span1.Inlines.Add(GenRunFromString("MD5: c0232b5bc37e70eebad95fbfc6499d92\r\n"));
-            span1.Inlines.Add(GenRunFromString("SHA1: 14017068424f5ca356b9440cb025eb0f848e08d9\r\n"));
-            span1.Inlines.Add(GenRunFromString("SHA256: ce25ecf0650ebfa1f8f2d8ebc557ad3db0cd75e80bda647c59314668e0281a35\r\n"));
-            span1.Inlines.Add(GenRunFromString("SHA512: aeda1930fc0ae1feda19b68170b78074f4a408ec50080256110dd0d9eda005abaa7167ae6d62ca302f6995f60f3d038af6c21667ea922e1206bb3670bc1c5e71\r\n"));
+            span1.Inlines.Add(GenRunFromString("MD5: "));
+            span1.Inlines.Add(GenUnderlineFromString("c0232b5bc37e70eebad95fbfc6499d92"));
             span1.Inlines.Add(GenRunFromString("\r\n"));
+            span1.Inlines.Add(GenRunFromString("SHA1: "));
+            span1.Inlines.Add(GenUnderlineFromString("14017068424f5ca356b9440cb025eb0f848e08d9"));
+            span1.Inlines.Add(GenRunFromString("\r\n"));
+            span1.Inlines.Add(GenRunFromString("SHA256: "));
+            span1.Inlines.Add(GenUnderlineFromString("ce25ecf0650ebfa1f8f2d8ebc557ad3db0cd75e80bda647c59314668e0281a35"));
+            span1.Inlines.Add(GenRunFromString("\r\n"));
+            span1.Inlines.Add(GenRunFromString("SHA512: "));
+            span1.Inlines.Add(GenUnderlineFromString("aeda1930fc0ae1feda19b68170b78074f4a408ec50080256110dd0d9eda005abaa7167ae6d62ca302f6995f60f3d038af6c21667ea922e1206bb3670bc1c5e71"));
+            span1.Inlines.Add(GenRunFromString("\r\n\r\n"));
 
             m_paragraphMain.Inlines.Clear();
             m_paragraphMain.Inlines.Add(span1);
@@ -246,11 +260,18 @@ namespace TestUWP1
             span2.Inlines.Add(GenRunFromString("Name: /Users/sunjw/Library/CloudStorage/OneDrive-个人/Apps/fHash/fHash-2.3.0-macOS.dmg\r\n"));
             span2.Inlines.Add(GenRunFromString("File Size: 656793 Byte(s)(656.79 KB)\r\n"));
             span2.Inlines.Add(GenRunFromString("Modified Date: 2022-03-28 14:58\r\n"));
-            span2.Inlines.Add(GenRunFromString("MD5: 1C880E1191F884EB225F9CFA36CDC355\r\n"));
-            span2.Inlines.Add(GenRunFromString("SHA1: 4528265C32082A3FB115C05CB29FA36E96A942E5\r\n"));
-            span2.Inlines.Add(GenRunFromString("SHA256: B704FD5E9E6818F1AC8E7EBECF97F0A56E1FDB8DB9AB9E01FE0F6B574A586FEF\r\n"));
-            span2.Inlines.Add(GenRunFromString("SHA512: 15F634DF65D0A41E943A9024CA69FF5C31E4B05446180FE5900B7CB0068CFF9DF2820EFD3F8AFCB48924C3FE45D0113FDC8E81F5E4E6CDD60830BE4581F8B11C\r\n"));
+            span2.Inlines.Add(GenRunFromString("MD5: \r\n"));
+            span2.Inlines.Add(GenUnderlineFromString("1C880E1191F884EB225F9CFA36CDC355"));
             span2.Inlines.Add(GenRunFromString("\r\n"));
+            span2.Inlines.Add(GenRunFromString("SHA1: \r\n"));
+            span2.Inlines.Add(GenUnderlineFromString("4528265C32082A3FB115C05CB29FA36E96A942E5"));
+            span2.Inlines.Add(GenRunFromString("\r\n"));
+            span2.Inlines.Add(GenRunFromString("SHA256: "));
+            span2.Inlines.Add(GenUnderlineFromString("B704FD5E9E6818F1AC8E7EBECF97F0A56E1FDB8DB9AB9E01FE0F6B574A586FEF"));
+            span2.Inlines.Add(GenRunFromString("\r\n"));
+            span2.Inlines.Add(GenRunFromString("SHA512: "));
+            span2.Inlines.Add(GenUnderlineFromString("15F634DF65D0A41E943A9024CA69FF5C31E4B05446180FE5900B7CB0068CFF9DF2820EFD3F8AFCB48924C3FE45D0113FDC8E81F5E4E6CDD60830BE4581F8B11C"));
+            span2.Inlines.Add(GenRunFromString("\r\n\r\n"));
 
             m_paragraphMain.Inlines.Add(span2);
             ProgressBarMain.Value = 60;
@@ -264,11 +285,18 @@ namespace TestUWP1
             span3.Inlines.Add(GenRunFromString("文件大小: 432640 字节(422.50 KB)\r\n"));
             span3.Inlines.Add(GenRunFromString("修改日期: 2022-05-24 12:58\r\n"));
             span3.Inlines.Add(GenRunFromString("版本: 1.2205.0.0\r\n"));
-            span3.Inlines.Add(GenRunFromString("MD5: 68373918248f972c784cf6fd921670dd\r\n"));
-            span3.Inlines.Add(GenRunFromString("SHA1: 9a0acfb02d983bc1feaf0364cd04884dd554c47d\r\n"));
-            span3.Inlines.Add(GenRunFromString("SHA256: f828b4973c72721b78aafeb9caa82362465ca95ebb8a296f39ef3c45aa8f0d10\r\n"));
-            span3.Inlines.Add(GenRunFromString("SHA512: e2f8f248b0dbada7799f02eeacccd53ca4d5ef4296504e6826e72cb6aa1259ad61d15c222f9ea1638d06990328a433e3dc871761fc38aef22dfa7bc786145213\r\n"));
+            span3.Inlines.Add(GenRunFromString("MD5: "));
+            span3.Inlines.Add(GenUnderlineFromString("68373918248f972c784cf6fd921670dd"));
             span3.Inlines.Add(GenRunFromString("\r\n"));
+            span3.Inlines.Add(GenRunFromString("SHA1: "));
+            span3.Inlines.Add(GenUnderlineFromString("9a0acfb02d983bc1feaf0364cd04884dd554c47d"));
+            span3.Inlines.Add(GenRunFromString("\r\n"));
+            span3.Inlines.Add(GenRunFromString("SHA256: "));
+            span3.Inlines.Add(GenUnderlineFromString("f828b4973c72721b78aafeb9caa82362465ca95ebb8a296f39ef3c45aa8f0d10"));
+            span3.Inlines.Add(GenRunFromString("\r\n"));
+            span3.Inlines.Add(GenRunFromString("SHA512: "));
+            span3.Inlines.Add(GenUnderlineFromString("e2f8f248b0dbada7799f02eeacccd53ca4d5ef4296504e6826e72cb6aa1259ad61d15c222f9ea1638d06990328a433e3dc871761fc38aef22dfa7bc786145213"));
+            span3.Inlines.Add(GenRunFromString("\r\n\r\n"));
 
             m_paragraphMain.Inlines.Add(span3);
             ProgressBarMain.Value = 100;
