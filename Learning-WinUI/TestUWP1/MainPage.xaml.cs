@@ -36,7 +36,7 @@ namespace TestUWP1
 
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             m_coreAppViewTitleBar = CoreApplication.GetCurrentView().TitleBar;
             m_appViewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
@@ -195,6 +195,19 @@ namespace TestUWP1
             strRun2 += "\r\n";
             run2.Text = strRun2;
             paragraph.Inlines.Add(run2);
+
+            Run run3 = new Run();
+            string strRun3 = "文件名: C:\\Users\\Sun Junwen\\OneDrive\\新建文件夹\\jstool\\JSMinNPP.dll\r\n";
+            strRun3 += "文件大小: 432640 字节(422.50 KB)\r\n";
+            strRun3 += "修改日期: 2022-05-24 12:58\r\n";
+            strRun3 += "版本: 1.2205.0.0\r\n";
+            strRun3 += "MD5: 68373918248f972c784cf6fd921670dd\r\n";
+            strRun3 += "SHA1: 9a0acfb02d983bc1feaf0364cd04884dd554c47d\r\n";
+            strRun3 += "SHA256: f828b4973c72721b78aafeb9caa82362465ca95ebb8a296f39ef3c45aa8f0d10\r\n";
+            strRun3 += "SHA512: e2f8f248b0dbada7799f02eeacccd53ca4d5ef4296504e6826e72cb6aa1259ad61d15c222f9ea1638d06990328a433e3dc871761fc38aef22dfa7bc786145213\r\n";
+            strRun3 += "\r\n";
+            run3.Text = strRun3;
+            paragraph.Inlines.Add(run3);
 
             RichTextMain.Blocks.Add(paragraph);
         }
