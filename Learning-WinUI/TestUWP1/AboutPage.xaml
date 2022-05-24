@@ -39,8 +39,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Click="ButtonOK_Click"
-                Content="OK"
-                Style="{StaticResource AccentButtonStyle}" />
+                Content="OK" />
         </Grid>
     </Grid>
 </UserControl>

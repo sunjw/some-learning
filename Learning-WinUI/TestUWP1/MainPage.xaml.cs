@@ -214,56 +214,63 @@ namespace TestUWP1
             RichTextMain.Blocks.Add(m_paragraphMain);
         }
 
+        private Run GenRunFromString(string strContent)
+        {
+            Run run = new Run();
+            run.Text = strContent;
+            return run;
+        }
+
         private void DoTest1()
         {
-            Run run1 = new Run();
-            string strRun1 = "文件名: C:\\Users\\Sun Junwen\\OneDrive\\Apps\\fHash\\fHash64-2.3.0-win64.zip\r\n";
-            strRun1 += "文件大小: 383692 字节(374.70 KB)\r\n";
-            strRun1 += "修改日期: 2022-03-28 15:17\r\n";
-            strRun1 += "MD5: c0232b5bc37e70eebad95fbfc6499d92\r\n";
-            strRun1 += "SHA1: 14017068424f5ca356b9440cb025eb0f848e08d9\r\n";
-            strRun1 += "SHA256: ce25ecf0650ebfa1f8f2d8ebc557ad3db0cd75e80bda647c59314668e0281a35\r\n";
-            strRun1 += "SHA512: aeda1930fc0ae1feda19b68170b78074f4a408ec50080256110dd0d9eda005abaa7167ae6d62ca302f6995f60f3d038af6c21667ea922e1206bb3670bc1c5e71\r\n";
-            strRun1 += "\r\n";
-            run1.Text = strRun1;
-            m_paragraphMain.Inlines.Clear();
-            m_paragraphMain.Inlines.Add(run1);
+            Span span1 = new Span();
 
+            span1.Inlines.Add(GenRunFromString("文件名: C:\\Users\\Sun Junwen\\OneDrive\\Apps\\fHash\\fHash64-2.3.0-win64.zip\r\n"));
+            span1.Inlines.Add(GenRunFromString("文件大小: 383692 字节(374.70 KB)\r\n"));
+            span1.Inlines.Add(GenRunFromString("修改日期: 2022-03-28 15:17\r\n"));
+            span1.Inlines.Add(GenRunFromString("MD5: c0232b5bc37e70eebad95fbfc6499d92\r\n"));
+            span1.Inlines.Add(GenRunFromString("SHA1: 14017068424f5ca356b9440cb025eb0f848e08d9\r\n"));
+            span1.Inlines.Add(GenRunFromString("SHA256: ce25ecf0650ebfa1f8f2d8ebc557ad3db0cd75e80bda647c59314668e0281a35\r\n"));
+            span1.Inlines.Add(GenRunFromString("SHA512: aeda1930fc0ae1feda19b68170b78074f4a408ec50080256110dd0d9eda005abaa7167ae6d62ca302f6995f60f3d038af6c21667ea922e1206bb3670bc1c5e71\r\n"));
+            span1.Inlines.Add(GenRunFromString("\r\n"));
+
+            m_paragraphMain.Inlines.Clear();
+            m_paragraphMain.Inlines.Add(span1);
             ProgressBarMain.Value = 30;
         }
 
         private void DoTest2()
         {
-            Run run2 = new Run();
-            string strRun2 = "Name: /Users/sunjw/Library/CloudStorage/OneDrive-个人/Apps/fHash/fHash-2.3.0-macOS.dmg\r\n";
-            strRun2 += "File Size: 656793 Byte(s)(656.79 KB)\r\n";
-            strRun2 += "Modified Date: 2022-03-28 14:58\r\n";
-            strRun2 += "MD5: 1C880E1191F884EB225F9CFA36CDC355\r\n";
-            strRun2 += "SHA1: 4528265C32082A3FB115C05CB29FA36E96A942E5\r\n";
-            strRun2 += "SHA256: B704FD5E9E6818F1AC8E7EBECF97F0A56E1FDB8DB9AB9E01FE0F6B574A586FEF\r\n";
-            strRun2 += "SHA512: 15F634DF65D0A41E943A9024CA69FF5C31E4B05446180FE5900B7CB0068CFF9DF2820EFD3F8AFCB48924C3FE45D0113FDC8E81F5E4E6CDD60830BE4581F8B11C\r\n";
-            strRun2 += "\r\n";
-            run2.Text = strRun2;
-            m_paragraphMain.Inlines.Add(run2);
+            Span span2 = new Span();
 
+            span2.Inlines.Add(GenRunFromString("Name: /Users/sunjw/Library/CloudStorage/OneDrive-个人/Apps/fHash/fHash-2.3.0-macOS.dmg\r\n"));
+            span2.Inlines.Add(GenRunFromString("File Size: 656793 Byte(s)(656.79 KB)\r\n"));
+            span2.Inlines.Add(GenRunFromString("Modified Date: 2022-03-28 14:58\r\n"));
+            span2.Inlines.Add(GenRunFromString("MD5: 1C880E1191F884EB225F9CFA36CDC355\r\n"));
+            span2.Inlines.Add(GenRunFromString("SHA1: 4528265C32082A3FB115C05CB29FA36E96A942E5\r\n"));
+            span2.Inlines.Add(GenRunFromString("SHA256: B704FD5E9E6818F1AC8E7EBECF97F0A56E1FDB8DB9AB9E01FE0F6B574A586FEF\r\n"));
+            span2.Inlines.Add(GenRunFromString("SHA512: 15F634DF65D0A41E943A9024CA69FF5C31E4B05446180FE5900B7CB0068CFF9DF2820EFD3F8AFCB48924C3FE45D0113FDC8E81F5E4E6CDD60830BE4581F8B11C\r\n"));
+            span2.Inlines.Add(GenRunFromString("\r\n"));
+
+            m_paragraphMain.Inlines.Add(span2);
             ProgressBarMain.Value = 60;
         }
 
         private void DoTest3()
         {
-            Run run3 = new Run();
-            string strRun3 = "文件名: C:\\Users\\Sun Junwen\\OneDrive\\新建文件夹\\jstool\\JSMinNPP.dll\r\n";
-            strRun3 += "文件大小: 432640 字节(422.50 KB)\r\n";
-            strRun3 += "修改日期: 2022-05-24 12:58\r\n";
-            strRun3 += "版本: 1.2205.0.0\r\n";
-            strRun3 += "MD5: 68373918248f972c784cf6fd921670dd\r\n";
-            strRun3 += "SHA1: 9a0acfb02d983bc1feaf0364cd04884dd554c47d\r\n";
-            strRun3 += "SHA256: f828b4973c72721b78aafeb9caa82362465ca95ebb8a296f39ef3c45aa8f0d10\r\n";
-            strRun3 += "SHA512: e2f8f248b0dbada7799f02eeacccd53ca4d5ef4296504e6826e72cb6aa1259ad61d15c222f9ea1638d06990328a433e3dc871761fc38aef22dfa7bc786145213\r\n";
-            strRun3 += "\r\n";
-            run3.Text = strRun3;
-            m_paragraphMain.Inlines.Add(run3);
+            Span span3 = new Span();
 
+            span3.Inlines.Add(GenRunFromString("文件名: C:\\Users\\Sun Junwen\\OneDrive\\新建文件夹\\jstool\\JSMinNPP.dll\r\n"));
+            span3.Inlines.Add(GenRunFromString("文件大小: 432640 字节(422.50 KB)\r\n"));
+            span3.Inlines.Add(GenRunFromString("修改日期: 2022-05-24 12:58\r\n"));
+            span3.Inlines.Add(GenRunFromString("版本: 1.2205.0.0\r\n"));
+            span3.Inlines.Add(GenRunFromString("MD5: 68373918248f972c784cf6fd921670dd\r\n"));
+            span3.Inlines.Add(GenRunFromString("SHA1: 9a0acfb02d983bc1feaf0364cd04884dd554c47d\r\n"));
+            span3.Inlines.Add(GenRunFromString("SHA256: f828b4973c72721b78aafeb9caa82362465ca95ebb8a296f39ef3c45aa8f0d10\r\n"));
+            span3.Inlines.Add(GenRunFromString("SHA512: e2f8f248b0dbada7799f02eeacccd53ca4d5ef4296504e6826e72cb6aa1259ad61d15c222f9ea1638d06990328a433e3dc871761fc38aef22dfa7bc786145213\r\n"));
+            span3.Inlines.Add(GenRunFromString("\r\n"));
+
+            m_paragraphMain.Inlines.Add(span3);
             ProgressBarMain.Value = 100;
         }
     }
