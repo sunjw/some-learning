@@ -51,6 +51,28 @@ namespace TestUWP1
             m_imageAppIconMargin = ImageAppIcon.Margin;
         }
 
+        private UIElement GetRootFrame()
+        {
+            return Window.Current.Content;
+        }
+
+        private void ChangeThemeLight()
+        {
+            ChangeTheme(ElementTheme.Light);
+        }
+
+        private void ChangeTheme(ElementTheme theme)
+        {
+            FrameworkElement root = (FrameworkElement)GetRootFrame();
+            root.RequestedTheme = theme;
+            UpdateControlColor();
+        }
+
+        private void UpdateControlColor()
+        {
+            UpdateTitleBarColor();
+        }
+
         private void InitCustomTitleBar()
         {
             m_coreAppViewTitleBar.ExtendViewIntoTitleBar = true;
@@ -120,7 +142,7 @@ namespace TestUWP1
         private void ColorValuesChanged(Windows.UI.ViewManagement.UISettings sender, object e)
         {
             _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
-                UpdateTitleBarColor(); 
+                UpdateControlColor(); 
             }));
         }
 
@@ -129,7 +151,7 @@ namespace TestUWP1
             if (RequestedThemeProperty == dp)
             {
                 _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
-                    UpdateTitleBarColor();
+                    UpdateControlColor();
                 }));
             }
         }
@@ -143,7 +165,7 @@ namespace TestUWP1
         {
             // Theme changed callback
             m_uiSettings = new UISettings();
-            Frame rootFrame = (Frame)Window.Current.Content;
+            Frame rootFrame = (Frame)GetRootFrame();
             m_uiSettings.ColorValuesChanged += ColorValuesChanged;
             // RequestedThemeProperty seems not work at all...
             m_tokenThemeChanged = rootFrame.RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedThemeChanged);
