@@ -206,6 +206,7 @@ namespace TestUWP1
         private void InitContent()
         {
             m_paragraphMain = new Paragraph();
+            m_paragraphMain.FontFamily = new FontFamily("Consolas");
 
             Run runInit = new Run();
             runInit.Text = "将文件拖入或点击打开，开始计算。";
@@ -267,10 +268,10 @@ namespace TestUWP1
             span2.Inlines.Add(GenRunFromString("Name: /Users/sunjw/Library/CloudStorage/OneDrive-个人/Apps/fHash/fHash-2.3.0-macOS.dmg\r\n"));
             span2.Inlines.Add(GenRunFromString("File Size: 656793 Byte(s)(656.79 KB)\r\n"));
             span2.Inlines.Add(GenRunFromString("Modified Date: 2022-03-28 14:58\r\n"));
-            span2.Inlines.Add(GenRunFromString("MD5: \r\n"));
+            span2.Inlines.Add(GenRunFromString("MD5: "));
             span2.Inlines.Add(GenUnderlineFromString("1C880E1191F884EB225F9CFA36CDC355"));
             span2.Inlines.Add(GenRunFromString("\r\n"));
-            span2.Inlines.Add(GenRunFromString("SHA1: \r\n"));
+            span2.Inlines.Add(GenRunFromString("SHA1: "));
             span2.Inlines.Add(GenUnderlineFromString("4528265C32082A3FB115C05CB29FA36E96A942E5"));
             span2.Inlines.Add(GenRunFromString("\r\n"));
             span2.Inlines.Add(GenRunFromString("SHA256: "));
