@@ -53,16 +53,12 @@
 
         <Grid x:Name="GridMain" Margin="0,32,0,0">
 
-            <RichTextBlock Margin="10,0,10,60">
-                <Paragraph>
-                    <Run Text="RichTextBlock" />
-                </Paragraph>
-            </RichTextBlock>
+            <RichTextBlock x:Name="RichTextMain" Margin="10,0,10,60" />
             <muxc:ProgressBar
                 x:Name="ProgressBarMain"
                 Width="Auto"
                 Height="0"
-                Margin="10,0,10,52"
+                Margin="10,0,10,50"
                 VerticalAlignment="Bottom"
                 Value="0" />
             <Button
