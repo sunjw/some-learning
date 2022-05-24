@@ -139,7 +139,7 @@ namespace TestUWP1
             PopupAboutContent.Height = windowBounds.Height;
         }
 
-        private void ColorValuesChanged(Windows.UI.ViewManagement.UISettings sender, object e)
+        private void ColorValuesChanged(UISettings sender, object e)
         {
             _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
                 UpdateControlColor(); 
@@ -156,7 +156,7 @@ namespace TestUWP1
             }
         }
 
-        private void WindowSizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
+        private void WindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
             UpdatePopupAboutSize();
         }
