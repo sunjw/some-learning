@@ -57,7 +57,8 @@
                 Margin="10,0,10,60"
                 HorizontalScrollBarVisibility="Auto"
                 VerticalScrollBarVisibility="Auto">
-                <RichTextBlock x:Name="RichTextMain" />
+
+                <RichTextBlock x:Name="RichTextMain" Margin="4,6,4,0" />
             </ScrollViewer>
 
             <muxc:ProgressBar
