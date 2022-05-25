@@ -29,6 +29,7 @@ namespace TestUWP1
     {
         private CoreApplicationViewTitleBar m_coreAppViewTitleBar;
         private ApplicationViewTitleBar m_appViewTitleBar;
+        private MenuFlyout m_menuFlyoutTextMain;
 
         private UISettings m_uiSettings;
         private long m_tokenThemeChanged;
@@ -52,6 +53,14 @@ namespace TestUWP1
             InitCustomTitleBar();
 
             m_imageAppIconMargin = ImageAppIcon.Margin;
+
+            m_menuFlyoutTextMain = new MenuFlyout();
+            MenuFlyoutItem menuItemCopy = new MenuFlyoutItem();
+            menuItemCopy.Text = "Copy";
+            MenuFlyoutItem menuItemGoogle = new MenuFlyoutItem();
+            menuItemGoogle.Text = "Google";
+            m_menuFlyoutTextMain.Items.Add(menuItemCopy);
+            m_menuFlyoutTextMain.Items.Add(menuItemGoogle);
         }
 
         private UIElement GetRootFrame()
@@ -142,16 +151,18 @@ namespace TestUWP1
             PopupAboutContent.Height = windowBounds.Height;
         }
 
-        private void InitContent()
+        private void ScrollTextMainToBottom()
         {
-            m_paragraphMain = new Paragraph();
-            m_paragraphMain.FontFamily = new FontFamily("Consolas");
+            ScrollViewerMain.Measure(ScrollViewerMain.RenderSize);
+            ScrollViewerMain.ChangeView(null, ScrollViewerMain.ScrollableHeight, null);
+        }
 
-            Run runInit = new Run();
-            runInit.Text = "将文件拖入或点击打开，开始计算。";
-            m_paragraphMain.Inlines.Add(runInit);
-
-            RichTextMain.Blocks.Add(m_paragraphMain);
+        private Point GetCursorPointRelatedToRootFrame()
+        {
+            Point cursorPoint = Window.Current.CoreWindow.PointerPosition;
+            Rect windowBount = Window.Current.Bounds;
+            Point relativePoint = new Point(cursorPoint.X - windowBount.X, cursorPoint.Y - windowBount.Y);
+            return relativePoint;
         }
 
         private Run GenRunFromString(string strContent)
@@ -185,10 +196,16 @@ namespace TestUWP1
             return GenHyperlinkFromString(strContent, TextMainHyperlink_Click);
         }
 
-        private void ScrollTextMainToBottom()
+        private void InitContent()
         {
-            ScrollViewerMain.Measure(ScrollViewerMain.RenderSize);
-            ScrollViewerMain.ChangeView(null, ScrollViewerMain.ScrollableHeight, null);
+            m_paragraphMain = new Paragraph();
+            m_paragraphMain.FontFamily = new FontFamily("Consolas");
+
+            Run runInit = new Run();
+            runInit.Text = "将文件拖入或点击打开，开始计算。";
+            m_paragraphMain.Inlines.Add(runInit);
+
+            RichTextMain.Blocks.Add(m_paragraphMain);
         }
 
         private void DoTest1()
@@ -331,15 +348,7 @@ namespace TestUWP1
 
         private void TextMainHyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
-            Point cursorPoint = Window.Current.CoreWindow.PointerPosition;
-            MenuFlyout menuFlyout = new MenuFlyout();
-            MenuFlyoutItem call1Item = new MenuFlyoutItem { Text = "Call1" };
-            MenuFlyoutItem call2Item = new MenuFlyoutItem { Text = "Call2" };
-            menuFlyout.Items.Add(call1Item);
-            menuFlyout.Items.Add(call2Item);
-            Rect windowBount = Window.Current.Bounds;
-            Point relativePoint = new Point(cursorPoint.X - windowBount.X, cursorPoint.Y - windowBount.Y);
-            menuFlyout.ShowAt(GetRootFrame(), relativePoint);
+            m_menuFlyoutTextMain.ShowAt(GetRootFrame(), GetCursorPointRelatedToRootFrame());
         }
 
     }
