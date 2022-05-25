@@ -7,7 +7,7 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="fb3d725d-7c34-470c-8f76-9c45d1803df7"
+    Name="SunJW.TestUWP1"
     Publisher="CN=sunjunwen"
     Version="1.0.0.0" />
 
@@ -15,7 +15,7 @@
 
   <Properties>
     <DisplayName>TestUWP1</DisplayName>
-    <PublisherDisplayName>sunjunwen</PublisherDisplayName>
+    <PublisherDisplayName>Sun Junwen</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
