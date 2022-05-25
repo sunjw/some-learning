@@ -79,6 +79,21 @@ namespace TestUWP1
             return interop.WindowHandle;
         }
 
+        public void OnCommandLineActivated()
+        {
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
+                string strMainTextCmdLine = "";
+                App curApp = (App)Application.Current;
+                if (!string.IsNullOrEmpty(curApp.CmdArgs))
+                {
+                    strMainTextCmdLine = curApp.CmdArgs;
+                }
+
+                m_paragraphMain.Inlines.Clear();
+                m_paragraphMain.Inlines.Add(GenRunFromString(strMainTextCmdLine));
+            }));
+        }
+
         private void ChangeThemeLight()
         {
             ChangeTheme(ElementTheme.Light);
@@ -231,14 +246,7 @@ namespace TestUWP1
                 strMainTextInit = curApp.CmdArgs;
             }
 
-            m_paragraphMain = new Paragraph();
-            m_paragraphMain.FontFamily = new FontFamily("Consolas");
-
-            Run runInit = new Run();
-            runInit.Text = strMainTextInit;
-            m_paragraphMain.Inlines.Add(runInit);
-
-            RichTextMain.Blocks.Add(m_paragraphMain);
+            m_paragraphMain.Inlines.Add(GenRunFromString(strMainTextInit));
         }
 
         private void DoTest1()
@@ -354,6 +362,9 @@ namespace TestUWP1
 
             // Init ui
             RichTextMain.TextWrapping = TextWrapping.NoWrap;
+            m_paragraphMain = new Paragraph();
+            m_paragraphMain.FontFamily = new FontFamily("Consolas");
+            RichTextMain.Blocks.Add(m_paragraphMain);
 
             // Init content
             InitContent();

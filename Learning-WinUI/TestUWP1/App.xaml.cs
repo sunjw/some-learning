@@ -67,6 +67,15 @@ namespace TestUWP1
 
         protected override void OnActivated(IActivatedEventArgs args)
         {
+            bool fromCommandLine = false;
+            // Command line activation
+            if (args.Kind == ActivationKind.CommandLineLaunch)
+            {
+                fromCommandLine = true;
+                CommandLineActivatedEventArgs commandLineArgs = args as CommandLineActivatedEventArgs;
+                CmdArgs = commandLineArgs.Operation.Arguments;
+            }
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // 不要在窗口已包含内容时重复应用程序初始化，
@@ -89,16 +98,11 @@ namespace TestUWP1
             else 
             {
                 // Already launched
-
-            }
-
-            // Command line activation
-            if (args.Kind == ActivationKind.CommandLineLaunch)
-            {
-                CommandLineActivatedEventArgs commandLineArgs = args as CommandLineActivatedEventArgs;
-
-                // Read command line args
-                CmdArgs = commandLineArgs.Operation.Arguments;
+                MainPage mainPage = MainPage.GetCurrentMainPage();
+                if (mainPage != null && fromCommandLine)
+                {
+                    mainPage.OnCommandLineActivated();
+                }
             }
 
             if (rootFrame.Content == null)
