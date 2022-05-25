@@ -400,7 +400,7 @@ namespace TestUWP1
             }
 
             string strHash = GetTextFromHyperlink(m_hyperlinkClicked);
-            string strGoogleUrl = "https://www.google.com/search?q=" + strHash + "&ie=utf-8&oe=utf-8";
+            string strGoogleUrl = string.Format("https://www.google.com/search?q={0}&ie=utf-8&oe=utf-8", strHash);
             OpenUrl(strGoogleUrl);
         }
 
