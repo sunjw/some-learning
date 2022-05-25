@@ -142,67 +142,6 @@ namespace TestUWP1
             PopupAboutContent.Height = windowBounds.Height;
         }
 
-        private void ColorValuesChanged(UISettings sender, object e)
-        {
-            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
-                UpdateControlColor(); 
-            }));
-        }
-
-        private void RequestedThemeChanged(DependencyObject sender, DependencyProperty dp)
-        {
-            if (RequestedThemeProperty == dp)
-            {
-                _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
-                    UpdateControlColor();
-                }));
-            }
-        }
-
-        private void WindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
-        {
-            UpdatePopupAboutSize();
-        }
-
-        private void GridRoot_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Theme changed callback
-            m_uiSettings = new UISettings();
-            Frame rootFrame = (Frame)GetRootFrame();
-            m_uiSettings.ColorValuesChanged += ColorValuesChanged;
-            // RequestedThemeProperty seems not work at all...
-            m_tokenThemeChanged = rootFrame.RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedThemeChanged);
-
-            // Init ui
-            RichTextMain.TextWrapping = TextWrapping.NoWrap;
-
-            // Init content
-            InitContent();
-        }
-
-        private void ButtonTest_Click(object sender, RoutedEventArgs e)
-        {
-            switch (m_testCount)
-            {
-                case 0:
-                    DoTest1();
-                    break;
-                case 1:
-                    DoTest2();
-                    break;
-                case 2:
-                    DoTest3();
-                    break;
-            }
-
-            m_testCount++;
-        }
-
-        private void ButtonAbout_Click(object sender, RoutedEventArgs e)
-        {
-            ShowPopupAbout();
-        }
-
         private void InitContent()
         {
             m_paragraphMain = new Paragraph();
@@ -244,19 +183,6 @@ namespace TestUWP1
         private Hyperlink GenHyperlinkFromStringForTextMain(string strContent)
         {
             return GenHyperlinkFromString(strContent, TextMainHyperlink_Click);
-        }
-
-        private void TextMainHyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
-        {
-            Point cursorPoint = Window.Current.CoreWindow.PointerPosition;
-            MenuFlyout menuFlyout = new MenuFlyout();
-            MenuFlyoutItem call1Item = new MenuFlyoutItem { Text = "Call1" };
-            MenuFlyoutItem call2Item = new MenuFlyoutItem { Text = "Call2" };
-            menuFlyout.Items.Add(call1Item);
-            menuFlyout.Items.Add(call2Item);
-            Rect windowBount = Window.Current.Bounds;
-            Point relativePoint = new Point(cursorPoint.X - windowBount.X, cursorPoint.Y - windowBount.Y);
-            menuFlyout.ShowAt(GetRootFrame(), relativePoint);
         }
 
         private void ScrollTextMainToBottom()
@@ -341,5 +267,80 @@ namespace TestUWP1
             ScrollTextMainToBottom();
             ProgressBarMain.Value = 100;
         }
+
+        private void ColorValuesChanged(UISettings sender, object e)
+        {
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
+                UpdateControlColor();
+            }));
+        }
+
+        private void RequestedThemeChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            if (RequestedThemeProperty == dp)
+            {
+                _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
+                    UpdateControlColor();
+                }));
+            }
+        }
+
+        private void WindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
+        {
+            UpdatePopupAboutSize();
+        }
+
+        private void GridRoot_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Theme changed callback
+            m_uiSettings = new UISettings();
+            Frame rootFrame = (Frame)GetRootFrame();
+            m_uiSettings.ColorValuesChanged += ColorValuesChanged;
+            // RequestedThemeProperty seems not work at all...
+            m_tokenThemeChanged = rootFrame.RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedThemeChanged);
+
+            // Init ui
+            RichTextMain.TextWrapping = TextWrapping.NoWrap;
+
+            // Init content
+            InitContent();
+        }
+
+        private void ButtonTest_Click(object sender, RoutedEventArgs e)
+        {
+            switch (m_testCount)
+            {
+                case 0:
+                    DoTest1();
+                    break;
+                case 1:
+                    DoTest2();
+                    break;
+                case 2:
+                    DoTest3();
+                    break;
+            }
+
+            m_testCount++;
+        }
+
+        private void ButtonAbout_Click(object sender, RoutedEventArgs e)
+        {
+            ShowPopupAbout();
+        }
+
+        private void TextMainHyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
+        {
+            Point cursorPoint = Window.Current.CoreWindow.PointerPosition;
+            MenuFlyout menuFlyout = new MenuFlyout();
+            MenuFlyoutItem call1Item = new MenuFlyoutItem { Text = "Call1" };
+            MenuFlyoutItem call2Item = new MenuFlyoutItem { Text = "Call2" };
+            menuFlyout.Items.Add(call1Item);
+            menuFlyout.Items.Add(call2Item);
+            Rect windowBount = Window.Current.Bounds;
+            Point relativePoint = new Point(cursorPoint.X - windowBount.X, cursorPoint.Y - windowBount.Y);
+            menuFlyout.ShowAt(GetRootFrame(), relativePoint);
+        }
+
     }
 }
