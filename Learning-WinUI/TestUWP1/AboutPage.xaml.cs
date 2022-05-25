@@ -15,22 +15,9 @@ namespace TestUWP1
             this.InitializeComponent();
         }
 
-        private MainPage GetMainPage()
-        {
-            Frame frame = (Frame)UWPHelper.GetRootFrame();
-
-            if (frame != null)
-            {
-                MainPage mainPage = (MainPage)frame.Content;
-                return mainPage;
-            }
-
-            return null;
-        }
-
         private void HideSelf()
         {
-            MainPage mainPage = GetMainPage();
+            MainPage mainPage = MainPage.GetCurrentMainPage();
             mainPage?.HidePopupAbout();
         }
 

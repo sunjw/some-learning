@@ -59,6 +59,19 @@ namespace TestUWP1
             InitMenuFlyoutTextMain();
         }
 
+        public static MainPage GetCurrentMainPage()
+        {
+            Frame frame = (Frame)UWPHelper.GetRootFrame();
+
+            if (frame != null)
+            {
+                MainPage mainPage = (MainPage)frame.Content;
+                return mainPage;
+            }
+
+            return null;
+        }
+
         private IntPtr GetCurrentWindowHandle()
         {
             dynamic corewin = CoreWindow.GetForCurrentThread();
