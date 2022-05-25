@@ -32,6 +32,8 @@ namespace TestUWP1
         private MenuFlyout m_menuFlyoutTextMain;
 
         private UISettings m_uiSettings;
+        private TaskbarExtension m_taskbarExt;
+
         private long m_tokenThemeChanged;
         private Thickness m_imageAppIconMargin;
         private Paragraph m_paragraphMain;
@@ -277,7 +279,7 @@ namespace TestUWP1
             m_paragraphMain.Inlines.Add(span1);
             ScrollTextMainToBottom();
             ProgressBarMain.Value = 30;
-            IntPtr ptrHwnd = GetCurrentWindowHandle();
+            // m_taskbarExt.SetProgressValue(30);
         }
 
         private void DoTest2()
@@ -355,8 +357,10 @@ namespace TestUWP1
 
         private void GridRoot_Loaded(object sender, RoutedEventArgs e)
         {
-            // Theme changed callback
             m_uiSettings = new UISettings();
+            m_taskbarExt = new TaskbarExtension(GetCurrentWindowHandle());
+
+            // Theme changed callback
             Frame rootFrame = (Frame)GetRootFrame();
             m_uiSettings.ColorValuesChanged += ColorValuesChanged;
             // RequestedThemeProperty seems not work at all...
