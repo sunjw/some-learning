@@ -245,11 +245,18 @@ namespace TestUWP1
 
         private void InitContent()
         {
+            string strMainTextInit = "将文件拖入或点击打开，开始计算。";
+            App curApp = (App)Application.Current;
+            if (!string.IsNullOrEmpty(curApp.CmdArgs))
+            {
+                strMainTextInit = curApp.CmdArgs;
+            }
+
             m_paragraphMain = new Paragraph();
             m_paragraphMain.FontFamily = new FontFamily("Consolas");
 
             Run runInit = new Run();
-            runInit.Text = "将文件拖入或点击打开，开始计算。";
+            runInit.Text = strMainTextInit;
             m_paragraphMain.Inlines.Add(runInit);
 
             RichTextMain.Blocks.Add(m_paragraphMain);
