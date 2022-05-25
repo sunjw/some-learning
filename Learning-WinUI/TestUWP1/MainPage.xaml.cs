@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
@@ -37,6 +38,14 @@ namespace TestUWP1
         private Hyperlink m_hyperlinkClicked;
         private int m_testCount = 0;
 
+        [ComImport, Guid("45D64A29-A63E-4CB6-B498-5781D298CB4F")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        interface ICoreWindowInterop
+        {
+            IntPtr WindowHandle { get; }
+            bool MessageHandled { set; }
+        }
+
         public MainPage()
         {
             InitializeComponent();
@@ -59,6 +68,13 @@ namespace TestUWP1
         private UIElement GetRootFrame()
         {
             return Window.Current.Content;
+        }
+
+        private IntPtr GetCurrentWindowHandle()
+        {
+            dynamic corewin = CoreWindow.GetForCurrentThread();
+            var interop = (ICoreWindowInterop)corewin;
+            return interop.WindowHandle;
         }
 
         private void ChangeThemeLight()
@@ -261,6 +277,7 @@ namespace TestUWP1
             m_paragraphMain.Inlines.Add(span1);
             ScrollTextMainToBottom();
             ProgressBarMain.Value = 30;
+            IntPtr ptrHwnd = GetCurrentWindowHandle();
         }
 
         private void DoTest2()
