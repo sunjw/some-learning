@@ -55,7 +55,7 @@
 
             <ScrollViewer
                 x:Name="ScrollViewerMain"
-                Margin="10,5,10,60"
+                Margin="8,5,8,56"
                 HorizontalScrollBarVisibility="Auto"
                 VerticalScrollBarVisibility="Auto">
 
@@ -66,7 +66,7 @@
                 x:Name="ProgressBarMain"
                 Width="Auto"
                 Height="0"
-                Margin="10,0,10,50"
+                Margin="0,0,0,52"
                 VerticalAlignment="Bottom"
                 Value="0" />
             <Button
