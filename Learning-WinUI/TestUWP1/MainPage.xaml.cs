@@ -1,22 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.Core;
-using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -67,11 +59,6 @@ namespace TestUWP1
             InitMenuFlyoutTextMain();
         }
 
-        private UIElement GetRootFrame()
-        {
-            return Window.Current.Content;
-        }
-
         private IntPtr GetCurrentWindowHandle()
         {
             dynamic corewin = CoreWindow.GetForCurrentThread();
@@ -86,7 +73,7 @@ namespace TestUWP1
 
         private void ChangeTheme(ElementTheme theme)
         {
-            FrameworkElement root = (FrameworkElement)GetRootFrame();
+            FrameworkElement root = (FrameworkElement)UWPHelper.GetRootFrame();
             root.RequestedTheme = theme;
             UpdateControlColor();
         }
@@ -162,14 +149,6 @@ namespace TestUWP1
             PopupAboutContent.Height = windowBounds.Height;
         }
 
-        private Point GetCursorPointRelatedToRootFrame()
-        {
-            Point cursorPoint = Window.Current.CoreWindow.PointerPosition;
-            Rect windowBount = Window.Current.Bounds;
-            Point relativePoint = new Point(cursorPoint.X - windowBount.X, cursorPoint.Y - windowBount.Y);
-            return relativePoint;
-        }
-
         private void InitMenuFlyoutTextMain()
         {
             m_menuFlyoutTextMain = new MenuFlyout();
@@ -187,19 +166,6 @@ namespace TestUWP1
         {
             ScrollViewerMain.Measure(ScrollViewerMain.RenderSize);
             ScrollViewerMain.ChangeView(null, ScrollViewerMain.ScrollableHeight, null);
-        }
-
-        private void CopyStringToClipboard(string text)
-        {
-            DataPackage dataPackage = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
-            dataPackage.SetText(text);
-            Clipboard.SetContent(dataPackage);
-        }
-
-        private void OpenUrl(string url)
-        {
-            Uri uri = new Uri(url);
-            _ = Launcher.LaunchUriAsync(uri);
         }
 
         private Run GenRunFromString(string strContent)
@@ -368,7 +334,7 @@ namespace TestUWP1
             m_taskbarExt = new TaskbarExtension(GetCurrentWindowHandle());
 
             // Theme changed callback
-            Frame rootFrame = (Frame)GetRootFrame();
+            Frame rootFrame = (Frame)UWPHelper.GetRootFrame();
             m_uiSettings.ColorValuesChanged += ColorValuesChanged;
             // RequestedThemeProperty seems not work at all...
             m_tokenThemeChanged = rootFrame.RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedThemeChanged);
@@ -406,7 +372,7 @@ namespace TestUWP1
         private void TextMainHyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
             m_hyperlinkClicked = sender;
-            m_menuFlyoutTextMain.ShowAt(GetRootFrame(), GetCursorPointRelatedToRootFrame());
+            m_menuFlyoutTextMain.ShowAt(UWPHelper.GetRootFrame(), UWPHelper.GetCursorPointRelatedToRootFrame());
         }
 
         private void MenuItemCopy_Click(object sender, RoutedEventArgs e)
@@ -417,7 +383,7 @@ namespace TestUWP1
             }
 
             string strHash = GetTextFromHyperlink(m_hyperlinkClicked);
-            CopyStringToClipboard(strHash);
+            UWPHelper.CopyStringToClipboard(strHash);
         }
 
         private void MenuItemGoogle_Click(object sender, RoutedEventArgs e)
@@ -429,7 +395,7 @@ namespace TestUWP1
 
             string strHash = GetTextFromHyperlink(m_hyperlinkClicked);
             string strGoogleUrl = string.Format("https://www.google.com/search?q={0}&ie=utf-8&oe=utf-8", strHash);
-            OpenUrl(strGoogleUrl);
+            UWPHelper.OpenUrl(strGoogleUrl);
         }
 
     }
