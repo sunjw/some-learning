@@ -17,7 +17,7 @@ namespace TestUWP1
 
         private MainPage GetMainPage()
         {
-            Frame frame = (Frame)Window.Current.Content;
+            Frame frame = (Frame)UWPHelper.GetRootFrame();
 
             if (frame != null)
             {
