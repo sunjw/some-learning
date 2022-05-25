@@ -6,6 +6,7 @@ using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
@@ -168,6 +169,19 @@ namespace TestUWP1
         {
             ScrollViewerMain.Measure(ScrollViewerMain.RenderSize);
             ScrollViewerMain.ChangeView(null, ScrollViewerMain.ScrollableHeight, null);
+        }
+
+        private void CopyStringToClipboard(string text)
+        {
+            DataPackage dataPackage = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
+            dataPackage.SetText(text);
+            Clipboard.SetContent(dataPackage);
+        }
+
+        private void OpenUrl(string url)
+        {
+            Uri uri = new Uri(url);
+            _ = Launcher.LaunchUriAsync(uri);
         }
 
         private Run GenRunFromString(string strContent)
@@ -375,9 +389,7 @@ namespace TestUWP1
             }
 
             string strHash = GetTextFromHyperlink(m_hyperlinkClicked);
-            var dataPackage = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
-            dataPackage.SetText(strHash);
-            Clipboard.SetContent(dataPackage);
+            CopyStringToClipboard(strHash);
         }
 
         private void MenuItemGoogle_Click(object sender, RoutedEventArgs e)
@@ -386,6 +398,10 @@ namespace TestUWP1
             {
                 return;
             }
+
+            string strHash = GetTextFromHyperlink(m_hyperlinkClicked);
+            string strGoogleUrl = "https://www.google.com/search?q=" + strHash + "&ie=utf-8&oe=utf-8";
+            OpenUrl(strGoogleUrl);
         }
 
     }
