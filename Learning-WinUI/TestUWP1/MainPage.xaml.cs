@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.Core;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
@@ -11,8 +11,6 @@ using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
@@ -34,8 +32,8 @@ namespace TestUWP1
         private UISettings m_uiSettings;
         private long m_tokenThemeChanged;
         private Thickness m_imageAppIconMargin;
-
         private Paragraph m_paragraphMain;
+        private Hyperlink m_hyperlinkClicked;
         private int m_testCount = 0;
 
         public MainPage()
@@ -54,13 +52,7 @@ namespace TestUWP1
 
             m_imageAppIconMargin = ImageAppIcon.Margin;
 
-            m_menuFlyoutTextMain = new MenuFlyout();
-            MenuFlyoutItem menuItemCopy = new MenuFlyoutItem();
-            menuItemCopy.Text = "Copy";
-            MenuFlyoutItem menuItemGoogle = new MenuFlyoutItem();
-            menuItemGoogle.Text = "Google";
-            m_menuFlyoutTextMain.Items.Add(menuItemCopy);
-            m_menuFlyoutTextMain.Items.Add(menuItemGoogle);
+            InitMenuFlyoutTextMain();
         }
 
         private UIElement GetRootFrame()
@@ -151,18 +143,31 @@ namespace TestUWP1
             PopupAboutContent.Height = windowBounds.Height;
         }
 
-        private void ScrollTextMainToBottom()
-        {
-            ScrollViewerMain.Measure(ScrollViewerMain.RenderSize);
-            ScrollViewerMain.ChangeView(null, ScrollViewerMain.ScrollableHeight, null);
-        }
-
         private Point GetCursorPointRelatedToRootFrame()
         {
             Point cursorPoint = Window.Current.CoreWindow.PointerPosition;
             Rect windowBount = Window.Current.Bounds;
             Point relativePoint = new Point(cursorPoint.X - windowBount.X, cursorPoint.Y - windowBount.Y);
             return relativePoint;
+        }
+
+        private void InitMenuFlyoutTextMain()
+        {
+            m_menuFlyoutTextMain = new MenuFlyout();
+            MenuFlyoutItem menuItemCopy = new MenuFlyoutItem();
+            menuItemCopy.Text = "Copy";
+            menuItemCopy.Click += MenuItemCopy_Click;
+            MenuFlyoutItem menuItemGoogle = new MenuFlyoutItem();
+            menuItemGoogle.Text = "Google";
+            menuItemGoogle.Click += MenuItemGoogle_Click;
+            m_menuFlyoutTextMain.Items.Add(menuItemCopy);
+            m_menuFlyoutTextMain.Items.Add(menuItemGoogle);
+        }
+
+        private void ScrollTextMainToBottom()
+        {
+            ScrollViewerMain.Measure(ScrollViewerMain.RenderSize);
+            ScrollViewerMain.ChangeView(null, ScrollViewerMain.ScrollableHeight, null);
         }
 
         private Run GenRunFromString(string strContent)
@@ -194,6 +199,16 @@ namespace TestUWP1
         private Hyperlink GenHyperlinkFromStringForTextMain(string strContent)
         {
             return GenHyperlinkFromString(strContent, TextMainHyperlink_Click);
+        }
+
+        private string GetTextFromHyperlink(Hyperlink hyperlink)
+        {
+            if (hyperlink.Inlines.Count == 0)
+            {
+                return null;
+            }
+            Run run = (Run)hyperlink.Inlines[0];
+            return run.Text;
         }
 
         private void InitContent()
@@ -348,7 +363,29 @@ namespace TestUWP1
 
         private void TextMainHyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
+            m_hyperlinkClicked = sender;
             m_menuFlyoutTextMain.ShowAt(GetRootFrame(), GetCursorPointRelatedToRootFrame());
+        }
+
+        private void MenuItemCopy_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_hyperlinkClicked == null)
+            {
+                return;
+            }
+
+            string strHash = GetTextFromHyperlink(m_hyperlinkClicked);
+            var dataPackage = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
+            dataPackage.SetText(strHash);
+            Clipboard.SetContent(dataPackage);
+        }
+
+        private void MenuItemGoogle_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_hyperlinkClicked == null)
+            {
+                return;
+            }
         }
 
     }
