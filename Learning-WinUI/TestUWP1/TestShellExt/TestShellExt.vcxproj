@@ -197,6 +197,7 @@
     <ClCompile Include="dll.cpp" />
     <ClCompile Include="ExplorerCommandVerb.cpp" />
     <ClCompile Include="RegisterExtension.cpp" />
+    <ClCompile Include="strhelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Dll.def" />
@@ -206,6 +207,7 @@
     <ClInclude Include="RegisterExtension.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ShellHelpers.h" />
+    <ClInclude Include="strhelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
