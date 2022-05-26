@@ -83,30 +83,7 @@ namespace TestUWP1
         public void OnCommandLineActivated()
         {
             _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
-                List<string> cmdArgFiles = new List<string>();
-                App curApp = (App)Application.Current;
-                if (!string.IsNullOrEmpty(curApp.CmdArgs))
-                {
-                    string[] cmdArgsArray = curApp.CmdArgs.Split("\"");
-                    for (int i = 0; i < cmdArgsArray.Length; i++)
-                    {
-                        string cmdArg = cmdArgsArray[i];
-                        cmdArg = cmdArg.Trim();
-                        if (string.IsNullOrEmpty(cmdArg))
-                        {
-                            continue;
-                        }
-                        cmdArgFiles.Add(cmdArg);
-                    }
-                }
-
-                m_paragraphMain.Inlines.Clear();
-                foreach (string cmdArg in cmdArgFiles)
-                {
-                    m_paragraphMain.Inlines.Add(GenRunFromString(cmdArg));
-                    m_paragraphMain.Inlines.Add(GenRunFromString("\r\n\r\n"));
-                }
-                ScrollTextMainToBottom();
+                ShowCmdArgs();
             }));
         }
 
@@ -255,14 +232,41 @@ namespace TestUWP1
 
         private void InitContent()
         {
-            string strMainTextInit = "将文件拖入或点击打开，开始计算。";
+            ShowCmdArgs("将文件拖入或点击打开，开始计算。\r\n");
+        }
+
+        private void ShowCmdArgs(string strInit = "")
+        {
+            List<string> cmdArgFiles = new List<string>();
             App curApp = (App)Application.Current;
             if (!string.IsNullOrEmpty(curApp.CmdArgs))
             {
-                strMainTextInit = curApp.CmdArgs;
+                string[] cmdArgsArray = curApp.CmdArgs.Split("\"");
+                for (int i = 0; i < cmdArgsArray.Length; i++)
+                {
+                    string cmdArg = cmdArgsArray[i];
+                    cmdArg = cmdArg.Trim();
+                    if (string.IsNullOrEmpty(cmdArg))
+                    {
+                        continue;
+                    }
+                    cmdArgFiles.Add(cmdArg);
+                }
             }
 
-            m_paragraphMain.Inlines.Add(GenRunFromString(strMainTextInit));
+            m_paragraphMain.Inlines.Clear();
+            if (cmdArgFiles.Count > 0)
+            {
+                foreach (string cmdArg in cmdArgFiles)
+                {
+                    m_paragraphMain.Inlines.Add(GenRunFromString(cmdArg));
+                    m_paragraphMain.Inlines.Add(GenRunFromString("\r\n\r\n"));
+                }
+            }
+            else
+            {
+                m_paragraphMain.Inlines.Add(GenRunFromString(strInit));
+            }
             ScrollTextMainToBottom();
         }
 
