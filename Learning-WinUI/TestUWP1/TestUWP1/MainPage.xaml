@@ -62,29 +62,34 @@
                 <RichTextBlock x:Name="RichTextMain" Margin="4,0,4,0" />
             </ScrollViewer>
 
-            <muxc:ProgressBar
-                x:Name="ProgressBarMain"
-                Width="Auto"
-                Height="0"
-                Margin="0,0,0,52"
-                VerticalAlignment="Bottom"
-                Value="0" />
-            <Button
-                x:Name="ButtonTest"
-                Margin="0,0,10,10"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Click="ButtonTest_Click"
-                Content="Test"
-                Style="{StaticResource AccentButtonStyle}" />
-            <Button
-                x:Name="ButtonAbout"
-                Margin="10,0,0,10"
-                VerticalAlignment="Bottom"
-                Click="ButtonAbout_Click"
-                Content="About" />
+            <Grid
+                x:Name="GridBottom"
+                Height="56"
+                Margin="0,0,0,0"
+                VerticalAlignment="Bottom">
 
-
+                <muxc:ProgressBar
+                    x:Name="ProgressBarMain"
+                    Width="Auto"
+                    Height="0"
+                    Margin="0,0,0,0"
+                    VerticalAlignment="Top"
+                    Value="0" />
+                <Button
+                    x:Name="ButtonTest"
+                    Margin="0,0,10,10"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Click="ButtonTest_Click"
+                    Content="Test"
+                    Style="{StaticResource AccentButtonStyle}" />
+                <Button
+                    x:Name="ButtonAbout"
+                    Margin="10,0,0,10"
+                    VerticalAlignment="Bottom"
+                    Click="ButtonAbout_Click"
+                    Content="About" />
+            </Grid>
         </Grid>
 
         <Popup
