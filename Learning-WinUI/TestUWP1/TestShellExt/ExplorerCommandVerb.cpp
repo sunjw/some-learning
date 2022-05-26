@@ -202,10 +202,8 @@ DWORD CExplorerCommandVerb::_ThreadProc()
                         sunjwbase::tstring tstrItemPath(pszPath);
                         CoTaskMemFree(pszPath);
 
-                        tstrExecCmd.append(L" ");
-                        tstrExecCmd.append(L"\"");
+                        tstrExecCmd.append(L" \"");
                         tstrExecCmd.append(tstrItemPath);
-
                         tstrExecCmd.append(L"\"");
                     }
                     psi->Release();
