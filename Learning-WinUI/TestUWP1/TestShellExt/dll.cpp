@@ -7,7 +7,6 @@
 
 #include "dll.h"
 
-
 typedef HRESULT (*PFNCREATEINSTANCE)(REFIID riid, void **ppvObject);
 struct CLASS_OBJECT_INIT
 {
