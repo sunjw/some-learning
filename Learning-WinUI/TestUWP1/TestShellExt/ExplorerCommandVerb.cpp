@@ -89,7 +89,7 @@ public:
     // compute the visibility of the verb here, respect "fOkToBeSlow" if this is slow (does IO for example)
     // when called with fOkToBeSlow == FALSE return E_PENDING and this object will be called
     // back on a background thread with fOkToBeSlow == TRUE
-    IFACEMETHODIMP GetState(IShellItemArray * /* psiItemArray */, BOOL fOkToBeSlow, EXPCMDSTATE *pCmdState)
+    IFACEMETHODIMP GetState(IShellItemArray * /* psiItemArray */, BOOL /*fOkToBeSlow*/, EXPCMDSTATE* pCmdState)
     {
         *pCmdState = ECS_ENABLED;
         return S_OK;
