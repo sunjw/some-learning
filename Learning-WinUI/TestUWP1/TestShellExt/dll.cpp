@@ -19,7 +19,6 @@ struct CLASS_OBJECT_INIT
 const CLASS_OBJECT_INIT c_rgClassObjectInit[] =
 {
     { &__uuidof(CExplorerCommandVerb),         CExplorerCommandVerb_CreateInstance },
-    { &__uuidof(CExplorerCommandStateHandler), CExplorerCommandStateHandler_CreateInstance },
 };
 
 
@@ -147,12 +146,7 @@ STDAPI DllGetClassObject(REFCLSID clsid, REFIID riid, void **ppv)
 
 HRESULT RegisterUnregister(bool fRegister)
 {
-    HRESULT hr = CExplorerCommandStateHandler_RegisterUnRegister(fRegister);
-    if (SUCCEEDED(hr))
-    {
-        hr = CExplorerCommandVerb_RegisterUnRegister(fRegister);
-    }
-    return hr;
+    return CExplorerCommandVerb_RegisterUnRegister(fRegister);
 }
 
 STDAPI DllRegisterServer()
