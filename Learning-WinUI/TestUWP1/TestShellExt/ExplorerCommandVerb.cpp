@@ -184,7 +184,7 @@ DWORD CExplorerCommandVerb::_ThreadProc()
         if (SUCCEEDED(hr))
         {
             sunjwbase::tstring tstrExecPath(szExecPath); // executable path
-            sunjwbase::tstring tstrExecCmd(tstrExecPath); // full commandline
+            sunjwbase::tstring tstrExecCmd = L"\"" + tstrExecPath + L"\""; // full commandline
 
             DWORD shellItemCount;
             psia->GetCount(&shellItemCount);
