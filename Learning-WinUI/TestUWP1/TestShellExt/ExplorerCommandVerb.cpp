@@ -164,55 +164,65 @@ DWORD CExplorerCommandVerb::_ThreadProc()
     _pstmShellItemArray = NULL;
     if (SUCCEEDED(hr))
     {
-        DWORD count;
-        psia->GetCount(&count);
-
-        sunjwbase::tstring tstrExecPath(c_szExecPath);
-        sunjwbase::tstring tstrExecCmd(tstrExecPath);
-
-        IShellItem2 *psi;
-        hr = GetItemAt(psia, 0, IID_PPV_ARGS(&psi));
+        WCHAR szUserPath[MAX_PATH];
+        hr = SHGetFolderPath(NULL, CSIDL_PROFILE, NULL, 0, szUserPath);
         if (SUCCEEDED(hr))
         {
-            PWSTR pszPath;
-            hr = psi->GetDisplayName(SIGDN_FILESYSPATH, &pszPath);
+            sunjwbase::tstring tstrUserPath(szUserPath);
+            tstrUserPath.append(L"\\AppData\\Local\\Microsoft\\WindowsApps\\");
+
+            sunjwbase::tstring tstrExecPath(tstrUserPath);
+            tstrExecPath.append(c_szExecPath);
+            sunjwbase::tstring tstrExecCmd(tstrExecPath);
+
+            DWORD count;
+            psia->GetCount(&count);
+
+            IShellItem2* psi;
+            hr = GetItemAt(psia, 0, IID_PPV_ARGS(&psi));
             if (SUCCEEDED(hr))
             {
-                sunjwbase::tstring tstrSelectedPath(pszPath);
-                CoTaskMemFree(pszPath);
+                PWSTR pszPath;
+                hr = psi->GetDisplayName(SIGDN_FILESYSPATH, &pszPath);
+                if (SUCCEEDED(hr))
+                {
+                    sunjwbase::tstring tstrSelectedPath(pszPath);
+                    CoTaskMemFree(pszPath);
 
-                tstrExecCmd.append(L" ");
-                tstrExecCmd.append(L"\"");
-                tstrExecCmd.append(tstrSelectedPath);
-                tstrExecCmd.append(L"\"");
+                    tstrExecCmd.append(L" ");
+                    tstrExecCmd.append(L"\"");
+                    tstrExecCmd.append(tstrSelectedPath);
 
-                size_t sizeExecCmdLen = tstrExecCmd.length() + 1;
-                WCHAR* pszCmd = new WCHAR[sizeExecCmdLen];
-                memset(pszCmd, 0, sizeof(WCHAR) * sizeExecCmdLen);
-                wcscpy_s(pszCmd, sizeExecCmdLen, tstrExecCmd.c_str());
+                    tstrExecCmd.append(L"\"");
 
-                MessageBox(_hwnd, tstrExecCmd.c_str(), tstrExecPath.c_str(), MB_OK);
+                    size_t sizeExecCmdLen = tstrExecCmd.length() + 1;
+                    WCHAR* pszCmd = new WCHAR[sizeExecCmdLen];
+                    memset(pszCmd, 0, sizeof(WCHAR) * sizeExecCmdLen);
+                    wcscpy_s(pszCmd, sizeExecCmdLen, tstrExecCmd.c_str());
 
-                STARTUPINFO sInfo = { 0 };
-                sInfo.cb = sizeof(sInfo);
-                PROCESS_INFORMATION pInfo = { 0 };
+                    MessageBox(_hwnd, tstrExecCmd.c_str(), tstrExecPath.c_str(), MB_OK);
 
-                CreateProcess(tstrExecPath.c_str(), pszCmd,
-                    0, 0, TRUE,
-                    NORMAL_PRIORITY_CLASS,
-                    0, 0, &sInfo, &pInfo);
+                    STARTUPINFO sInfo = { 0 };
+                    sInfo.cb = sizeof(sInfo);
+                    PROCESS_INFORMATION pInfo = { 0 };
 
-                delete[] pszCmd;
+                    CreateProcess(tstrExecPath.c_str(), pszCmd,
+                        0, 0, TRUE,
+                        NORMAL_PRIORITY_CLASS,
+                        0, 0, &sInfo, &pInfo);
 
-                /*WCHAR szMsg[128];
-                StringCchPrintf(szMsg, ARRAYSIZE(szMsg), L"%d item(s), first item is [%s]", count, pszPath);
+                    delete[] pszCmd;
 
-                MessageBox(_hwnd, szMsg, L"ExplorerCommand Sample Verb", MB_OK);
+                    /*WCHAR szMsg[128];
+                    StringCchPrintf(szMsg, ARRAYSIZE(szMsg), L"%d item(s), first item is [%s]", count, pszPath);
 
-                CoTaskMemFree(pszPath);*/
+                    MessageBox(_hwnd, szMsg, L"ExplorerCommand Sample Verb", MB_OK);
+
+                    CoTaskMemFree(pszPath);*/
+                }
+
+                psi->Release();
             }
-
-            psi->Release();
         }
         psia->Release();
     }
