@@ -18,7 +18,7 @@
 
 #include "Dll.h"
 
-static WCHAR const c_szVerbDisplayName[] = L"TestShellExt Title";
+static WCHAR const c_szVerbDisplayName[] = L"Go to TestUWP1";
 static WCHAR const c_szVerbName[] = L"TestShellExt";
 
 class CExplorerCommandVerb : public IExplorerCommand,
