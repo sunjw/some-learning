@@ -17,6 +17,7 @@
 // in the property bag
 
 #include "Dll.h"
+#include "strhelper.h"
 
 static WCHAR const c_szVerbDisplayName[] = L"Go to TestUWP1";
 static WCHAR const c_szVerbName[] = L"TestShellExt";

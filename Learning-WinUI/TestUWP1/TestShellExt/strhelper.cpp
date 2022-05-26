@@ -8,8 +8,6 @@
  * Provides replacing function to string and wstring.
  * Provides newline fixing to string.
  */
-#include "stdafx.h"
-
 #include <math.h>
 #include <string>
 
