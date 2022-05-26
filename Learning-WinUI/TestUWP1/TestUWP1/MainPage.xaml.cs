@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
@@ -82,15 +83,29 @@ namespace TestUWP1
         public void OnCommandLineActivated()
         {
             _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
-                string strMainTextCmdLine = "";
+                List<string> cmdArgFiles = new List<string>();
                 App curApp = (App)Application.Current;
                 if (!string.IsNullOrEmpty(curApp.CmdArgs))
                 {
-                    strMainTextCmdLine = curApp.CmdArgs;
+                    string[] cmdArgsArray = curApp.CmdArgs.Split("\"");
+                    for (int i = 0; i < cmdArgsArray.Length; i++)
+                    {
+                        string cmdArg = cmdArgsArray[i];
+                        cmdArg = cmdArg.Trim();
+                        if (string.IsNullOrEmpty(cmdArg))
+                        {
+                            continue;
+                        }
+                        cmdArgFiles.Add(cmdArg);
+                    }
                 }
 
                 m_paragraphMain.Inlines.Clear();
-                m_paragraphMain.Inlines.Add(GenRunFromString(strMainTextCmdLine));
+                foreach (string cmdArg in cmdArgFiles)
+                {
+                    m_paragraphMain.Inlines.Add(GenRunFromString(cmdArg));
+                    m_paragraphMain.Inlines.Add(GenRunFromString("\r\n\r\n"));
+                }
                 ScrollTextMainToBottom();
             }));
         }
