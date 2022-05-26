@@ -186,54 +186,56 @@ DWORD CExplorerCommandVerb::_ThreadProc()
             sunjwbase::tstring tstrExecPath(szExecPath); // executable path
             sunjwbase::tstring tstrExecCmd(tstrExecPath); // full commandline
 
-            DWORD count;
-            psia->GetCount(&count);
+            DWORD shellItemCount;
+            psia->GetCount(&shellItemCount);
 
-            IShellItem2* psi;
-            hr = GetItemAt(psia, 0, IID_PPV_ARGS(&psi));
-            if (SUCCEEDED(hr))
+            for (DWORD i = 0; i < shellItemCount; i++)
             {
-                PWSTR pszPath;
-                hr = psi->GetDisplayName(SIGDN_FILESYSPATH, &pszPath);
+                IShellItem2* psi;
+                hr = GetItemAt(psia, i, IID_PPV_ARGS(&psi));
                 if (SUCCEEDED(hr))
                 {
-                    sunjwbase::tstring tstrSelectedPath(pszPath);
-                    CoTaskMemFree(pszPath);
+                    PWSTR pszPath;
+                    hr = psi->GetDisplayName(SIGDN_FILESYSPATH, &pszPath);
+                    if (SUCCEEDED(hr))
+                    {
+                        sunjwbase::tstring tstrItemPath(pszPath);
+                        CoTaskMemFree(pszPath);
 
-                    tstrExecCmd.append(L" ");
-                    tstrExecCmd.append(L"\"");
-                    tstrExecCmd.append(tstrSelectedPath);
+                        tstrExecCmd.append(L" ");
+                        tstrExecCmd.append(L"\"");
+                        tstrExecCmd.append(tstrItemPath);
 
-                    tstrExecCmd.append(L"\"");
-
-                    size_t sizeExecCmdLen = tstrExecCmd.length() + 1;
-                    WCHAR* pszCmd = new WCHAR[sizeExecCmdLen];
-                    memset(pszCmd, 0, sizeof(WCHAR) * sizeExecCmdLen);
-                    wcscpy_s(pszCmd, sizeExecCmdLen, tstrExecCmd.c_str());
-
-                    // MessageBox(_hwnd, tstrExecCmd.c_str(), tstrExecPath.c_str(), MB_OK);
-
-                    STARTUPINFO sInfo = { 0 };
-                    sInfo.cb = sizeof(sInfo);
-                    PROCESS_INFORMATION pInfo = { 0 };
-
-                    CreateProcess(tstrExecPath.c_str(), pszCmd,
-                        0, 0, TRUE,
-                        NORMAL_PRIORITY_CLASS,
-                        0, 0, &sInfo, &pInfo);
-
-                    delete[] pszCmd;
-
-                    /*WCHAR szMsg[128];
-                    StringCchPrintf(szMsg, ARRAYSIZE(szMsg), L"%d item(s), first item is [%s]", count, pszPath);
-
-                    MessageBox(_hwnd, szMsg, L"ExplorerCommand Sample Verb", MB_OK);
-
-                    CoTaskMemFree(pszPath);*/
+                        tstrExecCmd.append(L"\"");
+                    }
+                    psi->Release();
                 }
-
-                psi->Release();
             }
+
+            size_t sizeExecCmdLen = tstrExecCmd.length() + 1;
+            WCHAR* pszCmd = new WCHAR[sizeExecCmdLen];
+            memset(pszCmd, 0, sizeof(WCHAR) * sizeExecCmdLen);
+            wcscpy_s(pszCmd, sizeExecCmdLen, tstrExecCmd.c_str());
+
+            // MessageBox(_hwnd, tstrExecCmd.c_str(), tstrExecPath.c_str(), MB_OK);
+
+            STARTUPINFO sInfo = { 0 };
+            sInfo.cb = sizeof(sInfo);
+            PROCESS_INFORMATION pInfo = { 0 };
+
+            CreateProcess(tstrExecPath.c_str(), pszCmd,
+                0, 0, TRUE,
+                NORMAL_PRIORITY_CLASS,
+                0, 0, &sInfo, &pInfo);
+
+            delete[] pszCmd;
+
+            /*WCHAR szMsg[128];
+            StringCchPrintf(szMsg, ARRAYSIZE(szMsg), L"%d item(s), first item is [%s]", count, pszPath);
+
+            MessageBox(_hwnd, szMsg, L"ExplorerCommand Sample Verb", MB_OK);
+
+            CoTaskMemFree(pszPath);*/
         }
         psia->Release();
     }
