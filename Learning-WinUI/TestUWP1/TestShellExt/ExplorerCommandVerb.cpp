@@ -211,7 +211,7 @@ DWORD CExplorerCommandVerb::_ThreadProc()
                     memset(pszCmd, 0, sizeof(WCHAR) * sizeExecCmdLen);
                     wcscpy_s(pszCmd, sizeExecCmdLen, tstrExecCmd.c_str());
 
-                    MessageBox(_hwnd, tstrExecCmd.c_str(), tstrExecPath.c_str(), MB_OK);
+                    // MessageBox(_hwnd, tstrExecCmd.c_str(), tstrExecPath.c_str(), MB_OK);
 
                     STARTUPINFO sInfo = { 0 };
                     sInfo.cb = sizeof(sInfo);
