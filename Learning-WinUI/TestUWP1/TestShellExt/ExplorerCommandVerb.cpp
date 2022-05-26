@@ -21,6 +21,7 @@
 
 static WCHAR const c_szVerbDisplayName[] = L"Go to TestUWP1";
 static WCHAR const c_szVerbName[] = L"TestShellExt";
+static WCHAR const c_szExecPath[] = L"TestUWP1.exe";
 
 class CExplorerCommandVerb : public IExplorerCommand,
                              public IInitializeCommand,
@@ -166,6 +167,9 @@ DWORD CExplorerCommandVerb::_ThreadProc()
         DWORD count;
         psia->GetCount(&count);
 
+        sunjwbase::tstring tstrExecPath(c_szExecPath);
+        sunjwbase::tstring tstrExecCmd(tstrExecPath);
+
         IShellItem2 *psi;
         hr = GetItemAt(psia, 0, IID_PPV_ARGS(&psi));
         if (SUCCEEDED(hr))
@@ -174,12 +178,38 @@ DWORD CExplorerCommandVerb::_ThreadProc()
             hr = psi->GetDisplayName(SIGDN_FILESYSPATH, &pszPath);
             if (SUCCEEDED(hr))
             {
-                WCHAR szMsg[128];
+                sunjwbase::tstring tstrSelectedPath(pszPath);
+                CoTaskMemFree(pszPath);
+
+                tstrExecCmd.append(L" ");
+                tstrExecCmd.append(L"\"");
+                tstrExecCmd.append(tstrSelectedPath);
+                tstrExecCmd.append(L"\"");
+
+                size_t sizeExecCmdLen = tstrExecCmd.length() + 1;
+                WCHAR* pszCmd = new WCHAR[sizeExecCmdLen];
+                memset(pszCmd, 0, sizeof(WCHAR) * sizeExecCmdLen);
+                wcscpy_s(pszCmd, sizeExecCmdLen, tstrExecCmd.c_str());
+
+                MessageBox(_hwnd, tstrExecCmd.c_str(), tstrExecPath.c_str(), MB_OK);
+
+                STARTUPINFO sInfo = { 0 };
+                sInfo.cb = sizeof(sInfo);
+                PROCESS_INFORMATION pInfo = { 0 };
+
+                CreateProcess(tstrExecPath.c_str(), pszCmd,
+                    0, 0, TRUE,
+                    NORMAL_PRIORITY_CLASS,
+                    0, 0, &sInfo, &pInfo);
+
+                delete[] pszCmd;
+
+                /*WCHAR szMsg[128];
                 StringCchPrintf(szMsg, ARRAYSIZE(szMsg), L"%d item(s), first item is [%s]", count, pszPath);
 
                 MessageBox(_hwnd, szMsg, L"ExplorerCommand Sample Verb", MB_OK);
 
-                CoTaskMemFree(pszPath);
+                CoTaskMemFree(pszPath);*/
             }
 
             psi->Release();
