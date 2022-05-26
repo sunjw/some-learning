@@ -91,6 +91,7 @@ namespace TestUWP1
 
                 m_paragraphMain.Inlines.Clear();
                 m_paragraphMain.Inlines.Add(GenRunFromString(strMainTextCmdLine));
+                ScrollTextMainToBottom();
             }));
         }
 
@@ -247,6 +248,7 @@ namespace TestUWP1
             }
 
             m_paragraphMain.Inlines.Add(GenRunFromString(strMainTextInit));
+            ScrollTextMainToBottom();
         }
 
         private void DoTest1()
@@ -327,6 +329,13 @@ namespace TestUWP1
             ProgressBarMain.Value = 100;
         }
 
+        private void DoTest4()
+        {
+            m_paragraphMain.Inlines.Clear();
+            ScrollTextMainToBottom();
+            ProgressBarMain.Value = 0;
+        }
+
         private void ColorValuesChanged(UISettings sender, object e)
         {
             _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
@@ -383,9 +392,13 @@ namespace TestUWP1
                 case 2:
                     DoTest3();
                     break;
+                case 3:
+                    DoTest4();
+                    break;
             }
 
             m_testCount++;
+            m_testCount = m_testCount % 4;
         }
 
         private void ButtonAbout_Click(object sender, RoutedEventArgs e)
