@@ -18,8 +18,8 @@
 
 #include "Dll.h"
 
-static WCHAR const c_szVerbDisplayName[] = L"ExplorerCommand Verb Sample";
-static WCHAR const c_szVerbName[] = L"Sample.ExplorerCommandVerb";
+static WCHAR const c_szVerbDisplayName[] = L"TestShellExt Title";
+static WCHAR const c_szVerbName[] = L"TestShellExt";
 
 class CExplorerCommandVerb : public IExplorerCommand,
                              public IInitializeCommand,
@@ -91,21 +91,8 @@ public:
     // back on a background thread with fOkToBeSlow == TRUE
     IFACEMETHODIMP GetState(IShellItemArray * /* psiItemArray */, BOOL fOkToBeSlow, EXPCMDSTATE *pCmdState)
     {
-        HRESULT hr;
-        if (fOkToBeSlow)
-        {
-            Sleep(4 * 1000);    // simulate expensive work
-            *pCmdState = ECS_ENABLED;
-            hr = S_OK;
-        }
-        else
-        {
-            *pCmdState = ECS_DISABLED;
-            // returning E_PENDING requests that a new instance of this object be called back
-            // on a background thread so that it can do work that might be slow
-            hr = E_PENDING;
-        }
-        return hr;
+        *pCmdState = ECS_ENABLED;
+        return S_OK;
     }
 
     IFACEMETHODIMP Invoke(IShellItemArray *psiItemArray, IBindCtx *pbc);
