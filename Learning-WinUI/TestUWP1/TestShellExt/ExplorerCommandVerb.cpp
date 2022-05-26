@@ -157,6 +157,21 @@ private:
     IStream *_pstmShellItemArray;
 };
 
+__inline HRESULT ResolveWindowsAppExePath(LPCWSTR pszExecName, LPWSTR pszPath)
+{
+    WCHAR szUserPath[MAX_PATH];
+    HRESULT hr = SHGetFolderPath(NULL, CSIDL_PROFILE, NULL, 0, szUserPath);
+    if (FAILED(hr))
+    {
+        return hr;
+    }
+
+    StringCchPrintf(pszPath, MAX_PATH, L"%s\\AppData\\Local\\Microsoft\\WindowsApps\\%s",
+        szUserPath, pszExecName);
+
+    return 0;
+}
+
 DWORD CExplorerCommandVerb::_ThreadProc()
 {
     IShellItemArray *psia;
@@ -164,16 +179,12 @@ DWORD CExplorerCommandVerb::_ThreadProc()
     _pstmShellItemArray = NULL;
     if (SUCCEEDED(hr))
     {
-        WCHAR szUserPath[MAX_PATH];
-        hr = SHGetFolderPath(NULL, CSIDL_PROFILE, NULL, 0, szUserPath);
+        WCHAR szExecPath[MAX_PATH];
+        hr = ResolveWindowsAppExePath(c_szExecPath, szExecPath);
         if (SUCCEEDED(hr))
         {
-            sunjwbase::tstring tstrUserPath(szUserPath);
-            tstrUserPath.append(L"\\AppData\\Local\\Microsoft\\WindowsApps\\");
-
-            sunjwbase::tstring tstrExecPath(tstrUserPath);
-            tstrExecPath.append(c_szExecPath);
-            sunjwbase::tstring tstrExecCmd(tstrExecPath);
+            sunjwbase::tstring tstrExecPath(szExecPath); // executable path
+            sunjwbase::tstring tstrExecCmd(tstrExecPath); // full commandline
 
             DWORD count;
             psia->GetCount(&count);
