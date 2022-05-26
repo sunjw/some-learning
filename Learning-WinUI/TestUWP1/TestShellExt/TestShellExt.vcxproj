@@ -163,7 +163,7 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(TargetPath)" "$(SolutionDir)TestUWP1\Native"</Command>
+      <Command>copy /y "$(TargetPath)" "$(SolutionDir)TestUWP1\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -190,7 +190,7 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(TargetPath)" "$(SolutionDir)TestUWP1\Native"</Command>
+      <Command>copy /y "$(TargetPath)" "$(SolutionDir)TestUWP1\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
