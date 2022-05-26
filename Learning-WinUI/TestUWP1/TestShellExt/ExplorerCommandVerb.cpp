@@ -169,16 +169,16 @@ DWORD CExplorerCommandVerb::_ThreadProc()
         hr = GetItemAt(psia, 0, IID_PPV_ARGS(&psi));
         if (SUCCEEDED(hr))
         {
-            PWSTR pszName;
-            hr = psi->GetDisplayName(SIGDN_PARENTRELATIVEPARSING, &pszName);
+            PWSTR pszPath;
+            hr = psi->GetDisplayName(SIGDN_FILESYSPATH, &pszPath);
             if (SUCCEEDED(hr))
             {
                 WCHAR szMsg[128];
-                StringCchPrintf(szMsg, ARRAYSIZE(szMsg), L"%d item(s), first item is named %s", count, pszName);
+                StringCchPrintf(szMsg, ARRAYSIZE(szMsg), L"%d item(s), first item is [%s]", count, pszPath);
 
                 MessageBox(_hwnd, szMsg, L"ExplorerCommand Sample Verb", MB_OK);
 
-                CoTaskMemFree(pszName);
+                CoTaskMemFree(pszPath);
             }
 
             psi->Release();
