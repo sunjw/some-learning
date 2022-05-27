@@ -202,18 +202,24 @@
   <ItemGroup>
     <ClCompile Include="dll.cpp" />
     <ClCompile Include="ExplorerCommandVerb.cpp" />
+    <ClCompile Include="OsThreadWinApi.cpp" />
     <ClCompile Include="RegisterExtension.cpp" />
     <ClCompile Include="strhelper.cpp" />
+    <ClCompile Include="WindowsStrings.cpp" />
+    <ClCompile Include="WindowsStringsInternal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Dll.def" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dll.h" />
+    <ClInclude Include="OsThread.h" />
     <ClInclude Include="RegisterExtension.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ShellHelpers.h" />
     <ClInclude Include="strhelper.h" />
+    <ClInclude Include="WindowsStrings.h" />
+    <ClInclude Include="WindowsStringsInternal.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
