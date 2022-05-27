@@ -20,6 +20,7 @@
 #include "strhelper.h"
 
 static WCHAR const c_szVerbDisplayName[] = L"Go to TestUWP1";
+static WCHAR const c_szProgID[] = L"*";
 static WCHAR const c_szVerbName[] = L"TestShellExt";
 static WCHAR const c_szExecPath[] = L"TestUWP1.exe";
 
@@ -256,8 +257,6 @@ IFACEMETHODIMP CExplorerCommandVerb::Invoke(IShellItemArray *psia, IBindCtx * /*
     }
     return S_OK;
 }
-
-static WCHAR const c_szProgID[] = L"txtfile";
 
 HRESULT CExplorerCommandVerb_RegisterUnRegister(bool fRegister)
 {
