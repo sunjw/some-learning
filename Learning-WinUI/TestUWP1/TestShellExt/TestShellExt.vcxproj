@@ -205,6 +205,8 @@
     <ClCompile Include="OsThreadWinApi.cpp" />
     <ClCompile Include="RegisterExtension.cpp" />
     <ClCompile Include="strhelper.cpp" />
+    <ClCompile Include="TestShellExtStringsBase.cpp" />
+    <ClCompile Include="TestShellExtStringsZHCN.cpp" />
     <ClCompile Include="WindowsStrings.cpp" />
     <ClCompile Include="WindowsStringsInternal.cpp" />
   </ItemGroup>
@@ -218,6 +220,8 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="ShellHelpers.h" />
     <ClInclude Include="strhelper.h" />
+    <ClInclude Include="TestShellExtStringsBase.h" />
+    <ClInclude Include="TestShellExtStringsZHCN.h" />
     <ClInclude Include="WindowsStrings.h" />
     <ClInclude Include="WindowsStringsInternal.h" />
   </ItemGroup>

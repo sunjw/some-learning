@@ -22,6 +22,12 @@
     <ClCompile Include="WindowsStringsInternal.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="TestShellExtStringsBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestShellExtStringsZHCN.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -47,6 +53,12 @@
     </ClInclude>
     <ClInclude Include="WindowsStringsInternal.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="TestShellExtStringsBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TestShellExtStringsZHCN.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
