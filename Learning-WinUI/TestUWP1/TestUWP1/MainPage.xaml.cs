@@ -83,6 +83,7 @@ namespace TestUWP1
         public void OnCommandLineActivated()
         {
             _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
+                HidePopupAbout();
                 ShowCmdArgs();
             }));
         }
