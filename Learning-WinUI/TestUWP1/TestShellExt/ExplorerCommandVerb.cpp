@@ -18,8 +18,11 @@
 
 #include "Dll.h"
 #include "strhelper.h"
+#include "WindowsStrings.h"
+#include "TestShellExtStringsBase.h"
+#include "TestShellExtStringsZHCN.h"
 
-static WCHAR const c_szVerbDisplayName[] = L"Go to TestUWP1";
+static WCHAR const c_szVerbDisplayNameBack[] = L"Go to TestUWP1";
 static WCHAR const c_szProgID[] = L"*";
 static WCHAR const c_szVerbName[] = L"TestShellExt";
 static WCHAR const c_szExecPath[] = L"TestUWP1.exe";
@@ -32,6 +35,8 @@ public:
     CExplorerCommandVerb() : _cRef(1), _punkSite(NULL), _hwnd(NULL), _pstmShellItemArray(NULL)
     {
         DllAddRef();
+        RegisterStringsForLang(-1, new TestShlExtStringsBase());
+        RegisterStringsForLang(2052, new TestShlExtStringsZHCN());
     }
 
     // IUnknown
@@ -66,7 +71,8 @@ public:
     IFACEMETHODIMP GetTitle(IShellItemArray * /* psiItemArray */, LPWSTR *ppszName)
     {
         // the verb name can be computed here, in this example it is static
-        return SHStrDup(c_szVerbDisplayName, ppszName);
+        LPCWSTR pszMenuItem = GetStringByKey(SHELL_EXT_DISPLAY_NAME);
+        return SHStrDup(pszMenuItem, ppszName);
     }
 
     IFACEMETHODIMP GetIcon(IShellItemArray * /* psiItemArray */, LPWSTR *ppszIcon)
@@ -265,11 +271,11 @@ HRESULT CExplorerCommandVerb_RegisterUnRegister(bool fRegister)
     HRESULT hr;
     if (fRegister)
     {
-        hr = re.RegisterInProcServer(c_szVerbDisplayName, L"Apartment");
+        hr = re.RegisterInProcServer(c_szVerbDisplayNameBack, L"Apartment");
         if (SUCCEEDED(hr))
         {
-            // register this verb on .txt files ProgID
-            hr = re.RegisterExplorerCommandVerb(c_szProgID, c_szVerbName, c_szVerbDisplayName);
+            // register this verb on ProgID
+            hr = re.RegisterExplorerCommandVerb(c_szProgID, c_szVerbName, c_szVerbDisplayNameBack);
             if (SUCCEEDED(hr))
             {
                 hr = re.RegisterVerbAttribute(c_szProgID, c_szVerbName, L"NeverDefault");
