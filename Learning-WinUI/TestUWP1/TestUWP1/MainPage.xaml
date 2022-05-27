@@ -66,12 +66,12 @@
                 x:Name="GridBottom"
                 Height="56"
                 Margin="0,0,0,0"
-                VerticalAlignment="Bottom">
+                VerticalAlignment="Bottom"
+                Background="{ThemeResource ControlFillColorTertiary}">
 
                 <muxc:ProgressBar
                     x:Name="ProgressBarMain"
                     Width="Auto"
-                    Height="0"
                     Margin="0,0,0,0"
                     VerticalAlignment="Top"
                     Value="0" />
