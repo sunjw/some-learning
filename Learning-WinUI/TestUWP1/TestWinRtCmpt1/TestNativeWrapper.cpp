@@ -4,11 +4,11 @@
 using namespace TestUWP1;
 using namespace Platform;
 
-Class1::Class1()
+TestNativeWrapper::TestNativeWrapper()
 {
 }
 
-String^ Class1::GetHello()
+String^ TestNativeWrapper::GetHello()
 {
 	return "将文件拖入或点击打开，开始计算。C++/CX！";
 }

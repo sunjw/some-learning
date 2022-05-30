@@ -33,7 +33,7 @@ namespace TestUWP1
         private Hyperlink m_hyperlinkClicked;
         private int m_testCount = 0;
 
-        private Class1 class1;
+        private TestNativeWrapper class1;
 
         [ComImport, Guid("45D64A29-A63E-4CB6-B498-5781D298CB4F")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -47,7 +47,7 @@ namespace TestUWP1
         {
             InitializeComponent();
 
-            class1 = new Class1();
+            class1 = new TestNativeWrapper();
 
             m_coreAppViewTitleBar = CoreApplication.GetCurrentView().TitleBar;
             m_appViewTitleBar = ApplicationView.GetForCurrentView().TitleBar;

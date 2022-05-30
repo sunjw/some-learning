@@ -2,10 +2,10 @@
 
 namespace TestUWP1
 {
-    public ref class Class1 sealed
+    public ref class TestNativeWrapper sealed
     {
     public:
-        Class1();
+        TestNativeWrapper();
 
         Platform::String^ GetHello();
     };
