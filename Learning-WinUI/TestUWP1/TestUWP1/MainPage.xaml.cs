@@ -33,6 +33,8 @@ namespace TestUWP1
         private Hyperlink m_hyperlinkClicked;
         private int m_testCount = 0;
 
+        private Class1 class1;
+
         [ComImport, Guid("45D64A29-A63E-4CB6-B498-5781D298CB4F")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         interface ICoreWindowInterop
@@ -44,6 +46,8 @@ namespace TestUWP1
         public MainPage()
         {
             InitializeComponent();
+
+            class1 = new Class1();
 
             m_coreAppViewTitleBar = CoreApplication.GetCurrentView().TitleBar;
             m_appViewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
@@ -233,7 +237,8 @@ namespace TestUWP1
 
         private void InitContent()
         {
-            ShowCmdArgs("将文件拖入或点击打开，开始计算。\r\n");
+            String strHello = class1.GetHello();
+            ShowCmdArgs(strHello + "\r\n");
         }
 
         private void ShowCmdArgs(string strInit = "")

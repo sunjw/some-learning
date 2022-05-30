@@ -6,5 +6,7 @@ namespace TestUWP1
     {
     public:
         Class1();
+
+        Platform::String^ GetHello();
     };
 }

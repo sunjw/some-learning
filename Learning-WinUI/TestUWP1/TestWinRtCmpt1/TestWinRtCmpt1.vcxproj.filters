@@ -13,5 +13,11 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Class1.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TestWinRtCmpt1.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
