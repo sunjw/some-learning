@@ -67,7 +67,7 @@
                 Height="56"
                 Margin="0,0,0,0"
                 VerticalAlignment="Bottom"
-                Background="{ThemeResource ControlFillColorSecondary}">
+                Background="{ThemeResource LayerOnMicaBaseAltFillColorDefault}">
 
                 <muxc:ProgressBar
                     x:Name="ProgressBarMain"
