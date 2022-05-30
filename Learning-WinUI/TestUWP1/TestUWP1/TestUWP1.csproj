@@ -170,7 +170,12 @@
       <Version>2.8.0-prerelease.220413001</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\TestWinRtCmpt1\TestWinRtCmpt1.vcxproj">
+      <Project>{1db637dd-b2f5-4b9f-a8c1-b833e9f86742}</Project>
+      <Name>TestWinRtCmpt1</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
