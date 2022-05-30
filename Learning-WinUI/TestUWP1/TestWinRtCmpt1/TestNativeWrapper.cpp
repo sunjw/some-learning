@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "Class1.h"
+#include "TestNativeWrapper.h"
 
 using namespace TestUWP1;
 using namespace Platform;
