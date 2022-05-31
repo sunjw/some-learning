@@ -22,6 +22,9 @@
     <ClCompile Include="TestNativeWrapper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="SomeNative.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -34,6 +37,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TestNativeWrapper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SomeNative.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

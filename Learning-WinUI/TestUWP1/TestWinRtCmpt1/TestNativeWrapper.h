@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <memory>
+#include "SomeNative.h"
 
 namespace TestUWP1
 {
@@ -8,5 +10,8 @@ namespace TestUWP1
         TestNativeWrapper();
 
         Platform::String^ GetHello();
+
+    private:
+        std::shared_ptr<SomeNative> m_spSomeNative;
     };
 }
