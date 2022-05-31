@@ -5,6 +5,7 @@ using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.Core.Preview;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -48,6 +49,8 @@ namespace TestUWP1
         {
             InitializeComponent();
 
+            SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += MainPage_CloseRequested;
+
             m_testDelegate = new TestDelegate();
             m_testDelegate.OnHelloHandler += OnNativeHelloHandler;
             m_testNativeWrapper = new TestNativeWrapper(m_testDelegate);
@@ -85,6 +88,12 @@ namespace TestUWP1
             dynamic corewin = CoreWindow.GetForCurrentThread();
             var interop = (ICoreWindowInterop)corewin;
             return interop.WindowHandle;
+        }
+
+        private void MainPage_CloseRequested(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
+        {
+            e.Handled = true;
+            Application.Current.Exit();
         }
 
         public void OnCommandLineActivated()
