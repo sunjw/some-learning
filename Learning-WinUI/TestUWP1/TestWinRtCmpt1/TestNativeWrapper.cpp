@@ -1,19 +1,19 @@
 ﻿#include "pch.h"
 #include "TestNativeWrapper.h"
 #include "strhelper.h"
+#include "TestDelegate.h"
 
-using namespace TestUWP1;
 using namespace Platform;
 using namespace sunjwbase;
+using namespace TestUWP1;
 
-TestNativeWrapper::TestNativeWrapper()
+TestNativeWrapper::TestNativeWrapper(TestDelegate^ testDelegate)
 {
-	m_spSomeNative.reset(new SomeNative(100));
+	m_testDelegate = testDelegate;
+	m_spSomeNative.reset(new SomeNative(m_testDelegate));
 }
 
-String^ TestNativeWrapper::GetHello()
+void TestNativeWrapper::GetHello()
 {
-	tstring tstrHello = m_spSomeNative->getHello();
-	String^ strHello = ref new String(tstrHello.c_str());
-	return strHello;
+	m_spSomeNative->getHello();
 }

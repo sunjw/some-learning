@@ -33,6 +33,7 @@ namespace TestUWP1
         private Hyperlink m_hyperlinkClicked;
         private int m_testCount = 0;
 
+        private TestDelegate m_testDelegate;
         private TestNativeWrapper m_testNativeWrapper;
 
         [ComImport, Guid("45D64A29-A63E-4CB6-B498-5781D298CB4F")]
@@ -47,7 +48,9 @@ namespace TestUWP1
         {
             InitializeComponent();
 
-            m_testNativeWrapper = new TestNativeWrapper();
+            m_testDelegate = new TestDelegate();
+            m_testDelegate.OnHelloHandler += OnNativeHelloHandler;
+            m_testNativeWrapper = new TestNativeWrapper(m_testDelegate);
 
             m_coreAppViewTitleBar = CoreApplication.GetCurrentView().TitleBar;
             m_appViewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
@@ -237,7 +240,8 @@ namespace TestUWP1
 
         private void InitContent()
         {
-            ShowCmdArgs(m_testNativeWrapper.GetHello() + "\r\n");
+            // ShowCmdArgs(m_testNativeWrapper.GetHello() + "\r\n");
+            m_testNativeWrapper.GetHello();
         }
 
         private void ShowCmdArgs(string strInit = "")
@@ -380,6 +384,13 @@ namespace TestUWP1
         private void WindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
             UpdatePopupAboutSize();
+        }
+
+        private void OnNativeHelloHandler(string strHello)
+        {
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
+                ShowCmdArgs(strHello + "\r\n");
+            }));
         }
 
         private void GridRoot_Loaded(object sender, RoutedEventArgs e)

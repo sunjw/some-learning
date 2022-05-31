@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <memory>
+#include "TestDelegate.h"
 #include "SomeNative.h"
 
 namespace TestUWP1
@@ -7,11 +8,12 @@ namespace TestUWP1
     public ref class TestNativeWrapper sealed
     {
     public:
-        TestNativeWrapper();
+        TestNativeWrapper(TestDelegate^ testDelegate);
 
-        Platform::String^ GetHello();
+        void GetHello();
 
     private:
+        TestDelegate^ m_testDelegate;
         std::shared_ptr<SomeNative> m_spSomeNative;
     };
 }

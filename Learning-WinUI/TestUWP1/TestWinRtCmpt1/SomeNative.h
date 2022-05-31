@@ -1,15 +1,16 @@
 #pragma once
 #include <memory>
+#include "TestDelegate.h"
 #include "strhelper.h"
 
 class SomeNative
 {
 public:
-	SomeNative(int someValue);
+	SomeNative(TestUWP1::TestDelegate^ someDelegate);
 	virtual ~SomeNative() {}
 
-	sunjwbase::tstring getHello();
+	void getHello();
 
 private:
-	std::shared_ptr<int> m_spTest;
+	TestUWP1::TestDelegate^ m_testDelegate;
 };
