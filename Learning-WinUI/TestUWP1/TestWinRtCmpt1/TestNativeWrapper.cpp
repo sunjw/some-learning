@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include <memory>
 #include "TestNativeWrapper.h"
 #include "strhelper.h"
 #include "TestDelegate.h"
@@ -10,7 +11,8 @@ using namespace TestUWP1;
 TestNativeWrapper::TestNativeWrapper(TestDelegate^ testDelegate)
 {
 	m_testDelegate = testDelegate;
-	m_spSomeNative.reset(new SomeNative(m_testDelegate));
+	WeakReference wrTestDelegate(m_testDelegate);
+	m_spSomeNative.reset(new SomeNative(wrTestDelegate));
 }
 
 void TestNativeWrapper::GetHello()

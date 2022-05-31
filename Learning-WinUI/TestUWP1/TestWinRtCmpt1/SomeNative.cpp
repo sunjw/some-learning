@@ -9,8 +9,14 @@ using namespace TestUWP1;
 
 int WINAPI TestThreadFunc(void* param);
 
-SomeNative::SomeNative(TestDelegate^ someDelegate):
-	m_testDelegate(someDelegate), m_thrdHandle(NULL)
+SomeNative::SomeNative():
+	SomeNative(WeakReference(nullptr))
+{
+
+}
+
+SomeNative::SomeNative(WeakReference wrSomeDelegate):
+	m_wrTestDelegate(wrSomeDelegate), m_thrdHandle(NULL)
 {
 
 }
@@ -25,11 +31,6 @@ SomeNative::~SomeNative()
 
 void SomeNative::getHello()
 {
-	if (m_testDelegate == nullptr)
-	{
-		return;
-	}
-
 	DWORD thredID;
 	m_thrdHandle = (HANDLE)_beginthreadex(NULL,
 		0,
@@ -41,9 +42,14 @@ void SomeNative::getHello()
 
 void SomeNative::doGetHello()
 {
+	TestDelegate^ testDelegate = m_wrTestDelegate.Resolve<TestDelegate>();
+	if (testDelegate == nullptr)
+	{
+		return;
+	}
 	tstring tstrHello(L"将文件拖入或点击打开，开始计算。C++/CX native！");
 	String^ strHello = ref new String(tstrHello.c_str());
-	m_testDelegate->OnGetHello(strHello);
+	testDelegate->OnGetHello(strHello);
 }
 
 int WINAPI TestThreadFunc(void* param)

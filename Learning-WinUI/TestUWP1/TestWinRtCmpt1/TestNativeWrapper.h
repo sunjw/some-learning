@@ -15,5 +15,6 @@ namespace TestUWP1
     private:
         TestDelegate^ m_testDelegate;
         std::shared_ptr<SomeNative> m_spSomeNative;
+        SomeNative m_spSomeNative2;
     };
 }

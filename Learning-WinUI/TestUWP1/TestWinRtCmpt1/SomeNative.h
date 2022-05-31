@@ -7,13 +7,14 @@
 class SomeNative
 {
 public:
-	SomeNative(TestUWP1::TestDelegate^ someDelegate);
+	SomeNative();
+	SomeNative(Platform::WeakReference wrSomeDelegate);
 	virtual ~SomeNative();
 
 	void getHello();
 	void doGetHello();
 
 private:
-	TestUWP1::TestDelegate^ m_testDelegate;
+	Platform::WeakReference m_wrTestDelegate;
 	HANDLE m_thrdHandle;
 };
