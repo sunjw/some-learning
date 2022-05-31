@@ -77,11 +77,12 @@
                     Value="0" />
                 <Button
                     x:Name="ButtonTest"
+                    x:Uid="ButtonTest"
                     Margin="0,0,10,10"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Click="ButtonTest_Click"
-                    Content="Test"
+                    Content="[TEST]"
                     Style="{StaticResource AccentButtonStyle}" />
                 <Button
                     x:Name="ButtonAbout"
