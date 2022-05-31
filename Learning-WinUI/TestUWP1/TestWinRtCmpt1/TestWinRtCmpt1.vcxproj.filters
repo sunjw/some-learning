@@ -11,12 +11,12 @@
     <Filter Include="源文件">
       <UniqueIdentifier>{1ee97733-0bec-4e09-bfeb-6dfbb42def27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{5b774ad5-4caa-4bed-a3ed-24ae0e05bc8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\TestShellExt\strhelper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="TestNativeWrapper.cpp">
@@ -28,15 +28,15 @@
     <ClCompile Include="TestDelegate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\TestShellExt\strhelper.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\TestShellExt\strhelper.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TestNativeWrapper.h">
@@ -47,6 +47,9 @@
     </ClInclude>
     <ClInclude Include="TestDelegate.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TestShellExt\strhelper.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
