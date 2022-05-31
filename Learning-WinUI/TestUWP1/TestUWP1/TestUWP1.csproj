@@ -128,7 +128,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskbarExtension.cs" />
-    <Compile Include="UwpxHelper.cs" />
+    <Compile Include="UwpHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

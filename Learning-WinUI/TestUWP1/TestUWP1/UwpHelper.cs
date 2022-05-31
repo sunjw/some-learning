@@ -6,7 +6,7 @@ using Windows.UI.Xaml;
 
 namespace TestUWP1
 {
-    class UwpxHelper
+    class UwpHelper
     {
         public static UIElement GetRootFrame()
         {

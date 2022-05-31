@@ -69,7 +69,7 @@ namespace TestUWP1
 
         public static MainPage GetCurrentMainPage()
         {
-            Frame frame = (Frame)UwpxHelper.GetRootFrame();
+            Frame frame = (Frame)UwpHelper.GetRootFrame();
 
             if (frame != null)
             {
@@ -102,7 +102,7 @@ namespace TestUWP1
 
         private void ChangeTheme(ElementTheme theme)
         {
-            FrameworkElement root = (FrameworkElement)UwpxHelper.GetRootFrame();
+            FrameworkElement root = (FrameworkElement)UwpHelper.GetRootFrame();
             root.RequestedTheme = theme;
             UpdateControlColor();
         }
@@ -399,7 +399,7 @@ namespace TestUWP1
             m_taskbarExt = new TaskbarExtension(GetCurrentWindowHandle());
 
             // Theme changed callback
-            Frame rootFrame = (Frame)UwpxHelper.GetRootFrame();
+            Frame rootFrame = (Frame)UwpHelper.GetRootFrame();
             m_uiSettings.ColorValuesChanged += ColorValuesChanged;
             // RequestedThemeProperty seems not work at all...
             m_tokenThemeChanged = rootFrame.RegisterPropertyChangedCallback(RequestedThemeProperty, RequestedThemeChanged);
@@ -444,7 +444,7 @@ namespace TestUWP1
         private void TextMainHyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
             m_hyperlinkClicked = sender;
-            m_menuFlyoutTextMain.ShowAt(UwpxHelper.GetRootFrame(), UwpxHelper.GetCursorPointRelatedToRootFrame());
+            m_menuFlyoutTextMain.ShowAt(UwpHelper.GetRootFrame(), UwpHelper.GetCursorPointRelatedToRootFrame());
         }
 
         private void MenuItemCopy_Click(object sender, RoutedEventArgs e)
@@ -455,7 +455,7 @@ namespace TestUWP1
             }
 
             string strHash = GetTextFromHyperlink(m_hyperlinkClicked);
-            UwpxHelper.CopyStringToClipboard(strHash);
+            UwpHelper.CopyStringToClipboard(strHash);
         }
 
         private void MenuItemGoogle_Click(object sender, RoutedEventArgs e)
@@ -467,7 +467,7 @@ namespace TestUWP1
 
             string strHash = GetTextFromHyperlink(m_hyperlinkClicked);
             string strGoogleUrl = string.Format("https://www.google.com/search?q={0}&ie=utf-8&oe=utf-8", strHash);
-            UwpxHelper.OpenUrl(strGoogleUrl);
+            UwpHelper.OpenUrl(strGoogleUrl);
         }
 
     }
