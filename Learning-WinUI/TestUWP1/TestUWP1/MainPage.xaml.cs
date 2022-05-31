@@ -23,6 +23,7 @@ namespace TestUWP1
     {
         private CoreApplicationViewTitleBar m_coreAppViewTitleBar;
         private ApplicationViewTitleBar m_appViewTitleBar;
+        private ContentDialog m_dialogExitConfirm;
         private MenuFlyout m_menuFlyoutTextMain;
 
         private UISettings m_uiSettings;
@@ -64,9 +65,7 @@ namespace TestUWP1
             Window.Current.SizeChanged += WindowSizeChanged;
 
             InitCustomTitleBar();
-
-            m_imageAppIconMargin = ImageAppIcon.Margin;
-
+            InitDialogExitConfirm();
             InitMenuFlyoutTextMain();
         }
 
@@ -90,10 +89,14 @@ namespace TestUWP1
             return interop.WindowHandle;
         }
 
-        private void MainPage_CloseRequested(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
+        private async void MainPage_CloseRequested(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
         {
             e.Handled = true;
-            Application.Current.Exit();
+            ContentDialogResult result = await m_dialogExitConfirm.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                Application.Current.Exit();
+            }
         }
 
         public void OnCommandLineActivated()
@@ -125,6 +128,7 @@ namespace TestUWP1
         {
             m_coreAppViewTitleBar.ExtendViewIntoTitleBar = true;
             Window.Current.SetTitleBar(GridTitleBarCustom);
+            m_imageAppIconMargin = ImageAppIcon.Margin;
 
             UpdateTitleBarColor();
         }
@@ -185,6 +189,18 @@ namespace TestUWP1
             Rect windowBounds = Window.Current.Bounds;
             PopupAboutContent.Width = windowBounds.Width;
             PopupAboutContent.Height = windowBounds.Height;
+        }
+
+        private void InitDialogExitConfirm()
+        {
+            m_dialogExitConfirm = new ContentDialog
+            {
+                Title = "Exit",
+                Content = "Really go?",
+                PrimaryButtonText = "Bye!",
+                CloseButtonText = "No",
+                DefaultButton = ContentDialogButton.Primary
+            };
         }
 
         private void InitMenuFlyoutTextMain()
