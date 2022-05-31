@@ -60,6 +60,9 @@
     <ClInclude Include="TestShellExtStringsZHCN.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="资源">

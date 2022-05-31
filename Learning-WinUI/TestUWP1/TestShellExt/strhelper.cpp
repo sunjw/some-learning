@@ -8,6 +8,8 @@
  * Provides replacing function to string and wstring.
  * Provides newline fixing to string.
  */
+#include "pch.h"
+
 #include <math.h>
 #include <string>
 

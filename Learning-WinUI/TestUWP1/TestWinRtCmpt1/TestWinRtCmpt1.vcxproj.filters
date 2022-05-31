@@ -9,11 +9,13 @@
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="TestNativeWrapper.cpp" />
+    <ClCompile Include="..\TestShellExt\strhelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="TestNativeWrapper.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="..\TestShellExt\strhelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TestWinRtCmpt1.rc">

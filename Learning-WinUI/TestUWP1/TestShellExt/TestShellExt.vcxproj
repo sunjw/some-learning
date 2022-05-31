@@ -216,6 +216,7 @@
   <ItemGroup>
     <ClInclude Include="Dll.h" />
     <ClInclude Include="OsThread.h" />
+    <ClInclude Include="pch.h" />
     <ClInclude Include="RegisterExtension.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ShellHelpers.h" />
