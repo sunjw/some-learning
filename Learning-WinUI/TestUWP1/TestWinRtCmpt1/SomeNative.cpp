@@ -7,10 +7,20 @@ using namespace Platform;
 using namespace sunjwbase;
 using namespace TestUWP1;
 
+int WINAPI TestThreadFunc(void* param);
+
 SomeNative::SomeNative(TestDelegate^ someDelegate):
-	m_testDelegate(someDelegate)
+	m_testDelegate(someDelegate), m_thrdHandle(NULL)
 {
 
+}
+
+SomeNative::~SomeNative()
+{
+	if (m_thrdHandle)
+	{
+		CloseHandle(m_thrdHandle);
+	}
 }
 
 void SomeNative::getHello()
@@ -19,7 +29,27 @@ void SomeNative::getHello()
 	{
 		return;
 	}
+
+	DWORD thredID;
+	m_thrdHandle = (HANDLE)_beginthreadex(NULL,
+		0,
+		(unsigned int (WINAPI*)(void*))TestThreadFunc,
+		this,
+		0,
+		(unsigned int*)&thredID);
+}
+
+void SomeNative::doGetHello()
+{
 	tstring tstrHello(L"将文件拖入或点击打开，开始计算。C++/CX native！");
 	String^ strHello = ref new String(tstrHello.c_str());
 	m_testDelegate->OnGetHello(strHello);
+}
+
+int WINAPI TestThreadFunc(void* param)
+{
+	SomeNative* ptrSomeNative = (SomeNative*)param;
+	SleepEx(5000, TRUE);
+	ptrSomeNative->doGetHello();
+	return 0;
 }
