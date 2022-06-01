@@ -548,6 +548,7 @@ namespace TestUWP1
                 }
             }
 
+            HidePopupAbout();
             List<Inline> inlines = GenInlinesFromPaths(strDropFilePaths);
             ClearAndShowInlinesInTextMain(inlines);
         }
