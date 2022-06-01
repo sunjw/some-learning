@@ -491,6 +491,11 @@ namespace TestUWP1
             ShowPopupAbout();
         }
 
+        private void ButtonFind_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void TextMainHyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
             m_hyperlinkClicked = sender;
@@ -552,5 +557,6 @@ namespace TestUWP1
             List<Inline> inlines = GenInlinesFromPaths(strDropFilePaths);
             ClearAndShowInlinesInTextMain(inlines);
         }
+
     }
 }

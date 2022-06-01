@@ -90,6 +90,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
                     <Button
@@ -100,10 +101,20 @@
                         Click="ButtonAbout_Click"
                         Content="&#xE946;"
                         Style="{StaticResource SquareIconButtonStyle}" />
+
+                    <Button
+                        x:Name="ButtonFind"
+                        x:Uid="ButtonFind"
+                        Grid.Column="2"
+                        Margin="0,0,10,10"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Click="ButtonFind_Click"
+                        Content="[FIND]" />
                     <Button
                         x:Name="ButtonTest"
                         x:Uid="ButtonTest"
-                        Grid.Column="2"
+                        Grid.Column="3"
                         Margin="0,0,10,10"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
