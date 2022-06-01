@@ -8,6 +8,7 @@ using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Core.Preview;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -26,6 +27,7 @@ namespace TestUWP1
         private CoreApplicationViewTitleBar m_coreAppViewTitleBar;
         private ApplicationViewTitleBar m_appViewTitleBar;
         private ContentDialog m_dialogExitConfirm;
+        private ContentDialog m_dialogFind;
         private MenuFlyout m_menuFlyoutTextMain;
 
         private UISettings m_uiSettings;
@@ -68,6 +70,7 @@ namespace TestUWP1
 
             InitCustomTitleBar();
             InitDialogExitConfirm();
+            InitDialogFind();
             InitMenuFlyoutTextMain();
         }
 
@@ -202,6 +205,25 @@ namespace TestUWP1
                 Content = "Really go?",
                 PrimaryButtonText = "Bye!",
                 CloseButtonText = "No",
+                DefaultButton = ContentDialogButton.Primary
+            };
+        }
+
+        private void InitDialogFind()
+        {
+            TextBox textBoxHash = new TextBox()
+            {
+                Height = (double)Application.Current.Resources["TextControlThemeMinHeight"],
+                Width = 400,
+                PlaceholderText = "Some hash"
+            };
+            m_dialogFind = new ContentDialog()
+            {
+                // Title = "Find",
+                // MaxWidth = ActualWidth,
+                PrimaryButtonText = "OK",
+                SecondaryButtonText = "Cancel",
+                Content = textBoxHash,
                 DefaultButton = ContentDialogButton.Primary
             };
         }
@@ -491,9 +513,18 @@ namespace TestUWP1
             ShowPopupAbout();
         }
 
-        private void ButtonFind_Click(object sender, RoutedEventArgs e)
+        private async void ButtonFind_Click(object sender, RoutedEventArgs e)
         {
-
+            ContentDialogResult result = await m_dialogFind.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                TextBox textBoxHash = (TextBox)m_dialogFind.Content;
+                string strHash = textBoxHash.Text;
+                List<Inline> inlines = new List<Inline>();
+                inlines.Add(GenRunFromString(strHash));
+                inlines.Add(GenRunFromString("\r\n"));
+                ClearAndShowInlinesInTextMain(inlines);
+            }
         }
 
         private void TextMainHyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
