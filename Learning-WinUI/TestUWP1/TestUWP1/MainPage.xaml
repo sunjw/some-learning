@@ -86,23 +86,30 @@
                     Height="50"
                     Margin="0,0,0,0"
                     VerticalAlignment="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
+                    <Button
+                        x:Name="ButtonAbout"
+                        Grid.Column="0"
+                        Margin="10,0,0,10"
+                        VerticalAlignment="Bottom"
+                        Click="ButtonAbout_Click"
+                        Content="&#xE946;"
+                        Style="{StaticResource SquareIconButtonStyle}" />
                     <Button
                         x:Name="ButtonTest"
                         x:Uid="ButtonTest"
+                        Grid.Column="2"
                         Margin="0,0,10,10"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
                         Click="ButtonTest_Click"
                         Content="[TEST]"
                         Style="{StaticResource AccentButtonStyle}" />
-                    <Button
-                        x:Name="ButtonAbout"
-                        Margin="10,0,0,10"
-                        VerticalAlignment="Bottom"
-                        Click="ButtonAbout_Click"
-                        Content="&#xE946;"
-                        Style="{StaticResource SquareIconButtonStyle}" />
                 </Grid>
 
             </Grid>
