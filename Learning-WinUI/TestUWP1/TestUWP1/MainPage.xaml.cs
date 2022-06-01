@@ -523,7 +523,7 @@ namespace TestUWP1
                 string strHash = m_textBoxFindHash.Text;
                 List<Inline> inlines = new List<Inline>();
                 inlines.Add(GenRunFromString(strHash));
-                inlines.Add(GenRunFromString("\r\n"));
+                inlines.Add(GenRunFromString("\r\n\r\n"));
                 ClearAndShowInlinesInTextMain(inlines);
             }
         }
