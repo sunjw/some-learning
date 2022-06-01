@@ -28,6 +28,7 @@ namespace TestUWP1
         private ApplicationViewTitleBar m_appViewTitleBar;
         private ContentDialog m_dialogExitConfirm;
         private ContentDialog m_dialogFind;
+        private TextBox m_textBoxFindHash;
         private MenuFlyout m_menuFlyoutTextMain;
 
         private UISettings m_uiSettings;
@@ -211,7 +212,7 @@ namespace TestUWP1
 
         private void InitDialogFind()
         {
-            TextBox textBoxHash = new TextBox()
+            m_textBoxFindHash = new TextBox()
             {
                 Height = (double)Application.Current.Resources["TextControlThemeMinHeight"],
                 Width = 400,
@@ -223,7 +224,7 @@ namespace TestUWP1
                 // MaxWidth = ActualWidth,
                 PrimaryButtonText = "OK",
                 SecondaryButtonText = "Cancel",
-                Content = textBoxHash,
+                Content = m_textBoxFindHash,
                 DefaultButton = ContentDialogButton.Primary
             };
         }
@@ -515,11 +516,11 @@ namespace TestUWP1
 
         private async void ButtonFind_Click(object sender, RoutedEventArgs e)
         {
+            m_textBoxFindHash.Text = "";
             ContentDialogResult result = await m_dialogFind.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                TextBox textBoxHash = (TextBox)m_dialogFind.Content;
-                string strHash = textBoxHash.Text;
+                string strHash = m_textBoxFindHash.Text;
                 List<Inline> inlines = new List<Inline>();
                 inlines.Add(GenRunFromString(strHash));
                 inlines.Add(GenRunFromString("\r\n"));
