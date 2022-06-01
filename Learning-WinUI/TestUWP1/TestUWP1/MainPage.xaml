@@ -13,6 +13,7 @@
         x:Name="GridRoot"
         AllowDrop="True"
         DragOver="GridRoot_DragOver"
+        Drop="GridRoot_Drop"
         Loaded="GridRoot_Loaded">
         <Grid
             x:Name="GridTitleBarHolder"

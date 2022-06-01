@@ -101,7 +101,7 @@ namespace TestUWP1
                 MainPage mainPage = MainPage.GetCurrentMainPage();
                 if (mainPage != null && fromCommandLine)
                 {
-                    mainPage.OnCommandLineActivated();
+                    mainPage.CommandLineActivated();
                 }
             }
 

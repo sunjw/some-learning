@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Core.Preview;
@@ -100,9 +101,10 @@ namespace TestUWP1
             }
         }
 
-        public void OnCommandLineActivated()
+        public void CommandLineActivated()
         {
-            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() =>
+            {
                 HidePopupAbout();
                 ShowCmdArgs();
             }));
@@ -264,6 +266,30 @@ namespace TestUWP1
             return run.Text;
         }
 
+        private List<Inline> GenInlinesFromPaths(List<string> strPaths)
+        {
+            List<Inline> inlines = new List<Inline>();
+            foreach (string path in strPaths)
+            {
+                inlines.Add(GenRunFromString(path));
+                inlines.Add(GenRunFromString("\r\n\r\n"));
+            }
+            return inlines;
+        }
+
+        private void ClearAndShowInlinesInTextMain(List<Inline> inlines)
+        {
+            m_paragraphMain.Inlines.Clear();
+            if (inlines != null)
+            {
+                foreach (Inline inline in inlines)
+                {
+                    m_paragraphMain.Inlines.Add(inline);
+                }
+            }
+            ScrollTextMainToBottom();
+        }
+
         private void InitContent()
         {
             // ShowCmdArgs(m_testNativeWrapper.GetHello() + "\r\n");
@@ -289,20 +315,16 @@ namespace TestUWP1
                 }
             }
 
-            m_paragraphMain.Inlines.Clear();
+            List<Inline> inlines = new List<Inline>();
             if (cmdArgFiles.Count > 0)
             {
-                foreach (string cmdArg in cmdArgFiles)
-                {
-                    m_paragraphMain.Inlines.Add(GenRunFromString(cmdArg));
-                    m_paragraphMain.Inlines.Add(GenRunFromString("\r\n\r\n"));
-                }
+                inlines = GenInlinesFromPaths(cmdArgFiles);
             }
             else
             {
-                m_paragraphMain.Inlines.Add(GenRunFromString(strInit));
+                inlines.Add(GenRunFromString(strInit));
             }
-            ScrollTextMainToBottom();
+            ClearAndShowInlinesInTextMain(inlines);
         }
 
         private void DoTest1()
@@ -325,9 +347,9 @@ namespace TestUWP1
             span1.Inlines.Add(GenHyperlinkFromStringForTextMain("aeda1930fc0ae1feda19b68170b78074f4a408ec50080256110dd0d9eda005abaa7167ae6d62ca302f6995f60f3d038af6c21667ea922e1206bb3670bc1c5e71"));
             span1.Inlines.Add(GenRunFromString("\r\n\r\n"));
 
-            m_paragraphMain.Inlines.Clear();
-            m_paragraphMain.Inlines.Add(span1);
-            ScrollTextMainToBottom();
+            List<Inline> inlines = new List<Inline>();
+            inlines.Add(span1);
+            ClearAndShowInlinesInTextMain(inlines);
             ProgressBarMain.Value = 30;
             // m_taskbarExt.SetProgressValue(30);
         }
@@ -385,14 +407,14 @@ namespace TestUWP1
 
         private void DoTest4()
         {
-            m_paragraphMain.Inlines.Clear();
-            ScrollTextMainToBottom();
+            ClearAndShowInlinesInTextMain(null);
             ProgressBarMain.Value = 0;
         }
 
         private void ColorValuesChanged(UISettings sender, object e)
         {
-            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() =>
+            {
                 UpdateControlColor();
             }));
         }
@@ -401,7 +423,8 @@ namespace TestUWP1
         {
             if (RequestedThemeProperty == dp)
             {
-                _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
+                _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() =>
+                {
                     UpdateControlColor();
                 }));
             }
@@ -414,7 +437,8 @@ namespace TestUWP1
 
         private void OnNativeHelloHandler(string strHello)
         {
-            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() => {
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, new DispatchedHandler(() =>
+            {
                 ShowCmdArgs(strHello + "\r\n");
             }));
         }
@@ -499,6 +523,33 @@ namespace TestUWP1
         private void GridRoot_DragOver(object sender, DragEventArgs e)
         {
             e.AcceptedOperation = DataPackageOperation.Copy;
+        }
+
+        private async void GridRoot_Drop(object sender, DragEventArgs e)
+        {
+            if (!e.DataView.Contains(StandardDataFormats.StorageItems))
+            {
+                return;
+            }
+
+            IReadOnlyList<IStorageItem> storageItems = await e.DataView.GetStorageItemsAsync();
+            if (storageItems == null)
+            {
+                return;
+            }
+
+            List<string> strDropFilePaths = new List<string>();
+            foreach (StorageFile storageFile in storageItems)
+            {
+                string path = storageFile.Path;
+                if (!string.IsNullOrEmpty(path))
+                {
+                    strDropFilePaths.Add(path);
+                }
+            }
+
+            List<Inline> inlines = GenInlinesFromPaths(strDropFilePaths);
+            ClearAndShowInlinesInTextMain(inlines);
         }
     }
 }
