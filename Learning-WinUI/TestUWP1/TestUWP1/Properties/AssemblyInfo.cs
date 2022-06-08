@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("TestUWP1")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Qihoo360")]
+[assembly: AssemblyCompany("Sun Junwen")]
 [assembly: AssemblyProduct("TestUWP1")]
-[assembly: AssemblyCopyright("Copyright © Qihoo360 2022")]
+[assembly: AssemblyCopyright("Copyright © Sun Junwen 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
