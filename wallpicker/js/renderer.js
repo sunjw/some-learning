@@ -915,12 +915,22 @@ class WallpickerPage {
     }
 
     filterImageBlock(imageBlock) {
+        let filterWords = this.curFilter.split(' ');
         let imagePath = imageBlock.attr(this.TAG_IMAGE_PATH);
         // let imageInfo = imageBlock.find('.imageInfo');
         // let imageName = imageInfo.attr(this.TAG_IMAGE_NAME);
         // let filterTarget = imageName.toLowerCase();
         let filterTarget = imagePath.toLowerCase();
-        if (filterTarget.includes(this.curFilter)) {
+        let allMatch = false;
+        for (let filterWord of filterWords) {
+            if (filterTarget.includes(filterWord)) {
+                allMatch = true;
+            } else {
+                allMatch = false;
+                break;
+            }
+        }
+        if (allMatch) {
             // show
             imageBlock.removeClass(this.CLASS_FILETER_OUT);
         } else {
