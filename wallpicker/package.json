@@ -20,7 +20,7 @@
   "license": "GPL-2.0",
   "devDependencies": {
     "@electron/remote": "^2.0.1",
-    "electron": "^16.0.5",
+    "electron": "^16.2.6",
     "electron-rebuild": "^3.2.7",
     "node-abi": "^3.5.0"
   },
