@@ -116,13 +116,15 @@ body {
     color: gray;
 }
 #divToolbarWrapper .toolbarBtn:hover {
-    background-color: #f6f6f6;
-    border-color: transparent;
+    /* background-color: #f6f6f6; */
+    background-color: transparent;
+    border-color: var(--color-windows-blue);
 }
 #divToolbarWrapper .toolbarBtn:focus, #divToolbarWrapper .toolbarBtn.focus {
-    /* color: var(--color-windows-blue); */
-    background-color: var(--color-light-gray);
-    border-color: var(--color-light-gray);
+    background-color: var(--color-lighter-gray);
+    /* background-color: #f6f6f6; */
+    /* border-color: var(--color-light-gray); */
+    border-color: var(--color-windows-blue);
 }
 /* Toolbar */
 
