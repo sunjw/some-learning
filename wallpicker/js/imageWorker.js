@@ -126,8 +126,8 @@ function processFile(filePath, stat) {
 
     // utils.log('processFile, image, filePath=[%s]', filePath);
     let imgData = fs.readFileSync(filePath);
-
     let imgDataHash = nodeUtils.hashMd5(imgData);
+
     fileObj.hash = imgDataHash;
 
     let imgDim = probeImageSize.sync(imgData);
