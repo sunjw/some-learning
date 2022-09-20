@@ -124,11 +124,15 @@ function processFile(filePath, stat) {
         ctime: stat.ctime.getTime()
     }
 
+    let imgMetaCombo = fileObj.path + '|' + fileObj.size + '|' + fileObj.mtime;
+    utils.log('processFile, image, imgMetaCombo=[%s]', imgMetaCombo);
+    let imgMetaHash = nodeUtils.hashMd5(imgMetaCombo);
+
     // utils.log('processFile, image, filePath=[%s]', filePath);
     let imgData = fs.readFileSync(filePath);
-    let imgDataHash = nodeUtils.hashMd5(imgData);
+    //let imgDataHash = nodeUtils.hashMd5(imgData);
 
-    fileObj.hash = imgDataHash;
+    fileObj.hash = imgMetaHash;
 
     let imgDim = probeImageSize.sync(imgData);
     if (!imgDim) {
