@@ -129,6 +129,8 @@ def main():
         app_dir_path_relative = 'Contents/Resources/app'
     app_path_relative = os.path.join(app_name, app_dir_path_relative)
 
+    machine_name = platform.machine()
+
     cwd = os.getcwd()
 
     # Update modules.
@@ -250,8 +252,8 @@ def main():
         remove_file('%s.7z' % (app_name))
         run_cmd('%s -t7z -mx9 a %s.7z %s' % (exe_7z_sys, app_name, app_name))
     else:
-        remove_file('%s.tar.%s' % (app_name, tar_ext))
-        run_cmd('tar %s %s.tar.%s %s' % (tar_param, app_name, tar_ext, app_name))
+        remove_file('%s.%s.tar.%s' % (app_name, machine_name, tar_ext))
+        run_cmd('tar %s %s.%s.tar.%s %s' % (tar_param, app_name, machine_name, tar_ext, app_name))
     remove_dir(app_name)
 
 if __name__ == '__main__':
