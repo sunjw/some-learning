@@ -31,6 +31,7 @@ def list_to_yaml(list_txt_path, list_yaml_path):
     list_yaml_content = list_yaml_content.replace('── ', '- ')
 
     # line by line
+    list_yaml_content_lines_new = []
     list_yaml_content_lines = list_yaml_content.splitlines()
     list_yaml_content_lines_len = len(list_yaml_content_lines)
     for i in range(0, list_yaml_content_lines_len):
@@ -45,9 +46,9 @@ def list_to_yaml(list_txt_path, list_yaml_path):
                 indent_prefix = indent_prefix + '  '
             list_yaml_line = list_yaml_line.lstrip()
             list_yaml_line = indent_prefix + list_yaml_line
-            list_yaml_content_lines[i] = list_yaml_line
+            list_yaml_content_lines_new.append(list_yaml_line)
 
-    list_yaml_content = '\n'.join(list_yaml_content_lines)
+    list_yaml_content = '\n'.join(list_yaml_content_lines_new)
 
     comm_util.write_file_text(list_yaml_path, list_yaml_content)
 
