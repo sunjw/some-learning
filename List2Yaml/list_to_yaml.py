@@ -10,6 +10,15 @@ import log_util
 logger = log_util.logger
 
 
+def sort_yaml(list_yaml_path):
+    list_yaml_content = comm_util.read_file_text(list_yaml_path)
+    list_yaml_dict = yaml.safe_load(list_yaml_content)
+    # print(list_yaml_dict)
+
+    list_yaml_content_new = yaml.dump(list_yaml_dict, allow_unicode=True)
+    comm_util.write_file_text(list_yaml_path, list_yaml_content_new)
+
+
 def generate_yaml_path(list_txt_path):
     list_txt_path = os.path.realpath(list_txt_path)
     list_dir = os.path.dirname(list_txt_path)
@@ -18,15 +27,6 @@ def generate_yaml_path(list_txt_path):
     list_yaml_path = os.path.join(list_dir, list_filename + '.yml')
     # logger.info('generate_yaml_path, list_dir=[%s], list_yaml_path=[%s]', list_dir, list_yaml_path)
     return list_yaml_path
-
-
-def sort_yaml(list_yaml_path):
-    list_yaml_content = comm_util.read_file_text(list_yaml_path)
-    list_yaml_dict = yaml.safe_load(list_yaml_content)
-    # print(list_yaml_dict)
-
-    list_yaml_content_new = yaml.dump(list_yaml_dict, allow_unicode=True)
-    comm_util.write_file_text(list_yaml_path, list_yaml_content_new)
 
 
 def list_to_yaml(list_txt_path, list_yaml_path):
