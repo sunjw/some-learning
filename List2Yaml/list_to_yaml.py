@@ -23,7 +23,10 @@ def generate_yaml_path(list_txt_path):
 def sort_yaml(list_yaml_path):
     list_yaml_content = comm_util.read_file_text(list_yaml_path)
     list_yaml_dict = yaml.safe_load(list_yaml_content)
-    print(list_yaml_dict)
+    # print(list_yaml_dict)
+
+    list_yaml_content_new = yaml.dump(list_yaml_dict, allow_unicode=True)
+    comm_util.write_file_text(list_yaml_path, list_yaml_content_new)
 
 
 def list_to_yaml(list_txt_path, list_yaml_path):
