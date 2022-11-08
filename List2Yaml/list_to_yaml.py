@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 
 import comm_util
@@ -28,6 +29,25 @@ def list_to_yaml(list_txt_path, list_yaml_path):
     list_yaml_content = list_yaml_content.replace('└', '│')
     list_yaml_content = list_yaml_content.replace('│', '')
     list_yaml_content = list_yaml_content.replace('── ', '- ')
+
+    # line by line
+    list_yaml_content_lines = list_yaml_content.splitlines()
+    list_yaml_content_lines_len = len(list_yaml_content_lines)
+    for i in range(0, list_yaml_content_lines_len):
+        list_yaml_line = list_yaml_content_lines[i]
+        re_result = re.search(r'[^ ]', list_yaml_line)
+        if re_result:
+            space_count = re_result.start()
+            # logger.info(space_count)
+            indent_count = int(space_count / 3)
+            indent_prefix = ''
+            for j in range(0, indent_count):
+                indent_prefix = indent_prefix + '  '
+            list_yaml_line = list_yaml_line.lstrip()
+            list_yaml_line = indent_prefix + list_yaml_line
+            list_yaml_content_lines[i] = list_yaml_line
+
+    list_yaml_content = '\n'.join(list_yaml_content_lines)
 
     comm_util.write_file_text(list_yaml_path, list_yaml_content)
 
