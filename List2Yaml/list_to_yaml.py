@@ -7,10 +7,6 @@ import log_util
 logger = log_util.logger
 
 
-def list_to_yaml(list_txt_path, list_yaml_path):
-    logger.info('list_to_yaml, convert list txt to yaml.')
-
-
 def generate_yaml_path(list_txt_path):
     list_txt_path = os.path.realpath(list_txt_path)
     list_dir = os.path.dirname(list_txt_path)
@@ -19,6 +15,21 @@ def generate_yaml_path(list_txt_path):
     list_yaml_path = os.path.join(list_dir, list_filename + '.yml')
     # logger.info('generate_yaml_path, list_dir=[%s], list_yaml_path=[%s]', list_dir, list_yaml_path)
     return list_yaml_path
+
+
+def list_to_yaml(list_txt_path, list_yaml_path):
+    logger.info('list_to_yaml, convert list txt to yaml.')
+
+    list_txt_content = comm_util.read_file_text(list_txt_path)
+
+    # replace tree symbols
+    list_yaml_content = list_txt_content.replace(' ', ' ')
+    list_yaml_content = list_yaml_content.replace('├', '│')
+    list_yaml_content = list_yaml_content.replace('└', '│')
+    list_yaml_content = list_yaml_content.replace('│', '')
+    list_yaml_content = list_yaml_content.replace('── ', '- ')
+
+    comm_util.write_file_text(list_yaml_path, list_yaml_content)
 
 
 def main():
