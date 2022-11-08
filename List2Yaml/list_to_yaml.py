@@ -102,12 +102,23 @@ def list_to_yaml(list_txt_path, list_yaml_path):
             indent_prefix = ''
             for j in range(0, indent_count):
                 indent_prefix = indent_prefix + '  '
+
             list_yaml_line = list_yaml_line.lstrip()
+            # fix line contains '#'
+            if list_yaml_line.find('#') != -1:
+                yaml_prefix = ''
+                if list_yaml_line.startswith('- '):
+                    yaml_prefix = '- '
+                    list_yaml_line = list_yaml_line[2:]
+                list_yaml_line = '\'' + list_yaml_line + '\''
+                list_yaml_line = yaml_prefix + list_yaml_line
+
             list_yaml_line = indent_prefix + list_yaml_line
 
             # fix 1st line
             if i == 0:
                 list_yaml_line = list_yaml_line + ':'
+
 
             re_result_last_line = re.search(r'[0-9]* directories, [0-9]* files', list_yaml_line)
             if re_result_last_line:
