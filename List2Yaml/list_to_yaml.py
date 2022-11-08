@@ -12,6 +12,8 @@ logger = log_util.logger
 
 
 def sort_cmp_str(str1, str2):
+    str1 = str(str1)
+    str2 = str(str2)
     if str1 > str2:
         return 1
     if str1 < str2:
