@@ -31,9 +31,11 @@ def list_to_yaml(list_txt_path, list_yaml_path):
     list_yaml_content = list_yaml_content.replace('── ', '- ')
 
     # line by line
-    list_yaml_content_lines_new = []
     list_yaml_content_lines = list_yaml_content.splitlines()
     list_yaml_content_lines_len = len(list_yaml_content_lines)
+
+    list_yaml_content_lines_new = []
+    last_indent_count = 0
     for i in range(0, list_yaml_content_lines_len):
         list_yaml_line = list_yaml_content_lines[i]
         re_result = re.search(r'[^ ]', list_yaml_line)
@@ -41,12 +43,30 @@ def list_to_yaml(list_txt_path, list_yaml_path):
             space_count = re_result.start()
             # logger.info(space_count)
             indent_count = int(space_count / 3)
+            if indent_count > last_indent_count:
+                last_index = len(list_yaml_content_lines_new) - 1
+                last_line = list_yaml_content_lines_new[last_index]
+                last_line = last_line + ':'
+                list_yaml_content_lines_new[last_index] = last_line
+
             indent_prefix = ''
             for j in range(0, indent_count):
                 indent_prefix = indent_prefix + '  '
             list_yaml_line = list_yaml_line.lstrip()
             list_yaml_line = indent_prefix + list_yaml_line
+
+            # fix 1st line
+            if i == 0:
+                list_yaml_line = list_yaml_line + ':'
+
+            re_result_last_line = re.search(r'[0-9]* directories, [0-9]* files', list_yaml_line)
+            if re_result_last_line:
+                # logger.info('re_result_last_line')
+                list_yaml_line = ''
+
             list_yaml_content_lines_new.append(list_yaml_line)
+
+            last_indent_count = indent_count
 
     list_yaml_content = '\n'.join(list_yaml_content_lines_new)
 
