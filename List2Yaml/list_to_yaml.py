@@ -54,7 +54,7 @@ def sort_yaml(list_yaml_path):
     root_key = get_dict_key0(list_yaml_dict)
     sort_yaml_list_recursive(list_yaml_dict[root_key])
 
-    list_yaml_content_new = yaml.dump(list_yaml_dict, allow_unicode=True)
+    list_yaml_content_new = yaml.dump(list_yaml_dict, allow_unicode=True, width=float("inf"))
     comm_util.write_file_text(list_yaml_path, list_yaml_content_new)
 
 
