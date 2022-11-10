@@ -160,14 +160,18 @@ def list_to_sort_yaml(list_txt_path, list_yaml_path):
 def main():
     logger.info('List2Yaml go!')
 
-    if len(sys.argv) != 2:
-        logger.error('Usage: python3 list_to_yaml.py <some-list.txt>')
+    argc = len(sys.argv)
+    if argc < 2:
+        logger.error('Usage: python3 list_to_yaml.py <some-list-1.txt> <some-list-2.txt> ...')
         return
 
-    list_txt_path = os.path.realpath(sys.argv[1])
-    list_yaml_path = generate_yaml_path(list_txt_path)
-    list_to_sort_yaml(list_txt_path, list_yaml_path)
+    for i in range(1, argc):
+        list_txt_path = os.path.realpath(sys.argv[i])
+        list_yaml_path = generate_yaml_path(list_txt_path)
+        list_to_sort_yaml(list_txt_path, list_yaml_path)
+        logger.info('===================================')
 
+    logger.info('List2Yaml, finish %d files.', (argc - 1))
 
 if __name__ == '__main__':
     main()
