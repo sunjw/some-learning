@@ -11,6 +11,19 @@ import log_util
 logger = log_util.logger
 
 
+def need_quote_yaml(yaml_str):
+    special_chars = ['\'', '{', '}', '[', ']', ',', '&', ':', '*', '#',
+                     '?', '|', '<', '>', '=', '!', '%', '@', '\\', '"']
+    for spec_shar in special_chars:
+        if yaml_str.find(spec_shar) != -1:
+            if spec_shar == '\'':
+                return '"'
+            else:
+                return '\''
+
+    return None
+
+
 def sort_cmp_str(str1, str2):
     str1 = str(str1)
     str2 = str(str2)
@@ -104,13 +117,15 @@ def list_to_yaml(list_txt_path, list_yaml_path):
                 indent_prefix = indent_prefix + '  '
 
             list_yaml_line = list_yaml_line.lstrip()
-            # fix line contains '#'
-            if list_yaml_line.find('#') != -1:
+
+            # line quote
+            quote_char = need_quote_yaml(list_yaml_line)
+            if quote_char is not None:
                 yaml_prefix = ''
                 if list_yaml_line.startswith('- '):
                     yaml_prefix = '- '
                     list_yaml_line = list_yaml_line[2:]
-                list_yaml_line = '\'' + list_yaml_line + '\''
+                list_yaml_line = quote_char + list_yaml_line + quote_char
                 list_yaml_line = yaml_prefix + list_yaml_line
 
             list_yaml_line = indent_prefix + list_yaml_line
@@ -118,7 +133,6 @@ def list_to_yaml(list_txt_path, list_yaml_path):
             # fix 1st line
             if i == 0:
                 list_yaml_line = list_yaml_line + ':'
-
 
             re_result_last_line = re.search(r'[0-9]* directories, [0-9]* files', list_yaml_line)
             if re_result_last_line:
