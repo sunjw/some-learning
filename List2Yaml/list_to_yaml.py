@@ -149,7 +149,6 @@ def list_to_yaml(list_txt_path, list_yaml_path):
 
 
 def list_to_sort_yaml(list_txt_path):
-    list_txt_path = os.path.realpath(list_txt_path)
     list_yaml_path = generate_yaml_path(list_txt_path)
     logger.info('list_to_sort_yaml, [%s] -> [%s]', list_txt_path, list_yaml_path)
     list_to_yaml(list_txt_path, list_yaml_path)
