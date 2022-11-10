@@ -173,5 +173,6 @@ def main():
 
     logger.info('List2Yaml, finish %d files.', (argc - 1))
 
+
 if __name__ == '__main__':
     main()
