@@ -38,6 +38,9 @@ def is_windows_sys():
 def is_macos_sys():
     return (platform.system() == 'Darwin')
 
+def is_linux_sys():
+    return (platform.system() == 'Linux')
+
 def fix_win_path(path):
     if is_windows_sys():
         return path.replace('/', '\\')
@@ -93,6 +96,7 @@ def log_stage(stage_message):
 
 EXE_7Z_WIN = '7z'
 USING_XZ_MACOS = True
+SUPPORT_LINUX = False
 
 APP_TITLE = 'wallpaper-picker'
 PACKAGE_NAME = 'wallpaper-picker'
@@ -111,16 +115,18 @@ REBUILD_CMD = 'rebuild-all'
 REBUILD_CLEAN_PATHS_WIN = ['./node_modules/better-sqlite3/build/Release/obj',
                         './node_modules/better-sqlite3/build/deps/Release/obj']
 REBUILD_CLEAN_PATHS_MACOS = []
+REBUILD_CLEAN_PATHS_LINUX = []
 
 def main():
-    extract_old = False # Always using new Electron
-
     exe_7z_sys = EXE_7Z_WIN # 7z is not supported on macOS
     tar_ext = 'gz'
     tar_param = '-czvf'
     if USING_XZ_MACOS:
         tar_ext = 'xz'
         tar_param = '-cJvf'
+    if is_linux_sys() and (not SUPPORT_LINUX):
+        log_stage('Not supported Linux.')
+        exit()
 
     app_name = PACKAGE_NAME
     app_dir_path_relative = 'resources/app'
@@ -141,45 +147,50 @@ def main():
     if not os.path.exists(DIST_DIR):
         os.mkdir(DIST_DIR)
 
-    if extract_old:
-        log_stage('Extract old package and remove old app...')
+    log_stage('No extract old package and copy from electron dist...')
+    electron_node_module_dir = 'node_modules/electron'
+    electron_dist_dir = 'dist'
+    os.chdir(electron_node_module_dir)
+    if is_windows_sys():
+        electron_dist_package = 'dist.7z'
+        run_cmd('%s -t7z a %s %s' % (exe_7z_sys, electron_dist_package, electron_dist_dir))
+        os.chdir(cwd)
+        electron_dist_package_path = os.path.join(electron_node_module_dir, electron_dist_package)
+        copy_file(electron_dist_package_path, os.path.join(DIST_DIR, electron_dist_package))
+        remove_file(electron_dist_package_path)
         os.chdir(DIST_DIR)
-        if is_windows_sys():
-            run_cmd('%s -t7z x %s.7z' % (exe_7z_sys, app_name))
-        else:
-            run_cmd('tar -xvf %s.tar.%s' % (app_name, tar_ext))
-        remove_dir(app_path_relative)
+        run_cmd('%s -t7z x %s' % (exe_7z_sys, electron_dist_package))
+        remove_file(electron_dist_package)
+        os.rename(electron_dist_dir, app_name)
+    elif is_macos_sys():
+        os.chdir(electron_dist_dir)
+        electron_dist_app_name = 'Electron.app'
+        electron_dist_package = '%s.tar.%s' % (electron_dist_app_name, tar_ext)
+        run_cmd('tar %s %s %s' % (tar_param, electron_dist_package, electron_dist_app_name))
         os.chdir(cwd)
+        electron_dist_package_path = os.path.join(electron_node_module_dir, electron_dist_dir, electron_dist_package)
+        copy_file(electron_dist_package_path, os.path.join(DIST_DIR, electron_dist_package))
+        remove_file(electron_dist_package_path)
+        os.chdir(DIST_DIR)
+        run_cmd('tar -xvf %s' % (electron_dist_package))
+        remove_file(electron_dist_package)
+        os.rename(electron_dist_app_name, app_name)
+    elif is_linux_sys():
+        electron_dist_package = 'dist.tar.%s' % (tar_ext)
+        run_cmd('tar %s %s %s' % (tar_param, electron_dist_package, electron_dist_dir))
+        os.chdir(cwd)
+        electron_dist_package_path = os.path.join(electron_node_module_dir, electron_dist_package)
+        copy_file(electron_dist_package_path, os.path.join(DIST_DIR, electron_dist_package))
+        remove_file(electron_dist_package_path)
+        os.chdir(DIST_DIR)
+        run_cmd('tar -xvf %s' % (electron_dist_package))
+        remove_file(electron_dist_package)
+        os.rename(electron_dist_dir, app_name)
     else:
-        log_stage('No extract old package and copy from electron dist...')
-        electron_node_module_dir = 'node_modules/electron'
-        electron_dist_dir = 'dist'
-        os.chdir(electron_node_module_dir)
-        if is_windows_sys():
-            electron_dist_package = 'dist.7z'
-            run_cmd('%s -t7z a %s %s' % (exe_7z_sys, electron_dist_package, electron_dist_dir))
-            os.chdir(cwd)
-            electron_dist_package_path = os.path.join(electron_node_module_dir, electron_dist_package)
-            copy_file(electron_dist_package_path, os.path.join(DIST_DIR, electron_dist_package))
-            remove_file(electron_dist_package_path)
-            os.chdir(DIST_DIR)
-            run_cmd('%s -t7z x %s' % (exe_7z_sys, electron_dist_package))
-            remove_file(electron_dist_package)
-            os.rename(electron_dist_dir, app_name)
-        else:
-            os.chdir(electron_dist_dir)
-            electron_dist_app_name = 'Electron.app'
-            electron_dist_package = '%s.tar.%s' % (electron_dist_app_name, tar_ext)
-            run_cmd('tar %s %s %s' % (tar_param, electron_dist_package, electron_dist_app_name))
-            os.chdir(cwd)
-            electron_dist_package_path = os.path.join(electron_node_module_dir, electron_dist_dir, electron_dist_package)
-            copy_file(electron_dist_package_path, os.path.join(DIST_DIR, electron_dist_package))
-            remove_file(electron_dist_package_path)
-            os.chdir(DIST_DIR)
-            run_cmd('tar -xvf %s' % (electron_dist_package))
-            remove_file(electron_dist_package)
-            os.rename(electron_dist_app_name, app_name)
-        os.chdir(cwd)
+        log_stage('Not supported system.')
+        exit()
+    os.chdir(cwd)
+
     os.chdir(DIST_DIR)
     os.mkdir(app_path_relative)
     os.chdir(cwd)
@@ -203,7 +214,7 @@ def main():
     # Rebuild and clean.
     log_stage('Rebuild and clean...')
     os.chdir(os.path.join(DIST_DIR, app_path_relative))
-    if is_macos_sys():
+    if is_macos_sys() or is_linux_sys():
         for exec_file in EXEC_FIX_PATHS:
             st = os.stat(exec_file)
             os.chmod(exec_file, st.st_mode | stat.S_IEXEC)
@@ -214,6 +225,8 @@ def main():
     rebuild_clean_paths = REBUILD_CLEAN_PATHS_WIN
     if is_macos_sys():
         rebuild_clean_paths = REBUILD_CLEAN_PATHS_MACOS
+    if is_linux_sys():
+        rebuild_clean_paths = REBUILD_CLEAN_PATHS_LINUX
     for rebuild_clean_path in rebuild_clean_paths:
         remove_dir(rebuild_clean_path)
     os.chdir(cwd)
@@ -232,6 +245,10 @@ def main():
         electron_exe_dir = './Contents/MacOS/'
         electron_exe_name = 'Electron'
         electron_exe_app_name = '%s%s' % (electron_exe_dir, APP_TITLE)
+    elif is_linux_sys():
+        electron_exe_dir = './'
+        electron_exe_name = 'electron'
+        electron_exe_app_name = '%s%s' % (electron_exe_dir, APP_TITLE)
     electron_exe_path = '%s%s' % (electron_exe_dir, electron_exe_name)
     if os.path.exists(electron_exe_path):
         os.rename(electron_exe_path, electron_exe_app_name)
@@ -249,11 +266,13 @@ def main():
     log_stage('Package and clean up...')
     os.chdir(DIST_DIR)
     if is_windows_sys():
-        remove_file('%s.7z' % (app_name))
-        run_cmd('%s -t7z -mx9 a %s.7z %s' % (exe_7z_sys, app_name, app_name))
+        app_package_file = '%s.7z' % (app_name)
+        remove_file(app_package_file)
+        run_cmd('%s -t7z -mx9 a %s %s' % (exe_7z_sys, app_package_file, app_name))
     else:
-        remove_file('%s.%s.tar.%s' % (app_name, machine_name, tar_ext))
-        run_cmd('tar %s %s.%s.tar.%s %s' % (tar_param, app_name, machine_name, tar_ext, app_name))
+        app_package_file = '%s.%s.tar.%s' % (app_name, machine_name, tar_ext)
+        remove_file(app_package_file)
+        run_cmd('tar %s %s %s' % (tar_param, app_package_file, app_name))
     remove_dir(app_name)
 
 if __name__ == '__main__':
