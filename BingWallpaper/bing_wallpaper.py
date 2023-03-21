@@ -11,8 +11,9 @@ import log_util
 
 logger = log_util.logger
 
-BING_BASE_URL = 'https://www.bing.com'
-BING_WALLPAPER_META_PATH = '/HPImageArchive.aspx?format=js&idx=0&n=10&nc=1612409408851&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160'
+#https://global.bing.com/HPImageArchive.aspx?format=js&idx=0&n=9&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160&setmkt=en-US
+BING_BASE_URL = 'https://global.bing.com'
+BING_WALLPAPER_META_PATH = '/HPImageArchive.aspx?format=js&idx=0&n=9&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160&setmkt=en-US'
 
 WALLPAPER_DIR = 'wallpaper'
 OPEN_WALLPAPER_DIR = True
