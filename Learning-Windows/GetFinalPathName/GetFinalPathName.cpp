@@ -1,20 +1,60 @@
-﻿// GetFinalPathName.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-//
+﻿#include <stdio.h>
+#include <windows.h>
+#include <tchar.h>
 
-#include <iostream>
+#define BUFSIZE MAX_PATH
 
-int main()
+int _tmain(int argc, TCHAR* argv[])
 {
-    std::cout << "Hello World!\n";
+    TCHAR Path[BUFSIZE];
+    HANDLE hFile;
+    DWORD dwRet;
+
+    printf("\n");
+    if (argc != 2)
+    {
+        wprintf(L"ERROR:\tIncorrect number of arguments\n\n");
+        wprintf(L"%s <file_name>\n", argv[0]);
+        return 0;
+    }
+
+    hFile = CreateFile(argv[1],               // file to open
+        GENERIC_READ,          // open for reading
+        FILE_SHARE_READ,       // share for reading
+        NULL,                  // default security
+        OPEN_EXISTING,         // existing file only
+        FILE_ATTRIBUTE_NORMAL, // normal file
+        NULL);                 // no attr. template
+
+    if (hFile == INVALID_HANDLE_VALUE)
+    {
+        wprintf(L"Could not open file (error %d\n)", GetLastError());
+        return 0;
+    }
+
+    dwRet = GetFinalPathNameByHandle(hFile, Path, BUFSIZE, VOLUME_NAME_NT);
+    if (dwRet < BUFSIZE)
+    {
+        wprintf(L"The final path (VOLUME_NAME_NT) is: %s\n", Path);
+    }
+    else
+    {
+        wprintf(L"The required buffer size is %d.\n", dwRet);
+    }
+    wprintf(L"\n");
+
+    dwRet = GetFinalPathNameByHandle(hFile, Path, BUFSIZE, VOLUME_NAME_GUID);
+    if (dwRet < BUFSIZE)
+    {
+        wprintf(L"The final path (VOLUME_NAME_GUID) is: %s\n", Path);
+    }
+    else
+    {
+        wprintf(L"The required buffer size is %d.\n", dwRet);
+    }
+    wprintf(L"\n");
+
+    CloseHandle(hFile);
+
+    return 0;
 }
-
-// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
-// 调试程序: F5 或调试 >“开始调试”菜单
-
-// 入门使用技巧: 
-//   1. 使用解决方案资源管理器窗口添加/管理文件
-//   2. 使用团队资源管理器窗口连接到源代码管理
-//   3. 使用输出窗口查看生成输出和其他消息
-//   4. 使用错误列表窗口查看错误
-//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
-//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件
