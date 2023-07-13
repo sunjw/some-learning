@@ -15,7 +15,7 @@ do
     arg_mkt=" --mkt $mkt_itr"
 
     download_args="$arg_mkt $arg_no_promote"
-    echo "$download_args"
+    # echo "$download_args"
 
     python3 bing_wallpaper.py $download_args
 done
