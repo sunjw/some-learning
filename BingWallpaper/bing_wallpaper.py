@@ -143,7 +143,7 @@ def clean_duplicated_wallpaper(wallpaper_dir):
     return delete_count
 
 
-def download_wallpaper_by_list(wallpaper_list):
+def download_wallpaper_by_list(wallpaper_list, need_promote):
     wallpaper_dir = WALLPAPER_DIR
 
     wallpaper_list_len = len(wallpaper_list)
@@ -155,11 +155,12 @@ def download_wallpaper_by_list(wallpaper_list):
     else:
         logger.info('[%s] exists.', wallpaper_dir)
 
-    if not comm_util.query_yes_no('Continue download wallpapers?'):
-        return
+    if need_promote:
+        if not comm_util.query_yes_no('Continue download wallpapers?'):
+            return
 
-    if OPEN_WALLPAPER_DIR:
-        open_wallpaper_dir(wallpaper_dir)
+        if OPEN_WALLPAPER_DIR:
+            open_wallpaper_dir(wallpaper_dir)
 
     downloaded_file_count = 0
     for wallpaper_data in reversed(wallpaper_list):
@@ -202,7 +203,7 @@ def main():
                         help='get bing wallpaper json over ssh')
     parser.add_argument('--mkt', dest='mkt', required=False,
                         help='set bing wallpaper mkt, like en-US, zh-CN or fr-FR')
-    parser.add_argument('--no-promote', dest='promote', required=False,
+    parser.add_argument('--no-promote', dest='need_promote', required=False,
                         nargs='?', default=True, const=False,
                         help='no need to promote window and direct to download')
     parser.add_argument('download_count', metavar='N', type=int,
@@ -218,6 +219,7 @@ def main():
 
     mkt = args['mkt']
     ssh_cmd = args['ssh_cmd']
+    need_promote = args['need_promote']
 
     wallpaper_list = []
     if ssh_cmd is None:
@@ -225,7 +227,7 @@ def main():
     else:
         wallpaper_list = get_bing_wallpaper(mkt, download_count, True, ssh_cmd)
 
-    download_wallpaper_by_list(wallpaper_list)
+    download_wallpaper_by_list(wallpaper_list, need_promote)
 
 
 if __name__ == '__main__':
