@@ -202,6 +202,9 @@ def main():
                         help='get bing wallpaper json over ssh')
     parser.add_argument('--mkt', dest='mkt', required=False,
                         help='set bing wallpaper mkt, like en-US, zh-CN or fr-FR')
+    parser.add_argument('--no-promote', dest='promote', required=False,
+                        nargs='?', default=True, const=False,
+                        help='no need to promote window and direct to download')
     parser.add_argument('download_count', metavar='N', type=int,
                         nargs='?', default=-1, help='download count')
 
