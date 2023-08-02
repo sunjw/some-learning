@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## declare an array variable
-declare -a mkt_arr=("en-us" "zh-cn" "ja-jp" "fr-fr" "it-it" "xx-xx")
+declare -a mkt_arr=("en-us" "zh-cn" "ja-jp" "fr-fr" "it-it" "en-gb" "xx-xx")
 
 first_mkt=true
 ## now loop through the above array
