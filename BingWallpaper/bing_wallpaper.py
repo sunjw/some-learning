@@ -115,6 +115,9 @@ def open_wallpaper_dir(wallpaper_dir):
 
 
 def clean_duplicated_wallpaper(wallpaper_dir):
+    default_mkt = BING_MKT[0]
+    default_mkt = default_mkt.lower()
+
     files_in_wallpaper_md5 = {}
     files_in_wallpaper_dir = comm_util.list_file(wallpaper_dir)
     files_in_wallpaper_dir.sort()
@@ -133,11 +136,18 @@ def clean_duplicated_wallpaper(wallpaper_dir):
             file_name_2 = files_in_wallpaper_dir[j]
             file_md5_2 = files_in_wallpaper_md5[file_name_2]
             if file_md5_1 == file_md5_2 and file_name_1 != file_name_2:
+                logger.info('Found duplicated wallpapers [%s, %s]', file_name_1, file_name_2)
+                file_path_1 = os.path.join(wallpaper_dir, file_name_1)
                 file_path_2 = os.path.join(wallpaper_dir, file_name_2)
-                if os.path.exists(file_path_2):
-                    logger.info('Found duplicated wallpapers [%s, %s]', file_name_1, file_name_2)
-                    logger.info('Delete [%s]', file_name_2)
-                    os.remove(os.path.join(file_path_2))
+                file_name_to_delete = file_name_2
+                file_path_to_delete = file_path_2
+                file_name_to_delete_lower = file_name_to_delete.lower()
+                if default_mkt in file_name_to_delete_lower:
+                    file_name_to_delete = file_name_1
+                    file_path_to_delete = file_path_1
+                if os.path.exists(file_path_to_delete):
+                    logger.info('Delete [%s]', file_name_to_delete)
+                    os.remove(os.path.join(file_path_to_delete))
                     delete_count = delete_count + 1
 
     return delete_count
