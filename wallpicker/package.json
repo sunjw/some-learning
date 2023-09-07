@@ -19,9 +19,9 @@
   "author": "Sun Junwen",
   "license": "GPL-2.0",
   "devDependencies": {
-    "@electron/rebuild": "^3.2.13",
-    "@electron/remote": "^2.0.10",
-    "electron": "^24.5.0",
+    "@electron/rebuild": "^3.3.0",
+    "@electron/remote": "^2.0.11",
+    "electron": "^24.8.2",
     "node-abi": "^3.45.0"
   },
   "dependencies": {
