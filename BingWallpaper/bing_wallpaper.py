@@ -93,7 +93,7 @@ def get_bing_wallpaper(mkt, download_count, over_ssh=False, ssh_cmd=None):
             return wallpaper_list
         image_name = image_name[idx + len(name_key):]
 
-        image_url = BING_BASE_URL + image_url
+        image_url = BING_BASE_URL + image_url + '&qlt=100'
         image_data['url'] = image_url
         image_data['name'] = image_name
         # logger.info('image_data\n%s', comm_util.pprint_dict_to_string(image_data))
