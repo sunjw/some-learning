@@ -361,13 +361,13 @@ std::string sunjwbase::strappendformat(std::string& str, const char *format, ...
 		temp.resize(size);
 		va_start(vl, format);
 #if defined (WIN32)
-		int n = vsnprintf_s((char *)temp.data(), size, size, format, vl);
+		int n = vsnprintf_s((char *)temp.data(), size, _TRUNCATE, format, vl);
 #else
 		int n = vsnprintf((char *)temp.data(), size, format, vl);
 #endif
 		va_end(vl);
 		if (n > -1 && n < size) {
-			// temp.resize(n + 1);
+			// temp.resize(n);
 			break;
 		}
 		if (n > -1)
@@ -375,7 +375,7 @@ std::string sunjwbase::strappendformat(std::string& str, const char *format, ...
 		else
 			size *= 2;
 	}
-	str.append(temp);
+	str.append(temp.c_str());
 
 	return str;
 }
