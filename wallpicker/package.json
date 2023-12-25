@@ -19,10 +19,10 @@
   "author": "Sun Junwen",
   "license": "GPL-2.0",
   "devDependencies": {
-    "@electron/rebuild": "^3.3.0",
-    "@electron/remote": "^2.0.11",
+    "@electron/rebuild": "^3.4.1",
+    "@electron/remote": "^2.1.1",
     "electron": "^26.6.3",
-    "node-abi": "^3.45.0"
+    "node-abi": "^3.52.0"
   },
   "dependencies": {
     "better-sqlite3": "^8.0.1",
