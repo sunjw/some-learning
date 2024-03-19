@@ -25,6 +25,7 @@
     "node-abi": "^3.56.0"
   },
   "dependencies": {
+    "@sunjw8888/wallpaper": "^5.0.1",
     "better-sqlite3": "^9.4.3",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
@@ -32,7 +33,6 @@
     "electron-window-state": "^5.0.3",
     "jquery": "^3.7.1",
     "probe-image-size": "^7.2.3",
-    "sharp": "^0.33.2",
-    "wallpaper": "^5.0.1"
+    "sharp": "^0.33.2"
   }
 }

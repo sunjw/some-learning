@@ -9,7 +9,7 @@ const path = require('path');
 window.$ = window.jQuery = require('jquery');
 const bootstrap = require('bootstrap');
 const probeImageSize = require('probe-image-size');
-const wallpaper = require('wallpaper');
+const wallpaper = require('@sunjw8888/wallpaper');
 const sharp = require('sharp');
 
 const utils = require('./utils');
