@@ -8,7 +8,6 @@ const path = require('path');
 
 window.$ = window.jQuery = require('jquery');
 const bootstrap = require('bootstrap');
-const fixPath = require('fix-path')();
 const probeImageSize = require('probe-image-size');
 const wallpaper = require('wallpaper');
 const sharp = require('sharp');
