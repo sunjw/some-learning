@@ -21,7 +21,7 @@
   "devDependencies": {
     "@electron/rebuild": "^3.4.1",
     "@electron/remote": "^2.1.1",
-    "electron": "^26.6.3",
+    "electron": "^28.2.7",
     "node-abi": "^3.52.0"
   },
   "dependencies": {
