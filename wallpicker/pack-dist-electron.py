@@ -109,7 +109,7 @@ APP_FILES = ['index.html', 'main.js',
             'README.md', 'LICENSE']
 
 EXEC_FIX_PATHS = ['./node_modules/.bin/electron-rebuild',
-                './node_modules/wallpaper/source/macos-wallpaper']
+                './node_modules/@sunjw8888/wallpaper/source/macos-wallpaper']
 
 REBUILD_CMD = 'rebuild-all'
 REBUILD_CLEAN_PATHS_WIN = ['./node_modules/better-sqlite3/build/Release/obj',
