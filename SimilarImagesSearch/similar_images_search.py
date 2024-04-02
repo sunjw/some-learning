@@ -9,7 +9,7 @@ logger = log_util.logger
 
 
 def go(images_dir_path):
-    dif = difPy.build(images_dir_path, px_size=512)
+    dif = difPy.build(images_dir_path, px_size=256)
     search = difPy.search(dif, similarity=50)
     result_dict = search.result
     # logger.info(comm_util.pprint_dict_to_string(result_dict))
