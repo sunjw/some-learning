@@ -1,4 +1,4 @@
-$MktArr = @("en-us", "zh-cn", "ja-jp", "fr-fr", "it-it", "en-gb", "es-es")
+$MktArr = @("en-us", "zh-cn", "ja-jp", "fr-fr", "it-it", "en-gb", "es-es", "de-de")
 
 $FirstMkt = $true
 foreach ($MktItr in $MktArr) {
