@@ -9,7 +9,7 @@
 
   <Identity
     Name="5a7f9c03-a86b-45d3-b829-6fd1676a43d1"
-    Publisher="CN=sunj"
+    Publisher="CN=sunjw"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="5a7f9c03-a86b-45d3-b829-6fd1676a43d1" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
