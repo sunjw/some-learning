@@ -15,8 +15,8 @@
   <mp:PhoneIdentity PhoneProductId="5a7f9c03-a86b-45d3-b829-6fd1676a43d1" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>RDPPassEncWUI3 (Package)</DisplayName>
-    <PublisherDisplayName>sunj</PublisherDisplayName>
+    <DisplayName>RDPPassEncWUI3</DisplayName>
+    <PublisherDisplayName>sunjw</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
@@ -34,8 +34,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="RDPPassEncWUI3 (Package)"
-        Description="RDPPassEncWUI3 (Package)"
+        DisplayName="RDPPassEncWUI3"
+        Description="RDPPassEncWUI3"
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
         Square44x44Logo="Images\Square44x44Logo.png">

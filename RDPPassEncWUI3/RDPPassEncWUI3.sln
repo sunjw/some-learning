@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "RDPPassEncWUI3 (Package)", "RDPPassEncWUI3 (Package)\RDPPassEncWUI3 (Package).wapproj", "{AA83CCB9-B01E-4C8A-87F4-F39CF7E58220}"
+Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "RDPPassEncWUI3Wap", "RDPPassEncWUI3Wap\RDPPassEncWUI3Wap.wapproj", "{AA83CCB9-B01E-4C8A-87F4-F39CF7E58220}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDPPassEncWUI3", "RDPPassEncWUI3\RDPPassEncWUI3.csproj", "{D9EF7184-1914-4D83-8850-76710C83257F}"
 EndProject
