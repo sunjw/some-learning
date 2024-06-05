@@ -18,8 +18,11 @@ namespace RDPPassEncWUI3
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
-            // Frame.GoBack(new SuppressNavigationTransitionInfo());
-            Frame.GoBack();
+            if (Frame.CanGoBack)
+            {
+                // Frame.GoBack(new SuppressNavigationTransitionInfo());
+                Frame.GoBack();
+            }
         }
     }
 }
