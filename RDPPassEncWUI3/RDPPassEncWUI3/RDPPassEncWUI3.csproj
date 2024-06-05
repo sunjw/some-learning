@@ -10,6 +10,11 @@
     <UseWinUI>true</UseWinUI>
     <UseRidGraph>true</UseRidGraph>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <DefineConstants>DISABLE_XAML_GENERATED_MAIN</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="AboutPage.xaml" />
     <None Remove="MainPage.xaml" />
