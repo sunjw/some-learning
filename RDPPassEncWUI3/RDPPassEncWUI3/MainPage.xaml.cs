@@ -89,5 +89,10 @@ namespace RDPPassEncWUI3
         {
             Frame.Navigate(typeof(AboutPage));
         }
+
+        public void OnRedirected(string someArgs)
+        {
+            TextBoxDecrypted.Text = someArgs;
+        }
     }
 }

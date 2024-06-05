@@ -29,6 +29,8 @@ namespace RDPPassEncWUI3
         private const int appInitWidth = 480;
         private const int appInitHeight = 480;
 
+        private Page currentPage = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -39,9 +41,22 @@ namespace RDPPassEncWUI3
             SetTitleBar(AppTitleBar);
         }
 
-        private void OnMainFrameLoaded(object sender, RoutedEventArgs e)
+        private void MainFrame_Loaded(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(typeof(MainPage));
+        }
+
+        private void MainFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            currentPage = e.Content as Page;
+        }
+
+        public void OnRedirected(string someArgs)
+        {
+            if (currentPage is MainPage)
+            {
+                (currentPage as MainPage).OnRedirected(someArgs);
+            }
         }
     }
 }

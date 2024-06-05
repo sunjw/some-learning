@@ -35,6 +35,7 @@
             x:Name="MainFrame"
             Grid.Row="1"
             Margin="0"
-            Loaded="OnMainFrameLoaded" />
+            Loaded="MainFrame_Loaded"
+            Navigated="MainFrame_Navigated" />
     </Grid>
 </Window>

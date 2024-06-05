@@ -32,7 +32,7 @@ namespace RDPPassEncWUI3
         {
             bool isRedirect = false;
             AppActivationArguments args = AppInstance.GetCurrent().GetActivatedEventArgs();
-            ExtendedActivationKind kind = args.Kind;
+            // ExtendedActivationKind kind = args.Kind;
             AppInstance keyInstance = AppInstance.FindOrRegisterForKey("RDPPassEncWUI3");
 
             if (keyInstance.IsCurrent)
@@ -49,7 +49,12 @@ namespace RDPPassEncWUI3
 
         private static void OnActivated(object sender, AppActivationArguments args)
         {
-            ExtendedActivationKind kind = args.Kind;
+            // ExtendedActivationKind kind = args.Kind;
+            App appCurrent = Application.Current as App;
+            if (appCurrent != null)
+            {
+                appCurrent.OnRedirected(args);
+            }
         }
     }
 }
