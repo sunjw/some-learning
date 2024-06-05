@@ -30,7 +30,7 @@ namespace RDPPassEncWUI3
         {
             InitializeComponent();
 
-            AppWindow.Resize(new(600, 400));
+            AppWindow.Resize(new(1200, 960));
 
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
