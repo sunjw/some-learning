@@ -26,11 +26,14 @@ namespace RDPPassEncWUI3
     /// </summary>
     public sealed partial class MainWindow : Window
     {
+        private const int appInitWidth = 800;
+        private const int appInitHeight = 600;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            AppWindow.Resize(new(1200, 960));
+            AppWindow.Resize(new(appInitWidth, appInitHeight));
 
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
