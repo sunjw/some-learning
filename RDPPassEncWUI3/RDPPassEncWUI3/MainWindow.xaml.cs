@@ -26,8 +26,8 @@ namespace RDPPassEncWUI3
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-        private const int appInitWidth = 800;
-        private const int appInitHeight = 600;
+        private const int appInitWidth = 480;
+        private const int appInitHeight = 480;
 
         public MainWindow()
         {
