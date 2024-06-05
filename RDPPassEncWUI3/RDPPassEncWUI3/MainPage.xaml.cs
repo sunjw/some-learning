@@ -14,6 +14,8 @@ namespace RDPPassEncWUI3
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private Encoding u16LE = Encoding.Unicode;
+
         public MainPage()
         {
             InitializeComponent();
@@ -22,7 +24,6 @@ namespace RDPPassEncWUI3
         private string EncryptPassword(string strDecrypted)
         {
             string strEncrypted = "";
-            Encoding u16LE = Encoding.Unicode;
             byte[] bytesDecrypted = u16LE.GetBytes(strDecrypted);
             byte[] bytesEncrypted = ProtectedData.Protect(bytesDecrypted, null, DataProtectionScope.CurrentUser);
             foreach (var byteValue in bytesEncrypted)
@@ -31,6 +32,18 @@ namespace RDPPassEncWUI3
             }
 
             return strEncrypted;
+        }
+
+        private string DecryptPassword(string strEncrypted)
+        {
+            int encryptedBytesLength = strEncrypted.Length / 2;
+            byte[] bytesEncrypted = new byte[encryptedBytesLength];
+            for (int i = 0; i < encryptedBytesLength; i++)
+            {
+                bytesEncrypted[i] = Convert.ToByte(strEncrypted.Substring(i * 2, 2), 16);
+            }
+            byte[] bytesDecrypted = ProtectedData.Unprotect(bytesEncrypted, null, DataProtectionScope.CurrentUser);
+            return u16LE.GetString(bytesDecrypted);
         }
 
         private void ButtonDecryptedClear_Click(object sender, RoutedEventArgs e)
@@ -50,7 +63,7 @@ namespace RDPPassEncWUI3
 
         private void ButtonDecrypt_Click(object sender, RoutedEventArgs e)
         {
-
+            TextBoxDecrypted.Text = DecryptPassword(TextBoxEncrypted.Text);
         }
 
         private void ButtonAbout_Click(object sender, RoutedEventArgs e)
