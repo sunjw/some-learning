@@ -34,13 +34,13 @@
                     x:Name="TextBoxDecrypted"
                     x:Uid="TextBoxDecrypted"
                     Grid.Row="0"
-                    Height="34"
                     Margin="10,0,10,0"
-                    VerticalAlignment="Center"
-                    PlaceholderText="Decrypted password"
-                    TextChanged="TextBoxDecrypted_TextChanged" />
+                    AcceptsReturn="True"
+                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    TextWrapping="NoWrap" />
 
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="1" Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />

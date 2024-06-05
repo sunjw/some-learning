@@ -33,12 +33,12 @@ namespace RDPPassEncWUI3
             return strEncrypted;
         }
 
-        private void TextBoxDecrypted_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            string strDecrypted = TextBoxDecrypted.Text;
-            string strEncrypted = EncryptPassword(strDecrypted);
-            TextBoxEncrypted.Text = strEncrypted;
-        }
+        //private void TextBoxDecrypted_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    string strDecrypted = TextBoxDecrypted.Text;
+        //    string strEncrypted = EncryptPassword(strDecrypted);
+        //    TextBoxEncrypted.Text = strEncrypted;
+        //}
 
         private void TextBoxEncrypted_TextChanged(object sender, TextChangedEventArgs e)
         {
