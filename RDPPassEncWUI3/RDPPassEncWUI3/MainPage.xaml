@@ -39,7 +39,7 @@
                     PlaceholderText="Decrypted password"
                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
-                    TextWrapping="NoWrap" />
+                    TextWrapping="Wrap" />
 
                 <Grid Grid.Row="1" Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
@@ -53,6 +53,7 @@
                         x:Uid="ButtonEncrypt"
                         Grid.Column="0"
                         Margin="10,0,10,0"
+                        Click="ButtonEncrypt_Click"
                         Content="Encrypt" />
 
                     <Button
@@ -60,6 +61,7 @@
                         x:Uid="ButtonDecryptedClear"
                         Grid.Column="2"
                         Margin="10,0,10,0"
+                        Click="ButtonDecryptedClear_Click"
                         Content="Clear" />
                 </Grid>
             </Grid>
@@ -82,7 +84,7 @@
                     PlaceholderText="Encrypted password"
                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
-                    TextWrapping="NoWrap" />
+                    TextWrapping="Wrap" />
 
                 <Grid Grid.Row="1" Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
@@ -96,6 +98,7 @@
                         x:Uid="ButtonDecrypt"
                         Grid.Column="0"
                         Margin="10,0,10,0"
+                        Click="ButtonDecrypt_Click"
                         Content="Decrypt" />
 
                     <Button
@@ -103,6 +106,7 @@
                         x:Uid="ButtonEncryptedClear"
                         Grid.Column="2"
                         Margin="10,0,10,0"
+                        Click="ButtonEncryptedClear_Click"
                         Content="Clear" />
                 </Grid>
 
