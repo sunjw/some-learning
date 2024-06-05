@@ -79,7 +79,8 @@
         <Grid
             x:Name="GridBottom"
             Grid.Row="1"
-            Margin="0,10,0,10">
+            Padding="0,10,0,10"
+            Background="{ThemeResource LayerOnMicaBaseAltFillColorDefault}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
