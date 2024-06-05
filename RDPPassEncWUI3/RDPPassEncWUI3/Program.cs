@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.UI.Dispatching;
+using Microsoft.UI.Xaml;
 using Microsoft.Windows.AppLifecycle;
 
 namespace RDPPassEncWUI3
@@ -15,7 +16,7 @@ namespace RDPPassEncWUI3
             bool isRedirect = await DecideRedirection();
             if (!isRedirect)
             {
-                Microsoft.UI.Xaml.Application.Start((p) =>
+                Application.Start((p) =>
                 {
                     var context = new DispatcherQueueSynchronizationContext(
                         DispatcherQueue.GetForCurrentThread());
