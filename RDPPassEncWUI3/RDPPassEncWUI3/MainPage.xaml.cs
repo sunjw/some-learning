@@ -24,11 +24,19 @@ namespace RDPPassEncWUI3
         private string EncryptPassword(string strDecrypted)
         {
             string strEncrypted = "";
-            byte[] bytesDecrypted = u16LE.GetBytes(strDecrypted);
-            byte[] bytesEncrypted = ProtectedData.Protect(bytesDecrypted, null, DataProtectionScope.CurrentUser);
-            foreach (var byteValue in bytesEncrypted)
+
+            try
             {
-                strEncrypted += String.Format("{0:X2}", byteValue);
+                byte[] bytesDecrypted = u16LE.GetBytes(strDecrypted);
+                byte[] bytesEncrypted = ProtectedData.Protect(bytesDecrypted, null, DataProtectionScope.CurrentUser);
+                foreach (var byteValue in bytesEncrypted)
+                {
+                    strEncrypted += String.Format("{0:X2}", byteValue);
+                }
+            }
+            catch (Exception)
+            {
+                strEncrypted = "Encryption error.";
             }
 
             return strEncrypted;
@@ -36,14 +44,25 @@ namespace RDPPassEncWUI3
 
         private string DecryptPassword(string strEncrypted)
         {
-            int encryptedBytesLength = strEncrypted.Length / 2;
-            byte[] bytesEncrypted = new byte[encryptedBytesLength];
-            for (int i = 0; i < encryptedBytesLength; i++)
+            string strDecrypted = "";
+
+            try
             {
-                bytesEncrypted[i] = Convert.ToByte(strEncrypted.Substring(i * 2, 2), 16);
+                int encryptedBytesLength = strEncrypted.Length / 2;
+                byte[] bytesEncrypted = new byte[encryptedBytesLength];
+                for (int i = 0; i < encryptedBytesLength; i++)
+                {
+                    bytesEncrypted[i] = Convert.ToByte(strEncrypted.Substring(i * 2, 2), 16);
+                }
+                byte[] bytesDecrypted = ProtectedData.Unprotect(bytesEncrypted, null, DataProtectionScope.CurrentUser);
+                strDecrypted = u16LE.GetString(bytesDecrypted);
             }
-            byte[] bytesDecrypted = ProtectedData.Unprotect(bytesEncrypted, null, DataProtectionScope.CurrentUser);
-            return u16LE.GetString(bytesDecrypted);
+            catch (Exception)
+            {
+                strDecrypted = "Decryption error.";
+            }
+
+            return strDecrypted;
         }
 
         private void ButtonDecryptedClear_Click(object sender, RoutedEventArgs e)
