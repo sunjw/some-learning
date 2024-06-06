@@ -9,10 +9,14 @@ namespace RDPPassEncWUI3
 {
     public static class Program
     {
+        private static string[] programArgs = null;
+
         [STAThread]
         static void Main(string[] args)
         {
             WinRT.ComWrappersSupport.InitializeComWrappers();
+            programArgs = args;
+
             bool isRedirect = DecideRedirection();
             if (!isRedirect)
             {
@@ -66,6 +70,11 @@ namespace RDPPassEncWUI3
             {
                 appCurrent.OnRedirected(args);
             }
+        }
+
+        public static string[] GetProgramArgs()
+        {
+           return programArgs;
         }
     }
 }

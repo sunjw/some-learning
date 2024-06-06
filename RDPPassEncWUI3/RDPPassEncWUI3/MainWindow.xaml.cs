@@ -48,12 +48,32 @@ namespace RDPPassEncWUI3
 
         private void MainFrame_Navigated(object sender, NavigationEventArgs e)
         {
+            bool isAppStart = false;
+            if (currentPage == null)
+            {
+                isAppStart = true;
+            }
             currentPage = e.Content as Page;
+            if (isAppStart && IsCurrentMainPage())
+            {
+                string someArgs = "";
+                string[] programeArgs = Program.GetProgramArgs();
+                if (programeArgs != null)
+                {
+                    someArgs = string.Join(",", programeArgs);
+                }
+                (currentPage as MainPage).OnRedirected(someArgs);
+            }
+        }
+
+        private bool IsCurrentMainPage()
+        {
+            return currentPage is MainPage;
         }
 
         public void OnRedirected(string someArgs)
         {
-            if (currentPage is MainPage)
+            if (IsCurrentMainPage())
             {
                 (currentPage as MainPage).OnRedirected(someArgs);
             }
