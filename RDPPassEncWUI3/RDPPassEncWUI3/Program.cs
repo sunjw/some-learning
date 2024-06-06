@@ -35,8 +35,7 @@ namespace RDPPassEncWUI3
         private static bool DecideRedirection()
         {
             bool isRedirect = false;
-            AppActivationArguments args = AppInstance.GetCurrent().GetActivatedEventArgs();
-            // ExtendedActivationKind kind = args.Kind;
+            AppActivationArguments args = WinUIHelper.GetCurrentActivatedEventArgs();
             AppInstance keyInstance = AppInstance.FindOrRegisterForKey("RDPPassEncWUI3");
 
             if (keyInstance.IsCurrent)

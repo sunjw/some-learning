@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.Windows.AppLifecycle;
 using System;
+using Windows.ApplicationModel.Activation;
 using WinRT.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -38,11 +39,12 @@ namespace RDPPassEncWUI3
             return currentPage is MainPage;
         }
 
-        public void OnRedirected(string someArgs)
+        public void OnRedirected(AppActivationArguments args)
         {
             if (IsCurrentMainPage())
             {
-                (currentPage as MainPage).OnRedirected(someArgs);
+                string appActivateArgs = WinUIHelper.GetLaunchActivatedEventArgs(args);
+                (currentPage as MainPage).OnRedirected(appActivateArgs);
             }
         }
 
@@ -53,7 +55,7 @@ namespace RDPPassEncWUI3
 
         public double GetScaleFactor()
         {
-            double dpi = User32.GetDpiForWindow(hWnd);
+            double dpi = User32Helper.GetDpiForWindow(hWnd);
             return dpi / 96.0;
         }
 
@@ -78,13 +80,9 @@ namespace RDPPassEncWUI3
             currentPage = e.Content as Page;
             if (isAppStart && IsCurrentMainPage())
             {
-                string someArgs = "";
-                string[] programeArgs = Program.GetProgramArgs();
-                if (programeArgs != null)
-                {
-                    someArgs = string.Join(",", programeArgs);
-                }
-                (currentPage as MainPage).OnRedirected(someArgs);
+                AppActivationArguments args = WinUIHelper.GetCurrentActivatedEventArgs();
+                string appActivateArgs = WinUIHelper.GetLaunchActivatedEventArgs(args);
+                (currentPage as MainPage).OnRedirected(appActivateArgs);
             }
         }
     }
