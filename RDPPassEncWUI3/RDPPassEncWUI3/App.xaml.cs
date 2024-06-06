@@ -1,6 +1,7 @@
 ﻿using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.Windows.AppLifecycle;
+using Windows.ApplicationModel.Activation;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -27,7 +28,7 @@ namespace RDPPassEncWUI3
         /// Invoked when the application is launched.
         /// </summary>
         /// <param name="args">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs args)
+        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             mainWindow = new MainWindow();
             mainWindow.Activate();
@@ -37,9 +38,15 @@ namespace RDPPassEncWUI3
         {
             if (mainWindow != null)
             {
+                string appActivateArgs = "";
+                if (args.Kind == ExtendedActivationKind.Launch)
+                {
+                    ILaunchActivatedEventArgs launchActivatedEventArgs = args.Data as ILaunchActivatedEventArgs;
+                    appActivateArgs = launchActivatedEventArgs?.Arguments;
+                }
                 mainWindow.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Normal, () =>
                 {
-                    (mainWindow as MainWindow).OnRedirected(args.Kind.ToString());
+                    (mainWindow as MainWindow).OnRedirected(appActivateArgs);
                 });
             }
         }
