@@ -17,7 +17,7 @@ namespace RDPPassEncWUI3
         private const int appInitWidth = 480;
         private const int appInitHeight = 480;
 
-        IntPtr hWnd = 0;
+        private IntPtr hWnd = 0;
         private Page currentPage = null;
 
         public MainWindow()
@@ -43,6 +43,11 @@ namespace RDPPassEncWUI3
             {
                 (currentPage as MainPage).OnRedirected(someArgs);
             }
+        }
+
+        public IntPtr GetHWNDHandle()
+        {
+            return hWnd;
         }
 
         private void MainFrame_Loaded(object sender, RoutedEventArgs e)

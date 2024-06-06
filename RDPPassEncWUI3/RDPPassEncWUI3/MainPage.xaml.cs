@@ -21,6 +21,11 @@ namespace RDPPassEncWUI3
             InitializeComponent();
         }
 
+        public void OnRedirected(string someArgs)
+        {
+            TextBoxDecrypted.Text = someArgs;
+        }
+
         private string EncryptPassword(string strDecrypted)
         {
             string strEncrypted = "";
@@ -88,11 +93,6 @@ namespace RDPPassEncWUI3
         private void ButtonAbout_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(AboutPage));
-        }
-
-        public void OnRedirected(string someArgs)
-        {
-            TextBoxDecrypted.Text = someArgs;
         }
     }
 }
