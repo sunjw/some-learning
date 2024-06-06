@@ -3,8 +3,9 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.Windows.AppLifecycle;
 using System;
-using Windows.ApplicationModel.Activation;
 using WinRT.Interop;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -55,7 +56,7 @@ namespace RDPPassEncWUI3
 
         public double GetScaleFactor()
         {
-            double dpi = User32Helper.GetDpiForWindow(hWnd);
+            double dpi = PInvoke.GetDpiForWindow(new HWND(hWnd));
             return dpi / 96.0;
         }
 
