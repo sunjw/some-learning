@@ -7,13 +7,13 @@ using Microsoft.Windows.AppLifecycle;
 
 namespace RDPPassEncWUI3
 {
-    class Program
+    public static class Program
     {
         [STAThread]
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             WinRT.ComWrappersSupport.InitializeComWrappers();
-            bool isRedirect = await DecideRedirection();
+            bool isRedirect = DecideRedirection();
             if (!isRedirect)
             {
                 Application.Start((p) =>
@@ -28,7 +28,7 @@ namespace RDPPassEncWUI3
             return;
         }
 
-        private static async Task<bool> DecideRedirection()
+        private static bool DecideRedirection()
         {
             bool isRedirect = false;
             AppActivationArguments args = AppInstance.GetCurrent().GetActivatedEventArgs();
@@ -42,9 +42,20 @@ namespace RDPPassEncWUI3
             else
             {
                 isRedirect = true;
-                await keyInstance.RedirectActivationToAsync(args);
+                RedirectActivationTo(keyInstance, args);
             }
             return isRedirect;
+        }
+
+        public static void RedirectActivationTo(AppInstance keyInstance, AppActivationArguments args)
+        {
+            var redirectSemaphore = new Semaphore(0, 1);
+            Task.Run(() =>
+            {
+                keyInstance.RedirectActivationToAsync(args).AsTask().Wait();
+                redirectSemaphore.Release();
+            });
+            redirectSemaphore.WaitOne();
         }
 
         private static void OnActivated(object sender, AppActivationArguments args)
