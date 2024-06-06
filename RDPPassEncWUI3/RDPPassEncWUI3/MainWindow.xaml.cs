@@ -14,8 +14,8 @@ namespace RDPPassEncWUI3
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-        private const int appInitWidth = 480;
-        private const int appInitHeight = 480;
+        private const int appInitWidth = 400;
+        private const int appInitHeight = 420;
 
         private IntPtr hWnd = 0;
         private Page currentPage = null;
@@ -26,7 +26,7 @@ namespace RDPPassEncWUI3
 
             hWnd = WindowNative.GetWindowHandle(this);
 
-            AppWindow.Resize(new(appInitWidth, appInitHeight));
+            InitWindowSize();
 
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
@@ -48,6 +48,18 @@ namespace RDPPassEncWUI3
         public IntPtr GetHWNDHandle()
         {
             return hWnd;
+        }
+
+        public double GetScaleFactor()
+        {
+            double dpi = User32.GetDpiForWindow(hWnd);
+            return dpi / 96.0;
+        }
+
+        private void InitWindowSize()
+        {
+            double scale = GetScaleFactor();
+            AppWindow.Resize(new((int)(appInitWidth * scale), (int)(appInitHeight * scale)));
         }
 
         private void MainFrame_Loaded(object sender, RoutedEventArgs e)
