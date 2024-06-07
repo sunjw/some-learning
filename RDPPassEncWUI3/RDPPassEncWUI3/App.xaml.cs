@@ -12,7 +12,7 @@ namespace RDPPassEncWUI3
     /// </summary>
     public partial class App : Application
     {
-        private Window mainWindow;
+        private MainWindow mainWindow;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -39,7 +39,7 @@ namespace RDPPassEncWUI3
             {
                 mainWindow.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Normal, () =>
                 {
-                    (mainWindow as MainWindow).OnRedirected(args);
+                    mainWindow.OnRedirected(args);
                 });
             }
         }
