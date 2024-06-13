@@ -67,8 +67,8 @@ namespace RDPPassEncWUI3
         {
             Point point = new Point();
             PInvoke.GetCursorPos(out point);
+            string strDebug = string.Format("{0:0.00} : {1:0.00}", point.X, point.Y);
 
-            string strDebug = string.Format("{0} : {1}", point.X, point.Y);
             TextBlockDebug.Text = strDebug;
         }
 
@@ -80,6 +80,14 @@ namespace RDPPassEncWUI3
             //    Frame.GoBack();
             //}
             Frame.Navigate(typeof(MainPage));
+        }
+
+        public void UpdateDebugString(string strDebug)
+        {
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                //TextBlockDebug.Text = strDebug;
+            });
         }
     }
 }
