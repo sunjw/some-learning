@@ -54,16 +54,10 @@ namespace RDPPassEncWUI3
             return hWnd;
         }
 
-        public double GetScaleFactor()
-        {
-            double dpi = PInvoke.GetDpiForWindow(new HWND(hWnd));
-            return dpi / 96.0;
-        }
-
         private void InitWindowSize()
         {
-            double scale = GetScaleFactor();
-            AppWindow.Resize(new((int)(appInitWidth * scale), (int)(appInitHeight * scale)));
+            double scale = WinUIHelper.GetScaleFactor(hWnd);
+            AppWindow.Resize(new(WinUIHelper.GetScaledPixel(appInitWidth, scale), WinUIHelper.GetScaledPixel(appInitHeight, scale)));
         }
 
         private void MainFrame_Loaded(object sender, RoutedEventArgs e)

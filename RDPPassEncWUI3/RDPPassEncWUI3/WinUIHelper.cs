@@ -1,5 +1,8 @@
-﻿using Microsoft.Windows.AppLifecycle;
+﻿using System;
+using Microsoft.Windows.AppLifecycle;
 using Windows.ApplicationModel.Activation;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 
 namespace RDPPassEncWUI3
 {
@@ -19,6 +22,17 @@ namespace RDPPassEncWUI3
                 launchArgs = launchActivatedEventArgs?.Arguments;
             }
             return launchArgs;
+        }
+
+        public static double GetScaleFactor(IntPtr hWnd)
+        {
+            double dpi = PInvoke.GetDpiForWindow(new HWND(hWnd));
+            return dpi / 96.0;
+        }
+
+        public static int GetScaledPixel(int pixel, double scale)
+        {
+            return (int)(pixel * scale);
         }
     }
 }
