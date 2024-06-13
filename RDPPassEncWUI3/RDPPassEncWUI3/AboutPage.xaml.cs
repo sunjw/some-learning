@@ -36,6 +36,7 @@ namespace RDPPassEncWUI3
             m_paragraphAbout.LineHeight = 18;
             m_paragraphAbout.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
 
+            RichTextBlockAbout.TextWrapping = TextWrapping.NoWrap;
             RichTextBlockAbout.Blocks.Clear();
             RichTextBlockAbout.Blocks.Add(m_paragraphAbout);
 
@@ -51,7 +52,9 @@ namespace RDPPassEncWUI3
 
             // test text
             inlinesAbout.Add(WinUIHelper.GenRunFromString("Name: C:\\Users\\sunj\\Downloads\\江苏省省道公路网规划（2023—2035 年）.pdf"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
 
+            // finish
             foreach (Inline inline in inlinesAbout)
             {
                 m_paragraphAbout.Inlines.Add(inline);
