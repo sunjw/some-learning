@@ -4,6 +4,8 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
 using Windows.ApplicationModel;
+using Windows.Win32;
+using System.Drawing;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -61,13 +63,23 @@ namespace RDPPassEncWUI3
             }
         }
 
+        private void RichTextBlockAbout_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            Point point = new Point();
+            PInvoke.GetCursorPos(out point);
+
+            string strDebug = string.Format("{0} : {1}", point.X, point.Y);
+            TextBlockDebug.Text = strDebug;
+        }
+
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
-            if (Frame.CanGoBack)
-            {
-                // Frame.GoBack(new SuppressNavigationTransitionInfo());
-                Frame.GoBack();
-            }
+            //if (Frame.CanGoBack)
+            //{
+            //    // Frame.GoBack(new SuppressNavigationTransitionInfo());
+            //    Frame.GoBack();
+            //}
+            Frame.Navigate(typeof(MainPage));
         }
     }
 }
