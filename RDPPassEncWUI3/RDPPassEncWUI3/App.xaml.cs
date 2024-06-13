@@ -12,7 +12,7 @@ namespace RDPPassEncWUI3
     /// </summary>
     public partial class App : Application
     {
-        private MainWindow mainWindow;
+        private MainWindow m_mainWindow;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -29,17 +29,17 @@ namespace RDPPassEncWUI3
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
-            mainWindow = new MainWindow();
-            mainWindow.Activate();
+            m_mainWindow = new MainWindow();
+            m_mainWindow.Activate();
         }
 
         public void OnRedirected(AppActivationArguments args)
         {
-            if (mainWindow != null)
+            if (m_mainWindow != null)
             {
-                mainWindow.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Normal, () =>
+                m_mainWindow.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Normal, () =>
                 {
-                    mainWindow.OnRedirected(args);
+                    m_mainWindow.OnRedirected(args);
                 });
             }
         }

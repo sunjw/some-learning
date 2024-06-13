@@ -1,5 +1,9 @@
+﻿using System.Collections.Generic;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Documents;
+using Microsoft.UI.Xaml.Media;
+using Windows.ApplicationModel;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -11,9 +15,47 @@ namespace RDPPassEncWUI3
     /// </summary>
     public sealed partial class AboutPage : Page
     {
+        private bool m_textAboutInit = false;
+        private Paragraph m_paragraphAbout = new Paragraph();
+
         public AboutPage()
         {
             InitializeComponent();
+        }
+
+        private void GridRoot_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (m_textAboutInit)
+            {
+                return;
+            }
+
+            m_textAboutInit = true;
+
+            m_paragraphAbout.FontFamily = new FontFamily("Consolas");
+            m_paragraphAbout.LineHeight = 18;
+            m_paragraphAbout.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
+
+            RichTextBlockAbout.Blocks.Clear();
+            RichTextBlockAbout.Blocks.Add(m_paragraphAbout);
+
+            List<Inline> inlinesAbout = new List<Inline>();
+
+            // version
+            PackageVersion packVersion = Package.Current.Id.Version;
+            string strVersion = string.Format("{0}.{1}.{2}.{3}",
+                packVersion.Major, packVersion.Minor, packVersion.Build, packVersion.Revision);
+            strVersion = "RDPPassEncWUI3: " + strVersion;
+            inlinesAbout.Add(WinUIHelper.GenRunFromString(strVersion));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+
+            // test text
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("Name: C:\\Users\\sunj\\Downloads\\江苏省省道公路网规划（2023—2035 年）.pdf"));
+
+            foreach (Inline inline in inlinesAbout)
+            {
+                m_paragraphAbout.Inlines.Add(inline);
+            }
         }
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)

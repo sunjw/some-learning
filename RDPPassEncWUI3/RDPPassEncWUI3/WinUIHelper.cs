@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.UI.Xaml.Documents;
 using Microsoft.Windows.AppLifecycle;
 using Windows.ApplicationModel.Activation;
 using Windows.Win32;
@@ -33,6 +34,13 @@ namespace RDPPassEncWUI3
         public static int GetScaledPixel(int pixel, double scale)
         {
             return (int)(pixel * scale);
+        }
+
+        public static Run GenRunFromString(string strContent)
+        {
+            Run run = new Run();
+            run.Text = strContent;
+            return run;
         }
     }
 }

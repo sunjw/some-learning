@@ -20,14 +20,14 @@ namespace RDPPassEncWUI3
         private const int appInitWidth = 400;
         private const int appInitHeight = 420;
 
-        private IntPtr hWnd = 0;
-        private Page currentPage = null;
+        private IntPtr m_hWnd = 0;
+        private Page m_pageCurrent = null;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            hWnd = WindowNative.GetWindowHandle(this);
+            m_hWnd = WindowNative.GetWindowHandle(this);
 
             InitWindowSize();
 
@@ -35,28 +35,28 @@ namespace RDPPassEncWUI3
             SetTitleBar(AppTitleBar);
         }
 
-        private bool IsCurrentMainPage()
+        private bool IsMainPageCurrent()
         {
-            return currentPage is MainPage;
+            return m_pageCurrent is MainPage;
         }
 
         public void OnRedirected(AppActivationArguments args)
         {
-            if (IsCurrentMainPage())
+            if (IsMainPageCurrent())
             {
                 string appActivateArgs = WinUIHelper.GetLaunchActivatedEventArgs(args);
-                (currentPage as MainPage).OnRedirected(appActivateArgs);
+                (m_pageCurrent as MainPage).OnRedirected(appActivateArgs);
             }
         }
 
         public IntPtr GetHWNDHandle()
         {
-            return hWnd;
+            return m_hWnd;
         }
 
         private void InitWindowSize()
         {
-            double scale = WinUIHelper.GetScaleFactor(hWnd);
+            double scale = WinUIHelper.GetScaleFactor(m_hWnd);
             AppWindow.Resize(new(WinUIHelper.GetScaledPixel(appInitWidth, scale), WinUIHelper.GetScaledPixel(appInitHeight, scale)));
         }
 
@@ -68,16 +68,16 @@ namespace RDPPassEncWUI3
         private void MainFrame_Navigated(object sender, NavigationEventArgs e)
         {
             bool isAppStart = false;
-            if (currentPage == null)
+            if (m_pageCurrent == null)
             {
                 isAppStart = true;
             }
-            currentPage = e.Content as Page;
-            if (isAppStart && IsCurrentMainPage())
+            m_pageCurrent = e.Content as Page;
+            if (isAppStart && IsMainPageCurrent())
             {
                 AppActivationArguments args = WinUIHelper.GetCurrentActivatedEventArgs();
                 string appActivateArgs = WinUIHelper.GetLaunchActivatedEventArgs(args);
-                (currentPage as MainPage).OnRedirected(appActivateArgs);
+                (m_pageCurrent as MainPage).OnRedirected(appActivateArgs);
             }
         }
     }
