@@ -82,6 +82,21 @@ namespace RDPPassEncWUI3
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("SHA512: A0E36C44680CC1A8B2FBAD283956300273D23F6693B47D6528792CCA56E69FC5871573CD87B0BDD5C286ABF9166F70346DB5FE81C40564567EBE97975A7AD9AE"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("文件名: C:\\Users\\Sun Junwen\\OneDrive\\Apps\\fHash\\insider\\fHashUwpWap_3.3.1.0_Test.7z"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("文件大小: 83672897 字节 (79.80 MB)"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("修改日期: 2024-04-22 23:06"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("MD5: 0A0B98B7C370D2DCB611C581AC9C9278"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("SHA1: 7385065E0B5A74E9F9D0B32FE0C9CF788FB543DD"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("SHA256: B37645E34682AE0A2BF87DA2BB5F361ADD919D2BCFE27FEEEC1B2C97DDB60B69"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("SHA512: DBBFEAE9818B0AB23D4D546FC635F4CC60B2178F9AC19A8FD1C435D905F05B495E16BEBFDE789F40C556A18640719C48B949F1CD8784E67FEBBB233BD1113741"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
 
             // finish
             foreach (Inline inline in inlinesAbout)
