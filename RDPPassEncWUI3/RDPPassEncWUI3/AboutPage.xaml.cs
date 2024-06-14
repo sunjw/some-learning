@@ -51,6 +51,7 @@ namespace RDPPassEncWUI3
             strVersion = "RDPPassEncWUI3: " + strVersion;
             inlinesAbout.Add(WinUIHelper.GenRunFromString(strVersion));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
 
             // test text
             inlinesAbout.Add(WinUIHelper.GenRunFromString("Name: C:\\Users\\sunj\\Downloads\\江苏省省道公路网规划（2023—2035 年）.pdf"));
@@ -68,6 +69,7 @@ namespace RDPPassEncWUI3
             inlinesAbout.Add(WinUIHelper.GenRunFromString("SHA512: 317084BEA676D335B0BFAC49421F0510B561CD1D967F1481AF119DFDA51B91EDA41B23D4BC2DFECB7A9CE6531D1412DAB17C805439573C545CCAD1AD737F797A"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+
             inlinesAbout.Add(WinUIHelper.GenRunFromString("文件名: /Users/sunjw/Library/CloudStorage/OneDrive-个人/Apps/fHash/insider/fHash-3.3.2-macOS.dmg"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("文件大小: 725422 字节 (725.42 KB)"));
@@ -83,6 +85,7 @@ namespace RDPPassEncWUI3
             inlinesAbout.Add(WinUIHelper.GenRunFromString("SHA512: A0E36C44680CC1A8B2FBAD283956300273D23F6693B47D6528792CCA56E69FC5871573CD87B0BDD5C286ABF9166F70346DB5FE81C40564567EBE97975A7AD9AE"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+
             inlinesAbout.Add(WinUIHelper.GenRunFromString("文件名: C:\\Users\\Sun Junwen\\OneDrive\\Apps\\fHash\\insider\\fHashUwpWap_3.3.1.0_Test.7z"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("文件大小: 83672897 字节 (79.80 MB)"));
@@ -96,6 +99,7 @@ namespace RDPPassEncWUI3
             inlinesAbout.Add(WinUIHelper.GenRunFromString("SHA256: B37645E34682AE0A2BF87DA2BB5F361ADD919D2BCFE27FEEEC1B2C97DDB60B69"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("SHA512: DBBFEAE9818B0AB23D4D546FC635F4CC60B2178F9AC19A8FD1C435D905F05B495E16BEBFDE789F40C556A18640719C48B949F1CD8784E67FEBBB233BD1113741"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
 
             // finish
@@ -117,6 +121,7 @@ namespace RDPPassEncWUI3
             {
                 return;
             }
+            double scale = Win32Helper.GetScaleFactor(mainWindow.GetHWNDHandle());
             Point pointCursor = mainWindow.GetCursorRelativePoint();
 
             //strDebug = string.Format("{0:0.00} : {1:0.00}", pointCursor.X, pointCursor.Y);
@@ -126,10 +131,9 @@ namespace RDPPassEncWUI3
             Windows.Foundation.Point pointScrollView = transformScrollView.TransformPoint(new Windows.Foundation.Point(0, 0));
 
             // cursor offset relative to ScrollView
-            double cursorRelateScrollOffX = pointCursor.X - pointScrollView.X;
-            double cursorRelateScrollOffY = pointCursor.Y - pointScrollView.Y;
+            double cursorRelateScrollOffX = pointCursor.X - pointScrollView.X - (ScrollViewerAbout.Margin.Left * scale);
+            double cursorRelateScrollOffY = pointCursor.Y - pointScrollView.Y - (ScrollViewerAbout.Margin.Top * scale);
 
-            double scale = Win32Helper.GetScaleFactor(mainWindow.GetHWNDHandle());
             double scrollViewWidth = ScrollViewerAbout.ActualWidth * scale;
             double scrollViewHeight = ScrollViewerAbout.ActualHeight * scale;
 
