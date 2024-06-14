@@ -74,6 +74,8 @@ namespace RDPPassEncWUI3
             }
             Point pointCursor = mainWindow.GetCursorRelativePoint();
 
+            //strDebug = string.Format("{0:0.00} : {1:0.00}", pointCursor.X, pointCursor.Y);
+
             // ScrollView position
             GeneralTransform transformScrollView = ScrollViewAbout.TransformToVisual(null);
             Windows.Foundation.Point pointScrollView = transformScrollView.TransformPoint(new Windows.Foundation.Point(0, 0));
@@ -82,7 +84,35 @@ namespace RDPPassEncWUI3
             double cursorRelateScrollOffX = pointCursor.X - pointScrollView.X;
             double cursorRelateScrollOffY = pointCursor.Y - pointScrollView.Y;
 
-            strDebug = string.Format("{0:0.00} : {1:0.00}", cursorRelateScrollOffX, cursorRelateScrollOffY);
+            double scale = Win32Helper.GetScaleFactor(mainWindow.GetHWNDHandle());
+            double scrollViewWidth = ScrollViewAbout.ActualWidth * scale;
+            double scrollViewHeight = ScrollViewAbout.ActualHeight * scale;
+
+            double cursorOutScrollWidthOffX = cursorRelateScrollOffX;
+            if (cursorOutScrollWidthOffX > 0 && cursorOutScrollWidthOffX <= scrollViewWidth)
+            {
+                // X inside
+                cursorOutScrollWidthOffX = 0;
+            }
+            else if (cursorOutScrollWidthOffX > scrollViewWidth)
+            {
+                // X outside right
+                cursorOutScrollWidthOffX = cursorOutScrollWidthOffX - scrollViewWidth;
+            }
+
+            double cursorOutScrollHeightOffY = cursorRelateScrollOffY;
+            if (cursorOutScrollHeightOffY > 0 && cursorOutScrollHeightOffY <= scrollViewHeight)
+            {
+                // Y inside
+                cursorOutScrollHeightOffY = 0;
+            }
+            else if (cursorOutScrollHeightOffY > scrollViewHeight)
+            {
+                // Y outside right
+                cursorOutScrollHeightOffY = cursorOutScrollHeightOffY - scrollViewHeight;
+            }
+
+            strDebug = string.Format("{0:0.00} : {1:0.00}", cursorOutScrollWidthOffX, cursorOutScrollHeightOffY);
 
             TextBlockDebug.Text = strDebug;
         }
