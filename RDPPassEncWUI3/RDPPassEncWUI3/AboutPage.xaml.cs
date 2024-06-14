@@ -77,7 +77,7 @@ namespace RDPPassEncWUI3
             //strDebug = string.Format("{0:0.00} : {1:0.00}", pointCursor.X, pointCursor.Y);
 
             // ScrollView position
-            GeneralTransform transformScrollView = ScrollViewAbout.TransformToVisual(null);
+            GeneralTransform transformScrollView = ScrollViewerAbout.TransformToVisual(null);
             Windows.Foundation.Point pointScrollView = transformScrollView.TransformPoint(new Windows.Foundation.Point(0, 0));
 
             // cursor offset relative to ScrollView
@@ -85,8 +85,8 @@ namespace RDPPassEncWUI3
             double cursorRelateScrollOffY = pointCursor.Y - pointScrollView.Y;
 
             double scale = Win32Helper.GetScaleFactor(mainWindow.GetHWNDHandle());
-            double scrollViewWidth = ScrollViewAbout.ActualWidth * scale;
-            double scrollViewHeight = ScrollViewAbout.ActualHeight * scale;
+            double scrollViewWidth = ScrollViewerAbout.ActualWidth * scale;
+            double scrollViewHeight = ScrollViewerAbout.ActualHeight * scale;
 
             double cursorOutScrollWidthOffX = cursorRelateScrollOffX;
             if (cursorOutScrollWidthOffX > 0 && cursorOutScrollWidthOffX <= scrollViewWidth)
@@ -112,7 +112,23 @@ namespace RDPPassEncWUI3
                 cursorOutScrollHeightOffY = cursorOutScrollHeightOffY - scrollViewHeight;
             }
 
-            strDebug = string.Format("{0:0.00} : {1:0.00}", cursorOutScrollWidthOffX, cursorOutScrollHeightOffY);
+            //strDebug = string.Format("{0:0.00} : {1:0.00}", cursorOutScrollWidthOffX, cursorOutScrollHeightOffY);
+
+            if (cursorOutScrollWidthOffX == 0 && cursorOutScrollHeightOffY == 0)
+            {
+                // X and Y all inside
+                strDebug = string.Format("{0:0.00} : {1:0.00}", cursorOutScrollWidthOffX, cursorOutScrollHeightOffY);
+                TextBlockDebug.Text = strDebug;
+                return;
+            }
+
+            double scrollViewCurOffX = ScrollViewerAbout.HorizontalOffset;
+            double scrollViewCurOffY = ScrollViewerAbout.VerticalOffset;
+            double scrollViewNewOffX = scrollViewCurOffX + cursorOutScrollWidthOffX;
+            double scrollViewNewOffY = scrollViewCurOffX + cursorOutScrollHeightOffY;
+
+            strDebug = string.Format("{0:0.00} : {1:0.00}", scrollViewNewOffX, scrollViewNewOffY);
+            ScrollViewerAbout.ChangeView(scrollViewNewOffX, scrollViewNewOffY, null);
 
             TextBlockDebug.Text = strDebug;
         }
