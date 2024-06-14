@@ -121,7 +121,7 @@ namespace RDPPassEncWUI3
             {
                 return;
             }
-            double scale = Win32Helper.GetScaleFactor(mainWindow.GetHWNDHandle());
+            double scale = Win32Helper.GetScaleFactor(mainWindow.HWNDHandle);
             Point pointCursor = mainWindow.GetCursorRelativePoint();
 
             //strDebug = string.Format("{0:0.00} : {1:0.00}", pointCursor.X, pointCursor.Y);

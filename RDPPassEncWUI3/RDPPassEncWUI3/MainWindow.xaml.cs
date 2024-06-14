@@ -22,16 +22,18 @@ namespace RDPPassEncWUI3
         private const int appInitWidth = 400;
         private const int appInitHeight = 420;
 
-        private IntPtr m_hWnd = 0;
         private Page m_pageCurrent = null;
 
-        public static MainWindow CurrentWindow { get; private set; }
+        public static MainWindow CurrentWindow { get; private set; } = null;
+
+        public IntPtr HWNDHandle { get; private set; } = 0;
+        public Windows.Foundation.Point PointCursor { get; private set; } = new Windows.Foundation.Point(0, 0);
 
         public MainWindow()
         {
             InitializeComponent();
 
-            m_hWnd = WindowNative.GetWindowHandle(this);
+            HWNDHandle = WindowNative.GetWindowHandle(this);
 
             InitWindowSize();
 
@@ -58,11 +60,6 @@ namespace RDPPassEncWUI3
             }
         }
 
-        public IntPtr GetHWNDHandle()
-        {
-            return m_hWnd;
-        }
-
         public Point GetCursorRelativePoint()
         {
             Point pointRelative = new Point(0, 0);
@@ -81,7 +78,7 @@ namespace RDPPassEncWUI3
 
         private void InitWindowSize()
         {
-            double scale = Win32Helper.GetScaleFactor(m_hWnd);
+            double scale = Win32Helper.GetScaleFactor(HWNDHandle);
             AppWindow.Resize(new(Win32Helper.GetScaledPixel(appInitWidth, scale), Win32Helper.GetScaledPixel(appInitHeight, scale)));
         }
 
@@ -110,7 +107,9 @@ namespace RDPPassEncWUI3
         private void GridRoot_PointerMoved(object sender, PointerRoutedEventArgs e)
         {
             PointerPoint pp = e.GetCurrentPoint(GridRoot);
-            string strDebug = string.Format("{0:0.00} : {1:0.00}", pp.Position.X, pp.Position.Y);
+            PointCursor = pp.Position;
+
+            string strDebug = string.Format("{0:0.00} : {1:0.00}", PointCursor.X, PointCursor.Y);
             if (IsAboutPageCurrent())
             {
                 (m_pageCurrent as AboutPage).UpdateDebugString(strDebug);
