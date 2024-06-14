@@ -173,7 +173,7 @@ namespace RDPPassEncWUI3
             double scrollViewNewOffY = scrollViewCurOffY + cursorOutScrollHeightOffY;
 
             strDebug = string.Format("{0:0.00} : {1:0.00}", scrollViewNewOffX, scrollViewNewOffY);
-            ScrollViewerAbout.ChangeView(scrollViewNewOffX, scrollViewNewOffY, null);
+            WinUIHelper.ScrollViewerScrollTo(ScrollViewerAbout, scrollViewNewOffX, scrollViewNewOffY);
 
             TextBlockDebug.Text = strDebug;
         }

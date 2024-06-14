@@ -24,9 +24,31 @@ namespace RDPPassEncWUI3
             return launchArgs;
         }
 
+        public static void ScrollViewerScrollTo(ScrollViewer scrollViewer, double offsetX, double offsetY)
+        {
+            if (offsetX < 0)
+            {
+               offsetX = 0;
+            }
+            if (offsetY < 0)
+            {
+               offsetY = 0;
+            }
+            if (offsetX > scrollViewer.ScrollableWidth)
+            {
+               offsetX = scrollViewer.ScrollableWidth;
+            }
+            if (offsetY > scrollViewer.ScrollableHeight)
+            {
+               offsetY = scrollViewer.ScrollableHeight;
+            }
+            scrollViewer.ChangeView(offsetX, offsetY, null);
+        }
+
+
         public static void ScrollViewerToBottom(ScrollViewer scrollViewer)
         {
-            scrollViewer.Measure(scrollViewer.RenderSize);
+            scrollViewer.Measure(scrollViewer.RenderSize); // must Measure now
             scrollViewer.ChangeView(null, scrollViewer.ScrollableHeight, null);
         }
 
