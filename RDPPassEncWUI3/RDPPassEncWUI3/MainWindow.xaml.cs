@@ -23,6 +23,8 @@ namespace RDPPassEncWUI3
         private IntPtr m_hWnd = 0;
         private Page m_pageCurrent = null;
 
+        public static MainWindow CurrentWindow { get; private set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -61,12 +63,13 @@ namespace RDPPassEncWUI3
 
         private void InitWindowSize()
         {
-            double scale = WinUIHelper.GetScaleFactor(m_hWnd);
-            AppWindow.Resize(new(WinUIHelper.GetScaledPixel(appInitWidth, scale), WinUIHelper.GetScaledPixel(appInitHeight, scale)));
+            double scale = Win32Helper.GetScaleFactor(m_hWnd);
+            AppWindow.Resize(new(Win32Helper.GetScaledPixel(appInitWidth, scale), Win32Helper.GetScaledPixel(appInitHeight, scale)));
         }
 
         private void MainFrame_Loaded(object sender, RoutedEventArgs e)
         {
+            CurrentWindow = this;
             MainFrame.Navigate(typeof(MainPage));
         }
 

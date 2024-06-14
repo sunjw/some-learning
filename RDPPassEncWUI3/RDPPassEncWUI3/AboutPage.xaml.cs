@@ -4,7 +4,6 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
 using Windows.ApplicationModel;
-using Windows.Win32;
 using System.Drawing;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -65,8 +64,7 @@ namespace RDPPassEncWUI3
 
         private void RichTextBlockAbout_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            Point point = new Point();
-            PInvoke.GetCursorPos(out point);
+            Point point = Win32Helper.GetPointerPoint();
             string strDebug = string.Format("{0:0.00} : {1:0.00}", point.X, point.Y);
 
             TextBlockDebug.Text = strDebug;
