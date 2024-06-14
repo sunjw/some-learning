@@ -6,6 +6,8 @@ using System;
 using WinRT.Interop;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Input;
+using System.Drawing;
+using Windows.Graphics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -59,6 +61,22 @@ namespace RDPPassEncWUI3
         public IntPtr GetHWNDHandle()
         {
             return m_hWnd;
+        }
+
+        public Point GetCursorRelativePoint()
+        {
+            Point pointRelative = new Point(0, 0);
+
+            Point pointPointer = Win32Helper.GetPointerPoint();
+
+            if (AppWindow != null)
+            {
+                PointInt32 pointAppWindow = AppWindow.Position;
+                pointRelative.X = pointPointer.X - pointAppWindow.X;
+                pointRelative.Y = pointPointer.Y - pointAppWindow.Y;
+            }
+
+            return pointRelative;
         }
 
         private void InitWindowSize()
