@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
 using Windows.ApplicationModel;
-using System.Drawing;
-using Microsoft.UI.Dispatching;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -23,6 +22,14 @@ namespace RDPPassEncWUI3
         public AboutPage()
         {
             InitializeComponent();
+        }
+
+        public void UpdateDebugString(string strDebug)
+        {
+            DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Normal, () =>
+            {
+                TextBlockDebug.Text = strDebug;
+            });
         }
 
         private void GridRoot_Loaded(object sender, RoutedEventArgs e)
@@ -111,6 +118,16 @@ namespace RDPPassEncWUI3
             WinUIHelper.ScrollViewerToBottom(ScrollViewerAbout);
         }
 
+        private void ButtonClose_Click(object sender, RoutedEventArgs e)
+        {
+            //if (Frame.CanGoBack)
+            //{
+            //    // Frame.GoBack(new SuppressNavigationTransitionInfo());
+            //    Frame.GoBack();
+            //}
+            Frame.Navigate(typeof(MainPage));
+        }
+
         private void RichTextBlockAbout_SelectionChanged(object sender, RoutedEventArgs e)
         {
             string strDebug = "";
@@ -122,9 +139,10 @@ namespace RDPPassEncWUI3
                 return;
             }
             double scale = Win32Helper.GetScaleFactor(mainWindow.HWNDHandle);
-            Point pointCursor = mainWindow.GetCursorRelativePoint();
+            System.Drawing.Point pointCursor = mainWindow.GetCursorRelativePoint();
 
             //strDebug = string.Format("{0:0.00} : {1:0.00}", pointCursor.X, pointCursor.Y);
+            //TextBlockDebug.Text = strDebug;
 
             // ScrollView position
             GeneralTransform transformScrollView = ScrollViewerAbout.TransformToVisual(null);
@@ -167,7 +185,7 @@ namespace RDPPassEncWUI3
             {
                 // X and Y all inside
                 strDebug = string.Format("{0:0.00} : {1:0.00}", cursorOutScrollWidthOffX, cursorOutScrollHeightOffY);
-                TextBlockDebug.Text = strDebug;
+                //TextBlockDebug.Text = strDebug;
                 return;
             }
 
@@ -179,25 +197,7 @@ namespace RDPPassEncWUI3
             strDebug = string.Format("{0:0.00} : {1:0.00}", scrollViewNewOffX, scrollViewNewOffY);
             WinUIHelper.ScrollViewerScrollTo(ScrollViewerAbout, scrollViewNewOffX, scrollViewNewOffY);
 
-            TextBlockDebug.Text = strDebug;
-        }
-
-        private void ButtonClose_Click(object sender, RoutedEventArgs e)
-        {
-            //if (Frame.CanGoBack)
-            //{
-            //    // Frame.GoBack(new SuppressNavigationTransitionInfo());
-            //    Frame.GoBack();
-            //}
-            Frame.Navigate(typeof(MainPage));
-        }
-
-        public void UpdateDebugString(string strDebug)
-        {
-            DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Normal, () =>
-            {
-                //TextBlockDebug.Text = strDebug;
-            });
+            //TextBlockDebug.Text = strDebug;
         }
     }
 }

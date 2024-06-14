@@ -1,13 +1,12 @@
+using System;
+using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.Windows.AppLifecycle;
-using System;
-using WinRT.Interop;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Input;
-using System.Drawing;
 using Windows.Graphics;
+using WinRT.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -60,11 +59,11 @@ namespace RDPPassEncWUI3
             }
         }
 
-        public Point GetCursorRelativePoint()
+        public System.Drawing.Point GetCursorRelativePoint()
         {
-            Point pointRelative = new Point(0, 0);
+            System.Drawing.Point pointRelative = new System.Drawing.Point(0, 0);
 
-            Point pointPointer = Win32Helper.GetPointerPoint();
+            System.Drawing.Point pointPointer = Win32Helper.GetPointerPoint();
 
             if (AppWindow != null)
             {
@@ -112,7 +111,17 @@ namespace RDPPassEncWUI3
             string strDebug = string.Format("{0:0.00} : {1:0.00}", PointCursor.X, PointCursor.Y);
             if (IsAboutPageCurrent())
             {
-                (m_pageCurrent as AboutPage).UpdateDebugString(strDebug);
+                //(m_pageCurrent as AboutPage).UpdateDebugString(strDebug);
+            }
+        }
+
+        private void GridRoot_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Windows.Foundation.Point pointTapped = e.GetPosition(GridRoot);
+            string strDebug = string.Format("{0:0.00} : {1:0.00}", pointTapped.X, pointTapped.Y);
+            if (IsAboutPageCurrent())
+            {
+                //(m_pageCurrent as AboutPage).UpdateDebugString(strDebug);
             }
         }
     }

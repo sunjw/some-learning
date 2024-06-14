@@ -12,7 +12,10 @@
         <MicaBackdrop />
     </Window.SystemBackdrop>
 
-    <Grid x:Name="GridRoot" PointerMoved="GridRoot_PointerMoved">
+    <Grid
+        x:Name="GridRoot"
+        PointerMoved="GridRoot_PointerMoved"
+        Tapped="GridRoot_Tapped">
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
             <RowDefinition Height="*" />
