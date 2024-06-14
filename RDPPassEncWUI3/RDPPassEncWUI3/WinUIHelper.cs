@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml.Documents;
+﻿using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Documents;
 using Microsoft.Windows.AppLifecycle;
 using Windows.ApplicationModel.Activation;
 
@@ -21,6 +22,12 @@ namespace RDPPassEncWUI3
                 launchArgs = launchActivatedEventArgs?.Arguments;
             }
             return launchArgs;
+        }
+
+        public static void ScrollViewerToBottom(ScrollViewer scrollViewer)
+        {
+            scrollViewer.Measure(scrollViewer.RenderSize);
+            scrollViewer.ChangeView(null, scrollViewer.ScrollableHeight, null);
         }
 
         public static Run GenRunFromString(string strContent)

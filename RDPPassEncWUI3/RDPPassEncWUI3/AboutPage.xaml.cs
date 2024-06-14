@@ -103,6 +103,8 @@ namespace RDPPassEncWUI3
             {
                 m_paragraphAbout.Inlines.Add(inline);
             }
+
+            WinUIHelper.ScrollViewerToBottom(ScrollViewerAbout);
         }
 
         private void RichTextBlockAbout_SelectionChanged(object sender, RoutedEventArgs e)
