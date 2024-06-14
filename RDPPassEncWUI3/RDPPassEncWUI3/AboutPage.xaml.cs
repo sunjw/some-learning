@@ -170,7 +170,7 @@ namespace RDPPassEncWUI3
             double scrollViewCurOffX = ScrollViewerAbout.HorizontalOffset;
             double scrollViewCurOffY = ScrollViewerAbout.VerticalOffset;
             double scrollViewNewOffX = scrollViewCurOffX + cursorOutScrollWidthOffX;
-            double scrollViewNewOffY = scrollViewCurOffX + cursorOutScrollHeightOffY;
+            double scrollViewNewOffY = scrollViewCurOffY + cursorOutScrollHeightOffY;
 
             strDebug = string.Format("{0:0.00} : {1:0.00}", scrollViewNewOffX, scrollViewNewOffY);
             ScrollViewerAbout.ChangeView(scrollViewNewOffX, scrollViewNewOffY, null);
