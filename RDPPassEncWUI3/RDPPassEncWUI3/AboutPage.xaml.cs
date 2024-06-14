@@ -66,6 +66,7 @@ namespace RDPPassEncWUI3
         {
             string strDebug = "";
 
+            // cursor position
             MainWindow mainWindow = MainWindow.CurrentWindow;
             if (mainWindow == null)
             {
@@ -73,7 +74,15 @@ namespace RDPPassEncWUI3
             }
             Point pointCursor = mainWindow.GetCursorRelativePoint();
 
-            strDebug = string.Format("{0:0.00} : {1:0.00}", pointCursor.X, pointCursor.Y);
+            // ScrollView position
+            GeneralTransform transformScrollView = ScrollViewAbout.TransformToVisual(null);
+            Windows.Foundation.Point pointScrollView = transformScrollView.TransformPoint(new Windows.Foundation.Point(0, 0));
+
+            // cursor offset relative to ScrollView
+            double cursorRelateScrollOffX = pointCursor.X - pointScrollView.X;
+            double cursorRelateScrollOffY = pointCursor.Y - pointScrollView.Y;
+
+            strDebug = string.Format("{0:0.00} : {1:0.00}", cursorRelateScrollOffX, cursorRelateScrollOffY);
 
             TextBlockDebug.Text = strDebug;
         }
