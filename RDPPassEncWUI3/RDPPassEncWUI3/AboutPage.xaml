@@ -28,7 +28,7 @@
 
                 <RichTextBlock
                     x:Name="RichTextBlockAbout"
-                    Margin="4,0,4,0"
+                    Margin="6,0,6,0"
                     SelectionChanged="RichTextBlockAbout_SelectionChanged" />
             </ScrollViewer>
         </Grid>
@@ -36,7 +36,8 @@
         <Grid
             x:Name="GridBottom"
             Grid.Row="1"
-            Padding="0,10,0,10">
+            Padding="0,10,0,10"
+            Background="{ThemeResource LayerOnMicaBaseAltFillColorDefault}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
