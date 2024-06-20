@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
 using Windows.ApplicationModel;
+using TestCLRBridge;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -17,7 +18,8 @@ namespace RDPPassEncWUI3
     public sealed partial class AboutPage : Page
     {
         private bool m_textAboutInit = false;
-        private Paragraph m_paragraphAbout = new Paragraph();
+        private Paragraph m_paragraphAbout = new ();
+        private TestClass m_testClass = new ();
 
         public AboutPage()
         {
@@ -116,6 +118,9 @@ namespace RDPPassEncWUI3
             }
 
             WinUIHelper.ScrollViewerToBottom(ScrollViewerAbout);
+
+            // some test
+            TextBlockDebug.Text = m_testClass.GetTestValue().ToString();
         }
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)

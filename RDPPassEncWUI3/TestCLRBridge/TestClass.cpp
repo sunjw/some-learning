@@ -4,7 +4,7 @@
 
 namespace TestCLRBridge
 {
-    int TestClass::Test()
+    int TestClass::GetTestValue()
     {
         return 100;
     }

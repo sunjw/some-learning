@@ -5,6 +5,6 @@ namespace TestCLRBridge
     public ref class TestClass
     {
     public:
-        int Test();
+        int GetTestValue();
     };
 }
