@@ -19,7 +19,7 @@ namespace RDPPassEncWUI3
     {
         private bool m_textAboutInit = false;
         private Paragraph m_paragraphAbout = new ();
-        private TestClass m_testClass = new ();
+        private TestClass m_testClass = new ("TestClass");
 
         public AboutPage()
         {
