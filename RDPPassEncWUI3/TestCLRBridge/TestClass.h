@@ -21,7 +21,7 @@ namespace TestCLRBridge
         // clean up managed resources
         !TestClass();
 
-        int GetTestValue();
+        System::String^ GetTestValue();
 
     private:
         sunjwbase::tstring *m_tstrSomeStr;

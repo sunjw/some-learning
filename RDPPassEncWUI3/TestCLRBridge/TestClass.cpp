@@ -26,8 +26,9 @@ namespace TestCLRBridge
         delete m_tstrSomeStr;
     }
 
-    int TestClass::GetTestValue()
+    String^ TestClass::GetTestValue()
     {
-        return 100;
+        m_tstrSomeStr->append(TEXT(" 100!"));
+        return marshal_as<String^>(m_tstrSomeStr->c_str());
     }
 }
