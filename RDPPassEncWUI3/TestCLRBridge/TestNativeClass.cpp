@@ -53,6 +53,9 @@ void TestNativeClass::GoThread()
 
 void TestNativeClass::UpdateUI(const tstring& tstrSome)
 {
-    String^ mstrSome = ConvertWstrToSystemString(tstrSome.c_str());
-    m_testManagedClass->UpdateUIHandler(mstrSome);
+    if (m_testManagedClass->UpdateUIHandler != nullptr)
+    {
+        String^ mstrSome = ConvertWstrToSystemString(tstrSome.c_str());
+        m_testManagedClass->UpdateUIHandler(mstrSome);
+    }
 }
