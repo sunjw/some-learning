@@ -5,6 +5,8 @@ namespace TestCLRBridge
 {
     class TestNativeClass;
 
+    public delegate void UpdateUIHandler(System::String^ someStr);
+
     public ref class TestManagedClass
     {
     public:
@@ -27,6 +29,8 @@ namespace TestCLRBridge
         System::String^ GetTestValue();
 
         void GoThread();
+
+        UpdateUIHandler^ UpdateUIHandler;
 
     private:
         TestNativeClass *m_testNativeClass;

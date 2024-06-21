@@ -17,6 +17,7 @@ namespace TestCLRBridge
         }
 
         void GoThread();
+        void UpdateUI(const sunjwbase::tstring& tstrSome);
 
     private:
         msclr::auto_gcroot<TestManagedClass^> m_testManagedClass;

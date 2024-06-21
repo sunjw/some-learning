@@ -6,10 +6,25 @@
 #include "ClrHelper.h"
 
 using namespace System;
+using namespace std;
+using namespace sunjwbase;
 using namespace TestCLRBridge;
 
 int WINAPI SomeThreadFunc(void *param)
 {
+    TestNativeClass *pNativeClass = (TestNativeClass *)param;
+
+    for (int i = 0; i < 3; i++)
+    {
+        Sleep(1000);
+        string strSome;
+        strSome = strappendformat(strSome, "%d", (i + 1));
+        pNativeClass->UpdateUI(strtotstr(strSome));
+    }
+
+    Sleep(1000);
+    pNativeClass->UpdateUI(tstring(TEXT("DONE @#$@#$@#$")));
+
     return 0;
 }
 
@@ -31,7 +46,13 @@ void TestNativeClass::GoThread()
     m_hWorkThread = (HANDLE)_beginthreadex(NULL,
         0,
         (unsigned int (WINAPI*)(void*))SomeThreadFunc,
-        NULL,
+        this,
         0,
         (unsigned int*)&thredID);
+}
+
+void TestNativeClass::UpdateUI(const tstring& tstrSome)
+{
+    String^ mstrSome = ConvertWstrToSystemString(tstrSome.c_str());
+    m_testManagedClass->UpdateUIHandler(mstrSome);
 }

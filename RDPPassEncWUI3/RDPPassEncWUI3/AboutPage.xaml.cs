@@ -120,6 +120,7 @@ namespace RDPPassEncWUI3
             WinUIHelper.ScrollViewerToBottom(ScrollViewerAbout);
 
             // some test
+            m_testManagedClass.UpdateUIHandler += UpdateUIHandler;
             TextBlockDebug.Text = m_testManagedClass.GetTestValue().ToString();
             m_testManagedClass.GoThread();
         }
@@ -204,6 +205,11 @@ namespace RDPPassEncWUI3
             WinUIHelper.ScrollViewerScrollTo(ScrollViewerAbout, scrollViewNewOffX, scrollViewNewOffY);
 
             //TextBlockDebug.Text = strDebug;
+        }
+
+        private void UpdateUIHandler(string someStr)
+        {
+            UpdateDebugString(someStr);
         }
     }
 }
