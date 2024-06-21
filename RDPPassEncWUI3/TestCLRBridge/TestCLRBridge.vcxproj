@@ -122,6 +122,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ClrHelper.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="strhelper.h" />
@@ -129,6 +130,7 @@
     <ClInclude Include="TestNativeClass.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ClrHelper.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="strhelper.cpp" />
     <ClCompile Include="TestManagedClass.cpp" />

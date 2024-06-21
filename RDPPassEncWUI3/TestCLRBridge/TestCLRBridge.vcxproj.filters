@@ -30,6 +30,9 @@
     <ClInclude Include="TestNativeClass.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ClrHelper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestManagedClass.cpp">
@@ -42,6 +45,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="TestNativeClass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ClrHelper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

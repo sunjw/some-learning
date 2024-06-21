@@ -1,5 +1,6 @@
 #pragma once
 #include <msclr\auto_gcroot.h>
+#include "strhelper.h"
 #include "TestManagedClass.h"
 
 namespace TestCLRBridge
@@ -11,5 +12,6 @@ namespace TestCLRBridge
 
 	private:
 		msclr::auto_gcroot<TestManagedClass^> m_testManagedClass;
+		sunjwbase::tstring m_tstrSome;
 	};
 }
