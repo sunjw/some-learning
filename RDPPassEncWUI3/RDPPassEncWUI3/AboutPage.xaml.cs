@@ -121,6 +121,7 @@ namespace RDPPassEncWUI3
 
             // some test
             TextBlockDebug.Text = m_testManagedClass.GetTestValue().ToString();
+            m_testManagedClass.GoThread();
         }
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)

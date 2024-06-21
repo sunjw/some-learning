@@ -1,4 +1,5 @@
 #pragma once
+#include <Windows.h>
 #include <msclr\auto_gcroot.h>
 #include "strhelper.h"
 #include "TestManagedClass.h"
@@ -15,8 +16,11 @@ namespace TestCLRBridge
 			return m_tstrSome;
 		}
 
+		void GoThread();
+
 	private:
 		msclr::auto_gcroot<TestManagedClass^> m_testManagedClass;
 		sunjwbase::tstring m_tstrSome;
+		HANDLE m_hWorkThread;
 	};
 }

@@ -26,6 +26,8 @@ namespace TestCLRBridge
 
         System::String^ GetTestValue();
 
+        void GoThread();
+
     private:
         TestNativeClass *m_testNativeClass;
     };

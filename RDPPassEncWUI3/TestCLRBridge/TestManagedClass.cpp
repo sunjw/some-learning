@@ -29,4 +29,9 @@ namespace TestCLRBridge
         ret = ret + " 10!";
         return ret;
     }
+
+    void TestManagedClass::GoThread()
+    {
+        m_testNativeClass->GoThread();
+    }
 }
