@@ -10,5 +10,5 @@ namespace TestCLRBridge
 
 	System::String^ ConvertStrToSystemString(LPCSTR lpStrSource);
 
-	System::String^ ConvertStrToSystemString(LPCWSTR lpWstrSource);
+	System::String^ ConvertWstrToSystemString(LPCWSTR lpWstrSource);
 }

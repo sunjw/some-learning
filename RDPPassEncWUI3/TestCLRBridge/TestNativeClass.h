@@ -8,7 +8,12 @@ namespace TestCLRBridge
 	class TestNativeClass
 	{
 	public:
-		TestNativeClass(TestManagedClass^ testManagedClass);
+		TestNativeClass(TestManagedClass^ testManagedClass, System::String^ mstr);
+
+		inline sunjwbase::tstring GetString() const
+		{
+			return m_tstrSome;
+		}
 
 	private:
 		msclr::auto_gcroot<TestManagedClass^> m_testManagedClass;

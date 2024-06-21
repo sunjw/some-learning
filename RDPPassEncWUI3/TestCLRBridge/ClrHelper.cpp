@@ -20,7 +20,7 @@ System::String^ TestCLRBridge::ConvertStrToSystemString(LPCSTR lpStrSource)
 	return msclr::interop::marshal_as<System::String^>(lpStrSource);
 }
 
-System::String^ TestCLRBridge::ConvertStrToSystemString(LPCWSTR lpWstrSource)
+System::String^ TestCLRBridge::ConvertWstrToSystemString(LPCWSTR lpWstrSource)
 {
 	return msclr::interop::marshal_as<System::String^>(lpWstrSource);
 }

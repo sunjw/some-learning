@@ -9,7 +9,8 @@ namespace TestCLRBridge
     {
     public:
         TestManagedClass(System::String^ someStr);
-        ~TestManagedClass()
+
+        virtual ~TestManagedClass()
         {
             // clean up code to release managed resource
             // ...
@@ -26,7 +27,6 @@ namespace TestCLRBridge
         System::String^ GetTestValue();
 
     private:
-        sunjwbase::tstring *m_tstrSomeStr;
         TestNativeClass *m_testNativeClass;
     };
 }
