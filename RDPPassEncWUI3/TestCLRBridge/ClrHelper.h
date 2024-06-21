@@ -4,11 +4,11 @@
 
 namespace TestCLRBridge
 {
-	std::string ConvertToStdString(System::String^ mstr);
+    std::string ConvertToStdString(System::String^ mstr);
 
-	std::wstring ConvertToStdWstring(System::String^ mstr);
+    std::wstring ConvertToStdWstring(System::String^ mstr);
 
-	System::String^ ConvertStrToSystemString(LPCSTR lpStrSource);
+    System::String^ ConvertStrToSystemString(LPCSTR lpStrSource);
 
-	System::String^ ConvertWstrToSystemString(LPCWSTR lpWstrSource);
+    System::String^ ConvertWstrToSystemString(LPCWSTR lpWstrSource);
 }

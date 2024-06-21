@@ -6,21 +6,21 @@
 
 namespace TestCLRBridge
 {
-	class TestNativeClass
-	{
-	public:
-		TestNativeClass(TestManagedClass^ testManagedClass, System::String^ mstr);
+    class TestNativeClass
+    {
+    public:
+        TestNativeClass(TestManagedClass^ testManagedClass, System::String^ mstr);
 
-		inline sunjwbase::tstring GetString() const
-		{
-			return m_tstrSome;
-		}
+        inline sunjwbase::tstring GetString() const
+        {
+            return m_tstrSome;
+        }
 
-		void GoThread();
+        void GoThread();
 
-	private:
-		msclr::auto_gcroot<TestManagedClass^> m_testManagedClass;
-		sunjwbase::tstring m_tstrSome;
-		HANDLE m_hWorkThread;
-	};
+    private:
+        msclr::auto_gcroot<TestManagedClass^> m_testManagedClass;
+        sunjwbase::tstring m_tstrSome;
+        HANDLE m_hWorkThread;
+    };
 }
