@@ -1,4 +1,3 @@
-#pragma once
 #include "stdafx.h"
 
 #include "TestManagedClass.h"
@@ -6,6 +5,8 @@
 #include <string>
 #include <msclr\marshal.h>
 #include <msclr\marshal_cppstd.h>
+
+#include "TestNativeClass.h"
 
 using namespace System;
 
@@ -16,7 +17,8 @@ using namespace sunjwbase;
 namespace TestCLRBridge
 {
     TestManagedClass::TestManagedClass(String^ someStr):
-        m_tstrSomeStr(new tstring(marshal_as<tstring>(someStr)))
+        m_tstrSomeStr(new tstring(marshal_as<tstring>(someStr))),
+        m_testNativeClass(new TestNativeClass(this))
     {
 
     }

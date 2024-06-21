@@ -126,11 +126,13 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="strhelper.h" />
     <ClInclude Include="TestManagedClass.h" />
+    <ClInclude Include="TestNativeClass.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="strhelper.cpp" />
     <ClCompile Include="TestManagedClass.cpp" />
+    <ClCompile Include="TestNativeClass.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

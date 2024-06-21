@@ -3,6 +3,8 @@
 
 namespace TestCLRBridge
 {
+    class TestNativeClass;
+
     public ref class TestManagedClass
     {
     public:
@@ -25,5 +27,6 @@ namespace TestCLRBridge
 
     private:
         sunjwbase::tstring *m_tstrSomeStr;
+        TestNativeClass *m_testNativeClass;
     };
 }
