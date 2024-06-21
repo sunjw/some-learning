@@ -19,7 +19,7 @@ namespace RDPPassEncWUI3
     {
         private bool m_textAboutInit = false;
         private Paragraph m_paragraphAbout = new ();
-        private TestClass m_testClass = new ("TestClass");
+        private TestManagedClass m_testManagedClass = new ("TestManagedClass");
 
         public AboutPage()
         {
@@ -120,7 +120,7 @@ namespace RDPPassEncWUI3
             WinUIHelper.ScrollViewerToBottom(ScrollViewerAbout);
 
             // some test
-            TextBlockDebug.Text = m_testClass.GetTestValue().ToString();
+            TextBlockDebug.Text = m_testManagedClass.GetTestValue().ToString();
         }
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)

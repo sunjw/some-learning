@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 
-#include "TestClass.h"
+#include "TestManagedClass.h"
 
 #include <string>
 #include <msclr\marshal.h>
@@ -15,18 +15,18 @@ using namespace sunjwbase;
 
 namespace TestCLRBridge
 {
-    TestClass::TestClass(String^ someStr):
+    TestManagedClass::TestManagedClass(String^ someStr):
         m_tstrSomeStr(new tstring(marshal_as<tstring>(someStr)))
     {
 
     }
 
-    TestClass::!TestClass()
+    TestManagedClass::!TestManagedClass()
     {
         delete m_tstrSomeStr;
     }
 
-    String^ TestClass::GetTestValue()
+    String^ TestManagedClass::GetTestValue()
     {
         m_tstrSomeStr->append(TEXT(" 100!"));
         return marshal_as<String^>(m_tstrSomeStr->c_str());

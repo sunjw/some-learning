@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestClass.h">
+    <ClInclude Include="TestManagedClass.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="strhelper.h">
@@ -29,7 +29,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TestClass.cpp">
+    <ClCompile Include="TestManagedClass.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="strhelper.cpp">
