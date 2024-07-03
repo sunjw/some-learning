@@ -38,9 +38,6 @@
     <ClCompile Include="TestManagedClass.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="strhelper.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
