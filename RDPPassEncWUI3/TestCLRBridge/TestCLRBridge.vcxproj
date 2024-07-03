@@ -77,6 +77,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <PublicIncludeDirectories>
+    </PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <OutDir>$(Platform)\$(Configuration)\</OutDir>
@@ -92,6 +94,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(SolutionDir)\TestNativeLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>TestNativeLib.lib;Version.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -113,6 +116,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(SolutionDir)\TestNativeLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>TestNativeLib.lib;Version.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -130,10 +134,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\TestNativeLib\strhelper.h" />
+    <ClInclude Include="..\TestNativeLib\WindowsComm.h" />
     <ClInclude Include="ClrHelper.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="strhelper.h" />
     <ClInclude Include="TestManagedClass.h" />
     <ClInclude Include="TestNativeClass.h" />
   </ItemGroup>

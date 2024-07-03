@@ -4,6 +4,7 @@
 #include <process.h>
 #include "TestNativeClass.h"
 #include "ClrHelper.h"
+#include "WindowsComm.h"
 
 using namespace System;
 using namespace std;
@@ -58,4 +59,11 @@ void TestNativeClass::UpdateUI(const tstring& tstrSome)
         String^ mstrSome = ConvertWstrToSystemString(tstrSome.c_str());
         m_testManagedClass->UpdateUIHandler(mstrSome);
     }
+}
+
+String^ TestNativeClass::GetWindowsInfo()
+{
+    tstring tstrWinInfo = WindowsComm::GetWindowsInfo();
+    String^ mstrWinInfo = ConvertWstrToSystemString(tstrWinInfo.c_str());
+    return mstrWinInfo;
 }
