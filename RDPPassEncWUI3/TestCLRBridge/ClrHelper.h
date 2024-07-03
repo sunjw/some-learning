@@ -11,4 +11,10 @@ namespace TestCLRBridge
     System::String^ ConvertStrToSystemString(LPCSTR lpStrSource);
 
     System::String^ ConvertWstrToSystemString(LPCWSTR lpWstrSource);
+
+#if defined(WIN32) && (defined(UNICODE) || defined(_UNICODE))
+#define ConvertTstrToSystemString ConvertWstrToSystemString
+#else
+#define ConvertTstrToSystemString ConvertStrToSystemString
+#endif
 }

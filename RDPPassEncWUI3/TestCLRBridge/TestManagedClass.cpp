@@ -5,6 +5,7 @@
 #include <string>
 #include "TestNativeClass.h"
 #include "ClrHelper.h"
+#include "WindowsComm.h"
 
 using namespace System;
 
@@ -25,9 +26,17 @@ namespace TestCLRBridge
 
     String^ TestManagedClass::GetTestValue()
     {
-        String^ ret = ConvertWstrToSystemString(m_testNativeClass->GetString().c_str());
+        String^ ret = ConvertTstrToSystemString(m_testNativeClass->GetString().c_str());
         ret = ret + " 10!";
         return ret;
+    }
+
+    String^ TestManagedClass::GetWindowsInfo()
+    {
+        tstring tstrWinInfo = WindowsComm::GetWindowsInfo();
+        tstrWinInfo = strtrim(tstrWinInfo);
+        String^ mstrWinInfo = ConvertTstrToSystemString(tstrWinInfo.c_str());
+        return mstrWinInfo;
     }
 
     void TestManagedClass::GoThread()

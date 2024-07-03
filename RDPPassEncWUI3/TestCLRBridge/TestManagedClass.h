@@ -27,6 +27,7 @@ namespace TestCLRBridge
         !TestManagedClass();
 
         System::String^ GetTestValue();
+        System::String^ GetWindowsInfo();
 
         void GoThread();
 

@@ -60,6 +60,11 @@ namespace RDPPassEncWUI3
             strVersion = "RDPPassEncWUI3: " + strVersion;
             inlinesAbout.Add(WinUIHelper.GenRunFromString(strVersion));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+
+            string strWindowsInfo = m_testManagedClass.GetWindowsInfo();
+            inlinesAbout.Add(WinUIHelper.GenRunFromString(strWindowsInfo));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
+
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
 
             // test text
