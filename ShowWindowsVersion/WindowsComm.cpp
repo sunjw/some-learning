@@ -300,7 +300,11 @@ namespace WindowsComm
 				else if (osvi.wProductType == VER_NT_SERVER ||
 					osvi.wProductType == VER_NT_DOMAIN_CONTROLLER)
 				{
-					if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2)
+					if (osvi.dwMajorVersion > 5)
+					{
+						strOsinfo.append("Server "); // Windows Server
+					}
+					else if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2)
 					{
 						if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64)
 						{
@@ -332,7 +336,7 @@ namespace WindowsComm
 								strOsinfo.append("Standard Edition ");
 						}
 					}
-					else if(osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0)
+					else if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0)
 					{
 						if (osvi.wSuiteMask & VER_SUITE_DATACENTER )
 							strOsinfo.append("Datacenter Server ");
