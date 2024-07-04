@@ -31,6 +31,8 @@ namespace TestCLRBridge
 
         void GoThread();
 
+        void SetHWND(System::IntPtr hWnd);
+
         UpdateUIHandler^ UpdateUIHandler;
 
     private:

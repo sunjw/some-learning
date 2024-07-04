@@ -43,4 +43,9 @@ namespace TestCLRBridge
     {
         m_testNativeClass->GoThread();
     }
+
+    void TestManagedClass::SetHWND(IntPtr hWnd)
+    {
+        m_testNativeClass->SetHWND(hWnd);
+    }
 }

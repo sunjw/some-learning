@@ -24,6 +24,8 @@ namespace RDPPassEncWUI3
         public AboutPage()
         {
             InitializeComponent();
+
+            m_testManagedClass.SetHWND(MainWindow.CurrentWindow.HWNDHandle);
         }
 
         public void UpdateDebugString(string strDebug)

@@ -3,6 +3,7 @@
 #include <msclr\auto_gcroot.h>
 #include "strhelper.h"
 #include "TestManagedClass.h"
+#include "AdvTaskbar.h"
 
 namespace TestCLRBridge
 {
@@ -19,9 +20,14 @@ namespace TestCLRBridge
         void GoThread();
         void UpdateUI(const sunjwbase::tstring& tstrSome);
 
+        void SetHWND(System::IntPtr hWnd);
+        void SetTaskbarProg(ULONGLONG ullValue);
+
     private:
         msclr::auto_gcroot<TestManagedClass^> m_testManagedClass;
         sunjwbase::tstring m_tstrSome;
         HANDLE m_hWorkThread;
+        HWND m_hWnd;
+        ITaskbarList3 *m_pTaskbarList3;
     };
 }
