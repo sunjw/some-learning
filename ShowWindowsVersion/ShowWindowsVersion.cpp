@@ -9,6 +9,8 @@ using namespace WindowsComm;
 
 int wmain(int argc, wchar_t* argv[])
 {
+    SetConsoleOutputCP(CP_UTF8);
+
     tstring tstrWindowsInfo = GetWindowsInfo();
     wprintf(L"%s\r\n", tstrWindowsInfo.c_str());
 
