@@ -21,6 +21,9 @@ namespace RDPPassEncWUI3
         private Paragraph m_paragraphAbout = new ();
         private TestManagedClass m_testManagedClass = new ("测试 ManagedClass");
 
+
+        public bool ThreadRunning { get; private set; } = false;
+
         public AboutPage()
         {
             InitializeComponent();
@@ -128,7 +131,10 @@ namespace RDPPassEncWUI3
 
             // some test
             m_testManagedClass.UpdateUIHandler += UpdateUIHandler;
+            m_testManagedClass.UpdateThreadHandler += UpdateThreadHandler;
             TextBlockDebug.Text = m_testManagedClass.GetTestValue().ToString();
+
+            ThreadRunning = true;
             m_testManagedClass.GoThread();
         }
 
@@ -212,6 +218,11 @@ namespace RDPPassEncWUI3
             WinUIHelper.ScrollViewerScrollTo(ScrollViewerAbout, scrollViewNewOffX, scrollViewNewOffY);
 
             //TextBlockDebug.Text = strDebug;
+        }
+
+        private void UpdateThreadHandler(bool running)
+        {
+            ThreadRunning = running;
         }
 
         private void UpdateUIHandler(string someStr)

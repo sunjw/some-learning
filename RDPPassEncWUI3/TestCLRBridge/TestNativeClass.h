@@ -18,6 +18,7 @@ namespace TestCLRBridge
         }
 
         void GoThread();
+        void UpdateThread(bool running);
         void UpdateUI(const sunjwbase::tstring& tstrSome);
 
         void SetHWND(System::IntPtr hWnd);

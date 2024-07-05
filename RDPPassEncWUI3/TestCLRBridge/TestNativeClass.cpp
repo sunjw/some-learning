@@ -15,6 +15,8 @@ int WINAPI SomeThreadFunc(void *param)
 {
     TestNativeClass *pNativeClass = (TestNativeClass *)param;
 
+    pNativeClass->UpdateThread(true);
+
     pNativeClass->SetTaskbarProg(1);
 
     for (int i = 0; i < 5; i++)
@@ -29,6 +31,8 @@ int WINAPI SomeThreadFunc(void *param)
     Sleep(1000);
     pNativeClass->UpdateUI(tstring(TEXT("DONE @#$@#$@#$")));
     pNativeClass->SetTaskbarProg(99);
+
+    pNativeClass->UpdateThread(false);
 
     return 0;
 }
@@ -57,6 +61,14 @@ void TestNativeClass::GoThread()
         this,
         0,
         (unsigned int *)&thredID);
+}
+
+void TestNativeClass::UpdateThread(bool running)
+{
+    if (m_testManagedClass->UpdateThreadHandler != nullptr)
+    {
+        m_testManagedClass->UpdateThreadHandler(running);
+    }
 }
 
 void TestNativeClass::UpdateUI(const tstring& tstrSome)

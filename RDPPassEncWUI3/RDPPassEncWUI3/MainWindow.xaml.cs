@@ -106,28 +106,36 @@ namespace RDPPassEncWUI3
             }
         }
 
-        private async void MainWindow_Closed(object sender, WindowEventArgs args)
+        private /*async*/ void MainWindow_Closed(object sender, WindowEventArgs args)
         {
-            if (m_confirmExit)
-            {
-                return;
-            }
+            //if (m_confirmExit)
+            //{
+            //    return;
+            //}
 
-            args.Handled = true;
-            ContentDialog dialog = new()
+            //args.Handled = true;
+            //ContentDialog dialog = new()
+            //{
+            //    XamlRoot = Content.XamlRoot,
+            //    Title = "Exit?",
+            //    PrimaryButtonText = "Yes",
+            //    CloseButtonText = "No",
+            //    DefaultButton = ContentDialogButton.Close
+            //};
+            //dialog.PrimaryButtonClick += (s, e) =>
+            //{
+            //    m_confirmExit = true;
+            //    DispatcherQueue.TryEnqueue(Close);
+            //};
+            //await dialog.ShowAsync();
+
+            if (IsAboutPageCurrent())
             {
-                XamlRoot = Content.XamlRoot,
-                Title = "Exit?",
-                PrimaryButtonText = "Yes",
-                CloseButtonText = "No",
-                DefaultButton = ContentDialogButton.Close
-            };
-            dialog.PrimaryButtonClick += (s, e) =>
-            {
-                m_confirmExit = true;
-                DispatcherQueue.TryEnqueue(Close);
-            };
-            await dialog.ShowAsync();
+                if ((m_pageCurrent as AboutPage).ThreadRunning)
+                {
+                    args.Handled = true;
+                }
+            }
         }
 
         private void GridRoot_PointerMoved(object sender, PointerRoutedEventArgs e)

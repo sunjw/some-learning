@@ -5,6 +5,7 @@ namespace TestCLRBridge
 {
     class TestNativeClass;
 
+    public delegate void UpdateThreadHandler(bool running);
     public delegate void UpdateUIHandler(System::String^ someStr);
 
     public ref class TestManagedClass
@@ -33,6 +34,7 @@ namespace TestCLRBridge
 
         void SetHWND(System::IntPtr hWnd);
 
+        UpdateThreadHandler^ UpdateThreadHandler;
         UpdateUIHandler^ UpdateUIHandler;
 
     private:
