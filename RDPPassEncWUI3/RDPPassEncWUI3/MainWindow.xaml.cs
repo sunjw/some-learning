@@ -22,6 +22,7 @@ namespace RDPPassEncWUI3
         private const int appInitHeight = 420;
 
         private Page m_pageCurrent = null;
+        private bool m_confirmExit = false;
 
         public static MainWindow CurrentWindow { get; private set; } = null;
 
@@ -38,6 +39,8 @@ namespace RDPPassEncWUI3
 
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
+
+            Closed += MainWindow_Closed;
         }
 
         private bool IsMainPageCurrent()
@@ -101,6 +104,30 @@ namespace RDPPassEncWUI3
                 string appActivateArgs = WinUIHelper.GetLaunchActivatedEventArgs(args);
                 (m_pageCurrent as MainPage).OnRedirected(appActivateArgs);
             }
+        }
+
+        private async void MainWindow_Closed(object sender, WindowEventArgs args)
+        {
+            if (m_confirmExit)
+            {
+                return;
+            }
+
+            args.Handled = true;
+            ContentDialog dialog = new()
+            {
+                XamlRoot = Content.XamlRoot,
+                Title = "Exit?",
+                PrimaryButtonText = "Yes",
+                CloseButtonText = "No",
+                DefaultButton = ContentDialogButton.Close
+            };
+            dialog.PrimaryButtonClick += (s, e) =>
+            {
+                m_confirmExit = true;
+                DispatcherQueue.TryEnqueue(Close);
+            };
+            await dialog.ShowAsync();
         }
 
         private void GridRoot_PointerMoved(object sender, PointerRoutedEventArgs e)
