@@ -21,6 +21,9 @@ int WINAPI SomeThreadFunc(void *param)
 
     for (int i = 0; i < 5; i++)
     {
+        if (pNativeClass->GetReqStop())
+            break;
+
         Sleep(1000);
         string strSome;
         strSome = strappendformat(strSome, "%d", (i + 1));
@@ -28,7 +31,11 @@ int WINAPI SomeThreadFunc(void *param)
         pNativeClass->SetTaskbarProg((i + 1) * 15);
     }
 
-    Sleep(1000);
+    if (!pNativeClass->GetReqStop())
+    {
+        Sleep(1000);
+    }
+
     pNativeClass->UpdateUI(tstring(TEXT("DONE @#$@#$@#$")));
     pNativeClass->SetTaskbarProg(99);
 
@@ -40,9 +47,10 @@ int WINAPI SomeThreadFunc(void *param)
 TestNativeClass::TestNativeClass(TestManagedClass^ testManagedClass, String^ mstr) :
     m_testManagedClass(testManagedClass),
     m_tstrSome(ConvertToStdWstring(mstr)),
-    m_hWorkThread(nullptr),
     m_hWnd(nullptr),
-    m_pTaskbarList3(nullptr)
+    m_pTaskbarList3(nullptr),
+    m_hWorkThread(nullptr),
+    m_bReqStop(false)
 {
     m_tstrSome.append(TEXT(" 啊啊啊 "));
     InitTaskbarList3(&m_pTaskbarList3);
@@ -54,6 +62,8 @@ void TestNativeClass::GoThread()
     {
         CloseHandle(m_hWorkThread);
     }
+
+    m_bReqStop = false;
     DWORD thredID;
     m_hWorkThread = (HANDLE)_beginthreadex(NULL,
         0,
@@ -61,6 +71,11 @@ void TestNativeClass::GoThread()
         this,
         0,
         (unsigned int *)&thredID);
+}
+
+void TestNativeClass::StopThread()
+{
+    m_bReqStop = true;
 }
 
 void TestNativeClass::UpdateThread(bool running)

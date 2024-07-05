@@ -21,7 +21,6 @@ namespace RDPPassEncWUI3
         private Paragraph m_paragraphAbout = new ();
         private TestManagedClass m_testManagedClass = new ("测试 ManagedClass");
 
-
         public bool ThreadRunning { get; private set; } = false;
 
         public AboutPage()
@@ -37,6 +36,11 @@ namespace RDPPassEncWUI3
             {
                 TextBlockDebug.Text = strDebug;
             });
+        }
+
+        public void StopThread()
+        {
+            m_testManagedClass.StopThread();
         }
 
         private void GridRoot_Loaded(object sender, RoutedEventArgs e)

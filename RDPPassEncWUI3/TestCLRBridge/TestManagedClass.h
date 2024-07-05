@@ -31,6 +31,7 @@ namespace TestCLRBridge
         System::String^ GetWindowsInfo();
 
         void GoThread();
+        void StopThread();
 
         void SetHWND(System::IntPtr hWnd);
 

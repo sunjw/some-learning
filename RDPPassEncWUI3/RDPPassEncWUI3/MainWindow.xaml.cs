@@ -131,9 +131,11 @@ namespace RDPPassEncWUI3
 
             if (IsAboutPageCurrent())
             {
-                if ((m_pageCurrent as AboutPage).ThreadRunning)
+                AboutPage aboutPageCur = m_pageCurrent as AboutPage;
+                if (aboutPageCur.ThreadRunning)
                 {
                     args.Handled = true;
+                    aboutPageCur.StopThread();
                 }
             }
         }

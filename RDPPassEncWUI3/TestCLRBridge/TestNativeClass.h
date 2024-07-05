@@ -18,6 +18,12 @@ namespace TestCLRBridge
         }
 
         void GoThread();
+        void StopThread();
+        inline bool GetReqStop() const
+        {
+            return m_bReqStop;
+        }
+
         void UpdateThread(bool running);
         void UpdateUI(const sunjwbase::tstring& tstrSome);
 
@@ -27,8 +33,9 @@ namespace TestCLRBridge
     private:
         msclr::auto_gcroot<TestManagedClass^> m_testManagedClass;
         sunjwbase::tstring m_tstrSome;
-        HANDLE m_hWorkThread;
         HWND m_hWnd;
         ITaskbarList3 *m_pTaskbarList3;
+        HANDLE m_hWorkThread;
+        bool m_bReqStop;
     };
 }
