@@ -135,7 +135,7 @@ namespace RDPPassEncWUI3
                 if (aboutPageCur.ThreadRunning)
                 {
                     args.Handled = true;
-                    aboutPageCur.StopThread();
+                    aboutPageCur.StopThread(() => DispatcherQueue.TryEnqueue(Close));
                 }
             }
         }

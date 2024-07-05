@@ -17,9 +17,12 @@ namespace RDPPassEncWUI3
     /// </summary>
     public sealed partial class AboutPage : Page
     {
+        public delegate void ThreadStoppedHandler();
+
         private bool m_textAboutInit = false;
         private Paragraph m_paragraphAbout = new ();
         private TestManagedClass m_testManagedClass = new ("测试 ManagedClass");
+        private ThreadStoppedHandler m_threadStopppedHandler = null;
 
         public bool ThreadRunning { get; private set; } = false;
 
@@ -38,8 +41,9 @@ namespace RDPPassEncWUI3
             });
         }
 
-        public void StopThread()
+        public void StopThread(ThreadStoppedHandler threadStoppedHandler)
         {
+            m_threadStopppedHandler = threadStoppedHandler;
             m_testManagedClass.StopThread();
         }
 
@@ -227,6 +231,10 @@ namespace RDPPassEncWUI3
         private void UpdateThreadHandler(bool running)
         {
             ThreadRunning = running;
+            if (!ThreadRunning && m_threadStopppedHandler != null)
+            {
+                m_threadStopppedHandler();
+            }
         }
 
         private void UpdateUIHandler(string someStr)
