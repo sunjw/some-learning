@@ -17,13 +17,13 @@ int WINAPI SomeThreadFunc(void *param)
 
     pNativeClass->SetTaskbarProg(1);
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 5; i++)
     {
         Sleep(1000);
         string strSome;
         strSome = strappendformat(strSome, "%d", (i + 1));
         pNativeClass->UpdateUI(strtotstr(strSome));
-        pNativeClass->SetTaskbarProg((i + 1) * 30);
+        pNativeClass->SetTaskbarProg((i + 1) * 15);
     }
 
     Sleep(1000);
