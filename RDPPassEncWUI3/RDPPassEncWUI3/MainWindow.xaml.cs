@@ -1,11 +1,15 @@
 using System;
+using Microsoft.UI;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.Windows.AppLifecycle;
 using Windows.Graphics;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using WinRT.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -21,6 +25,7 @@ namespace RDPPassEncWUI3
         private const int appInitWidth = 400;
         private const int appInitHeight = 420;
 
+        private UISettings m_uiSettings;
         private Page m_pageCurrent = null;
         private bool m_confirmExit = false;
 
@@ -34,13 +39,15 @@ namespace RDPPassEncWUI3
             InitializeComponent();
 
             HWNDHandle = WindowNative.GetWindowHandle(this);
-
-            InitWindowSize();
+            m_uiSettings = new UISettings();
 
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
 
+            InitWindowSize();
+
             Closed += MainWindow_Closed;
+            m_uiSettings.ColorValuesChanged += UISettings_ColorValuesChanged;
         }
 
         private bool IsMainPageCurrent()
@@ -84,9 +91,35 @@ namespace RDPPassEncWUI3
             AppWindow.Resize(new(Win32Helper.GetScaledPixel(appInitWidth, scale), Win32Helper.GetScaledPixel(appInitHeight, scale)));
         }
 
+        private void UpdateTitleBarColor()
+        {
+            if (AppWindow.TitleBar == null)
+            {
+                return;
+            }
+
+            Color bgColor = Colors.Transparent;
+            Color fgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlPageTextBaseHighBrush"]).Color;
+            Color inactivefgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundChromeDisabledLowBrush"]).Color;
+            Color hoverbgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlBackgroundListLowBrush"]).Color;
+            Color hoverfgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"]).Color;
+            Color pressedbgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlBackgroundListMediumBrush"]).Color;
+            Color pressedfgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"]).Color;
+            Application.Current.Resources["WindowCaptionForeground"] = fgColor;
+            //AppWindow.TitleBar.ButtonBackgroundColor = bgColor;
+            AppWindow.TitleBar.ButtonForegroundColor = fgColor;
+            //AppWindow.TitleBar.ButtonInactiveBackgroundColor = bgColor;
+            //AppWindow.TitleBar.ButtonInactiveForegroundColor = inactivefgColor;
+            //AppWindow.TitleBar.ButtonHoverBackgroundColor = hoverbgColor;
+            //AppWindow.TitleBar.ButtonHoverForegroundColor = hoverfgColor;
+            //AppWindow.TitleBar.ButtonPressedBackgroundColor = pressedbgColor;
+            //AppWindow.TitleBar.ButtonPressedForegroundColor = pressedfgColor;
+        }
+
         private void MainFrame_Loaded(object sender, RoutedEventArgs e)
         {
             CurrentWindow = this;
+            UpdateTitleBarColor();
             MainFrame.Navigate(typeof(MainPage));
         }
 
@@ -104,6 +137,11 @@ namespace RDPPassEncWUI3
                 string appActivateArgs = WinUIHelper.GetLaunchActivatedEventArgs(args);
                 (m_pageCurrent as MainPage).OnRedirected(appActivateArgs);
             }
+        }
+
+        private void UISettings_ColorValuesChanged(UISettings sender, object args)
+        {
+            DispatcherQueue.TryEnqueue(UpdateTitleBarColor);
         }
 
         private /*async*/ void MainWindow_Closed(object sender, WindowEventArgs args)
