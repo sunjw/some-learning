@@ -1,10 +1,10 @@
 using System;
 using Microsoft.UI;
 using Microsoft.UI.Input;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.Windows.AppLifecycle;
 using Windows.Graphics;
@@ -93,21 +93,28 @@ namespace RDPPassEncWUI3
 
         private void UpdateTitleBarColor()
         {
-            if (AppWindow.TitleBar == null)
-            {
+            AppWindowTitleBar curTitleBar = AppWindow.TitleBar;
+            if (curTitleBar == null)
                 return;
-            }
 
-            Color bgColor = Colors.Transparent;
-            Color fgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlPageTextBaseHighBrush"]).Color;
-            Color inactivefgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundChromeDisabledLowBrush"]).Color;
-            Color hoverbgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlBackgroundListLowBrush"]).Color;
-            Color hoverfgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"]).Color;
-            Color pressedbgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlBackgroundListMediumBrush"]).Color;
-            Color pressedfgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"]).Color;
+            ElementTheme curElementTheme = MainFrame.ActualTheme;
+            Color fgColor = Colors.Black;
+            if (curElementTheme == ElementTheme.Dark)
+                fgColor = Colors.White;
+
             Application.Current.Resources["WindowCaptionForeground"] = fgColor;
-            //AppWindow.TitleBar.ButtonBackgroundColor = bgColor;
             AppWindow.TitleBar.ButtonForegroundColor = fgColor;
+
+            //Color bgColor = Colors.Transparent;
+            //Color fgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlPageTextBaseHighBrush"]).Color;
+            //Color inactivefgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundChromeDisabledLowBrush"]).Color;
+            //Color hoverbgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlBackgroundListLowBrush"]).Color;
+            //Color hoverfgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"]).Color;
+            //Color pressedbgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlBackgroundListMediumBrush"]).Color;
+            //Color pressedfgColor = ((SolidColorBrush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"]).Color;
+
+            //AppWindow.TitleBar.ButtonBackgroundColor = bgColor;
+            //AppWindow.TitleBar.ButtonForegroundColor = fgColor;
             //AppWindow.TitleBar.ButtonInactiveBackgroundColor = bgColor;
             //AppWindow.TitleBar.ButtonInactiveForegroundColor = inactivefgColor;
             //AppWindow.TitleBar.ButtonHoverBackgroundColor = hoverbgColor;
