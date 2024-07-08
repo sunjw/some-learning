@@ -1,4 +1,6 @@
 using System;
+using System.CommandLine.Parsing;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.UI.Xaml;
@@ -23,7 +25,9 @@ namespace RDPPassEncWUI3
 
         public void OnRedirected(string someArgs)
         {
-            TextBoxDecrypted.Text = someArgs;
+            string[] splitArgs = CommandLineStringSplitter.Instance.Split(someArgs).ToArray();
+            string linesArgs = string.Join("\r\n", splitArgs) + "\r\n";
+            TextBoxDecrypted.Text = linesArgs;
         }
 
         private string EncryptPassword(string strDecrypted)
