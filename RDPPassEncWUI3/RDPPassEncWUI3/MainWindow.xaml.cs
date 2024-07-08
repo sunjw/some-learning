@@ -27,7 +27,7 @@ namespace RDPPassEncWUI3
 
         private UISettings m_uiSettings;
         private Page m_pageCurrent = null;
-        private bool m_confirmExit = false;
+        //private bool m_confirmExit = false;
 
         public static MainWindow CurrentWindow { get; private set; } = null;
 
@@ -72,7 +72,6 @@ namespace RDPPassEncWUI3
         public System.Drawing.Point GetCursorRelativePoint()
         {
             System.Drawing.Point pointRelative = new System.Drawing.Point(0, 0);
-
             System.Drawing.Point pointPointer = Win32Helper.GetPointerPoint();
 
             if (AppWindow != null)
