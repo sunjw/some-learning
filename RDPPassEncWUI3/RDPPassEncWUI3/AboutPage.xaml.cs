@@ -298,7 +298,7 @@ namespace RDPPassEncWUI3
             }
             m_hyperlinkClicked = sender;
             double scale = m_mainWindow.Scale;
-            int menuOffsetX = 6;
+            int menuOffsetX = 4;
             int menuOffsetY = 2;
             System.Drawing.Point sdPointCursor = m_mainWindow.GetCursorRelativePoint();
             Windows.Foundation.Point wfPointCuror = new((sdPointCursor.X / scale) + menuOffsetX, (sdPointCursor.Y / scale) + menuOffsetY);
