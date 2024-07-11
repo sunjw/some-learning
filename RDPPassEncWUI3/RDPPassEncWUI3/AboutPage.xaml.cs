@@ -4,8 +4,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
-using Windows.ApplicationModel;
 using TestCLRBridge;
+using Windows.ApplicationModel;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -279,9 +279,10 @@ namespace RDPPassEncWUI3
             }
             m_hyperlinkClicked = sender;
             double scale = m_mainWindow.Scale;
-            int menuOffset = 6;
+            int menuOffsetX = 6;
+            int menuOffsetY = 2;
             System.Drawing.Point sdPointCursor = m_mainWindow.GetCursorRelativePoint();
-            Windows.Foundation.Point wfPointCuror = new((sdPointCursor.X / scale) + menuOffset, (sdPointCursor.Y / scale) + menuOffset);
+            Windows.Foundation.Point wfPointCuror = new((sdPointCursor.X / scale) + menuOffsetX, (sdPointCursor.Y / scale) + menuOffsetY);
             m_menuFlyoutTextMain.ShowAt(null, wfPointCuror);
         }
 
