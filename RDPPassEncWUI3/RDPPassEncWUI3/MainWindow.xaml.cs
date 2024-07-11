@@ -32,6 +32,8 @@ namespace RDPPassEncWUI3
         public static MainWindow CurrentWindow { get; private set; } = null;
 
         public IntPtr HWNDHandle { get; private set; } = 0;
+        public double Scale { get; private set; } = 1.0;
+
         public Windows.Foundation.Point PointCursor { get; private set; } = new Windows.Foundation.Point(0, 0);
 
         public MainWindow()
@@ -39,6 +41,7 @@ namespace RDPPassEncWUI3
             InitializeComponent();
 
             HWNDHandle = WindowNative.GetWindowHandle(this);
+            Scale = Win32Helper.GetScaleFactor(HWNDHandle);
             m_uiSettings = new UISettings();
 
             ExtendsContentIntoTitleBar = true;
@@ -86,8 +89,7 @@ namespace RDPPassEncWUI3
 
         private void InitWindowSize()
         {
-            double scale = Win32Helper.GetScaleFactor(HWNDHandle);
-            AppWindow.Resize(new(Win32Helper.GetScaledPixel(appInitWidth, scale), Win32Helper.GetScaledPixel(appInitHeight, scale)));
+            AppWindow.Resize(new(Win32Helper.GetScaledPixel(appInitWidth, Scale), Win32Helper.GetScaledPixel(appInitHeight, Scale)));
         }
 
         private void UpdateTitleBarColor()

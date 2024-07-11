@@ -209,7 +209,7 @@ namespace RDPPassEncWUI3
             string strDebug = "";
 
             // cursor position
-            double scale = Win32Helper.GetScaleFactor(m_mainWindow.HWNDHandle);
+            double scale = m_mainWindow.Scale;
             System.Drawing.Point pointCursor = m_mainWindow.GetCursorRelativePoint();
 
             //strDebug = string.Format("{0:0.00} : {1:0.00}", pointCursor.X, pointCursor.Y);
@@ -278,8 +278,10 @@ namespace RDPPassEncWUI3
                 return;
             }
             m_hyperlinkClicked = sender;
+            double scale = m_mainWindow.Scale;
+            int menuOffset = 6;
             System.Drawing.Point sdPointCursor = m_mainWindow.GetCursorRelativePoint();
-            Windows.Foundation.Point wfPointCuror = new(sdPointCursor.X, sdPointCursor.Y);
+            Windows.Foundation.Point wfPointCuror = new((sdPointCursor.X / scale) + menuOffset, (sdPointCursor.Y / scale) + menuOffset);
             m_menuFlyoutTextMain.ShowAt(null, wfPointCuror);
         }
 
