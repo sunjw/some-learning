@@ -19,9 +19,15 @@ namespace RDPPassEncWUI3
     {
         public delegate void ThreadStoppedHandler();
 
+        private MainWindow m_mainWindow;
+
         private bool m_textAboutInit = false;
-        private Paragraph m_paragraphAbout = new ();
-        private TestManagedClass m_testManagedClass = new ("测试 ManagedClass");
+        private Paragraph m_paragraphAbout = new();
+        private Hyperlink m_hyperlinkClicked = null;
+        private MenuFlyout m_menuFlyoutTextMain;
+
+        private TestManagedClass m_testManagedClass = new("测试 ManagedClass");
+
         private ThreadStoppedHandler m_threadStopppedHandler = null;
 
         public bool ThreadRunning { get; private set; } = false;
@@ -30,7 +36,34 @@ namespace RDPPassEncWUI3
         {
             InitializeComponent();
 
-            m_testManagedClass.SetHWND(MainWindow.CurrentWindow.HWNDHandle);
+            m_mainWindow = MainWindow.CurrentWindow;
+
+            InitMenuFlyoutTextMain();
+
+            m_testManagedClass.SetHWND(m_mainWindow.HWNDHandle);
+        }
+
+        private void InitMenuFlyoutTextMain()
+        {
+            m_menuFlyoutTextMain = new()
+            {
+                XamlRoot = m_mainWindow.Content.XamlRoot
+            };
+
+            MenuFlyoutItem menuItemCopy = new()
+            {
+                Text = "Copy"
+            };
+            menuItemCopy.Click += MenuItemCopy_Click;
+            MenuFlyoutItem menuItemGoogle = new()
+            {
+                Text = "Google"
+            };
+            menuItemGoogle.Click += MenuItemGoogle_Click;
+
+            m_menuFlyoutTextMain.Items.Add(menuItemCopy);
+            m_menuFlyoutTextMain.Items.Add(new MenuFlyoutSeparator());
+            m_menuFlyoutTextMain.Items.Add(menuItemGoogle);
         }
 
         public void UpdateDebugString(string strDebug)
@@ -45,6 +78,20 @@ namespace RDPPassEncWUI3
         {
             m_threadStopppedHandler = threadStoppedHandler;
             m_testManagedClass.StopThread();
+        }
+
+        private void UpdateThreadHandler(bool running)
+        {
+            ThreadRunning = running;
+            if (!ThreadRunning && m_threadStopppedHandler != null)
+            {
+                m_threadStopppedHandler();
+            }
+        }
+
+        private void UpdateUIHandler(string someStr)
+        {
+            UpdateDebugString(someStr);
         }
 
         private void GridRoot_Loaded(object sender, RoutedEventArgs e)
@@ -87,7 +134,8 @@ namespace RDPPassEncWUI3
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("Modified Date: 2024-04-11 14:18"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
-            inlinesAbout.Add(WinUIHelper.GenRunFromString("MD5: E44B1734EA01D8C76D2CEABBBA8DF964"));
+            inlinesAbout.Add(WinUIHelper.GenRunFromString("MD5: "));
+            inlinesAbout.Add(WinUIHelper.GenHyperlinkFromString("E44B1734EA01D8C76D2CEABBBA8DF964", TextAboutHyperlink_Click));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("SHA1: A79DE28FB4F6083661467457C13A6A3DC02F154D"));
             inlinesAbout.Add(WinUIHelper.GenRunFromString("\r\n"));
@@ -161,13 +209,8 @@ namespace RDPPassEncWUI3
             string strDebug = "";
 
             // cursor position
-            MainWindow mainWindow = MainWindow.CurrentWindow;
-            if (mainWindow == null)
-            {
-                return;
-            }
-            double scale = Win32Helper.GetScaleFactor(mainWindow.HWNDHandle);
-            System.Drawing.Point pointCursor = mainWindow.GetCursorRelativePoint();
+            double scale = Win32Helper.GetScaleFactor(m_mainWindow.HWNDHandle);
+            System.Drawing.Point pointCursor = m_mainWindow.GetCursorRelativePoint();
 
             //strDebug = string.Format("{0:0.00} : {1:0.00}", pointCursor.X, pointCursor.Y);
             //TextBlockDebug.Text = strDebug;
@@ -228,18 +271,38 @@ namespace RDPPassEncWUI3
             //TextBlockDebug.Text = strDebug;
         }
 
-        private void UpdateThreadHandler(bool running)
+        private void TextAboutHyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
-            ThreadRunning = running;
-            if (!ThreadRunning && m_threadStopppedHandler != null)
+            if (sender == null || m_menuFlyoutTextMain == null)
             {
-                m_threadStopppedHandler();
+                return;
             }
+            m_hyperlinkClicked = sender;
+            System.Drawing.Point sdPointCursor = m_mainWindow.GetCursorRelativePoint();
+            Windows.Foundation.Point wfPointCuror = new(sdPointCursor.X, sdPointCursor.Y);
+            m_menuFlyoutTextMain.ShowAt(null, wfPointCuror);
         }
 
-        private void UpdateUIHandler(string someStr)
+        private void MenuItemCopy_Click(object sender, RoutedEventArgs e)
         {
-            UpdateDebugString(someStr);
+            if (m_hyperlinkClicked == null)
+            {
+                return;
+            }
+            string strHash = WinUIHelper.GetTextFromHyperlink(m_hyperlinkClicked);
+            WinUIHelper.CopyStringToClipboard(strHash);
+        }
+
+        private void MenuItemGoogle_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_hyperlinkClicked == null)
+            {
+                return;
+            }
+
+            string strHash = WinUIHelper.GetTextFromHyperlink(m_hyperlinkClicked);
+            string strUrl = string.Format("https://www.google.com/search?q={0}&ie=utf-8&oe=utf-8", strHash);
+            WinUIHelper.OpenUrl(strUrl);
         }
     }
 }
