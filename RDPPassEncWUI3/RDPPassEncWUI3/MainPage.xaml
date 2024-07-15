@@ -121,13 +121,21 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
+            <HyperlinkButton
+                x:Name="HyperlinkButtonLink"
+                x:Uid="HyperlinkButtonLink"
+                Grid.Column="1"
+                Margin="10,0,10,0"
+                Content="GitHub"
+                NavigateUri="https://github.com/sunjw/some-learning/tree/master/RDPPassEncWUI3" />
             <Button
                 x:Name="ButtonAbout"
                 x:Uid="ButtonAbout"
-                Grid.Column="1"
-                Margin="10,0,10,0"
+                Grid.Column="2"
+                Margin="0,0,10,0"
                 Click="ButtonAbout_Click"
                 Content="About" />
         </Grid>
