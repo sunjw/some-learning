@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.Windows.AppLifecycle;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
+using Windows.Storage;
 using Windows.System;
 
 namespace RDPPassEncWUI3
@@ -97,6 +101,29 @@ namespace RDPPassEncWUI3
             }
             Run run = (Run)hyperlink.Inlines[0];
             return run.Text;
+        }
+
+        public static async Task<List<string>> GetDropFilesPath(DragEventArgs e)
+        {
+            List<string> strDropFilesPath = new List<string>();
+
+            if (e.DataView.Contains(StandardDataFormats.StorageItems))
+            {
+                IReadOnlyList<IStorageItem> storageItems = await e.DataView.GetStorageItemsAsync();
+                if (storageItems != null)
+                {
+                    foreach (IStorageItem storageItem in storageItems)
+                    {
+                        string path = storageItem.Path;
+                        if (!string.IsNullOrEmpty(path))
+                        {
+                            strDropFilesPath.Add(path);
+                        }
+                    }
+                }
+            }
+
+            return strDropFilesPath;
         }
     }
 }

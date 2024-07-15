@@ -37,10 +37,7 @@ namespace RDPPassEncWUI3
         {
             if (m_mainWindow != null)
             {
-                m_mainWindow.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Normal, () =>
-                {
-                    m_mainWindow.OnRedirected(args);
-                });
+                m_mainWindow.DispatcherQueue.TryEnqueue(() => m_mainWindow.OnRedirected(args));
             }
         }
     }

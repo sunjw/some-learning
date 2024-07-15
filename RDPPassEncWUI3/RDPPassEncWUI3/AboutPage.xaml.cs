@@ -68,10 +68,7 @@ namespace RDPPassEncWUI3
 
         public void UpdateDebugString(string strDebug)
         {
-            DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Normal, () =>
-            {
-                TextBlockDebug.Text = strDebug;
-            });
+            DispatcherQueue.TryEnqueue(() => TextBlockDebug.Text = strDebug);
         }
 
         public void StopThread(ThreadStoppedHandler threadStoppedHandler)

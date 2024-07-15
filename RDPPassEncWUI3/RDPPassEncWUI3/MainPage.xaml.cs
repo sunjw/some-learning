@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.CommandLine.Parsing;
 using System.Linq;
 using System.Security.Cryptography;
@@ -103,6 +104,12 @@ namespace RDPPassEncWUI3
         private void GridRoot_DragOver(object sender, DragEventArgs e)
         {
             e.AcceptedOperation = DataPackageOperation.Copy;
+        }
+
+        private async void GridRoot_Drop(object sender, DragEventArgs e)
+        {
+            List<string> strDropFilesPath = await WinUIHelper.GetDropFilesPath(e);
+            DispatcherQueue.TryEnqueue(() => TextBoxDecrypted.Text = string.Join("\r\n", strDropFilesPath) + "\r\n");
         }
     }
 }
