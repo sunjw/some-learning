@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Windows.ApplicationModel.DataTransfer;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -97,6 +98,11 @@ namespace RDPPassEncWUI3
         private void ButtonAbout_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(AboutPage));
+        }
+
+        private void GridRoot_DragOver(object sender, DragEventArgs e)
+        {
+            e.AcceptedOperation = DataPackageOperation.Copy;
         }
     }
 }

@@ -21,7 +21,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <Grid x:Name="GridTitleBar" Grid.Row="0">
             <Border
                 x:Name="AppTitleBar"
                 Height="32"
