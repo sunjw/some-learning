@@ -54,11 +54,11 @@ namespace RDPPassEncWUI3
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
 
-            InitWindowSize();
-            InitWindowSubclass();
-
             Closed += MainWindow_Closed;
             m_uiSettings.ColorValuesChanged += UISettings_ColorValuesChanged;
+
+            InitWindowSize();
+            InitWindowSubclass();
         }
 
         private bool IsMainPageCurrent()
