@@ -1,2 +1,9 @@
-﻿GetCursorPos
+﻿// struct
+MINMAXINFO
+// constant
+WM_GETMINMAXINFO
+// function
+DefSubclassProc
+GetCursorPos
 GetDpiForWindow
+SetWindowSubclass

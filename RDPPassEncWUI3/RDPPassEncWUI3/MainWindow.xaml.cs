@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using Microsoft.UI;
 using Microsoft.UI.Input;
 using Microsoft.UI.Windowing;
@@ -10,6 +11,10 @@ using Microsoft.Windows.AppLifecycle;
 using Windows.Graphics;
 using Windows.UI;
 using Windows.UI.ViewManagement;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.UI.Shell;
+using Windows.Win32.UI.WindowsAndMessaging;
 using WinRT.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -22,11 +27,13 @@ namespace RDPPassEncWUI3
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-        private const int appInitWidth = 400;
-        private const int appInitHeight = 420;
+        private const int appMinWidth = 400;
+        private const int appMinHeight = 420;
+        private const nuint subclassId = 18;
 
         private UISettings m_uiSettings;
         private Page m_pageCurrent = null;
+        private SUBCLASSPROC m_subclassProc = null;
         //private bool m_confirmExit = false;
 
         public static MainWindow CurrentWindow { get; private set; } = null;
@@ -48,6 +55,7 @@ namespace RDPPassEncWUI3
             SetTitleBar(AppTitleBar);
 
             InitWindowSize();
+            InitWindowSubclass();
 
             Closed += MainWindow_Closed;
             m_uiSettings.ColorValuesChanged += UISettings_ColorValuesChanged;
@@ -87,11 +95,6 @@ namespace RDPPassEncWUI3
             return pointRelative;
         }
 
-        private void InitWindowSize()
-        {
-            AppWindow.Resize(new(Win32Helper.GetScaledPixel(appInitWidth, Scale), Win32Helper.GetScaledPixel(appInitHeight, Scale)));
-        }
-
         private void UpdateTitleBarColor()
         {
             AppWindowTitleBar curTitleBar = AppWindow.TitleBar;
@@ -122,6 +125,30 @@ namespace RDPPassEncWUI3
             //AppWindow.TitleBar.ButtonHoverForegroundColor = hoverfgColor;
             //AppWindow.TitleBar.ButtonPressedBackgroundColor = pressedbgColor;
             //AppWindow.TitleBar.ButtonPressedForegroundColor = pressedfgColor;
+        }
+
+        private void InitWindowSize()
+        {
+            AppWindow.Resize(new(Win32Helper.GetScaledPixel(appMinWidth, Scale), Win32Helper.GetScaledPixel(appMinWidth, Scale)));
+        }
+
+        private void InitWindowSubclass()
+        {
+            m_subclassProc = new SUBCLASSPROC(WndSubProc);
+            PInvoke.SetWindowSubclass(new HWND(HWNDHandle), m_subclassProc, subclassId, 0);
+        }
+
+        private LRESULT WndSubProc(HWND hWnd, uint uMsg, WPARAM wParam, LPARAM lParam, nuint uIdSubclass, nuint dwRefData)
+        {
+            if (uMsg == PInvoke.WM_GETMINMAXINFO)
+            {
+                var minMaxInfo = Marshal.PtrToStructure<MINMAXINFO>(lParam);
+                minMaxInfo.ptMinTrackSize.X = Win32Helper.GetScaledPixel(appMinWidth, Scale);
+                minMaxInfo.ptMinTrackSize.Y = Win32Helper.GetScaledPixel(appMinWidth, Scale);
+                Marshal.StructureToPtr(minMaxInfo, lParam, false);
+            }
+
+            return PInvoke.DefSubclassProc(hWnd, uMsg, wParam, lParam);
         }
 
         private void MainFrame_Loaded(object sender, RoutedEventArgs e)
