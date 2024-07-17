@@ -38,6 +38,7 @@ namespace RDPPassEncWUI3
 
         public static MainWindow CurrentWindow { get; private set; } = null;
 
+        public bool IsAppPackaged { get; private set; } = false;
         public IntPtr HWNDHandle { get; private set; } = 0;
         public double Scale { get; private set; } = 1.0;
 
@@ -47,6 +48,7 @@ namespace RDPPassEncWUI3
         {
             InitializeComponent();
 
+            IsAppPackaged = Win32Helper.IsAppPackaged();
             HWNDHandle = WindowNative.GetWindowHandle(this);
             Scale = Win32Helper.GetScaleFactor(HWNDHandle);
             m_uiSettings = new UISettings();

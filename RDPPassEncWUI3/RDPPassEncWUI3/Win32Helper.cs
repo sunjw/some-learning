@@ -7,6 +7,18 @@ namespace RDPPassEncWUI3
 {
     public class Win32Helper
     {
+        public static unsafe bool IsAppPackaged()
+        {
+            uint bufferLength = 0;
+            WIN32_ERROR result = PInvoke.GetCurrentPackageId(ref bufferLength, null);
+            bool isPackaged = true;
+            if (result == WIN32_ERROR.APPMODEL_ERROR_NO_PACKAGE)
+            {
+                isPackaged = false;
+            }
+            return isPackaged;
+        }
+
         public static double GetScaleFactor(IntPtr hWnd)
         {
             double dpi = PInvoke.GetDpiForWindow(new HWND(hWnd));
