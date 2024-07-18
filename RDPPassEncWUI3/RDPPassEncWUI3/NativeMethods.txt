@@ -8,4 +8,5 @@ DefSubclassProc
 GetCurrentPackageId
 GetCursorPos
 GetDpiForWindow
+GetWindowPlacement
 SetWindowSubclass

@@ -125,5 +125,21 @@ namespace RDPPassEncWUI3
 
             return strDropFilesPath;
         }
+
+        public static void SaveLocalSettings(string key, object val)
+        {
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            localSettings.Values[key] = val;
+        }
+
+        public static object LoadLocalSettings(string key)
+        {
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            if (localSettings.Values.ContainsKey(key))
+            {
+                return localSettings.Values[key];
+            }
+            return null;
+        }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using Windows.UI.Popups;
 using Windows.Win32;
 using Windows.Win32.Foundation;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace RDPPassEncWUI3
 {
@@ -23,6 +25,17 @@ namespace RDPPassEncWUI3
         {
             double dpi = PInvoke.GetDpiForWindow(new HWND(hWnd));
             return dpi / 96.0;
+        }
+
+        public static bool IsWindowMaximize(IntPtr hWnd)
+        {
+            WINDOWPLACEMENT windowPlacement = default;
+            if (PInvoke.GetWindowPlacement(new HWND(hWnd), ref windowPlacement))
+            {
+                if (windowPlacement.showCmd == SHOW_WINDOW_CMD.SW_MAXIMIZE)
+                    return true;
+            }
+            return false;
         }
 
         public static int GetScaledPixel(int pixel, double scale)

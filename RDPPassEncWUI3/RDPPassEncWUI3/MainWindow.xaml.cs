@@ -27,9 +27,10 @@ namespace RDPPassEncWUI3
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-        private const int appMinWidth = 400;
-        private const int appMinHeight = 420;
-        private const nuint subclassId = 18;
+        private const int AppMinWidth = 400;
+        private const int AppMinHeight = 420;
+        private const nuint SubclassId = 18;
+        private const string KeyWinMaximize = "WinMaximize";
 
         private UISettings m_uiSettings;
         private Page m_pageCurrent = null;
@@ -59,7 +60,7 @@ namespace RDPPassEncWUI3
             Closed += MainWindow_Closed;
             m_uiSettings.ColorValuesChanged += UISettings_ColorValuesChanged;
 
-            InitWindowSize();
+            InitWindowPosSize();
             InitWindowSubclass();
         }
 
@@ -129,15 +130,16 @@ namespace RDPPassEncWUI3
             //AppWindow.TitleBar.ButtonPressedForegroundColor = pressedfgColor;
         }
 
-        private void InitWindowSize()
+        private void InitWindowPosSize()
         {
-            AppWindow.Resize(new(Win32Helper.GetScaledPixel(appMinWidth, Scale), Win32Helper.GetScaledPixel(appMinWidth, Scale)));
+            LoadWindowPosSize();
+            AppWindow.Resize(new(Win32Helper.GetScaledPixel(AppMinWidth, Scale), Win32Helper.GetScaledPixel(AppMinWidth, Scale)));
         }
 
         private void InitWindowSubclass()
         {
             m_subclassProc = new SUBCLASSPROC(WndSubProc);
-            PInvoke.SetWindowSubclass(new HWND(HWNDHandle), m_subclassProc, subclassId, 0);
+            PInvoke.SetWindowSubclass(new HWND(HWNDHandle), m_subclassProc, SubclassId, 0);
         }
 
         private LRESULT WndSubProc(HWND hWnd, uint uMsg, WPARAM wParam, LPARAM lParam, nuint uIdSubclass, nuint dwRefData)
@@ -145,12 +147,28 @@ namespace RDPPassEncWUI3
             if (uMsg == PInvoke.WM_GETMINMAXINFO)
             {
                 var minMaxInfo = Marshal.PtrToStructure<MINMAXINFO>(lParam);
-                minMaxInfo.ptMinTrackSize.X = Win32Helper.GetScaledPixel(appMinWidth, Scale);
-                minMaxInfo.ptMinTrackSize.Y = Win32Helper.GetScaledPixel(appMinWidth, Scale);
+                minMaxInfo.ptMinTrackSize.X = Win32Helper.GetScaledPixel(AppMinWidth, Scale);
+                minMaxInfo.ptMinTrackSize.Y = Win32Helper.GetScaledPixel(AppMinWidth, Scale);
                 Marshal.StructureToPtr(minMaxInfo, lParam, false);
             }
 
             return PInvoke.DefSubclassProc(hWnd, uMsg, wParam, lParam);
+        }
+
+        private void LoadWindowPosSize()
+        {
+            bool isWindowMaximize = false;
+            object objWinMaximize = WinUIHelper.LoadLocalSettings(KeyWinMaximize);
+            if (objWinMaximize != null)
+            {
+                isWindowMaximize = (bool)objWinMaximize;
+            }
+        }
+
+        private void SaveWindowPosSize()
+        {
+            bool isWindowMaximize = Win32Helper.IsWindowMaximize(HWNDHandle);
+            WinUIHelper.SaveLocalSettings(KeyWinMaximize, isWindowMaximize);
         }
 
         private void MainFrame_Loaded(object sender, RoutedEventArgs e)
@@ -183,6 +201,8 @@ namespace RDPPassEncWUI3
 
         private /*async*/ void MainWindow_Closed(object sender, WindowEventArgs args)
         {
+            SaveWindowPosSize();
+
             //if (m_confirmExit)
             //{
             //    return;
