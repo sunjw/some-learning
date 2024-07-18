@@ -10,3 +10,4 @@ GetCursorPos
 GetDpiForWindow
 GetWindowPlacement
 SetWindowSubclass
+ShowWindow

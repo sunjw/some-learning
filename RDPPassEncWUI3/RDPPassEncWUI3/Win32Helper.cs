@@ -38,9 +38,19 @@ namespace RDPPassEncWUI3
             return false;
         }
 
+        public static void MaximizeWindow(IntPtr hWnd)
+        {
+            PInvoke.ShowWindow(new HWND(hWnd), SHOW_WINDOW_CMD.SW_MAXIMIZE);
+        }
+
         public static int GetScaledPixel(int pixel, double scale)
         {
             return (int)(pixel * scale);
+        }
+
+        public static int GetUnscaledPixel(int pixel, double scale)
+        {
+            return (int)(pixel / scale);
         }
 
         public static Point GetPointerPoint()

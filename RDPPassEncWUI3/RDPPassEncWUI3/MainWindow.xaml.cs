@@ -31,6 +31,10 @@ namespace RDPPassEncWUI3
         private const int AppMinHeight = 420;
         private const nuint SubclassId = 18;
         private const string KeyWinMaximize = "WinMaximize";
+        private const string KeyWinPosX = "WinPosX";
+        private const string KeyWinPosY = "WinPosY";
+        private const string KeyWinSizeWidth = "WinSizeWidth";
+        private const string KeyWinSizeHeight = "WinSizeHeight";
 
         private UISettings m_uiSettings;
         private Page m_pageCurrent = null;
@@ -43,7 +47,7 @@ namespace RDPPassEncWUI3
         public IntPtr HWNDHandle { get; private set; } = 0;
         public double Scale { get; private set; } = 1.0;
 
-        public Windows.Foundation.Point PointCursor { get; private set; } = new Windows.Foundation.Point(0, 0);
+        public Windows.Foundation.Point PointCursor { get; private set; } = new(0, 0);
 
         public MainWindow()
         {
@@ -52,7 +56,7 @@ namespace RDPPassEncWUI3
             IsAppPackaged = Win32Helper.IsAppPackaged();
             HWNDHandle = WindowNative.GetWindowHandle(this);
             Scale = Win32Helper.GetScaleFactor(HWNDHandle);
-            m_uiSettings = new UISettings();
+            m_uiSettings = new();
 
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
@@ -60,7 +64,7 @@ namespace RDPPassEncWUI3
             Closed += MainWindow_Closed;
             m_uiSettings.ColorValuesChanged += UISettings_ColorValuesChanged;
 
-            InitWindowPosSize();
+            LoadWindowPosSize();
             InitWindowSubclass();
         }
 
@@ -85,7 +89,7 @@ namespace RDPPassEncWUI3
 
         public System.Drawing.Point GetCursorRelativePoint()
         {
-            System.Drawing.Point pointRelative = new System.Drawing.Point(0, 0);
+            System.Drawing.Point pointRelative = new(0, 0);
             System.Drawing.Point pointPointer = Win32Helper.GetPointerPoint();
 
             if (AppWindow != null)
@@ -130,15 +134,9 @@ namespace RDPPassEncWUI3
             //AppWindow.TitleBar.ButtonPressedForegroundColor = pressedfgColor;
         }
 
-        private void InitWindowPosSize()
-        {
-            LoadWindowPosSize();
-            AppWindow.Resize(new(Win32Helper.GetScaledPixel(AppMinWidth, Scale), Win32Helper.GetScaledPixel(AppMinWidth, Scale)));
-        }
-
         private void InitWindowSubclass()
         {
-            m_subclassProc = new SUBCLASSPROC(WndSubProc);
+            m_subclassProc = new(WndSubProc);
             PInvoke.SetWindowSubclass(new HWND(HWNDHandle), m_subclassProc, SubclassId, 0);
         }
 
@@ -148,7 +146,7 @@ namespace RDPPassEncWUI3
             {
                 var minMaxInfo = Marshal.PtrToStructure<MINMAXINFO>(lParam);
                 minMaxInfo.ptMinTrackSize.X = Win32Helper.GetScaledPixel(AppMinWidth, Scale);
-                minMaxInfo.ptMinTrackSize.Y = Win32Helper.GetScaledPixel(AppMinWidth, Scale);
+                minMaxInfo.ptMinTrackSize.Y = Win32Helper.GetScaledPixel(AppMinHeight, Scale);
                 Marshal.StructureToPtr(minMaxInfo, lParam, false);
             }
 
@@ -157,18 +155,56 @@ namespace RDPPassEncWUI3
 
         private void LoadWindowPosSize()
         {
-            bool isWindowMaximize = false;
+            bool windowMaximize = false;
+            PointInt32 windowPos = new(-1, -1);
+            SizeInt32 windowSize = new(Win32Helper.GetScaledPixel(AppMinWidth, Scale), Win32Helper.GetScaledPixel(AppMinHeight, Scale));
+
             object objWinMaximize = WinUIHelper.LoadLocalSettings(KeyWinMaximize);
             if (objWinMaximize != null)
             {
-                isWindowMaximize = (bool)objWinMaximize;
+                windowMaximize = (bool)objWinMaximize;
+            }
+            object objWinPosX = WinUIHelper.LoadLocalSettings(KeyWinPosX);
+            object objWinPosY = WinUIHelper.LoadLocalSettings(KeyWinPosY);
+            if (objWinPosX != null && objWinPosY != null)
+            {
+                windowPos.X = Win32Helper.GetScaledPixel((int)objWinPosX, Scale);
+                windowPos.Y = Win32Helper.GetScaledPixel((int)objWinPosY, Scale);
+            }
+            object objWinSizeWidth = WinUIHelper.LoadLocalSettings(KeyWinSizeWidth);
+            object objWinSizeHeight = WinUIHelper.LoadLocalSettings(KeyWinSizeHeight);
+            if (objWinSizeWidth != null && objWinSizeHeight != null)
+            {
+                windowSize.Width = Win32Helper.GetScaledPixel((int)objWinSizeWidth, Scale);
+                windowSize.Height = Win32Helper.GetScaledPixel((int)objWinSizeHeight, Scale);
+            }
+
+            AppWindow.Resize(windowSize);
+            if (windowPos.X != -1 && windowPos.Y != -1)
+            {
+                AppWindow.Move(windowPos);
+            }
+            if (windowMaximize)
+            {
+                Win32Helper.MaximizeWindow(HWNDHandle);
             }
         }
 
         private void SaveWindowPosSize()
         {
-            bool isWindowMaximize = Win32Helper.IsWindowMaximize(HWNDHandle);
-            WinUIHelper.SaveLocalSettings(KeyWinMaximize, isWindowMaximize);
+            bool windowMaximize = Win32Helper.IsWindowMaximize(HWNDHandle);
+            PointInt32 windowPos = AppWindow.Position;
+            windowPos.X = Win32Helper.GetUnscaledPixel(windowPos.X, Scale);
+            windowPos.Y = Win32Helper.GetUnscaledPixel(windowPos.Y, Scale);
+            SizeInt32 windowSize = AppWindow.Size;
+            windowSize.Width = Win32Helper.GetUnscaledPixel(windowSize.Width, Scale);
+            windowSize.Height = Win32Helper.GetUnscaledPixel(windowSize.Height, Scale);
+
+            WinUIHelper.SaveLocalSettings(KeyWinMaximize, windowMaximize);
+            WinUIHelper.SaveLocalSettings(KeyWinPosX, windowPos.X);
+            WinUIHelper.SaveLocalSettings(KeyWinPosY, windowPos.Y);
+            WinUIHelper.SaveLocalSettings(KeyWinSizeWidth, windowSize.Width);
+            WinUIHelper.SaveLocalSettings(KeyWinSizeHeight, windowSize.Height);
         }
 
         private void MainFrame_Loaded(object sender, RoutedEventArgs e)
