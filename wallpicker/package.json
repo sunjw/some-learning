@@ -21,12 +21,12 @@
   "devDependencies": {
     "@electron/rebuild": "^3.6.0",
     "@electron/remote": "^2.1.2",
-    "electron": "^28.2.7",
-    "node-abi": "^3.56.0"
+    "electron": "^30.3.1",
+    "node-abi": "^3.65.0"
   },
   "dependencies": {
     "@sunjw8888/wallpaper": "^5.3.3",
-    "better-sqlite3": "^9.4.3",
+    "better-sqlite3": "^11.1.2",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "electron-localshortcut": "^3.2.1",
