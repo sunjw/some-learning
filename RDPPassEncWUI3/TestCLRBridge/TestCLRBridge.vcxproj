@@ -140,6 +140,7 @@
     <ClInclude Include="..\TestNativeLib\WindowsComm.h" />
     <ClInclude Include="ClrHelper.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TestManagedClass.h" />
     <ClInclude Include="TestNativeClass.h" />
@@ -154,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="TestManagedClass.cpp" />
     <ClCompile Include="TestNativeClass.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
