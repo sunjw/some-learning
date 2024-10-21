@@ -19,14 +19,14 @@
   "author": "Sun Junwen",
   "license": "GPL-2.0",
   "devDependencies": {
-    "@electron/rebuild": "^3.6.0",
+    "@electron/rebuild": "^3.7.0",
     "@electron/remote": "^2.1.2",
-    "electron": "^30.3.1",
-    "node-abi": "^3.65.0"
+    "electron": "^32.2.1",
+    "node-abi": "^3.71.0"
   },
   "dependencies": {
     "@sunjw8888/wallpaper": "^5.3.3",
-    "better-sqlite3": "^11.1.2",
+    "better-sqlite3": "^11.4.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "electron-localshortcut": "^3.2.1",
