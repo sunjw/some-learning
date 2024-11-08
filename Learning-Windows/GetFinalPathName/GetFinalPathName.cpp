@@ -28,7 +28,23 @@ int _tmain(int argc, TCHAR* argv[])
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        wprintf(L"Could not open file (error %d)\n", GetLastError());
+        DWORD dwError = GetLastError();
+        LPVOID lpMsgBuf = NULL;
+        FormatMessage(
+            FORMAT_MESSAGE_ALLOCATE_BUFFER |
+            FORMAT_MESSAGE_FROM_SYSTEM |
+            FORMAT_MESSAGE_IGNORE_INSERTS,
+            NULL,
+            dwError,
+            0, //MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), // MAKELANGID(LANG_FRENCH, SUBLANG_FRENCH),
+            (LPTSTR)&lpMsgBuf,
+            0, NULL);
+
+        wprintf(L"Could not open file: error %d, %s\n", dwError, (LPCTSTR)lpMsgBuf);
+
+        if (lpMsgBuf != NULL)
+            LocalFree(lpMsgBuf);
+
         return 0;
     }
 
