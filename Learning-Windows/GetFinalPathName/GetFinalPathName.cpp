@@ -28,7 +28,7 @@ int _tmain(int argc, TCHAR* argv[])
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        wprintf(L"Could not open file (error %d\n)", GetLastError());
+        wprintf(L"Could not open file (error %d)\n", GetLastError());
         return 0;
     }
 
