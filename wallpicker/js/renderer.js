@@ -1,5 +1,6 @@
 const {
-    ipcRenderer
+    ipcRenderer,
+    webUtils
 } = require('electron');
 const remote = require('@electron/remote');
 
@@ -575,7 +576,7 @@ class WallpickerPage {
             });
             return;
         }
-        let dropPath = dropFiles[0].path;
+        let dropPath = webUtils.getPathForFile(dropFiles[0]);
         utils.log('onDropFiles, dropPath=[%s]', dropPath);
         fs.lstat(dropPath, (err, stats) => {
             if (err || !stats.isDirectory()) {
