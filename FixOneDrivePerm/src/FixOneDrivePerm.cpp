@@ -267,7 +267,7 @@ static BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& t
 	string strLog;
 
 	strLog.clear();
-	strappendformat(strLog, "Found dir:\t[%s]\r\n", tstrtostr(tstrDirectoryPath).c_str());
+	strappendformat(strLog, "Traverse dir:\t[%s]\r\n", tstrtostr(tstrDirectoryPath).c_str());
 	PrintLog(strLog);
 
 	// Prepare the search string.
@@ -289,7 +289,9 @@ static BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& t
 		{
 			tstrFullPath = tstrDirectoryPath + tstring(TEXT("\\")) + tstrFileName;
 
-			if (!IsDirectory(findFileData.dwFileAttributes))
+			BOOL bDirectory = IsDirectory(findFileData.dwFileAttributes);
+
+			if (!bDirectory)
 			{
 				strLog.clear();
 				strappendformat(strLog, "Found file:\t[%s]\r\n", tstrtostr(tstrFullPath).c_str());
@@ -304,7 +306,7 @@ static BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& t
 				strappendformat(strLog, "SetPermissions:\t[%s] failed.\r\n", tstrtostr(tstrFullPath).c_str());
 			PrintLog(strLog);
 
-			if (IsDirectory(findFileData.dwFileAttributes))
+			if (bDirectory)
 			{
 				// Recursively traverse the subdirectory.
 				TraverseDirectory(tstrFullPath, tstrUserName);
