@@ -131,7 +131,11 @@
     <ClCompile Include="src\strhelper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="src\strhelper.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FixOneDrivePerm.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
