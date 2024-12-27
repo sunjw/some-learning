@@ -88,9 +88,10 @@ static void PrintLog(const string& strLog)
 		stLocal.wMilliseconds);
 
 	string strTime = tstrtostr(tstrTmBuf);
+	string strFullLog = strTime + " " + strLog;
 
-	printf("%s %s", strTime.c_str(), strLog.c_str());
-	s_fileLog.AppendLog(strLog);
+	printf(strFullLog.c_str());
+	s_fileLog.AppendLog(strFullLog);
 }
 
 static BOOL GetErrorMessage(DWORD dwError, tstring& tstrErrMessage)
