@@ -322,7 +322,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	s_fileLog.InitLog();
 
 	int argc;
-	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+	LPWSTR *argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	if (argc != 3)
 	{
 		PrintLog("Usage: FixOneDrivePerm.exe <machine\\username> <directory>\r\n");
@@ -341,6 +341,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		PrintLog("Failed to make privileged process.\r\n");
 		return 0;
 	}
+
+	string strLog;
+	strappendformat(strLog, "FixOneDrivePerm: <%s> [%s]\r\n",
+		tstrtostr(tstrUserName).c_str(), tstrtostr(tstrDirectory).c_str());
+	PrintLog(strLog.c_str());
 
 	if (TraverseDirectory(tstrDirectory, tstrUserName))
 		PrintLog("Successfully traversed directory.\r\n");
