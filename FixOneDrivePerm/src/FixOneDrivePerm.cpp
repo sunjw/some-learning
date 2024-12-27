@@ -250,8 +250,10 @@ BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& tstrUser
 	return TRUE;
 }
 
-int wmain(int argc, wchar_t *argv[])
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
+	int argc;
+	LPWSTR *argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	if (argc != 3)
 	{
 		wprintf(TEXT("Usage: FixOneDrivePerm.exe <machine\\username> <directory>\n"));
