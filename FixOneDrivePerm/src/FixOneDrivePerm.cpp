@@ -8,7 +8,73 @@
 using namespace std;
 using namespace sunjwbase;
 
-void PrintLog(const string& strLog)
+class FileLog
+{
+public:
+	FileLog() : m_hLogFile(INVALID_HANDLE_VALUE)
+	{
+	}
+	~FileLog()
+	{
+		CloseLog();
+	}
+
+	void InitLog();
+	void CloseLog();
+
+	void AppendLog(const string& strLog);
+
+private:
+	HANDLE m_hLogFile;
+};
+
+static FileLog s_fileLog;
+
+static tstring GetCurrentExeDir()
+{
+	TCHAR tszExeDir[MAX_PATH] = { 0 };
+	GetModuleFileName(NULL, tszExeDir, MAX_PATH);
+	for (int i = lstrlen(tszExeDir) - 1; i >= 0; i--)
+	{
+		if (tszExeDir[i] == TEXT('\\'))
+		{
+			tszExeDir[i + 1] = 0;
+			break;
+		}
+	}
+
+	return tstring(tszExeDir);
+}
+
+void FileLog::InitLog()
+{
+	tstring tstrExeDir = GetCurrentExeDir();
+	tstring tstrLogFilePath = tstrExeDir + TEXT("FixOneDrivePerm.log");
+	m_hLogFile = CreateFile(tstrLogFilePath.c_str(), FILE_APPEND_DATA, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+}
+
+void FileLog::CloseLog()
+{
+	if (m_hLogFile != INVALID_HANDLE_VALUE)
+	{
+		CloseHandle(m_hLogFile);
+		m_hLogFile = INVALID_HANDLE_VALUE;
+	}
+}
+
+void FileLog::AppendLog(const string& strLog)
+{
+	if (m_hLogFile == INVALID_HANDLE_VALUE)
+		return;
+
+	SetFilePointer(m_hLogFile, 0, NULL, FILE_END);
+
+	string strLogUtf8 = utf8conv((std::string&)strLog);
+	DWORD dwBytesWritten = 0;
+	WriteFile(m_hLogFile, strLogUtf8.c_str(), strLogUtf8.length(), &dwBytesWritten, NULL);
+}
+
+static void PrintLog(const string& strLog)
 {
 	SYSTEMTIME stUTC, stLocal;
 	GetSystemTime(&stUTC);
@@ -24,9 +90,10 @@ void PrintLog(const string& strLog)
 	string strTime = tstrtostr(tstrTmBuf);
 
 	printf("%s %s", strTime.c_str(), strLog.c_str());
+	s_fileLog.AppendLog(strLog);
 }
 
-BOOL GetErrorMessage(DWORD dwError, tstring& tstrErrMessage)
+static BOOL GetErrorMessage(DWORD dwError, tstring& tstrErrMessage)
 {
 	LPVOID lpMsgBuf = NULL;
 	FormatMessage(
@@ -50,12 +117,12 @@ BOOL GetErrorMessage(DWORD dwError, tstring& tstrErrMessage)
 	return FALSE;
 }
 
-BOOL IsDirectory(DWORD dwFileAttributes)
+static BOOL IsDirectory(DWORD dwFileAttributes)
 {
 	return (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
 }
 
-BOOL ModifyPrivilege(LPCTSTR szPrivilege, BOOL fEnable)
+static BOOL ModifyPrivilege(LPCTSTR szPrivilege, BOOL fEnable)
 {
 	BOOL bRet = TRUE;
 	TOKEN_PRIVILEGES NewState;
@@ -102,7 +169,7 @@ BOOL ModifyPrivilege(LPCTSTR szPrivilege, BOOL fEnable)
 	return bRet;
 }
 
-BOOL ModifyPrivilegeWithLog(LPCTSTR szPrivilege, BOOL fEnable)
+static BOOL ModifyPrivilegeWithLog(LPCTSTR szPrivilege, BOOL fEnable)
 {
 	if (!ModifyPrivilege(szPrivilege, fEnable))
 	{
@@ -118,7 +185,7 @@ BOOL ModifyPrivilegeWithLog(LPCTSTR szPrivilege, BOOL fEnable)
 	return TRUE;
 }
 
-BOOL PrivilegedProcess()
+static BOOL PrivilegedProcess()
 {
 	if (!ModifyPrivilegeWithLog(SE_TAKE_OWNERSHIP_NAME, TRUE))
 		return FALSE;
@@ -135,7 +202,7 @@ BOOL PrivilegedProcess()
 	return TRUE;
 }
 
-DWORD SetPermissions(LPCTSTR path, LPCTSTR userName)
+static DWORD SetPermissions(LPCTSTR path, LPCTSTR userName)
 {
 	PACL pOldDACL = NULL, pNewDACL = NULL;
 	PSECURITY_DESCRIPTOR pSD = NULL;
@@ -192,7 +259,7 @@ Cleanup:
 	return dwRes;
 }
 
-BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& tstrUserName)
+static BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& tstrUserName)
 {
 	WIN32_FIND_DATA findFileData;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
@@ -242,8 +309,7 @@ BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& tstrUser
 				TraverseDirectory(tstrFullPath, tstrUserName);
 			}
 		}
-	}
-	while (FindNextFile(hFind, &findFileData) != 0);
+	} while (FindNextFile(hFind, &findFileData) != 0);
 
 	FindClose(hFind);
 
@@ -252,11 +318,13 @@ BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& tstrUser
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
+	s_fileLog.InitLog();
+
 	int argc;
-	LPWSTR *argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	if (argc != 3)
 	{
-		wprintf(TEXT("Usage: FixOneDrivePerm.exe <machine\\username> <directory>\n"));
+		PrintLog("Usage: FixOneDrivePerm.exe <machine\\username> <directory>\n");
 		return 0;
 	}
 
@@ -274,13 +342,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	}
 
 	if (TraverseDirectory(tstrDirectory, tstrUserName))
-	{
 		PrintLog("Successfully traversed directory.\n");
-	}
 	else
-	{
 		PrintLog("Failed to traverse directory.\n");
-	}
 
 	return 0;
 }
