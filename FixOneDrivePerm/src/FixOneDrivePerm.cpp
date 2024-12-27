@@ -178,7 +178,7 @@ static BOOL ModifyPrivilegeWithLog(LPCTSTR szPrivilege, BOOL fEnable)
 		tstring tstrLog, tstrLastErrMsg;
 		string strLog;
 		GetErrorMessage(dwLastErr, tstrLastErrMsg);
-		strappendformat(strLog, "Cannot set privilege [%s], error: 0x%0x, %s\n",
+		strappendformat(strLog, "Cannot set privilege [%s], error: 0x%0x, %s\r\n",
 			szPrivilege, dwLastErr, tstrtostr(tstrLastErrMsg).c_str());
 		PrintLog(strLog);
 		return FALSE;
@@ -217,7 +217,7 @@ static DWORD SetPermissions(LPCTSTR path, LPCTSTR userName)
 	if (ERROR_SUCCESS != dwRes)
 	{
 		strLog.clear();
-		strappendformat(strLog, "GetNamedSecurityInfo Error %u\n", dwRes);
+		strappendformat(strLog, "GetNamedSecurityInfo Error %u\r\n", dwRes);
 		PrintLog(strLog);
 		goto Cleanup;
 	}
@@ -236,7 +236,7 @@ static DWORD SetPermissions(LPCTSTR path, LPCTSTR userName)
 	if (ERROR_SUCCESS != dwRes)
 	{
 		strLog.clear();
-		strappendformat(strLog, "SetEntriesInAcl Error %u\n", dwRes);
+		strappendformat(strLog, "SetEntriesInAcl Error %u\r\n", dwRes);
 		PrintLog(strLog);
 		goto Cleanup;
 	}
@@ -247,7 +247,7 @@ static DWORD SetPermissions(LPCTSTR path, LPCTSTR userName)
 	if (ERROR_SUCCESS != dwRes)
 	{
 		strLog.clear();
-		strappendformat(strLog, "SetNamedSecurityInfo Error % u\n", dwRes);
+		strappendformat(strLog, "SetNamedSecurityInfo Error % u\r\n", dwRes);
 		PrintLog(strLog);
 		goto Cleanup;
 	}
@@ -267,7 +267,7 @@ static BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& t
 	string strLog;
 
 	strLog.clear();
-	strappendformat(strLog, "Found dir:\t[%s]\n", tstrtostr(tstrDirectoryPath).c_str());
+	strappendformat(strLog, "Found dir:\t[%s]\r\n", tstrtostr(tstrDirectoryPath).c_str());
 	PrintLog(strLog);
 
 	// Prepare the search string.
@@ -277,7 +277,7 @@ static BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& t
 	if (hFind == INVALID_HANDLE_VALUE)
 	{
 		strLog.clear();
-		strappendformat(strLog, "FindFirstFile failed (%d)\n", GetLastError());
+		strappendformat(strLog, "FindFirstFile failed (%d)\r\n", GetLastError());
 		PrintLog(strLog);
 		return FALSE;
 	}
@@ -292,16 +292,16 @@ static BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& t
 			if (!IsDirectory(findFileData.dwFileAttributes))
 			{
 				strLog.clear();
-				strappendformat(strLog, "Found file:\t[%s]\n", tstrtostr(tstrFullPath).c_str());
+				strappendformat(strLog, "Found file:\t[%s]\r\n", tstrtostr(tstrFullPath).c_str());
 				PrintLog(strLog);
 			}
 
 			// Set permissions for the file or directory.
 			strLog.clear();
 			if (ERROR_SUCCESS == SetPermissions(tstrFullPath.c_str(), tstrUserName.c_str()))
-				strappendformat(strLog, "SetPermissions:\t[%s] successful.\n", tstrtostr(tstrFullPath).c_str());
+				strappendformat(strLog, "SetPermissions:\t[%s] successful.\r\n", tstrtostr(tstrFullPath).c_str());
 			else
-				strappendformat(strLog, "SetPermissions:\t[%s] failed.\n", tstrtostr(tstrFullPath).c_str());
+				strappendformat(strLog, "SetPermissions:\t[%s] failed.\r\n", tstrtostr(tstrFullPath).c_str());
 			PrintLog(strLog);
 
 			if (IsDirectory(findFileData.dwFileAttributes))
@@ -325,7 +325,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	if (argc != 3)
 	{
-		PrintLog("Usage: FixOneDrivePerm.exe <machine\\username> <directory>\n");
+		PrintLog("Usage: FixOneDrivePerm.exe <machine\\username> <directory>\r\n");
 		return 0;
 	}
 
@@ -334,18 +334,18 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	if (PrivilegedProcess())
 	{
-		PrintLog("Got privileged process.\n");
+		PrintLog("Got privileged process.\r\n");
 	}
 	else
 	{
-		PrintLog("Failed to make privileged process.\n");
+		PrintLog("Failed to make privileged process.\r\n");
 		return 0;
 	}
 
 	if (TraverseDirectory(tstrDirectory, tstrUserName))
-		PrintLog("Successfully traversed directory.\n");
+		PrintLog("Successfully traversed directory.\r\n");
 	else
-		PrintLog("Failed to traverse directory.\n");
+		PrintLog("Failed to traverse directory.\r\n");
 
 	return 0;
 }
