@@ -50,7 +50,21 @@ void FileLog::InitLog(const tstring& tstrLogFileName)
 {
 	tstring tstrExeDir = GetCurrentExeDir();
 	tstring tstrLogFilePath = tstrExeDir + tstrLogFileName;
-	m_hLogFile = CreateFile(tstrLogFilePath.c_str(), FILE_APPEND_DATA, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	m_hLogFile = CreateFile(tstrLogFilePath.c_str(),
+		GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (m_hLogFile != INVALID_HANDLE_VALUE)
+	{
+		// Get file size
+		LARGE_INTEGER liFileSize = { 0 };
+		GetFileSizeEx(m_hLogFile, &liFileSize);
+		LONGLONG llFileSize = liFileSize.QuadPart;
+		if (llFileSize > (5 * 1024 * 1024))
+		{
+			// If log file size is larger than 5MB, clear it.
+			SetFilePointer(m_hLogFile, 0, NULL, FILE_BEGIN);
+			SetEndOfFile(m_hLogFile);
+		}
+	}
 }
 
 void FileLog::CloseLog()
