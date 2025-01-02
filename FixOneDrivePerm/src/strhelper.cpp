@@ -1,7 +1,7 @@
 /*
  * strhelper implementation file
  * Author: Sun Junwen
- * Version: 2.2.3
+ * Version: 2.2.4
  * Provides converting from tstring, string and wstring to each other
  * And provides string's utf8 converting.
  * Provides triming function to string and wstring.
@@ -59,6 +59,58 @@ namespace sunjwbase
 		return wstrTo;
 	}
 #endif
+
+	template<typename T>
+	static T _str_upper(const T& str)
+	{
+		T ret(str);
+		std::transform(ret.begin(), ret.end(), ret.begin(), ::toupper);
+		return ret;
+	}
+
+	template<typename T>
+	static T _str_lower(const T& str)
+	{
+		T ret(str);
+		std::transform(ret.begin(), ret.end(), ret.begin(), ::tolower);
+		return ret;
+	}
+
+	template<typename T>
+	static bool _str_startwith(const T& str, const T& target)
+	{
+		if (str.length() < target.length())
+			return false;
+
+		// Length is enough, let's check content.
+		size_t i = 0;
+		for (; i < target.length(); ++i)
+		{
+			if (str[i] != target[i])
+				return false;
+		}
+
+		return (i == target.length());
+	}
+
+	template<typename T>
+	static bool _str_endwith(const T& str, const T& target)
+	{
+		if (str.length() < target.length())
+			return false;
+
+		// Length is enough, let's check content.
+		size_t str_len = str.length();
+		size_t target_len = target.length();
+		size_t i = 0;
+		for (; i < target.length(); ++i)
+		{
+			if (str[str_len - target_len + i] != target[i])
+				return false;
+		}
+
+		return (i == target.length());
+	}
 }
 
 #if defined (__APPLE__) || defined (__unix)
@@ -309,16 +361,22 @@ std::string sunjwbase::fixnewline(const std::string& str)
 
 std::string sunjwbase::str_upper(const std::string& str)
 {
-	std::string ret(str);
-	std::transform(ret.begin(), ret.end(), ret.begin(), ::toupper);
-	return ret;
+	return _str_upper(str);
 }
 
 std::string sunjwbase::str_lower(const std::string& str)
 {
-	std::string ret(str);
-	std::transform(ret.begin(), ret.end(), ret.begin(), ::tolower);
-	return ret;
+	return _str_lower(str);
+}
+
+std::wstring sunjwbase::str_upper(const std::wstring& str)
+{
+	return _str_upper(str);
+}
+
+std::wstring sunjwbase::str_lower(const std::wstring& str)
+{
+	return _str_lower(str);
 }
 
 std::string sunjwbase::itostr(int num, int idx /* = 10 */)
@@ -380,36 +438,51 @@ std::string sunjwbase::strappendformat(std::string& str, const char *format, ...
 	return str;
 }
 
+std::wstring sunjwbase::strappendformat(std::wstring& str, const wchar_t* format, ...)
+{
+	int size = 100;
+	std::wstring temp;
+	va_list vl;
+	while (1)
+	{
+		temp.resize(size);
+		va_start(vl, format);
+#if defined (_WIN32)
+		int n = _vsnwprintf_s((wchar_t*)temp.data(), size, _TRUNCATE, format, vl);
+#else
+		int n = vswprintf((wchar_t*)temp.data(), size, format, vl);
+#endif
+		va_end(vl);
+		if (n > -1 && n < size) {
+			// temp.resize(n);
+			break;
+		}
+		if (n > -1)
+			size = n + 1; // not large enough
+		else
+			size *= 2;
+	}
+	str.append(temp.c_str());
+
+	return str;
+}
+
 bool sunjwbase::str_startwith(const std::string& str, const std::string& target)
 {
-	if (str.length() < target.length())
-		return false;
-
-	// Length is enough, let's check content.
-	size_t i = 0;
-	for (; i < target.length(); ++i)
-	{
-		if (str[i] != target[i])
-			return false;
-	}
-
-	return (i == target.length());
+	return _str_startwith(str, target);
 }
 
 bool sunjwbase::str_endwith(const std::string& str, const std::string& target)
 {
-	if (str.length() < target.length())
-		return false;
+	return _str_endwith(str, target);
+}
 
-	// Length is enough, let's check content.
-	size_t str_len = str.length();
-	size_t target_len = target.length();
-	size_t i = 0;
-	for (; i < target.length(); ++i)
-	{
-		if (str[str_len - target_len + i] != target[i])
-			return false;
-	}
+bool sunjwbase::str_startwith(const std::wstring& str, const std::wstring& target)
+{
+	return _str_startwith(str, target);
+}
 
-	return (i == target.length());
+bool sunjwbase::str_endwith(const std::wstring& str, const std::wstring& target)
+{
+	return _str_endwith(str, target);
 }

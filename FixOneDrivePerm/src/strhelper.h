@@ -1,7 +1,7 @@
 /*
  * strhelper header file
  * Author: Sun Junwen
- * Version: 2.2.3
+ * Version: 2.2.4
  * Provides converting from tstring, string and wstring to each other
  * And provides string's utf8 converting.
  * Provides triming function to string and wstring.
@@ -163,8 +163,13 @@ namespace sunjwbase
 	// fixing
 
 	// upper and lower
+	// string version
 	std::string str_upper(const std::string& str);
 	std::string str_lower(const std::string& str);
+	// wstring version
+	std::wstring str_upper(const std::wstring& str);
+	std::wstring str_lower(const std::wstring& str);
+	// upper and lower
 
 	// searching part
 	// case insensitive equal for ci_strfind
@@ -200,16 +205,26 @@ namespace sunjwbase
 			return -1; // not found
 		}
 	}
+	// searching part
 
 	// itostr
 	std::string itostr(int num, int idx = 10);
 
-	// format append for std::string
+	// append format part
+	// string version
 	std::string strappendformat(std::string& str, const char *format, ...);
+	// wstring version
+	std::wstring strappendformat(std::wstring& str, const wchar_t* format, ...);
+	// append format part
 
 	// start with & end with
+	// string version
 	bool str_startwith(const std::string& str, const std::string& target);
 	bool str_endwith(const std::string& str, const std::string& target);
+	// wstring version
+	bool str_startwith(const std::wstring& str, const std::wstring& target);
+	bool str_endwith(const std::wstring& str, const std::wstring& target);
+	// start with & end with
 
 }
 
