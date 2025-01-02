@@ -96,10 +96,9 @@ void FileLog::AppendLog(const wstring& wstrLog)
 
 	SetFilePointer(m_hLogFile, 0, NULL, FILE_END);
 
-	//string strLogUtf8 = utf8conv((std::string&)tstrLog);
+	string strLogUtf8 = wstrtostrutf8(wstrLog);
 	DWORD dwBytesWritten = 0;
-	//WriteFile(m_hLogFile, strLogUtf8.c_str(), strLogUtf8.length(), &dwBytesWritten, NULL);
-	WriteFile(m_hLogFile, wstrLog.c_str(), wstrLog.length() * sizeof(TCHAR), &dwBytesWritten, NULL);
+	WriteFile(m_hLogFile, strLogUtf8.c_str(), strLogUtf8.length(), &dwBytesWritten, NULL);
 }
 
 static void PrintLog(const string& strLog)
