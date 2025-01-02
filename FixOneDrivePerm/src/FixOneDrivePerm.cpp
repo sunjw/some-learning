@@ -23,6 +23,7 @@ public:
 	void CloseLog();
 
 	void AppendLog(const string& strLog);
+	void AppendLog(const wstring& wstrLog);
 
 private:
 	HANDLE m_hLogFile;
@@ -88,24 +89,61 @@ void FileLog::AppendLog(const string& strLog)
 	WriteFile(m_hLogFile, strLogUtf8.c_str(), strLogUtf8.length(), &dwBytesWritten, NULL);
 }
 
+void FileLog::AppendLog(const wstring& wstrLog)
+{
+	if (m_hLogFile == INVALID_HANDLE_VALUE)
+		return;
+
+	SetFilePointer(m_hLogFile, 0, NULL, FILE_END);
+
+	//string strLogUtf8 = utf8conv((std::string&)tstrLog);
+	DWORD dwBytesWritten = 0;
+	//WriteFile(m_hLogFile, strLogUtf8.c_str(), strLogUtf8.length(), &dwBytesWritten, NULL);
+	WriteFile(m_hLogFile, wstrLog.c_str(), wstrLog.length() * sizeof(TCHAR), &dwBytesWritten, NULL);
+}
+
 static void PrintLog(const string& strLog)
 {
 	SYSTEMTIME stUTC, stLocal;
 	GetSystemTime(&stUTC);
 	SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
 
-	TCHAR tstrTmBuf[1024] = { 0 };
-	StringCchPrintf(tstrTmBuf, 1024,
+	TCHAR tszTmBuf[1024] = { 0 };
+	StringCchPrintf(tszTmBuf, 1024,
 		TEXT("%d-%02d-%02d %02d:%02d:%02d.%03d"),
 		stLocal.wYear, stLocal.wMonth, stLocal.wDay,
 		stLocal.wHour, stLocal.wMinute, stLocal.wSecond,
 		stLocal.wMilliseconds);
 
-	string strTime = tstrtostr(tstrTmBuf);
+	string strTime = tstrtostr(tszTmBuf);
 	string strFullLog = strTime + " " + strLog;
 
 	printf(strFullLog.c_str());
 	s_fileLog.AppendLog(strFullLog);
+}
+
+static void PrintLog(const tstring& tstrLog)
+{
+	SYSTEMTIME stUTC, stLocal;
+	GetSystemTime(&stUTC);
+	SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
+
+	TCHAR tszTmBuf[1024] = { 0 };
+	StringCchPrintf(tszTmBuf, 1024,
+		TEXT("%d-%02d-%02d %02d:%02d:%02d.%03d"),
+		stLocal.wYear, stLocal.wMonth, stLocal.wDay,
+		stLocal.wHour, stLocal.wMinute, stLocal.wSecond,
+		stLocal.wMilliseconds);
+
+	tstring tstrTime = tszTmBuf;
+	tstring tstrFullLog = tstrTime + TEXT(" ") + tstrLog;
+
+#if defined(_WIN32) && (defined(UNICODE) || defined(_UNICODE))
+	wprintf(tstrFullLog.c_str());
+#else
+	printf(tstrFullLog.c_str());
+#endif
+	s_fileLog.AppendLog(tstrFullLog);
 }
 
 static BOOL GetErrorMessage(DWORD dwError, tstring& tstrErrMessage)
@@ -190,11 +228,10 @@ static BOOL ModifyPrivilegeWithLog(LPCTSTR szPrivilege, BOOL fEnable)
 	{
 		DWORD dwLastErr = GetLastError();
 		tstring tstrLog, tstrLastErrMsg;
-		string strLog;
 		GetErrorMessage(dwLastErr, tstrLastErrMsg);
-		strappendformat(strLog, "Cannot set privilege [%s], error: 0x%0x, %s\r\n",
-			szPrivilege, dwLastErr, tstrtostr(tstrLastErrMsg).c_str());
-		PrintLog(strLog);
+		strappendformat(tstrLog, TEXT("Cannot set privilege [%s], error: 0x%0x, %s\r\n"),
+			szPrivilege, dwLastErr, tstrLastErrMsg.c_str());
+		PrintLog(tstrLog);
 		return FALSE;
 	}
 	return TRUE;
@@ -223,16 +260,16 @@ static DWORD SetPermissions(LPCTSTR path, LPCTSTR userName)
 	PSECURITY_DESCRIPTOR pSD = NULL;
 	EXPLICIT_ACCESS ea;
 	DWORD dwRes = ERROR_SUCCESS;
-	string strLog;
+	tstring tstrLog;
 
 	// Get a pointer to the existing DACL.
 	dwRes = GetNamedSecurityInfo(path, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION,
 		NULL, NULL, &pOldDACL, NULL, &pSD);
 	if (ERROR_SUCCESS != dwRes)
 	{
-		strLog.clear();
-		strappendformat(strLog, "GetNamedSecurityInfo Error %u\r\n", dwRes);
-		PrintLog(strLog);
+		tstrLog.clear();
+		strappendformat(tstrLog, TEXT("GetNamedSecurityInfo Error %u\r\n"), dwRes);
+		PrintLog(tstrLog);
 		goto Cleanup;
 	}
 
@@ -249,9 +286,9 @@ static DWORD SetPermissions(LPCTSTR path, LPCTSTR userName)
 	dwRes = SetEntriesInAcl(1, &ea, pOldDACL, &pNewDACL);
 	if (ERROR_SUCCESS != dwRes)
 	{
-		strLog.clear();
-		strappendformat(strLog, "SetEntriesInAcl Error %u\r\n", dwRes);
-		PrintLog(strLog);
+		tstrLog.clear();
+		strappendformat(tstrLog, TEXT("SetEntriesInAcl Error %u\r\n"), dwRes);
+		PrintLog(tstrLog);
 		goto Cleanup;
 	}
 
@@ -260,9 +297,9 @@ static DWORD SetPermissions(LPCTSTR path, LPCTSTR userName)
 		NULL, NULL, pNewDACL, NULL);
 	if (ERROR_SUCCESS != dwRes)
 	{
-		strLog.clear();
-		strappendformat(strLog, "SetNamedSecurityInfo Error % u\r\n", dwRes);
-		PrintLog(strLog);
+		tstrLog.clear();
+		strappendformat(tstrLog, TEXT("SetNamedSecurityInfo Error %u\r\n"), dwRes);
+		PrintLog(tstrLog);
 		goto Cleanup;
 	}
 
@@ -278,11 +315,11 @@ static BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& t
 {
 	WIN32_FIND_DATA findFileData;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
-	string strLog;
+	tstring tstrLog;
 
-	strLog.clear();
-	strappendformat(strLog, "Traverse dir:\t[%s]\r\n", tstrtostr(tstrDirectoryPath).c_str());
-	PrintLog(strLog);
+	tstrLog.clear();
+	strappendformat(tstrLog, TEXT("Traverse dir:\t[%s]\r\n"), tstrDirectoryPath.c_str());
+	PrintLog(tstrLog);
 
 	// Prepare the search string.
 	tstring tstrFullPath = tstrDirectoryPath + tstring(TEXT("\\*"));
@@ -290,9 +327,9 @@ static BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& t
 
 	if (hFind == INVALID_HANDLE_VALUE)
 	{
-		strLog.clear();
-		strappendformat(strLog, "FindFirstFile failed (%d)\r\n", GetLastError());
-		PrintLog(strLog);
+		tstrLog.clear();
+		strappendformat(tstrLog, TEXT("FindFirstFile failed (%d)\r\n"), GetLastError());
+		PrintLog(tstrLog);
 		return FALSE;
 	}
 
@@ -307,18 +344,18 @@ static BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& t
 
 			if (!bDirectory)
 			{
-				strLog.clear();
-				strappendformat(strLog, "Found file:\t[%s]\r\n", tstrtostr(tstrFullPath).c_str());
-				PrintLog(strLog);
+				tstrLog.clear();
+				strappendformat(tstrLog, TEXT("Found file:\t[%s]\r\n"), tstrFullPath.c_str());
+				PrintLog(tstrLog);
 			}
 
 			// Set permissions for the file or directory.
-			strLog.clear();
+			tstrLog.clear();
 			if (ERROR_SUCCESS == SetPermissions(tstrFullPath.c_str(), tstrUserName.c_str()))
-				strappendformat(strLog, "SetPermissions:\t[%s] successful.\r\n", tstrtostr(tstrFullPath).c_str());
+				strappendformat(tstrLog, TEXT("SetPermissions:\t[%s] successful.\r\n"), tstrFullPath.c_str());
 			else
-				strappendformat(strLog, "SetPermissions:\t[%s] failed.\r\n", tstrtostr(tstrFullPath).c_str());
-			PrintLog(strLog);
+				strappendformat(tstrLog, TEXT("SetPermissions:\t[%s] failed.\r\n"), tstrFullPath.c_str());
+			PrintLog(tstrLog);
 
 			if (bDirectory)
 			{
@@ -347,7 +384,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	LPWSTR *argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	if (argc != 3)
 	{
-		PrintLog("Usage: FixOneDrivePerm.exe <machine\\username> <directory>\r\n");
+		PrintLog(TEXT("Usage: FixOneDrivePerm.exe <machine\\username> <directory>\r\n"));
 		return 0;
 	}
 
@@ -356,23 +393,22 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	if (PrivilegedProcess())
 	{
-		PrintLog("Got privileged process.\r\n");
+		PrintLog(TEXT("Got privileged process.\r\n"));
 	}
 	else
 	{
-		PrintLog("Failed to make privileged process.\r\n");
+		PrintLog(TEXT("Failed to make privileged process.\r\n"));
 		return 0;
 	}
 
-	string strLog;
-	strappendformat(strLog, "FixOneDrivePerm: <%s> [%s]\r\n",
-		tstrtostr(tstrUserName).c_str(), tstrtostr(tstrDirectory).c_str());
-	PrintLog(strLog.c_str());
+	tstring tstrLog;
+	strappendformat(tstrLog, TEXT("FixOneDrivePerm: <%s> [%s]\r\n"), tstrUserName.c_str(), tstrDirectory.c_str());
+	PrintLog(tstrLog.c_str());
 
 	if (TraverseDirectory(tstrDirectory, tstrUserName))
-		PrintLog("Successfully traversed directory.\r\n");
+		PrintLog(TEXT("Successfully traversed directory.\r\n"));
 	else
-		PrintLog("Failed to traverse directory.\r\n");
+		PrintLog(TEXT("Failed to traverse directory.\r\n"));
 
 	return 0;
 }
