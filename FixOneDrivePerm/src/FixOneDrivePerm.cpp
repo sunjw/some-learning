@@ -19,7 +19,7 @@ public:
 		CloseLog();
 	}
 
-	void InitLog();
+	void InitLog(const tstring& tstrLogFileName);
 	void CloseLog();
 
 	void AppendLog(const string& strLog);
@@ -46,10 +46,10 @@ static tstring GetCurrentExeDir()
 	return tstring(tszExeDir);
 }
 
-void FileLog::InitLog()
+void FileLog::InitLog(const tstring& tstrLogFileName)
 {
 	tstring tstrExeDir = GetCurrentExeDir();
-	tstring tstrLogFilePath = tstrExeDir + TEXT("FixOneDrivePerm.log");
+	tstring tstrLogFilePath = tstrExeDir + tstrLogFileName;
 	m_hLogFile = CreateFile(tstrLogFilePath.c_str(), FILE_APPEND_DATA, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 }
 
@@ -319,9 +319,15 @@ static BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& t
 	return TRUE;
 }
 
+static void InitLog()
+{
+	const tstring tstrLogFileName = TEXT("FixOneDrivePerm.log");
+	s_fileLog.InitLog(tstrLogFileName);
+}
+
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-	s_fileLog.InitLog();
+	InitLog();
 
 	int argc;
 	LPWSTR *argv = CommandLineToArgvW(GetCommandLineW(), &argc);
