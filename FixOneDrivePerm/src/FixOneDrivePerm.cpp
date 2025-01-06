@@ -4,9 +4,12 @@
 #include <strsafe.h>
 #include <aclapi.h>
 #include "strhelper.h"
+#include "version.h"
 
 using namespace std;
 using namespace sunjwbase;
+
+#define EXE_NAME "FixOneDrivePerm"
 
 class FileLog
 {
@@ -371,7 +374,7 @@ static BOOL TraverseDirectory(const tstring& tstrDirectoryPath, const tstring& t
 
 static void InitLog()
 {
-	const tstring tstrLogFileName = TEXT("FixOneDrivePerm.log");
+	const tstring tstrLogFileName = TEXT(EXE_NAME ".log");
 	s_fileLog.InitLog(tstrLogFileName);
 }
 
@@ -379,11 +382,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 {
 	InitLog();
 
+	PrintLog(TEXT(EXE_NAME " " STR_VERSION " starts.\r\n"));
+
 	int argc;
 	LPWSTR *argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	if (argc != 3)
 	{
-		PrintLog(TEXT("Usage: FixOneDrivePerm.exe <machine\\username> <directory>\r\n"));
+		PrintLog(TEXT("Usage: " EXE_NAME ".exe <machine\\username> <directory>\r\n"));
 		return 0;
 	}
 
@@ -401,7 +406,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	}
 
 	tstring tstrLog;
-	strappendformat(tstrLog, TEXT("FixOneDrivePerm: <%s> [%s]\r\n"), tstrUserName.c_str(), tstrDirectory.c_str());
+	strappendformat(tstrLog, TEXT(EXE_NAME ": <%s> [%s]\r\n"), tstrUserName.c_str(), tstrDirectory.c_str());
 	PrintLog(tstrLog.c_str());
 
 	if (TraverseDirectory(tstrDirectory, tstrUserName))
