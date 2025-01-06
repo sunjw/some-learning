@@ -26,12 +26,12 @@
     <ClInclude Include="src\strhelper.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="src\resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="FixOneDrivePerm.rc">
+    <ResourceCompile Include="src\FixOneDrivePerm.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
   </ItemGroup>
