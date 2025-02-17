@@ -25,7 +25,7 @@
     "node-abi": "^3.74.0"
   },
   "dependencies": {
-    "@sunjw8888/wallpaper": "^5.3.3",
+    "@sunjw8888/wallpaper": "^5.3.4",
     "better-sqlite3": "^11.8.1",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
