@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@sunjw8888/wallpaper": "^5.3.3",
-    "better-sqlite3": "^11.4.0",
+    "better-sqlite3": "^11.8.1",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "electron-localshortcut": "^3.2.1",
