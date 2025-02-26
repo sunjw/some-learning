@@ -64,7 +64,12 @@ body {
     z-index: 1000;
     background-color: rgba(245,245,247,0.6);
     backdrop-filter: blur(40px);
-    box-shadow: 0 -2px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+    transition: box-shadow 0.5s;
+}
+#divToolbarWrapper.toolbarScrolled {
+    box-shadow: 0 -2px 20px rgba(0,0,0,0.3);
+    transition: box-shadow 0.5s;
 }
 #divToolbarWrapper #divPathDropInfo {
     display: none;

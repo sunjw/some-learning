@@ -132,6 +132,9 @@ class WallpickerPage {
         $(window).on('resize', function () {
             that.onWindowResize();
         });
+        $(window).on('scroll', function () {
+            that.onWindowScroll();
+        });
 
         this.disableAllButtons();
         this.hideLoading();
@@ -237,6 +240,15 @@ class WallpickerPage {
         // on window resize
         this.fitContentHeight();
         this.fitImageListWidth();
+    }
+
+    onWindowScroll() {
+        let windowScrollTop = $(window).scrollTop();
+        if (windowScrollTop >= 6) {
+            this.divToolbarWrapper.addClass('toolbarScrolled');
+        } else {
+            this.divToolbarWrapper.removeClass('toolbarScrolled');
+        }
     }
 
     initLayout() {
