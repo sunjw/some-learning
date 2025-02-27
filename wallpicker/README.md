@@ -13,7 +13,7 @@ Windows and macOS distribution packages are in [dist](dist) directory.
 
 ## Pack
 ```
-python3 ./pack-dist-electron.py
+python3 ./pack_dist_electron.py
 ```
 New package will overwrite exists one in [dist](dist) directory.
 
