@@ -1,7 +1,4 @@
-const {
-    ipcRenderer,
-    webUtils
-} = require('electron');
+const { ipcRenderer, webUtils } = require('electron');
 const remote = require('@electron/remote');
 
 const fs = require('fs');
