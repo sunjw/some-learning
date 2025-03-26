@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="./dist/styles.min.css">
+    <script src="./dist/bundle.js"></script>
+  </head>
+  <body>
+    <div id="pageContainer">
+      <div id="qrTextContainer">
+        <header class="blue darken-1">QR Code Generator</header>
+        <div id="qrTextAreaContainer" class="input-field">
+          <textarea id="qrText" class="materialize-textarea"></textarea>
+          <label for="qrText" class="blue-text text-darken-1">Some text to QR code</label>
+          <i id="qrTextClear" class="material-icons">clear</i>
+        </div>
+      </div>
+      <div id="qrImgContainer">
+        <div id="qrGeneratorInfo">2020 - <a href="http://sunjw.us/blog" target="_blank">Sun Junwen</a></div>
+        <canvas id="qrImgCanvas"></canvas>
+      </div>
+    </div>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-5927560-7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-5927560-7');
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J4TZQEXTPD"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-J4TZQEXTPD');
+    </script>
+  </body>
+</html>

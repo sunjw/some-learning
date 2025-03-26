@@ -1,0 +1,34 @@
+{
+  "name": "qr-web",
+  "version": "0.2.2",
+  "description": "A web to generate QR code by any text.",
+  "main": "js/main.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "start:dev": "webpack-dev-server --mode development"
+  },
+  "keywords": [
+    "QR"
+  ],
+  "author": "Sun Junwen",
+  "license": "GPL-2.0",
+  "repository": "https://github.com/sunjw/some-coding",
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "css-loader": "^7.1.2",
+    "mini-css-extract-plugin": "^2.9.1",
+    "postcss": "^8.4.47",
+    "postcss-loader": "^8.1.1",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
+  },
+  "dependencies": {
+    "@materializecss/materialize": "^1.2.2",
+    "jquery": "^3.7.1",
+    "material-design-icons": "^3.0.1",
+    "qrcode": "^1.5.4"
+  }
+}

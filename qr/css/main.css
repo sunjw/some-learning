@@ -1,0 +1,136 @@
+/* Common */
+* {
+  padding: 0;
+  margin: 0;
+}
+body {
+  line-height: 1.4em;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+}
+
+.clear {
+  clear: both;
+}
+.center {
+  text-align: center;
+}
+.right {
+  text-align: right;
+}
+.floatLeft {
+  float: left;
+}
+.floatRight {
+  float: right;
+}
+.floatLeftWrapper:after, .floatRightWrapper:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+img {
+  border: 0;
+}
+ul {
+  list-style-type: none;
+}
+/* Common */
+
+/* Dark */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #0c0c0c;
+    color: #cccccc;
+  }
+  a {
+    color: #cccccc;
+  }
+}
+/* Dark */
+
+/* Page Container */
+div#pageContainer {
+  display: none;
+}
+/* Page Container */
+
+/* QR Text */
+div#qrTextContainer header {
+  height: 64px;
+  line-height: 64px;
+  padding-left: 20px;
+  color: white;
+}
+div#qrTextContainer div#qrTextAreaContainer {
+  margin-left: 2px;
+  margin-right: 6px;
+  margin-top: 24px;
+}
+div#qrTextContainer textarea#qrText {
+  min-height: 60px;
+}
+div#qrTextContainer textarea#qrText:focus {
+  border-bottom-color: #1e88e5;
+  box-shadow: 0 1px 0 0 #1e88e5;
+}
+div#qrTextContainer i#qrTextClear {
+  position: absolute;
+  top: -12px;
+  right: 2px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: none;
+}
+/* QR Text */
+
+/* QR Image */
+div#qrImgContainer {
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.14),0 2px 2px 0 rgba(0,0,0,.098),0 1px 5px 0 rgba(0,0,0,.084);
+}
+div#qrImgContainer div#qrGeneratorInfo {
+  margin-right: 10px;
+  text-align: right;
+  font-size: x-small;
+  color: #bababa;
+}
+div#qrImgContainer div#qrGeneratorInfo a {
+  color: #bababa;
+  text-decoration: underline;
+}
+div#qrImgContainer canvas#qrImgCanvas {
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.14),0 6px 10px 0 rgba(0,0,0,.098),0 1px 18px 0 rgba(0,0,0,.084);
+  cursor: pointer;
+}
+/* QR Image */
+
+/* Dark */
+@media (prefers-color-scheme: dark) {
+  /* QR Text */
+  div#qrTextContainer textarea#qrText {
+    color: #cccccc;
+  }
+  /* QR Text */
+
+  /* QR Image */
+  div#qrImgContainer {
+    box-shadow: 0 3px 1px -2px rgba(255,255,255,.28),0 2px 2px 0 rgba(255,255,255,.196),0 1px 5px 0 rgba(255,255,255,.168);
+  }
+  div#qrImgContainer div#qrGeneratorInfo {
+    color: #434343;
+  }
+  div#qrImgContainer div#qrGeneratorInfo a {
+    color: #434343;
+  }
+  div#qrImgContainer canvas#qrImgCanvas {
+    box-shadow: 0 3px 5px -1px rgba(255,255,255,.28),0 6px 10px 0 rgba(255,255,255,.196),0 1px 18px 0 rgba(255,255,255,.168);
+  }
+  /* QR Image */
+}
+/* Dark */
