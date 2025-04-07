@@ -1,0 +1,37 @@
+{
+  "name": "qr-dec-web",
+  "version": "0.1.0",
+  "description": "A web to decode QR code by an image.",
+  "main": "js/main.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "start:dev": "webpack serve --mode development"
+  },
+  "keywords": [
+    "qr"
+  ],
+  "author": "Sun Junwen",
+  "license": "GPL-2.0",
+  "repository": "https://github.com/sunjw/some-coding",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "css-loader": "^7.1.2",
+    "mini-css-extract-plugin": "^2.9.2",
+    "postcss": "^8.5.3",
+    "postcss-loader": "^8.1.1",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.1"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.5",
+    "bootstrap-icons": "^1.11.3",
+    "clipboard-copy": "^4.0.1",
+    "dayjs": "^1.11.13",
+    "filesize": "^10.1.6",
+    "jquery": "^3.7.1",
+    "platform": "^1.3.6"
+  }
+}

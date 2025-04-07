@@ -1,0 +1,51 @@
+/* Common */
+/* @font-face {
+  font-family: xkcd-script;
+  src: url('../assets/xkcd-script.woff') format('woff');
+} */
+
+:root {
+  --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", Helvetica, Arial, sans-serif;
+  --font-monospace: ui-monospace, "Cascadia Mono", "Segoe UI Mono", SFMono-Regular, "SF Mono", "Liberation Mono", Monaco, Menlo, Consolas, monospace;
+  --height-textheader: 48px;
+  --shadow-like-bs: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  --ani-duration: 0.5s;
+}
+
+body {
+
+}
+.noBsFocus:focus, .noBsFocus.focus {
+  box-shadow: none !important;
+}
+.btn-light:disabled, .btn-light.disabled {
+  color: var(--bs-gray-600);
+}
+/* Common */
+
+/* Large screen */
+@media (min-width: 769px) {
+
+}
+/* Large screen */
+
+/* Small screen */
+@media (max-width: 768px) {
+
+}
+@media (max-width: 640px) {
+
+}
+/* Small screen */
+
+/* Even small screen */
+@media (max-width: 430px) {
+
+}
+/* Even small screen */
+
+/* Dark */
+@media (prefers-color-scheme: dark) {
+
+}
+/* Dark */
