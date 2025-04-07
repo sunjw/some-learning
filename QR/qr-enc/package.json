@@ -1,5 +1,5 @@
 {
-  "name": "qr-web",
+  "name": "qr-enc-web",
   "version": "0.2.2",
   "description": "A web to generate QR code by any text.",
   "main": "js/main.js",
