@@ -21,7 +21,11 @@ function copyText(someText) {
 class QrDecPage {
     constructor() {
         // vars
-        
+
+        // layout
+        this.body = $('body');
+        this.divContentWrapper = null;
+        this.divUploadWrapper = null;
     }
 
     init() {
@@ -31,14 +35,42 @@ class QrDecPage {
     }
 
     initLayout() {
+        // content
+        this.divContentWrapper = $('<div/>')
+            .attr('id', 'divContentWrapper')
+            .addClass('d-flex flex-wrap mx-auto pt-4');
 
+        this.divUploadWrapper = $('<div/>')
+            .attr('id', 'divUploadWrapper')
+            .addClass('d-flex flex-column p-2');
+        let divUploadFormGroup = $('<div/>')
+            .attr('id', 'divUploadFormGroup')
+            .addClass('form-group');
+        let labelImageUpload = $('<label/>')
+            .attr({
+                'id': 'labelImageUpload',
+                'for': 'inputImageUpload'
+            })
+            .addClass('form-label')
+            .text('Select or drag a image file');
+        let inputImageUpload = $('<input/>')
+            .attr({
+                'id': 'inputImageUpload',
+                'type': 'file',
+                'accept': 'image/png, image/jpeg'
+            })
+            .addClass('form-control');
+        divUploadFormGroup.append(labelImageUpload);
+        divUploadFormGroup.append(inputImageUpload);
+        this.divUploadWrapper.append(divUploadFormGroup);
+
+        this.divContentWrapper.append(this.divUploadWrapper);
+
+        this.body.append(this.divContentWrapper);
     }
 
-    initFunc() {
+    initFunc() {}
 
-    }
-
-    
 }
 
 $(function () {

@@ -23,6 +23,11 @@ body {
 }
 /* Common */
 
+/* QR Dec */
+#divContentWrapper {
+  max-width: 1000px;
+}
+
 /* Large screen */
 @media (min-width: 769px) {
 
@@ -49,3 +54,4 @@ body {
 
 }
 /* Dark */
+/* QR Dec */
