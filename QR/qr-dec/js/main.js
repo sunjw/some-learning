@@ -30,6 +30,7 @@ class QrDecPage {
         this.labelImageUpload = null;
         this.inputImageUpload = null;
         this.imgPreview = null;
+        this.divResultWrapper = null;
     }
 
     init() {
@@ -47,7 +48,7 @@ class QrDecPage {
         // upload
         this.divUploadWrapper = $('<div/>')
             .attr('id', 'divUploadWrapper')
-            .addClass('d-flex flex-column p-2');
+            .addClass('d-flex flex-column m-2');
 
         let divUploadFormGroup = $('<div/>')
             .attr('id', 'divUploadFormGroup')
@@ -81,15 +82,38 @@ class QrDecPage {
                 'id': 'imgPreview',
                 'src': ''
             })
-            .addClass('mt-2 mb-2 noImage');
+            .addClass('mt-2 noImage');
         this.divImagePreview.append(this.imgPreview);
 
         this.divUploadWrapper.append(divUploadFormGroup);
         this.divUploadWrapper.append(this.divImagePreview);
 
         // result
+        this.divResultWrapper = $('<div/>')
+            .attr('id', 'divResultWrapper')
+            .addClass('d-flex flex-column m-2');
+
+        // header
+        let divResultHeader = $('<div/>')
+            .attr('id', 'divResultHeader')
+            .addClass('d-flex');
+
+        // left
+        let divResultHeaderLeft = $('<div/>')
+            .attr('id', 'divResultHeaderLeft')
+            .addClass('flex-grow-1 d-flex align-items-center m-2');
+        // title
+        let divResultTitle = $('<div/>')
+            .attr('id', 'divResultTitle')
+            .addClass('text-truncate ps-2')
+            .html('Result');
+        divResultHeaderLeft.append(divResultTitle);
+        divResultHeader.append(divResultHeaderLeft);
+
+        this.divResultWrapper.append(divResultHeader);
 
         this.divContentWrapper.append(this.divUploadWrapper);
+        this.divContentWrapper.append(this.divResultWrapper);
 
         this.body.append(this.divContentWrapper);
     }

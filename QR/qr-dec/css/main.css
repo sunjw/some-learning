@@ -28,7 +28,7 @@ body {
   width: 1000px;
 }
 
-#divUploadWrapper {
+#divUploadWrapper, #divResultWrapper {
   width: 480px;
 }
 #divUploadWrapper #labelImageUpload {
@@ -43,13 +43,20 @@ body {
 #divUploadWrapper #labelImageUpload.dragDrop {
   border-color: var(--bs-danger);
 }
-
 #divUploadWrapper #imgPreview {
   border: 0;
   border-radius: var(--bs-border-radius);
 }
 #divUploadWrapper #imgPreview.noImage {
   border: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+#divResultWrapper {
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+}
+#divResultWrapper #divResultHeader {
+  height: 60px;
 }
 
 /* Large screen */
