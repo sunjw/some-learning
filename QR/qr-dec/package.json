@@ -16,6 +16,7 @@
   "repository": "https://github.com/sunjw/some-coding",
   "devDependencies": {
     "autoprefixer": "^10.4.21",
+    "copy-webpack-plugin": "^13.0.0",
     "css-loader": "^7.1.2",
     "mini-css-extract-plugin": "^2.9.2",
     "postcss": "^8.5.3",
