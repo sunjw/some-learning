@@ -27,6 +27,7 @@ class QrDecPage {
         this.divContentWrapper = null;
         this.divUploadWrapper = null;
         this.divImagePreview = null;
+        this.labelImageUpload = null;
         this.inputImageUpload = null;
         this.imgPreview = null;
     }
@@ -50,7 +51,7 @@ class QrDecPage {
         let divUploadFormGroup = $('<div/>')
             .attr('id', 'divUploadFormGroup')
             .addClass('form-group');
-        let labelImageUpload = $('<label/>')
+        this.labelImageUpload = $('<label/>')
             .attr({
                 'id': 'labelImageUpload',
                 'for': 'inputImageUpload'
@@ -68,7 +69,7 @@ class QrDecPage {
         this.inputImageUpload.on('change', () => {
             this.onImageUploadChange();
         });
-        divUploadFormGroup.append(labelImageUpload);
+        divUploadFormGroup.append(this.labelImageUpload);
         divUploadFormGroup.append(this.inputImageUpload);
 
         this.divImagePreview = $('<div/>')
@@ -90,7 +91,44 @@ class QrDecPage {
         this.body.append(this.divContentWrapper);
     }
 
-    initFunc() {}
+    initFunc() {
+        this.initDragDrop();
+    }
+
+    initDragDrop() {
+        let that = this;
+
+        const dragDropClass = 'dragDrop';
+        let bodyElem = this.body.get(0);
+        bodyElem.ondragover = function (e) {
+            e.preventDefault();
+            that.labelImageUpload.addClass(dragDropClass);
+            return false;
+        };
+        bodyElem.ondragleave = function (e) {
+            e.preventDefault();
+            that.labelImageUpload.removeClass(dragDropClass);
+            return false;
+        };
+        bodyElem.ondragend = function (e) {
+            e.preventDefault();
+            that.labelImageUpload.removeClass(dragDropClass);
+            return false;
+        };
+        bodyElem.ondrop = function (e) {
+            utils.log('bodyElem.ondrop');
+            e.preventDefault();
+            that.labelImageUpload.removeClass(dragDropClass);
+            if (e && e.dataTransfer) {
+                let dragDropFiles = e.dataTransfer.files;
+                if (dragDropFiles.length > 0) {
+                    that.inputImageUpload.get(0).files = dragDropFiles;
+                    that.onImageUploadChange();
+                }
+            }
+            return false;
+        }
+    }
 
     onImageUploadChange() {
         let that = this;

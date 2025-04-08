@@ -40,6 +40,9 @@ body {
   border: var(--bs-border-width) solid var(--bs-border-color);
   border-radius: var(--bs-border-radius);
 }
+#divUploadWrapper #labelImageUpload.dragDrop {
+  border-color: var(--bs-danger);
+}
 
 /* Large screen */
 @media (min-width: 769px) {
