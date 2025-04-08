@@ -44,6 +44,10 @@ body {
   border-color: var(--bs-danger);
 }
 
+#divUploadWrapper #imgPreview {
+  border-radius: var(--bs-border-radius);
+}
+
 /* Large screen */
 @media (min-width: 769px) {
 
