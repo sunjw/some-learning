@@ -43,6 +43,7 @@ class QrDecPage {
         this.divUploadWrapper = $('<div/>')
             .attr('id', 'divUploadWrapper')
             .addClass('d-flex flex-column p-2');
+
         let divUploadFormGroup = $('<div/>')
             .attr('id', 'divUploadFormGroup')
             .addClass('form-group');
@@ -63,7 +64,18 @@ class QrDecPage {
         inputImageUpload.hide();
         divUploadFormGroup.append(labelImageUpload);
         divUploadFormGroup.append(inputImageUpload);
+
+        let divImagePreview = $('<div/>')
+            .attr('id', 'divImagePreview');
+        let imgPreview = $('<img/>')
+            .attr({
+                'id': 'imgPreview',
+                'src': ''
+            });
+        divImagePreview.append(imgPreview);
+
         this.divUploadWrapper.append(divUploadFormGroup);
+        this.divUploadWrapper.append(divImagePreview);
 
         this.divContentWrapper.append(this.divUploadWrapper);
 
