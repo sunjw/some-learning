@@ -47,7 +47,7 @@ class QrDecPage {
         // content
         this.divContentWrapper = $('<div/>')
             .attr('id', 'divContentWrapper')
-            .addClass('d-flex justify-content-center mx-auto pt-4');
+            .addClass('d-flex mx-auto pt-4');
 
         // upload
         this.divUploadWrapper = $('<div/>')
@@ -141,6 +141,35 @@ class QrDecPage {
         this.divContentWrapper.append(this.divResultWrapper);
 
         this.body.append(this.divContentWrapper);
+
+        this.onLayoutResize();
+        $(window).on('resize', function () {
+            that.onLayoutResize();
+        });
+    }
+
+    onLayoutResize() {
+        let windowWidth = this.getWindowWidth();
+        let windowHeight = this.getWindowHeight();
+        utils.log('onWindowResize, windowWidth=%dpx, windowHeight=%dpx', windowWidth, windowHeight);
+
+        let contentWideClass = 'justify-content-center contentWide';
+        let contentNarrowClass = 'flex-column contentNarrow';
+        if (windowWidth > 1000) {
+            this.divContentWrapper.addClass(contentWideClass);
+            this.divContentWrapper.removeClass(contentNarrowClass);
+        } else {
+            this.divContentWrapper.addClass(contentNarrowClass);
+            this.divContentWrapper.removeClass(contentWideClass);
+        }
+    }
+
+    getWindowWidth() {
+        return $(window).width();
+    }
+
+    getWindowHeight() {
+        return $(window).height();
     }
 
     initFunc() {

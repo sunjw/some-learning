@@ -24,13 +24,21 @@ body {
 /* Common */
 
 /* QR Dec */
-#divContentWrapper {
+#divContentWrapper.contentWide {
   width: 1000px;
 }
-
-#divUploadWrapper, #divResultWrapper {
+#divContentWrapper.contentNarrow {
+  max-width: 500px;
+}
+#divContentWrapper.contentWide #divUploadWrapper,
+#divContentWrapper.contentWide #divResultWrapper {
   width: 480px;
 }
+#divContentWrapper.contentNarrow #divUploadWrapper,
+#divContentWrapper.contentNarrow #divResultWrapper {
+  width: auto;
+}
+
 #divUploadWrapper #labelImageUpload {
   display: block;
   text-align: center;
