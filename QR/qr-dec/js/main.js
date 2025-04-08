@@ -84,7 +84,7 @@ class QrDecPage {
         this.imgPreview = $('<img/>')
             .attr({
                 'id': 'imgPreview',
-                'src': ''
+                'src': './dist/assets/dummy.png',
             })
             .addClass('mt-2 noImage');
         this.divImagePreview.append(this.imgPreview);
