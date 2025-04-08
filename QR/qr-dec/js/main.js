@@ -38,7 +38,7 @@ class QrDecPage {
         // content
         this.divContentWrapper = $('<div/>')
             .attr('id', 'divContentWrapper')
-            .addClass('d-flex flex-wrap mx-auto pt-4');
+            .addClass('d-flex justify-content-center mx-auto pt-4');
 
         this.divUploadWrapper = $('<div/>')
             .attr('id', 'divUploadWrapper')
@@ -60,6 +60,7 @@ class QrDecPage {
                 'accept': 'image/png, image/jpeg'
             })
             .addClass('form-control');
+        inputImageUpload.hide();
         divUploadFormGroup.append(labelImageUpload);
         divUploadFormGroup.append(inputImageUpload);
         this.divUploadWrapper.append(divUploadFormGroup);
