@@ -26,6 +26,7 @@ class QrDecPage {
         this.body = $('body');
         this.divContentWrapper = null;
         this.divUploadWrapper = null;
+        this.divImagePreview = null;
         this.inputImageUpload = null;
         this.imgPreview = null;
     }
@@ -55,7 +56,7 @@ class QrDecPage {
                 'for': 'inputImageUpload'
             })
             .addClass('form-label')
-            .text('Select or drag a image file');
+            .text('Select or drag a QR image to decode');
         this.inputImageUpload = $('<input/>')
             .attr({
                 'id': 'inputImageUpload',
@@ -70,17 +71,19 @@ class QrDecPage {
         divUploadFormGroup.append(labelImageUpload);
         divUploadFormGroup.append(this.inputImageUpload);
 
-        let divImagePreview = $('<div/>')
-            .attr('id', 'divImagePreview');
+        this.divImagePreview = $('<div/>')
+            .attr('id', 'divImagePreview')
+            .addClass('d-flex justify-content-center');
         this.imgPreview = $('<img/>')
             .attr({
                 'id': 'imgPreview',
                 'src': ''
-            });
-        divImagePreview.append(this.imgPreview);
+            })
+            .addClass('mt-2 mb-2');
+        this.divImagePreview.append(this.imgPreview);
 
         this.divUploadWrapper.append(divUploadFormGroup);
-        this.divUploadWrapper.append(divImagePreview);
+        this.divUploadWrapper.append(this.divImagePreview);
 
         this.divContentWrapper.append(this.divUploadWrapper);
 
@@ -97,7 +100,24 @@ class QrDecPage {
             let imageFileReader = new FileReader();
             imageFileReader.onload = function (e) {
                 utils.log('onImageUploadChange, [' + imageFile.name + '] loaded');
-                that.imgPreview.attr('src', e.target.result);
+                let imgObj = new Image();
+                imgObj.src = e.target.result;
+                imgObj.onload = function () {
+                    let divImagePreviewWidth = that.divImagePreview.width();
+                    let imgWidth = imgObj.width;
+                    let imgHeight = imgObj.height;
+                    let imgRatio = imgWidth / imgHeight;
+                    if (imgWidth > divImagePreviewWidth) {
+                        imgWidth = divImagePreviewWidth;
+                        imgHeight = imgWidth / imgRatio;
+                    }
+                    that.imgPreview.css({
+                        'width': imgWidth + 'px',
+                        'height': imgHeight + 'px'
+                    });
+
+                    that.imgPreview.attr('src', imgObj.src);
+                };
             };
             imageFileReader.readAsDataURL(imageFile);
         }
