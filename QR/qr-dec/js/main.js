@@ -330,6 +330,14 @@ class QrDecPage {
             utils.log('decodeQRImage, failed to decode.');
             this.divResultContent.html('No QR Code detected.');
         }
+
+        if (this.divContentWrapper.hasClass('contentNarrow')) {
+            let divResultWrapperElem = this.divResultWrapper.get(0);
+            divResultWrapperElem.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
     }
 
 }
