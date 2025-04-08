@@ -118,11 +118,18 @@ class QrDecPage {
                 'btnCopy', 'bi-clipboard', 'bi-clipboard-check', 'Copy');
         this.switchButtonClick(btnCopy, function () {
             utils.log('switchButtonClick.btnCopy');
+            // do something...
         });
         divResultOper.append(btnCopy);
         divResultHeader.append(divResultOper);
 
+        // content
+        let divResultContent = $('<div/>')
+            .attr('id', 'divResultContent')
+            .addClass('ms-5 me-5 mt-4 mb-4');
+
         this.divResultWrapper.append(divResultHeader);
+        this.divResultWrapper.append(divResultContent);
 
         this.divContentWrapper.append(this.divUploadWrapper);
         this.divContentWrapper.append(this.divResultWrapper);
