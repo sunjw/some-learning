@@ -110,6 +110,18 @@ class QrDecPage {
         divResultHeaderLeft.append(divResultTitle);
         divResultHeader.append(divResultHeaderLeft);
 
+        // oper
+        let divResultOper = $('<div/>')
+            .attr('id', 'divResultOper')
+            .addClass('d-flex align-items-center m-2');
+        let btnCopy = this.generateSwitchButton(
+                'btnCopy', 'bi-clipboard', 'bi-clipboard-check', 'Copy');
+        this.switchButtonClick(btnCopy, function () {
+            utils.log('switchButtonClick.btnCopy');
+        });
+        divResultOper.append(btnCopy);
+        divResultHeader.append(divResultOper);
+
         this.divResultWrapper.append(divResultHeader);
 
         this.divContentWrapper.append(this.divUploadWrapper);
@@ -164,6 +176,63 @@ class QrDecPage {
             }
             return false;
         }
+    }
+
+    generateButton(buttonClass, iconName, title) {
+        let button = $('<button/>')
+            .attr('type', 'button')
+            .addClass('btn toolbarBtn');
+        button.addClass(buttonClass);
+        if (title) {
+            button.attr('title', title);
+        }
+        let buttonIcon = $('<i/>').addClass('bi').addClass(iconName);
+        button.append(buttonIcon);
+        return button;
+    }
+
+    needFixButtonFocus() {
+        return (npmUtils.isSafari());
+    }
+
+    buttonClick(button, handler) {
+        let that = this;
+        button.on('click', function () {
+            if (that.needFixButtonFocus()) {
+                button.addClass('focus');
+            }
+            handler();
+            if (that.needFixButtonFocus()) {
+                setTimeout(function () {
+                    button.removeClass('focus');
+                }, 2000);
+            }
+        });
+    }
+
+    generateSwitchButton(buttonClass, iconName1, iconName2, title) {
+        let button = this.generateButton(buttonClass, iconName1, title);
+        let buttonIcon = button.children('.bi');
+        buttonIcon.attr({
+            'data-icon-1': iconName1,
+            'data-icon-2': iconName2
+        });
+        return button;
+    }
+
+    switchButtonClick(btnSwitch, handler) {
+        let buttonIcon = btnSwitch.children('.bi');
+        let iconName1 = buttonIcon.attr('data-icon-1');
+        let iconName2 = buttonIcon.attr('data-icon-2');
+        this.buttonClick(btnSwitch, function () {
+            handler();
+            buttonIcon.removeClass(iconName1);
+            buttonIcon.addClass(iconName2);
+            setTimeout(function () {
+                buttonIcon.removeClass(iconName2);
+                buttonIcon.addClass(iconName1);
+            }, 2000);
+        });
     }
 
     onImageUploadChange() {

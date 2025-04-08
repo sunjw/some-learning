@@ -58,6 +58,15 @@ body {
 #divResultWrapper #divResultHeader {
   height: 60px;
 }
+#divResultWrapper #divResultHeader .toolbarBtn {
+  background-color: transparent;
+  border-color: transparent;
+}
+#divResultWrapper #divResultHeader .toolbarBtn.focus,
+#divResultWrapper #divResultHeader .toolbarBtn:focus {
+  outline: 0;
+  box-shadow: var(--shadow-like-bs);
+}
 
 /* Large screen */
 @media (min-width: 769px) {
