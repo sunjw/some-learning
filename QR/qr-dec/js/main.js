@@ -11,7 +11,6 @@ const jsQR = require('jsqr');
 const utils = require('./utils');
 const npmUtils = require('./npmUtils');
 const jqueryUtils = require('./jqueryUtils');
-const bsDialog = require('./bsDialog');
 
 function copyText(someText) {
     utils.log('copyText, copied\n%s', someText);
