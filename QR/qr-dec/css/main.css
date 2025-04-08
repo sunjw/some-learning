@@ -45,7 +45,11 @@ body {
 }
 
 #divUploadWrapper #imgPreview {
+  border: 0;
   border-radius: var(--bs-border-radius);
+}
+#divUploadWrapper #imgPreview.noImage {
+  border: var(--bs-border-width) solid var(--bs-border-color);
 }
 
 /* Large screen */

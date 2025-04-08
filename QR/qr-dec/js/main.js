@@ -44,6 +44,7 @@ class QrDecPage {
             .attr('id', 'divContentWrapper')
             .addClass('d-flex justify-content-center mx-auto pt-4');
 
+        // upload
         this.divUploadWrapper = $('<div/>')
             .attr('id', 'divUploadWrapper')
             .addClass('d-flex flex-column p-2');
@@ -80,11 +81,13 @@ class QrDecPage {
                 'id': 'imgPreview',
                 'src': ''
             })
-            .addClass('mt-2 mb-2');
+            .addClass('mt-2 mb-2 noImage');
         this.divImagePreview.append(this.imgPreview);
 
         this.divUploadWrapper.append(divUploadFormGroup);
         this.divUploadWrapper.append(this.divImagePreview);
+
+        // result
 
         this.divContentWrapper.append(this.divUploadWrapper);
 
@@ -92,7 +95,16 @@ class QrDecPage {
     }
 
     initFunc() {
+        this.initImagePreview();
         this.initDragDrop();
+    }
+
+    initImagePreview() {
+        let divImagePreviewWidth = this.divImagePreview.width();
+        this.imgPreview.css({
+            'width': divImagePreviewWidth + 'px',
+            'height': (divImagePreviewWidth * 0.6) + 'px'
+        });
     }
 
     initDragDrop() {
@@ -154,6 +166,7 @@ class QrDecPage {
                         'height': imgHeight + 'px'
                     });
 
+                    that.imgPreview.removeClass('noImage');
                     that.imgPreview.attr('src', imgObj.src);
                 };
             };
