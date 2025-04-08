@@ -7,6 +7,7 @@ require('../css/main.css');
 window.$ = window.jQuery = require('jquery'); // bootstrap 5 must see window.jQuery
 require('bootstrap');
 const clipboardCopy = require('clipboard-copy');
+const jsQR = require('jsqr');
 const utils = require('./utils');
 const npmUtils = require('./npmUtils');
 const jqueryUtils = require('./jqueryUtils');
@@ -21,6 +22,7 @@ function copyText(someText) {
 class QrDecPage {
     constructor() {
         // vars
+        this.imgObj = null;
 
         // layout
         this.body = $('body');
@@ -124,12 +126,12 @@ class QrDecPage {
         divResultHeader.append(divResultOper);
 
         // content
-        let divResultContent = $('<div/>')
+        this.divResultContent = $('<div/>')
             .attr('id', 'divResultContent')
-            .addClass('ms-5 me-5 mt-4 mb-4');
+            .addClass('fs-3 m-4');
 
         this.divResultWrapper.append(divResultHeader);
-        this.divResultWrapper.append(divResultContent);
+        this.divResultWrapper.append(this.divResultContent);
 
         this.divContentWrapper.append(this.divUploadWrapper);
         this.divContentWrapper.append(this.divResultWrapper);
@@ -250,12 +252,12 @@ class QrDecPage {
             let imageFileReader = new FileReader();
             imageFileReader.onload = function (e) {
                 utils.log('onImageUploadChange, [' + imageFile.name + '] loaded');
-                let imgObj = new Image();
-                imgObj.src = e.target.result;
-                imgObj.onload = function () {
+                that.imgObj = new Image();
+                that.imgObj.src = e.target.result;
+                that.imgObj.onload = function () {
                     let divImagePreviewWidth = that.divImagePreview.width();
-                    let imgWidth = imgObj.width;
-                    let imgHeight = imgObj.height;
+                    let imgWidth = that.imgObj.width;
+                    let imgHeight = that.imgObj.height;
                     let imgRatio = imgWidth / imgHeight;
                     if (imgWidth > divImagePreviewWidth) {
                         imgWidth = divImagePreviewWidth;
@@ -267,10 +269,32 @@ class QrDecPage {
                     });
 
                     that.imgPreview.removeClass('noImage');
-                    that.imgPreview.attr('src', imgObj.src);
+                    that.imgPreview.attr('src', that.imgObj.src);
+
+                    that.decodeQRImage();
                 };
             };
             imageFileReader.readAsDataURL(imageFile);
+        }
+    }
+
+    decodeQRImage() {
+        let canvas = document.createElement('canvas');
+        let context = canvas.getContext('2d');
+
+        canvas.width = this.imgObj.naturalWidth;
+        canvas.height = this.imgObj.naturalHeight;
+        context.drawImage(this.imgObj, 0, 0, canvas.width, canvas.height);
+
+        let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        let qrCode = jsQR(imageData.data, imageData.width, imageData.height);
+
+        if (qrCode) {
+            utils.log('decodeQRImage, result:\n' + JSON.stringify(qrCode));
+            this.divResultContent.html(utils.escapeHtmlWithLineEnd(qrCode.data));
+        } else {
+            utils.log('decodeQRImage, failed to decode.');
+            this.divResultContent.html('No QR Code detected.');
         }
     }
 
