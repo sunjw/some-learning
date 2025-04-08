@@ -22,6 +22,7 @@ class QrDecPage {
     constructor() {
         // vars
         this.imgObj = null;
+        this.qrData = null;
 
         // layout
         this.body = $('body');
@@ -41,6 +42,8 @@ class QrDecPage {
     }
 
     initLayout() {
+        var that = this;
+
         // content
         this.divContentWrapper = $('<div/>')
             .attr('id', 'divContentWrapper')
@@ -119,7 +122,9 @@ class QrDecPage {
                 'btnCopy', 'bi-clipboard', 'bi-clipboard-check', 'Copy');
         this.switchButtonClick(btnCopy, function () {
             utils.log('switchButtonClick.btnCopy');
-            // do something...
+            if (that.qrData) {
+                copyText(that.qrData);
+            }
         });
         divResultOper.append(btnCopy);
         divResultHeader.append(divResultOper);
@@ -284,13 +289,14 @@ class QrDecPage {
         canvas.width = this.imgObj.naturalWidth;
         canvas.height = this.imgObj.naturalHeight;
         context.drawImage(this.imgObj, 0, 0, canvas.width, canvas.height);
-
         let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-        let qrCode = jsQR(imageData.data, imageData.width, imageData.height);
 
+        this.qrData = null;
+        let qrCode = jsQR(imageData.data, imageData.width, imageData.height);
         if (qrCode) {
             utils.log('decodeQRImage, result:\n' + JSON.stringify(qrCode));
-            this.divResultContent.html(utils.escapeHtmlWithLineEnd(qrCode.data));
+            this.qrData = qrCode.data;
+            this.divResultContent.html(utils.escapeHtmlWithLineEnd(this.qrData));
         } else {
             utils.log('decodeQRImage, failed to decode.');
             this.divResultContent.html('No QR Code detected.');
