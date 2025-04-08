@@ -26,6 +26,8 @@ class QrDecPage {
         this.body = $('body');
         this.divContentWrapper = null;
         this.divUploadWrapper = null;
+        this.inputImageUpload = null;
+        this.imgPreview = null;
     }
 
     init() {
@@ -54,25 +56,28 @@ class QrDecPage {
             })
             .addClass('form-label')
             .text('Select or drag a image file');
-        let inputImageUpload = $('<input/>')
+        this.inputImageUpload = $('<input/>')
             .attr({
                 'id': 'inputImageUpload',
                 'type': 'file',
                 'accept': 'image/png, image/jpeg'
             })
             .addClass('form-control');
-        inputImageUpload.hide();
+        this.inputImageUpload.hide();
+        this.inputImageUpload.on('change', () => {
+            this.onImageUploadChange();
+        });
         divUploadFormGroup.append(labelImageUpload);
-        divUploadFormGroup.append(inputImageUpload);
+        divUploadFormGroup.append(this.inputImageUpload);
 
         let divImagePreview = $('<div/>')
             .attr('id', 'divImagePreview');
-        let imgPreview = $('<img/>')
+        this.imgPreview = $('<img/>')
             .attr({
                 'id': 'imgPreview',
                 'src': ''
             });
-        divImagePreview.append(imgPreview);
+        divImagePreview.append(this.imgPreview);
 
         this.divUploadWrapper.append(divUploadFormGroup);
         this.divUploadWrapper.append(divImagePreview);
@@ -83,6 +88,20 @@ class QrDecPage {
     }
 
     initFunc() {}
+
+    onImageUploadChange() {
+        let that = this;
+        let inputImageUploadElem = this.inputImageUpload.get(0);
+        if (inputImageUploadElem.files.length > 0) {
+            let imageFile = inputImageUploadElem.files[0];
+            let imageFileReader = new FileReader();
+            imageFileReader.onload = function (e) {
+                utils.log('onImageUploadChange, [' + imageFile.name + '] loaded');
+                that.imgPreview.attr('src', e.target.result);
+            };
+            imageFileReader.readAsDataURL(imageFile);
+        }
+    }
 
 }
 
