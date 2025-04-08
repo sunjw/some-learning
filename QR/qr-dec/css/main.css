@@ -67,6 +67,10 @@ body {
   outline: 0;
   box-shadow: var(--shadow-like-bs);
 }
+#divResultWrapper #divResultContent {
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
 
 /* Large screen */
 @media (min-width: 769px) {
