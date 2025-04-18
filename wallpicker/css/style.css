@@ -164,6 +164,20 @@ body {
 }
 #divImageList .imageBlock .imageWrapper {
     height: 160px;
+    position: relative;
+}
+#divImageList .imageBlock .imageWrapper .imageMeta {
+    position: absolute;
+    bottom: 4px;
+    right: 6px;
+    font-size: 12px;
+    line-height: 14px;
+    color: white;
+    text-shadow: 0 0 4px black;
+}
+#divImageList .imageBlock .imageWrapper .imageMeta.imageMetaPortrait {
+    color: black;
+    text-shadow: 0 0 4px white;
 }
 #divImageList .imageBlock .infoWrapper {
     height: 40px;

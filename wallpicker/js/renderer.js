@@ -773,6 +773,11 @@ class WallpickerPage {
                 that.openImage();
             });
             divImageWrapper.append(imgContent);
+            let imageMetaIcon = $('<i/>').addClass('imageMeta bi bi-info-circle');
+            if (imageRatio < 1.2) {
+                imageMetaIcon.addClass('imageMetaPortrait');
+            }
+            divImageWrapper.append(imageMetaIcon);
 
             let divImageInfo = $('<div/>').addClass('align-self-start rounded imageInfo');
             let imageBasenameFull = fileObj.basename;
