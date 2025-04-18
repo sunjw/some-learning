@@ -793,6 +793,10 @@ class WallpickerPage {
                 // 'data-bs-trigger': 'click',
                 'data-bs-title': imageMetaInfo
             });
+            imageMetaIcon.on('click', function (e) {
+                eleUtils.stopBubble(e);
+                fnClickToSelectImage();
+            });
             new bootstrap.Tooltip(imageMetaIcon.get(0));
             divImageWrapper.append(imageMetaIcon);
 
