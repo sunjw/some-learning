@@ -196,21 +196,29 @@ body {
 /* Image list */
 
 /* Others */
-#divToastWrapperRight {
+#divToastWrapperLeft, #divToastWrapperRight {
     position: fixed;
     bottom: 0;
-    right: 0;
-    margin-right: 22px;
     margin-bottom: 16px;
 }
-#divToastWrapperRight .toast {
+#divToastWrapperLeft {
+    left: 0;
+    margin-left: 22px;
+}
+#divToastWrapperRight {
+    right: 0;
+    margin-right: 22px;
+}
+#divToastWrapperLeft .toast, #divToastWrapperRight .toast {
     margin-top: 20px;
 }
+#divToastWrapperLeft .toast .toast-body,
 #divToastWrapperRight .toast .toast-body {
     overflow-wrap: anywhere;
     word-break: break-all;
     max-width: 320px;
 }
+#divToastWrapperLeft .toast .toast-body .highlight,
 #divToastWrapperRight .toast .toast-body .highlight {
     color: var(--color-windows-blue);
 }
