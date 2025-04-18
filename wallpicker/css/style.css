@@ -4,6 +4,7 @@
     --color-light-gray: #e0e0e0;
     --color-lighter-gray: #f0f0f0;
     --height-toolbar: 48px;
+    --tooltip-back-color: rgba(0,0,0,0.78);
 }
 /* Defines */
 
@@ -235,6 +236,16 @@ body {
 #divToastWrapperLeft .toast .toast-body .highlight,
 #divToastWrapperRight .toast .toast-body .highlight {
     color: var(--color-windows-blue);
+}
+
+.tooltip-inner {
+    background-color: var(--tooltip-back-color) !important;
+}
+.bs-tooltip-auto[data-popper-placement^=left] .tooltip-arrow::before {
+    border-left-color: var(--tooltip-back-color) !important;
+}
+.bs-tooltip-auto[data-popper-placement^=top] .tooltip-arrow::before {
+    border-top-color: var(--tooltip-back-color) !important;
 }
 /* Others */
 

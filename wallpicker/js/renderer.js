@@ -790,6 +790,7 @@ class WallpickerPage {
                 'data-bs-toggle': 'tooltip',
                 'data-bs-placement': imageMetaIconTipPlace,
                 'data-bs-delay': '{"show":400,"hide":500}',
+                // 'data-bs-trigger': 'click',
                 'data-bs-title': imageMetaInfo
             });
             new bootstrap.Tooltip(imageMetaIcon.get(0));
