@@ -187,6 +187,20 @@ function getCurTimestamp() {
     return new Date().getTime();
 }
 
+function convertSizeToShortSize(size) {
+    let shortSize = size;
+    const shortSizeUnit = ['KB', 'MB', 'GB'];
+    for (let i = 0; i < shortSizeUnit.length; ++i) {
+        if (size >= 1024) {
+            shortSize = (size / 1024.0).toFixed(2) + shortSizeUnit[i];
+            size = size / 1024;
+        } else {
+            break;
+        }
+    }
+    return shortSize;
+}
+
 // exports
 exports.log = log;
 exports.clone = clone;
@@ -213,3 +227,4 @@ exports.fixWindowsPath = fixWindowsPath;
 exports.expireKey = expireKey;
 exports.objToJsonBeautify = objToJsonBeautify;
 exports.getCurTimestamp = getCurTimestamp;
+exports.convertSizeToShortSize = convertSizeToShortSize;
