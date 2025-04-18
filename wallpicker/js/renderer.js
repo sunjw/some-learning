@@ -773,15 +773,22 @@ class WallpickerPage {
                 that.openImage();
             });
             divImageWrapper.append(imgContent);
-            let imageMetaIcon = $('<i/>').addClass('imageMeta bi bi-info-circle');
-            if (imageRatio < 1.2) {
-                imageMetaIcon.addClass('imageMetaPortrait');
-            }
+
             let imageMetaInfo = fileObj.width + 'x' + fileObj.height +
                 ' ' + utils.convertSizeToShortSize(fileObj.size);
+            let imageMetaIcon = $('<i/>').addClass('imageMeta bi bi-info-circle');
+            let imageMetaIconRight = 6;
+            if (imagePreviewWidth < this.maxImagePreviewWidth) {
+                imageMetaIconRight = imageMetaIconRight + ((this.maxImagePreviewWidth - imagePreviewWidth) / 2);
+            }
+            imageMetaIcon.css('right', imageMetaIconRight + 'px');
+            let imageMetaIconTipPlace = 'left';
+            if (imagePreviewWidth < (this.maxImagePreviewWidth / 2)) {
+                imageMetaIconTipPlace = 'top';
+            }
             imageMetaIcon.attr({
                 'data-bs-toggle': 'tooltip',
-                'data-bs-placement': 'left',
+                'data-bs-placement': imageMetaIconTipPlace,
                 'data-bs-delay': '{"show":400,"hide":500}',
                 'data-bs-title': imageMetaInfo
             });

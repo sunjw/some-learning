@@ -169,7 +169,7 @@ body {
 #divImageList .imageBlock .imageWrapper .imageMeta {
     position: absolute;
     bottom: 4px;
-    right: 6px;
+    /* right: 6px; */
     font-size: 12px;
     line-height: 14px;
     color: white;
