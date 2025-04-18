@@ -694,7 +694,7 @@ class WallpickerPage {
         this.refreshButtonState();
 
         // toast
-        this.showToast('Found <span class="highlight">' + this.curImageList.length + '</span> images.');
+        this.showToast('Found <span class="highlight">' + this.curImageList.length + '</span> images.', true);
 
         // start generate thumbnail
         this.generateImageThumbnailStart();
@@ -985,7 +985,7 @@ class WallpickerPage {
         setTimeout(() => {
             wallpaper.set(imagePath);
         }, 1000);
-        this.showToast('Set wallpaper to "<span class="highlight">' + imagePath + '</span>".');
+        this.showToast('Set wallpaper to "<span class="highlight">' + imagePath + '</span>".', true);
     }
 
     openImageInDirectory() {
@@ -1022,16 +1022,23 @@ class WallpickerPage {
         this.scrollToImageBlockDom(imageBlockDom);
     }
 
-    showToast(message) {
-        utils.log('showToast');
+    showToast(message, autoHide) {
+        utils.log('showToast, autoHide=%s', autoHide);
 
         let divToast = $('<div/>').attr({
             'role': 'alert',
             'aria-live': 'assertive',
-            'aria-atomic': 'true',
-            // 'data-bs-autohide': 'false',
-            'data-bs-delay': '10000'
+            'aria-atomic': 'true'
         }).addClass('toast d-flex');
+
+        if (autoHide) {
+            divToast.attr({
+                'data-bs-autohide': 'true',
+                'data-bs-delay': '10000'
+            });
+        } else {
+            divToast.attr('data-bs-autohide', 'false');
+        }
 
         let divToastBody = $('<div/>')
             .addClass('toast-body flex-grow-1')
