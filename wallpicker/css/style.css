@@ -196,22 +196,22 @@ body {
 /* Image list */
 
 /* Others */
-#divToastWrapper {
+#divToastWrapperRight {
     position: fixed;
     bottom: 0;
     right: 0;
     margin-right: 22px;
     margin-bottom: 16px;
 }
-#divToastWrapper .toast {
+#divToastWrapperRight .toast {
     margin-top: 20px;
 }
-#divToastWrapper .toast .toast-body {
+#divToastWrapperRight .toast .toast-body {
     overflow-wrap: anywhere;
     word-break: break-all;
     max-width: 320px;
 }
-#divToastWrapper .toast .toast-body .highlight {
+#divToastWrapperRight .toast .toast-body .highlight {
     color: var(--color-windows-blue);
 }
 /* Others */

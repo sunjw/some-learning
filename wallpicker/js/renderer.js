@@ -119,7 +119,7 @@ class WallpickerPage {
         this.divImageList = null;
         this.divLoadingWrapper = null;
         this.divLoadingBlock = null;
-        this.divToastWrapper = null;
+        this.divToastWrapperRight = null;
 
         this.initWorker();
         this.initLayout();
@@ -398,8 +398,8 @@ class WallpickerPage {
         this.body.append(this.divContentWrapper);
 
         // toast
-        this.divToastWrapper = $('<div/>').attr('id', 'divToastWrapper');
-        this.body.append(this.divToastWrapper);
+        this.divToastWrapperRight = $('<div/>').attr('id', 'divToastWrapperRight');
+        this.body.append(this.divToastWrapperRight);
     }
 
     initSort() {
@@ -1044,7 +1044,7 @@ class WallpickerPage {
         }).addClass('btn-close m-auto me-2 noBsFocus');
         divToast.append(buttonToastClose);
 
-        this.divToastWrapper.append(divToast);
+        this.divToastWrapperRight.append(divToast);
 
         divToast.on('hidden.bs.toast', function () {
             // remove self
