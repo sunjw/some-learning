@@ -892,8 +892,8 @@ class WallpickerPage {
     selectImage(imageBlock) {
         this.clearSelection(false);
         utils.log('selectImage, imageBlock=[%s]', imageBlock.attr(this.TAG_IMAGE_PATH));
-        this.selectedImageBlock = imageBlock;
         imageBlock.addClass(this.CLASS_IMAGE_SELECTED);
+        this.selectedImageBlock = imageBlock;
         this.refreshButtonState();
     }
 
