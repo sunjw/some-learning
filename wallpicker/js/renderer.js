@@ -697,7 +697,8 @@ class WallpickerPage {
         this.refreshButtonState();
 
         // toast
-        this.showToast('Found <span class="highlight">' + this.curImageList.length + '</span> images.', true);
+        this.showToast('Found <span class="highlight">' + this.curImageList.length + '</span> images.',
+            'right', true);
 
         // start generate thumbnail
         this.generateImageThumbnailStart();
@@ -988,7 +989,8 @@ class WallpickerPage {
         setTimeout(() => {
             wallpaper.set(imagePath);
         }, 1000);
-        this.showToast('Set wallpaper to "<span class="highlight">' + imagePath + '</span>".', true);
+        this.showToast('Set wallpaper to "<span class="highlight">' + imagePath + '</span>".',
+            'right', true);
     }
 
     openImageInDirectory() {
@@ -1025,8 +1027,8 @@ class WallpickerPage {
         this.scrollToImageBlockDom(imageBlockDom);
     }
 
-    showToast(message, autoHide) {
-        utils.log('showToast, autoHide=%s', autoHide);
+    showToast(message, position, autoHide) {
+        utils.log('showToast, position=%s, autoHide=%s', position, autoHide);
 
         let divToast = $('<div/>').attr({
             'role': 'alert',
@@ -1054,7 +1056,11 @@ class WallpickerPage {
         }).addClass('btn-close m-auto me-2 noBsFocus');
         divToast.append(buttonToastClose);
 
-        this.divToastWrapperRight.append(divToast);
+        if (position == 'left') {
+            this.divToastWrapperLeft.append(divToast);
+        } else if (position == 'right') {
+            this.divToastWrapperRight.append(divToast);
+        }
 
         divToast.on('hidden.bs.toast', function () {
             // remove self
