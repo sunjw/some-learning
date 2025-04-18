@@ -738,9 +738,9 @@ class WallpickerPage {
                 .attr('src', this.imagePlaceholder)
                 .addClass('align-self-end rounded imageContent');
             imgContent.attr(TAG_IMAGE_SRC, filePath);
-            imgContent.attr(TAG_IMAGE_SRC_WIDTH, fileObj.width);
-            imgContent.attr(TAG_IMAGE_SRC_HEIGHT, fileObj.height);
-            imgContent.attr(TAG_IMAGE_SRC_SIZE, utils.convertSizeToShortSize(fileObj.size));
+            // imgContent.attr(TAG_IMAGE_SRC_WIDTH, fileObj.width);
+            // imgContent.attr(TAG_IMAGE_SRC_HEIGHT, fileObj.height);
+            // imgContent.attr(TAG_IMAGE_SRC_SIZE, utils.convertSizeToShortSize(fileObj.size));
             imgContent.attr(TAG_IMAGE_PLACEHOLDER, this.imagePlaceholder);
             if (fileObj.thumbPath) {
                 imgContent.attr(TAG_IMAGE_THUMB_SRC, fileObj.thumbPath);
@@ -777,6 +777,15 @@ class WallpickerPage {
             if (imageRatio < 1.2) {
                 imageMetaIcon.addClass('imageMetaPortrait');
             }
+            let imageMetaInfo = fileObj.width + 'x' + fileObj.height +
+                ' ' + utils.convertSizeToShortSize(fileObj.size);
+            imageMetaIcon.attr({
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'left',
+                'data-bs-delay': '{"show":400,"hide":500}',
+                'data-bs-title': imageMetaInfo
+            });
+            new bootstrap.Tooltip(imageMetaIcon.get(0));
             divImageWrapper.append(imageMetaIcon);
 
             let divImageInfo = $('<div/>').addClass('align-self-start rounded imageInfo');
