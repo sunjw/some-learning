@@ -189,11 +189,15 @@ function getCurTimestamp() {
 
 function convertSizeToShortSize(size) {
     let shortSize = size;
+    let kValue = 1024.0;
+    if (isMacOS()) {
+        kValue = 1000.0;
+    }
     const shortSizeUnit = ['KB', 'MB', 'GB'];
     for (let i = 0; i < shortSizeUnit.length; ++i) {
-        if (size >= 1024) {
-            shortSize = (size / 1024.0).toFixed(2) + shortSizeUnit[i];
-            size = size / 1024;
+        if (size >= kValue) {
+            shortSize = (size / kValue).toFixed(2) + shortSizeUnit[i];
+            size = size / kValue;
         } else {
             break;
         }
