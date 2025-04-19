@@ -212,7 +212,7 @@ body {
 }
 /* Image list */
 
-/* Status bar */
+/* Statusbar */
 #divStatusBarWrapper {
     width: 100%;
     height: var(--height-statusbar);
@@ -224,7 +224,7 @@ body {
     background-color: white;
     border-top: 1px solid var(--color-light-gray);
 }
-/* Status bar */
+/* Statusbar */
 
 /* Others */
 #divToastWrapperLeft, #divToastWrapperRight {
