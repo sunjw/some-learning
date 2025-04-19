@@ -124,6 +124,7 @@ class WallpickerPage {
         this.divLoadingBlock = null;
         this.divToastWrapperLeft = null;
         this.divToastWrapperRight = null;
+        this.divStatusBarWrapper = null;
 
         this.initWorker();
         this.initLayout();
@@ -406,6 +407,10 @@ class WallpickerPage {
         this.divToastWrapperRight = $('<div/>').attr('id', 'divToastWrapperRight');
         this.body.append(this.divToastWrapperLeft);
         this.body.append(this.divToastWrapperRight);
+
+        // statusbar
+        this.divStatusBarWrapper = $('<div/>').attr('id', 'divStatusBarWrapper');
+        this.body.append(this.divStatusBarWrapper);
     }
 
     initSort() {

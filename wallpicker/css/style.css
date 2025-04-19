@@ -5,6 +5,7 @@
     --color-lighter-gray: #f0f0f0;
     --height-toolbar: 48px;
     --tooltip-back-color: rgba(0,0,0,0.78);
+    --height-statusbar: 24px;
 }
 /* Defines */
 
@@ -144,6 +145,7 @@ body {
     /* overflow-x: hidden;
     overflow-y: auto; */
     margin-top: var(--height-toolbar);
+    margin-bottom: var(--height-statusbar);
     position: relative;
 }
 #divLoadingWrapper {
@@ -209,6 +211,20 @@ body {
     margin-left: 10px;
 }
 /* Image list */
+
+/* Status bar */
+#divStatusBarWrapper {
+    width: 100%;
+    height: var(--height-statusbar);
+    padding: 0 16px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    background-color: white;
+    border-top: 1px solid var(--color-light-gray);
+}
+/* Status bar */
 
 /* Others */
 #divToastWrapperLeft, #divToastWrapperRight {
