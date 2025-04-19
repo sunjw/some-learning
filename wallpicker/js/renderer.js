@@ -702,7 +702,7 @@ class WallpickerPage {
         this.renderImageList();
 
         this.hideLoading();
-        this.refreshButtonState();
+        this.refreshControls();
 
         // toast
         this.showToast('Found <span class="highlight">' + this.curImageList.length + '</span> images.',
@@ -842,7 +842,7 @@ class WallpickerPage {
         }
     }
 
-    refreshButtonState() {
+    refreshControls() {
         if (this.selectedImageBlock) {
             // selected
             this.setControlDisabled(this.btnToolbarSetWallpaper, false);
@@ -910,13 +910,13 @@ class WallpickerPage {
         return null;
     }
 
-    clearSelection(refreshButton = true) {
+    clearSelection(needRefreshControls = true) {
         utils.log('clearSelection');
         let imageBlocks = this.getAllImageBlocks();
         imageBlocks.removeClass(this.CLASS_IMAGE_SELECTED);
         this.selectedImageBlock = null;
-        if (refreshButton) {
-            this.refreshButtonState();
+        if (needRefreshControls) {
+            this.refreshControls();
         }
     }
 
@@ -925,7 +925,7 @@ class WallpickerPage {
         utils.log('selectImage, imageBlock=[%s]', imageBlock.attr(this.TAG_IMAGE_PATH));
         imageBlock.addClass(this.CLASS_IMAGE_SELECTED);
         this.selectedImageBlock = imageBlock;
-        this.refreshButtonState();
+        this.refreshControls();
     }
 
     onFilterTextChanged() {
