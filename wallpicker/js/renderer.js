@@ -415,10 +415,10 @@ class WallpickerPage {
         let divImageMetaInfo = $('<div/>')
             .attr('id', 'divImageMetaInfo')
             .addClass('d-flex flex-row');
-        this.divImageSizeInfo = $('<div/>').attr('id', 'divImageSizeInfo');
-        this.divImageSizeInfo.text('6000 x 6000');
+        this.divImageSizeInfo = $('<div/>')
+            .attr('id', 'divImageSizeInfo')
+            .addClass('pe-4');
         this.divFileSizeInfo = $('<div/>').attr('id', 'divFileSizeInfo');
-        this.divFileSizeInfo.text('18.59 MB');
         divImageMetaInfo.append(this.divImageSizeInfo);
         divImageMetaInfo.append(this.divFileSizeInfo);
         divStatusBarLeft.append(divImageMetaInfo);
@@ -426,7 +426,7 @@ class WallpickerPage {
         // right
         let divStatusBarRight = $('<div/>')
             .attr('id', 'divStatusBarRight')
-            .addClass('flex-shrink-1 overflow-hidden');
+            .addClass('flex-shrink-1 ps-2 overflow-hidden');
         this.divImagePathInfo = $('<div/>')
             .attr('id', 'divImagePathInfo')
             .addClass('text-truncate');

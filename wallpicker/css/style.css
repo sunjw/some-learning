@@ -228,7 +228,6 @@ body {
 #divStatusBarWrapper #divImagePathInfo {
     line-height: calc(var(--height-statusbar) - 2px);
 }
-
 /* Statusbar */
 
 /* Others */
