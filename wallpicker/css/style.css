@@ -224,6 +224,11 @@ body {
     background-color: white;
     border-top: 1px solid var(--color-light-gray);
 }
+#divStatusBarWrapper #divImageMetaInfo,
+#divStatusBarWrapper #divImagePathInfo {
+    line-height: calc(var(--height-statusbar) - 2px);
+}
+
 /* Statusbar */
 
 /* Others */

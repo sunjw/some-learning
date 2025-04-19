@@ -123,6 +123,8 @@ class WallpickerPage {
         this.divLoadingWrapper = null;
         this.divLoadingBlock = null;
         this.divStatusBarWrapper = null;
+        this.divImageSizeInfo = null;
+        this.divFileSizeInfo = null;
         this.divImagePathInfo = null;
         this.divToastWrapperLeft = null;
         this.divToastWrapperRight = null;
@@ -408,11 +410,20 @@ class WallpickerPage {
             .attr('id', 'divStatusBarWrapper')
             .addClass('d-flex justify-content-between');
 
+        // left
         let divStatusBarLeft = $('<div/>').attr('id', 'divStatusBarLeft');
-        let divImageMetaInfo = $('<div/>').attr('id', 'divImageMetaInfo');
-        divImageMetaInfo.text('divImageMetaInfo');
+        let divImageMetaInfo = $('<div/>')
+            .attr('id', 'divImageMetaInfo')
+            .addClass('d-flex flex-row');
+        this.divImageSizeInfo = $('<div/>').attr('id', 'divImageSizeInfo');
+        this.divImageSizeInfo.text('6000 x 6000');
+        this.divFileSizeInfo = $('<div/>').attr('id', 'divFileSizeInfo');
+        this.divFileSizeInfo.text('18.59 MB');
+        divImageMetaInfo.append(this.divImageSizeInfo);
+        divImageMetaInfo.append(this.divFileSizeInfo);
         divStatusBarLeft.append(divImageMetaInfo);
 
+        // right
         let divStatusBarRight = $('<div/>')
             .attr('id', 'divStatusBarRight')
             .addClass('flex-shrink-1 overflow-hidden');
