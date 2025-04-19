@@ -216,7 +216,7 @@ body {
 #divStatusBarWrapper {
     width: 100%;
     height: var(--height-statusbar);
-    padding: 0 16px;
+    padding: 0 32px;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -227,6 +227,12 @@ body {
 #divStatusBarWrapper #divImageMetaInfo,
 #divStatusBarWrapper #divImagePathInfo {
     line-height: calc(var(--height-statusbar) - 2px);
+}
+#divStatusBarWrapper #divImageMetaInfo #divImageSizeInfo {
+    width: 100px;
+}
+#divStatusBarWrapper #divImageMetaInfo #divFileSizeInfo {
+    width: 70px;
 }
 /* Statusbar */
 

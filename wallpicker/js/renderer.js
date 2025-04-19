@@ -415,9 +415,7 @@ class WallpickerPage {
         let divImageMetaInfo = $('<div/>')
             .attr('id', 'divImageMetaInfo')
             .addClass('d-flex flex-row');
-        this.divImageSizeInfo = $('<div/>')
-            .attr('id', 'divImageSizeInfo')
-            .addClass('pe-4');
+        this.divImageSizeInfo = $('<div/>').attr('id', 'divImageSizeInfo');
         this.divFileSizeInfo = $('<div/>').attr('id', 'divFileSizeInfo');
         divImageMetaInfo.append(this.divImageSizeInfo);
         divImageMetaInfo.append(this.divFileSizeInfo);
@@ -430,7 +428,6 @@ class WallpickerPage {
         this.divImagePathInfo = $('<div/>')
             .attr('id', 'divImagePathInfo')
             .addClass('text-truncate');
-        this.divImagePathInfo.text('divImagePathInfo');
         divStatusBarRight.append(this.divImagePathInfo);
 
         this.divStatusBarWrapper.append(divStatusBarLeft);
@@ -876,6 +873,7 @@ class WallpickerPage {
     }
 
     refreshControls() {
+        // toolbar
         if (this.selectedImageBlock) {
             // selected
             this.setControlDisabled(this.btnToolbarSetWallpaper, false);
@@ -891,6 +889,21 @@ class WallpickerPage {
         this.setControlDisabled(this.btnToolbarRefresh, false);
         this.setControlDisabled(this.btnToolbarRandom, false);
         this.setControlDisabled(this.btnToolbarSort, false);
+
+        // statusbar
+        if (this.selectedImageBlock) {
+            let imageSrcPath = this.selectedImageBlock.attr(this.TAG_IMAGE_PATH);
+            let fileObj = this.getFileObjectByImagePath(imageSrcPath);
+            if (fileObj) {
+                this.divImageSizeInfo.html(fileObj.width + ' x ' + fileObj.height);
+                this.divFileSizeInfo.html(utils.convertSizeToShortSize(fileObj.size));
+                this.divImagePathInfo.html(utils.escapeHtml(imageSrcPath));
+            }
+        } else {
+            this.divImageSizeInfo.html('');
+            this.divFileSizeInfo.html('');
+            this.divImagePathInfo.html('');
+        }
     }
 
     disableAllButtons() {
