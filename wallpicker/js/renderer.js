@@ -122,9 +122,10 @@ class WallpickerPage {
         this.divImageList = null;
         this.divLoadingWrapper = null;
         this.divLoadingBlock = null;
+        this.divStatusBarWrapper = null;
+        this.divImagePathInfo = null;
         this.divToastWrapperLeft = null;
         this.divToastWrapperRight = null;
-        this.divStatusBarWrapper = null;
 
         this.initWorker();
         this.initLayout();
@@ -412,10 +413,14 @@ class WallpickerPage {
         divImageMetaInfo.text('divImageMetaInfo');
         divStatusBarLeft.append(divImageMetaInfo);
 
-        let divStatusBarRight = $('<div/>').attr('id', 'divStatusBarRight');
-        let divImagePathInfo = $('<div/>').attr('id', 'divImagePathInfo');
-        divImagePathInfo.text('divImagePathInfo');
-        divStatusBarRight.append(divImagePathInfo);
+        let divStatusBarRight = $('<div/>')
+            .attr('id', 'divStatusBarRight')
+            .addClass('flex-shrink-1 overflow-hidden');
+        this.divImagePathInfo = $('<div/>')
+            .attr('id', 'divImagePathInfo')
+            .addClass('text-truncate');
+        this.divImagePathInfo.text('divImagePathInfo');
+        divStatusBarRight.append(this.divImagePathInfo);
 
         this.divStatusBarWrapper.append(divStatusBarLeft);
         this.divStatusBarWrapper.append(divStatusBarRight);
