@@ -403,7 +403,23 @@ class WallpickerPage {
         this.body.append(this.divContentWrapper);
 
         // statusbar
-        this.divStatusBarWrapper = $('<div/>').attr('id', 'divStatusBarWrapper');
+        this.divStatusBarWrapper = $('<div/>')
+            .attr('id', 'divStatusBarWrapper')
+            .addClass('d-flex justify-content-between');
+
+        let divStatusBarLeft = $('<div/>').attr('id', 'divStatusBarLeft');
+        let divImageMetaInfo = $('<div/>').attr('id', 'divImageMetaInfo');
+        divImageMetaInfo.text('divImageMetaInfo');
+        divStatusBarLeft.append(divImageMetaInfo);
+
+        let divStatusBarRight = $('<div/>').attr('id', 'divStatusBarRight');
+        let divImagePathInfo = $('<div/>').attr('id', 'divImagePathInfo');
+        divImagePathInfo.text('divImagePathInfo');
+        divStatusBarRight.append(divImagePathInfo);
+
+        this.divStatusBarWrapper.append(divStatusBarLeft);
+        this.divStatusBarWrapper.append(divStatusBarRight);
+
         this.body.append(this.divStatusBarWrapper);
 
         // toast
