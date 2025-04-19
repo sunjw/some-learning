@@ -402,15 +402,16 @@ class WallpickerPage {
 
         this.body.append(this.divContentWrapper);
 
+        // statusbar
+        this.divStatusBarWrapper = $('<div/>').attr('id', 'divStatusBarWrapper');
+        this.body.append(this.divStatusBarWrapper);
+
         // toast
         this.divToastWrapperLeft = $('<div/>').attr('id', 'divToastWrapperLeft');
         this.divToastWrapperRight = $('<div/>').attr('id', 'divToastWrapperRight');
         this.body.append(this.divToastWrapperLeft);
         this.body.append(this.divToastWrapperRight);
 
-        // statusbar
-        this.divStatusBarWrapper = $('<div/>').attr('id', 'divStatusBarWrapper');
-        this.body.append(this.divStatusBarWrapper);
     }
 
     initSort() {
