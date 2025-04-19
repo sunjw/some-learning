@@ -17,9 +17,6 @@ const eleUtils = require('./eleUtils');
 const sqliteDb = require('./sqliteDb');
 
 const TAG_IMAGE_SRC = 'data-image-src';
-const TAG_IMAGE_SRC_WIDTH = 'data-image-src-width';
-const TAG_IMAGE_SRC_HEIGHT = 'data-image-src-height';
-const TAG_IMAGE_SRC_SIZE = 'data-image-src-size';
 const TAG_IMAGE_THUMB_SRC = 'data-image-thumb-src';
 const TAG_IMAGE_PLACEHOLDER = 'data-image-placeholder';
 
@@ -56,6 +53,9 @@ class WallpickerPage {
         // init consts
         this.TAG_IMAGE_PATH = 'data-image-path';
         this.TAG_IMAGE_NAME = 'data-image-name';
+        this.TAG_IMAGE_SRC_WIDTH = 'data-image-src-width';
+        this.TAG_IMAGE_SRC_HEIGHT = 'data-image-src-height';
+        this.TAG_IMAGE_SRC_SIZE = 'data-image-src-size';
         this.TAG_SORT_ID = 'data-sort-id';
         this.THUMBNAIL_FORMAT = 'png';
         this.THUMBNAIL_EXPIRE = 60 * 60 * 24 * 7; // 7 days
@@ -743,9 +743,9 @@ class WallpickerPage {
                 .attr('src', this.imagePlaceholder)
                 .addClass('align-self-end rounded imageContent');
             imgContent.attr(TAG_IMAGE_SRC, filePath);
-            // imgContent.attr(TAG_IMAGE_SRC_WIDTH, fileObj.width);
-            // imgContent.attr(TAG_IMAGE_SRC_HEIGHT, fileObj.height);
-            // imgContent.attr(TAG_IMAGE_SRC_SIZE, utils.convertSizeToShortSize(fileObj.size));
+            imgContent.attr(this.TAG_IMAGE_SRC_WIDTH, fileObj.width);
+            imgContent.attr(this.TAG_IMAGE_SRC_HEIGHT, fileObj.height);
+            imgContent.attr(this.TAG_IMAGE_SRC_SIZE, fileObj.size);
             imgContent.attr(TAG_IMAGE_PLACEHOLDER, this.imagePlaceholder);
             if (fileObj.thumbPath) {
                 imgContent.attr(TAG_IMAGE_THUMB_SRC, fileObj.thumbPath);
