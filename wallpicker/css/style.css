@@ -242,7 +242,7 @@ body {
 /* Others */
 #divToastWrapperLeft, #divToastWrapperRight {
     position: fixed;
-    bottom: 0;
+    bottom: var(--height-statusbar);
     margin-bottom: 16px;
 }
 #divToastWrapperLeft {
