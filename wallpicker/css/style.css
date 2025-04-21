@@ -224,17 +224,17 @@ body {
     z-index: 1000;
     background-color: white;
     border-top: 1px solid var(--color-light-gray);
-    font-size: 14px;
+    font-size: 13px;
     color: var(--color-gray);
 }
 #divStatusBarWrapper #divImageMetaInfo #divImageSizeIcon {
     width: 30px;
 }
 #divStatusBarWrapper #divImageMetaInfo #divImageSizeInfo {
-    width: 100px;
+    width: 96px;
 }
 #divStatusBarWrapper #divImageMetaInfo #divFileSizeInfo {
-    width: 70px;
+    width: 66px;
 }
 /* Statusbar */
 

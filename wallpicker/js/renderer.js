@@ -414,7 +414,7 @@ class WallpickerPage {
             .addClass('d-flex');
         let divImageMetaInfo = $('<div/>')
             .attr('id', 'divImageMetaInfo')
-            .addClass('d-flex flex-row align-items-center');
+            .addClass('d-flex flex-row align-items-center lh-base');
         let divImageSizeIcon = $('<div/>').attr('id', 'divImageSizeIcon');
         this.iSizeIcon = $('<i/>')
             .attr('id', 'iSizeIcon')
@@ -434,7 +434,7 @@ class WallpickerPage {
             .addClass('d-flex flex-shrink-1 ps-2 overflow-hidden');
         let divImagePathInfo = $('<div/>')
             .attr('id', 'divImagePathInfo')
-            .addClass('d-flex flex-row align-items-center overflow-hidden');
+            .addClass('d-flex flex-row align-items-center lh-base overflow-hidden');
         this.divImagePath = $('<div/>')
             .attr('id', 'divImagePath')
             .addClass('text-truncate');
