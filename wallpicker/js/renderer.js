@@ -120,6 +120,7 @@ class WallpickerPage {
         this.divLoadingWrapper = null;
         this.divLoadingBlock = null;
         this.divStatusBarWrapper = null;
+        this.iSizeIcon = null;
         this.divImageSizeInfo = null;
         this.divFileSizeInfo = null;
         this.divImagePathInfo = null;
@@ -414,8 +415,15 @@ class WallpickerPage {
         let divImageMetaInfo = $('<div/>')
             .attr('id', 'divImageMetaInfo')
             .addClass('d-flex flex-row align-items-center');
+        let divImageSizeIcon = $('<div/>').attr('id', 'divImageSizeIcon');
+        this.iSizeIcon = $('<i/>')
+            .attr('id', 'iSizeIcon')
+            .addClass('bi bi-aspect-ratio');
+        this.iSizeIcon.hide();
+        divImageSizeIcon.append(this.iSizeIcon);
         this.divImageSizeInfo = $('<div/>').attr('id', 'divImageSizeInfo');
         this.divFileSizeInfo = $('<div/>').attr('id', 'divFileSizeInfo');
+        divImageMetaInfo.append(divImageSizeIcon);
         divImageMetaInfo.append(this.divImageSizeInfo);
         divImageMetaInfo.append(this.divFileSizeInfo);
         divStatusBarLeft.append(divImageMetaInfo);
@@ -892,11 +900,13 @@ class WallpickerPage {
             let imageSrcPath = this.selectedImageBlock.attr(this.TAG_IMAGE_PATH);
             let fileObj = this.getFileObjectByImagePath(imageSrcPath);
             if (fileObj) {
+                this.iSizeIcon.show();
                 this.divImageSizeInfo.html(fileObj.width + ' x ' + fileObj.height);
                 this.divFileSizeInfo.html(utils.convertSizeToShortSize(fileObj.size));
                 this.divImagePathInfo.html(utils.escapeHtml(imageSrcPath));
             }
         } else {
+            this.iSizeIcon.hide();
             this.divImageSizeInfo.html('');
             this.divFileSizeInfo.html('');
             this.divImagePathInfo.html('');

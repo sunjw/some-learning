@@ -227,6 +227,9 @@ body {
     font-size: 14px;
     color: var(--color-gray);
 }
+#divStatusBarWrapper #divImageMetaInfo #divImageSizeIcon {
+    width: 30px;
+}
 #divStatusBarWrapper #divImageMetaInfo #divImageSizeInfo {
     width: 100px;
 }
