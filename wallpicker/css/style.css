@@ -227,10 +227,6 @@ body {
     font-size: 14px;
     color: var(--color-gray);
 }
-#divStatusBarWrapper #divImageMetaInfo,
-#divStatusBarWrapper #divImagePathInfo {
-    /* line-height: calc(var(--height-statusbar) - 2px); */
-}
 #divStatusBarWrapper #divImageMetaInfo #divImageSizeInfo {
     width: 100px;
 }
