@@ -123,7 +123,7 @@ class WallpickerPage {
         this.iSizeIcon = null;
         this.divImageSizeInfo = null;
         this.divFileSizeInfo = null;
-        this.divImagePathInfo = null;
+        this.divImagePath = null;
         this.divToastWrapperLeft = null;
         this.divToastWrapperRight = null;
 
@@ -432,10 +432,14 @@ class WallpickerPage {
         let divStatusBarRight = $('<div/>')
             .attr('id', 'divStatusBarRight')
             .addClass('d-flex flex-shrink-1 ps-2 overflow-hidden');
-        this.divImagePathInfo = $('<div/>')
+        let divImagePathInfo = $('<div/>')
             .attr('id', 'divImagePathInfo')
-            .addClass('d-flex flex-row align-items-center text-truncate');
-        divStatusBarRight.append(this.divImagePathInfo);
+            .addClass('d-flex flex-row align-items-center overflow-hidden');
+        this.divImagePath = $('<div/>')
+            .attr('id', 'divImagePath')
+            .addClass('text-truncate');
+        divImagePathInfo.append(this.divImagePath);
+        divStatusBarRight.append(divImagePathInfo);
 
         this.divStatusBarWrapper.append(divStatusBarLeft);
         this.divStatusBarWrapper.append(divStatusBarRight);
@@ -903,13 +907,13 @@ class WallpickerPage {
                 this.iSizeIcon.show();
                 this.divImageSizeInfo.html(fileObj.width + ' x ' + fileObj.height);
                 this.divFileSizeInfo.html(utils.convertSizeToShortSize(fileObj.size));
-                this.divImagePathInfo.html(utils.escapeHtml(imageSrcPath));
+                this.divImagePath.html(utils.escapeHtml(imageSrcPath));
             }
         } else {
             this.iSizeIcon.hide();
             this.divImageSizeInfo.html('');
             this.divFileSizeInfo.html('');
-            this.divImagePathInfo.html('');
+            this.divImagePath.html('');
         }
     }
 
