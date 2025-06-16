@@ -21,18 +21,18 @@
   "devDependencies": {
     "@electron/rebuild": "^3.7.2",
     "@electron/remote": "^2.1.2",
-    "electron": "^34.2.0",
-    "node-abi": "^3.74.0"
+    "electron": "^36.4.0",
+    "node-abi": "^3.75.0"
   },
   "dependencies": {
     "@sunjw8888/wallpaper": "^5.3.4",
-    "better-sqlite3": "^11.9.1",
-    "bootstrap": "^5.3.5",
-    "bootstrap-icons": "^1.11.3",
+    "better-sqlite3": "^11.10.0",
+    "bootstrap": "^5.3.6",
+    "bootstrap-icons": "^1.13.1",
     "electron-localshortcut": "^3.2.1",
     "electron-window-state": "^5.0.3",
     "jquery": "^3.7.1",
     "probe-image-size": "^7.2.3",
-    "sharp": "^0.34.1"
+    "sharp": "^0.34.2"
   }
 }
