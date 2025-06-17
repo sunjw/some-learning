@@ -131,6 +131,7 @@ class WallpickerPage {
         this.initLayout();
         this.initHandler();
 
+        // handle window resize and scroll
         this.onWindowResize();
         $(window).on('resize', function () {
             that.onWindowResize();
@@ -139,6 +140,7 @@ class WallpickerPage {
             that.onWindowScroll();
         });
 
+        // start logic
         this.disableAllButtons();
         this.hideLoading();
 
@@ -252,6 +254,11 @@ class WallpickerPage {
         } else {
             this.divToolbarWrapper.removeClass('toolbarScrolled');
         }
+    }
+
+    onArrowKeydown(e) {
+        utils.log('onArrowKeydown, key=[%s]', e.key);
+        e.preventDefault();
     }
 
     initLayout() {
@@ -553,6 +560,15 @@ class WallpickerPage {
             that.onDropFiles(e.dataTransfer.files);
             return false;
         };
+
+        $(window).on('keydown', function (e) {
+            utils.log('window.keydown, key=[%s]', e.key);
+            if (e.key == 'ArrowUp' || e.key == 'ArrowDown' ||
+                e.key == 'ArrowLeft' || e.key == 'ArrowRight') {
+                // arrow key
+                that.onArrowKeydown(e);
+            }
+        });
     }
 
     fitContentHeight() {
