@@ -87,6 +87,7 @@ class WallpickerPage {
         this.eleConfig = new eleUtils.EleConfig(this.options.userDataPath);
         this.curImageDir = this.getConfig(this.KEY_IMAGE_DIR);
         this.curImageList = [];
+        this.imagesPerLine = 0;
         this.scanStart = 0;
         this.curFilter = '';
         this.sortOptions = {};
@@ -581,8 +582,8 @@ class WallpickerPage {
 
     fitImageListWidth() {
         let contentWrapperWidth = this.divContentWrapper.width();
-        let imagePerLine = Math.floor(contentWrapperWidth / this.imageBlockWidth);
-        let divImageListWidth = imagePerLine * this.imageBlockWidth + 2;
+        this.imagesPerLine = Math.floor(contentWrapperWidth / this.imageBlockWidth);
+        let divImageListWidth = this.imagesPerLine * this.imageBlockWidth + 2;
         this.divImageList.css('width', divImageListWidth + 'px');
     }
 
