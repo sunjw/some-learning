@@ -259,7 +259,22 @@ class WallpickerPage {
 
     onArrowKeydown(e) {
         utils.log('onArrowKeydown, key=[%s]', e.key);
-        e.preventDefault();
+        if (this.selectedImageBlock) {
+            e.preventDefault();
+            if (e.key == 'ArrowUp') {
+                // up
+                this.prevSelect(this.imagesPerLine);
+            } else if (e.key == 'ArrowDown') {
+                // down
+                this.nextSelect(this.imagesPerLine);
+            } else if (e.key == 'ArrowLeft') {
+                // left
+                this.prevSelect(1);
+            } else if (e.key == 'ArrowRight') {
+                // right
+                this.nextSelect(1);
+            }
+        }
     }
 
     initLayout() {
@@ -1092,6 +1107,14 @@ class WallpickerPage {
         utils.log('randomSelect, randomImagePath=[%s]', randomImagePath);
         this.selectImage(imageBlockRandom);
         this.scrollToSelected();
+    }
+
+    prevSelect(count) {
+        utils.log('prevSelect, count=%d', count);
+    }
+
+    nextSelect(count) {
+        utils.log('nextSelect, count=%d', count);
     }
 
     setOsWallpaper() {
