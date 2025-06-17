@@ -1171,10 +1171,10 @@ class WallpickerPage {
         remote.shell.openPath(imagePath);
     }
 
-    scrollToImageBlockDom(imageBlockDom) {
+    scrollToImageBlockDom(imageBlockDom, scrollBlock = 'center') {
         imageBlockDom.scrollIntoView({
             behavior: 'smooth',
-            block: 'center'
+            block: scrollBlock
         });
     }
 
@@ -1187,10 +1187,10 @@ class WallpickerPage {
         }
     }
 
-    scrollToSelected() {
+    scrollToSelected(scrollBlock = 'center') {
         utils.log('scrollToSelected');
         let imageBlockDom = this.selectedImageBlock.get(0);
-        this.scrollToImageBlockDom(imageBlockDom);
+        this.scrollToImageBlockDom(imageBlockDom, scrollBlock);
     }
 
     showToast(message, position, autoHide) {
