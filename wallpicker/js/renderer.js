@@ -263,13 +263,13 @@ class WallpickerPage {
             e.preventDefault();
             if (e.key == 'ArrowUp') {
                 // up
-                this.prevSelect(this.imagesPerLine);
+                this.nextSelect(-this.imagesPerLine);
             } else if (e.key == 'ArrowDown') {
                 // down
                 this.nextSelect(this.imagesPerLine);
             } else if (e.key == 'ArrowLeft') {
                 // left
-                this.prevSelect(1);
+                this.nextSelect(-1);
             } else if (e.key == 'ArrowRight') {
                 // right
                 this.nextSelect(1);
@@ -1109,12 +1109,44 @@ class WallpickerPage {
         this.scrollToSelected();
     }
 
-    prevSelect(count) {
-        utils.log('prevSelect, count=%d', count);
-    }
-
     nextSelect(count) {
         utils.log('nextSelect, count=%d', count);
+        if (!this.selectedImageBlock) {
+            return;
+        }
+        let imageBlocks = this.getAllImageBlocks();
+        let imageBlockCount = imageBlocks.length;
+        let selectedImageBlockIdx = imageBlocks.index(this.selectedImageBlock.get(0));
+        utils.log('nextSelect, imageBlockCount=%d, selectedImageBlockIdx=%d',
+            imageBlockCount, selectedImageBlockIdx);
+        let nextIdx = selectedImageBlockIdx;
+        let moveCount = 0;
+        let direction = 1;
+        if (count < 0) {
+            direction = -1;
+            count = -count;
+        }
+        while (true) {
+            nextIdx = nextIdx + direction;
+            if (nextIdx < 0 || nextIdx >= imageBlockCount) {
+                // out of range
+                utils.log('nextSelect, to the end');
+                break;
+            }
+            let nextImageBlock = $(imageBlocks[nextIdx]);
+            if (!nextImageBlock.hasClass(this.CLASS_FILETER_OUT)) {
+                moveCount++;
+            }
+            if (moveCount == count) {
+                // found
+                let nextImagePath = nextImageBlock.attr(this.TAG_IMAGE_PATH);
+                utils.log('nextSelect, found, nextIdx=%d, randomImagePath=[%s]',
+                    nextIdx, nextImagePath);
+                this.selectImage(nextImageBlock);
+                this.scrollToSelected();
+                break;
+            }
+        }
     }
 
     setOsWallpaper() {
