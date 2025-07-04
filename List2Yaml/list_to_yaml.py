@@ -134,7 +134,7 @@ def list_to_yaml(list_txt_path, list_yaml_path):
             if i == 0:
                 list_yaml_line = list_yaml_line + ':'
 
-            re_result_last_line = re.search(r'[0-9]* directories, [0-9]* files', list_yaml_line)
+            re_result_last_line = re.search(r'[0-9]* director(.*), [0-9]* file(s)*', list_yaml_line)
             if re_result_last_line:
                 # logger.info('re_result_last_line')
                 list_yaml_line = ''
