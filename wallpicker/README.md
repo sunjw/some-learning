@@ -11,6 +11,11 @@ Windows and macOS distribution packages are in [dist](dist) directory.
 3. npm run rebuild-all
 4. If no error occured in previous steps, then run.
 
+## Update icons
+```
+./node_modules/.bin/electron-icon-builder --input="./icons/some.png" --output="./"
+```
+
 ## Pack
 ```
 python3 ./pack_dist_electron.py
