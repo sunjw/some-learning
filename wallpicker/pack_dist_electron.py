@@ -47,6 +47,12 @@ def fix_win_path(path):
     else:
         return path
 
+def fix_win_long_path(path):
+    if is_windows_sys() and not path.startswith('\\\\?\\'):
+        abs_path = os.path.abspath(path)
+        return '\\\\?\\' + abs_path
+    return path
+
 def find_strings_in_string(strings, in_string):
     for str_itr in strings:
         if in_string.find(str_itr) >= 0:
@@ -58,7 +64,7 @@ def copy_file(source, dest):
     follow_symlinks_os = False
     if is_windows_sys():
         follow_symlinks_os = True
-    shutil.copyfile(source, dest, follow_symlinks=follow_symlinks_os)
+    shutil.copyfile(fix_win_long_path(source), fix_win_long_path(dest), follow_symlinks=follow_symlinks_os)
 
 def copy_dir(source, dest):
     for filename in os.listdir(source):
@@ -73,12 +79,14 @@ def copy_dir(source, dest):
             copy_file(src_file, dst_file)
 
 def remove_file(path):
-    if os.path.exists(path):
-        os.remove(path)
+    fixed_path = fix_win_long_path(path)
+    if os.path.exists(fixed_path):
+        os.remove(fixed_path)
 
 def remove_dir(path):
-    if os.path.exists(path):
-        shutil.rmtree(path)
+    fixed_path = fix_win_long_path(path)
+    if os.path.exists(fixed_path):
+        shutil.rmtree(fixed_path)
 
 def read_file_content(file_path):
     if not os.path.exists(file_path):
