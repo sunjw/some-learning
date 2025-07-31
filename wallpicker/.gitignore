@@ -1,9 +1,9 @@
 *~
 .DS_Store
 *.bak
-
 node_modules
+ResourceHacker.log
 
+icons/png/*
 dist/wallpicker.app/*
 dist/wallpicker/*
-ResourceHacker.log
