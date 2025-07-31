@@ -1,0 +1,6 @@
+[FILENAMES]
+Exe=.\dist\wallpaper-picker\electron.exe
+SaveAs=.\dist\wallpaper-picker\electron.exe
+Log=.\ResourceHacker.log
+[COMMANDS]
+-addoverwrite .\icons\win\icon.ico, ICONGROUP,1,1033

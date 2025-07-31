@@ -111,9 +111,9 @@ SUPPORT_LINUX = False
 APP_TITLE = 'wallpaper-picker'
 PACKAGE_NAME = 'wallpaper-picker'
 
-RESOURCE_HACKER_SCRIPT = ''
+RESOURCE_HACKER_SCRIPT = 'rh_script_upd_icons.txt'
 APP_BUNDLE_ID_MACOS = 'org.sunjw.WallpaperPicker'
-APP_ICNS_MACOS = ''
+APP_ICNS_MACOS = 'icons/mac/icon.icns'
 
 DIST_DIR = 'dist'
 APP_DIRS = ['node_modules', 'assets', 'css', 'js']
