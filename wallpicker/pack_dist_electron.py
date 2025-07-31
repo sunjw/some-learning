@@ -127,9 +127,8 @@ EXEC_FIX_PATHS = ['./node_modules/.bin/electron-rebuild',
 REBUILD_CMD = 'rebuild-all'
 REBUILD_CLEAN_PATHS_WIN = ['./node_modules/better-sqlite3/build/Release/obj',
                         './node_modules/better-sqlite3/build/deps/Release/obj',
-                        './node_modules/@img',
                         './node_modules/@jimp']
-REBUILD_CLEAN_PATHS_MACOS = ['./node_modules/@img', './node_modules/@jimp']
+REBUILD_CLEAN_PATHS_MACOS = ['./node_modules/@jimp']
 REBUILD_CLEAN_PATHS_LINUX = []
 
 def main():
