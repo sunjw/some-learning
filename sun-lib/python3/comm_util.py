@@ -45,6 +45,10 @@ def pprint_dict_to_string(a_dict):
     return json.dumps(a_dict, indent=2, ensure_ascii=False)
 
 
+def bytes_to_str(bytes_string):
+    return bytes_string.decode('utf-8')
+
+
 def is_ipv4(input_str):
     compile_ip = re.compile(
         '^(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|[1-9])\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)$')
