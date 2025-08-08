@@ -108,9 +108,9 @@ def get_bing_wallpaper(mkt, download_count, over_ssh=False, ssh_cmd=None):
 
 def open_wallpaper_dir(wallpaper_dir):
     logger.info('Open [%s]', wallpaper_dir)
-    if comm_util.is_windows():
+    if comm_util.is_windows_sys():
         comm_util.call_command(['explorer', wallpaper_dir])
-    if comm_util.is_macos():
+    if comm_util.is_macos_sys():
         comm_util.call_command(['open', wallpaper_dir])
 
 
