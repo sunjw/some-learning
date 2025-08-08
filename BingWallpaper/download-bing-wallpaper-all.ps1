@@ -1,4 +1,4 @@
-$MktArr = @("en-us", "zh-cn", "ja-jp", "fr-fr", "it-it", "en-gb", "es-es", "de-de", "pt-br", "en-in", "row")
+$MktArr = @("en-us", "zh-cn", "ja-jp", "fr-fr", "it-it", "en-gb", "es-es", "de-de", "pt-br", "en-in")
 $NoPromoteString = "--no-promote"
 
 $CurDir = Get-Location
