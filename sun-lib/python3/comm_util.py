@@ -75,6 +75,10 @@ def is_linux_sys():
     return (platform.system() == 'Linux')
 
 
+def get_machine():
+    return platform.machine()
+
+
 def fix_win_path(path):
     if is_windows_sys():
         return path.replace('/', '\\')
