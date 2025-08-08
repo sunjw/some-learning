@@ -30,7 +30,7 @@ def run_cmd_with_stderr(cmd):
 
     stdout_text, stderr_text = p.communicate()
 
-    return stderr_text
+    return stdout_text, stderr_text
 
 def is_windows_sys():
     return (platform.system() == 'Windows')
@@ -88,13 +88,13 @@ def remove_dir(path):
     if os.path.exists(fixed_path):
         shutil.rmtree(fixed_path)
 
-def read_file_content(file_path):
+def read_file_binary(file_path):
     if not os.path.exists(file_path):
         return ''
     file_content = open(file_path, 'rb').read()
     return file_content
 
-def write_file_content(file_path, file_content):
+def write_file_binary(file_path, file_content):
     file_obj = open(file_path, 'wb')
     file_obj.write(file_content)
     file_obj.close()
@@ -289,7 +289,7 @@ def main():
     # Update Info.plist.
     if is_macos_sys():
         info_plist_path = './Contents/Info.plist'
-        info_plist_content = read_file_content(info_plist_path)
+        info_plist_content = read_file_binary(info_plist_path)
         info_plist_content = info_plist_content.replace(b'>Electron<',
                                 bytes('>%s<' % (APP_TITLE), encoding='utf8'))
         info_plist_content = info_plist_content.replace(b'>com.github.Electron<',
@@ -297,7 +297,7 @@ def main():
         if new_icns_name_mac != '':
             info_plist_content = info_plist_content.replace(b'>electron.icns<',
                                     bytes('>%s<' % (new_icns_name_mac), encoding='utf8'))
-        write_file_content(info_plist_path, info_plist_content)
+        write_file_binary(info_plist_path, info_plist_content)
 
     os.chdir(cwd)
 
