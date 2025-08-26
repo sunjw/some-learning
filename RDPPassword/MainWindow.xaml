@@ -46,6 +46,8 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <TextBlock
@@ -57,15 +59,33 @@
                 Text="[Info]" />
 
             <Button
-                x:Name="ButtonEncrypt"
+                x:Name="ButtonClear"
                 Grid.Column="2"
+                Margin="0,0,12,12"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                ToolTip="Clear">
+                <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.EraseTool}" />
+            </Button>
+            <Button
+                x:Name="ButtonCopy"
+                Grid.Column="3"
+                Margin="0,0,12,12"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                ToolTip="Copy">
+                <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Copy}" />
+            </Button>
+            <Button
+                x:Name="ButtonEncrypt"
+                Grid.Column="4"
                 Margin="0,0,12,12"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Content="Encrypt" />
             <Button
                 x:Name="ButtonDecrypt"
-                Grid.Column="3"
+                Grid.Column="5"
                 Margin="0,0,12,12"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"

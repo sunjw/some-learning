@@ -38,7 +38,14 @@ namespace RDPPassword
         {
             gridRootLoaded = true;
 
+            // Fix small buttons
+            double buttonHeight = ButtonDecrypt.ActualHeight;
+            ButtonClear.Height = buttonHeight;
+            ButtonCopy.Height = buttonHeight;
+
             ShowSelfFileVersion();
+
+            TextBoxMain.Focus();
         }
     }
 }
