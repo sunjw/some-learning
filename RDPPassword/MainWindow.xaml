@@ -16,14 +16,19 @@
     ResizeMode="CanMinimize"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <Grid x:Name="GridRoot">
+    <Grid x:Name="GridRoot" Loaded="GridRoot_Loaded">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
         <Grid
             x:Name="GridMain"
-            Height="320"
-            VerticalAlignment="Top">
+            Grid.Row="0"
+            Margin="0,0,0,0">
             <TextBox
                 x:Name="TextBoxMain"
-                Margin="15,5,15,15"
+                Margin="12,6,12,0"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 TextWrapping="Wrap" />
@@ -32,7 +37,8 @@
 
         <Grid
             x:Name="GridBottom"
-            Height="60"
+            Grid.Row="1"
+            Height="54"
             Margin="0,0,0,0"
             VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
@@ -45,7 +51,7 @@
             <TextBlock
                 x:Name="TextBlockInfo"
                 Grid.Column="0"
-                Margin="15,0,0,0"
+                Margin="14,0,0,0"
                 VerticalAlignment="Center"
                 Foreground="Gray"
                 Text="[Info]" />
@@ -53,14 +59,14 @@
             <Button
                 x:Name="ButtonEncrypt"
                 Grid.Column="2"
-                Margin="0,0,15,15"
+                Margin="0,0,12,12"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Content="Encrypt" />
             <Button
                 x:Name="ButtonDecrypt"
                 Grid.Column="3"
-                Margin="0,0,15,15"
+                Margin="0,0,12,12"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Content="Decrypt" />

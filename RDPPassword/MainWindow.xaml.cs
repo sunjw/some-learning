@@ -1,13 +1,6 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace RDPPassword
 {
@@ -16,9 +9,36 @@ namespace RDPPassword
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bool gridRootLoaded = false;
+        private string currentFileVersion = "";
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void ShowSelfFileVersion()
+        {
+            try
+            {
+                string selfPath = Assembly.GetExecutingAssembly().Location;
+                FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(selfPath);
+                if (fileVersionInfo != null && fileVersionInfo.FileVersion != null)
+                {
+                    currentFileVersion = fileVersionInfo.FileVersion;
+                }
+            }
+            catch (Exception)
+            { }
+
+            TextBlockInfo.Text = currentFileVersion;
+        }
+
+        private void GridRoot_Loaded(object sender, RoutedEventArgs e)
+        {
+            gridRootLoaded = true;
+
+            ShowSelfFileVersion();
         }
     }
 }
