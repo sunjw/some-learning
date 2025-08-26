@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -12,6 +14,7 @@ namespace RDPPassword
     {
         private const string IconCheckMark = "\ue73e";
         private const string IconCopy = "\ue8c8";
+        private Encoding U16LE = Encoding.Unicode;
 
         private bool gridRootLoaded = false;
         private string currentFileVersion = "";
@@ -37,6 +40,51 @@ namespace RDPPassword
 
             TextBlockInfo.Text = currentFileVersion;
         }
+
+        private string EncryptPassword(string strDecrypted)
+        {
+            string strEncrypted = "";
+
+            try
+            {
+                byte[] bytesDecrypted = U16LE.GetBytes(strDecrypted);
+                byte[] bytesEncrypted = ProtectedData.Protect(bytesDecrypted, null, DataProtectionScope.CurrentUser);
+                foreach (var byteValue in bytesEncrypted)
+                {
+                    strEncrypted += String.Format("{0:X2}", byteValue);
+                }
+            }
+            catch (Exception)
+            {
+                strEncrypted = "Encryption error.";
+            }
+
+            return strEncrypted;
+        }
+
+        private string DecryptPassword(string strEncrypted)
+        {
+            string strDecrypted = "";
+
+            try
+            {
+                int encryptedBytesLength = strEncrypted.Length / 2;
+                byte[] bytesEncrypted = new byte[encryptedBytesLength];
+                for (int i = 0; i < encryptedBytesLength; i++)
+                {
+                    bytesEncrypted[i] = Convert.ToByte(strEncrypted.Substring(i * 2, 2), 16);
+                }
+                byte[] bytesDecrypted = ProtectedData.Unprotect(bytesEncrypted, null, DataProtectionScope.CurrentUser);
+                strDecrypted = U16LE.GetString(bytesDecrypted);
+            }
+            catch (Exception)
+            {
+                strDecrypted = "Decryption error.";
+            }
+
+            return strDecrypted;
+        }
+
 
         private void GridRoot_Loaded(object sender, RoutedEventArgs e)
         {
@@ -78,6 +126,22 @@ namespace RDPPassword
                 timer.Stop();
             };
             timer.Start();
+        }
+
+        private void ButtonEncrypt_Click(object sender, RoutedEventArgs e)
+        {
+            string mainText = TextBoxMain.Text;
+            mainText = mainText.Trim();
+            string encryptedText = EncryptPassword(mainText);
+            TextBoxMain.Text = encryptedText;
+        }
+
+        private void ButtonDecrypt_Click(object sender, RoutedEventArgs e)
+        {
+            string mainText = TextBoxMain.Text;
+            mainText = mainText.Trim();
+            string decryptedText = DecryptPassword(mainText);
+            TextBoxMain.Text = decryptedText;
         }
     }
 }
