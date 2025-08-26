@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:RDPPassword"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
-    Title="MainWindow"
+    Title="RDPPassword"
     Width="600"
     Height="400"
     ui:TitleBar.Height="36"
