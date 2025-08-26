@@ -391,3 +391,6 @@ DerivedData/
 *.old
 *.suo
 *.user
+
+!Properties/PublishProfiles/*
+Properties/PublishProfiles/*.user
