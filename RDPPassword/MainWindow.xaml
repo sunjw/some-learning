@@ -7,10 +7,65 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
     Title="MainWindow"
-    Width="800"
-    Height="450"
+    Width="600"
+    Height="400"
+    ui:TitleBar.Height="36"
+    ui:TitleBar.IsIconVisible="True"
     ui:WindowHelper.SystemBackdropType="Mica"
     ui:WindowHelper.UseModernWindowStyle="True"
+    ResizeMode="CanMinimize"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <Grid />
+    <Grid x:Name="GridRoot">
+        <Grid
+            x:Name="GridMain"
+            Height="320"
+            VerticalAlignment="Top">
+            <TextBox
+                x:Name="TextBoxMain"
+                Margin="15,5,15,15"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                TextWrapping="Wrap" />
+
+        </Grid>
+
+        <Grid
+            x:Name="GridBottom"
+            Height="60"
+            Margin="0,0,0,0"
+            VerticalAlignment="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                x:Name="TextBlockInfo"
+                Grid.Column="0"
+                Margin="15,0,0,0"
+                VerticalAlignment="Center"
+                Foreground="Gray"
+                Text="[Info]" />
+
+            <Button
+                x:Name="ButtonEncrypt"
+                Grid.Column="2"
+                Margin="0,0,15,15"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Content="Encrypt" />
+            <Button
+                x:Name="ButtonDecrypt"
+                Grid.Column="3"
+                Margin="0,0,15,15"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Content="Decrypt" />
+
+        </Grid>
+
+    </Grid>
 </Window>
