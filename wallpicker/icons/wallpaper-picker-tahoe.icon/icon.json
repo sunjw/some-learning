@@ -1,0 +1,41 @@
+{
+  "fill" : {
+    "automatic-gradient" : "extended-gray:1.00000,1.00000"
+  },
+  "groups" : [
+    {
+      "blend-mode" : "normal",
+      "blur-material" : null,
+      "layers" : [
+        {
+          "fill" : "automatic",
+          "glass" : true,
+          "image-name" : "Unofficial_Windows_XP_Logo_macos.png",
+          "name" : "Unofficial_Windows_XP_Logo_macos",
+          "position" : {
+            "scale" : 0.46,
+            "translation-in-points" : [
+              0,
+              -20
+            ]
+          }
+        }
+      ],
+      "lighting" : "individual",
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 1
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.1
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "squares" : [
+      "macOS"
+    ]
+  }
+}
