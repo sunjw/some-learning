@@ -1,6 +1,6 @@
 {
   "name": "qr-dec-web",
-  "version": "0.2.3",
+  "version": "25.10.3",
   "description": "A web to decode QR code by an image.",
   "main": "js/main.js",
   "scripts": {
