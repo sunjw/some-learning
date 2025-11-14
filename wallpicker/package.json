@@ -1,6 +1,6 @@
 {
   "name": "wallpicker",
-  "version": "25.8.7",
+  "version": "25.11.8",
   "description": "A wallpaper picker",
   "main": "main.js",
   "scripts": {
