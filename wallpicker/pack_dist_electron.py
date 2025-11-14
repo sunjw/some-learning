@@ -1,3 +1,4 @@
+import json
 import os
 import platform
 import shlex
@@ -288,15 +289,31 @@ def main():
 
     # Update Info.plist.
     if is_macos_sys():
+        log_stage('Update Info.plist...')
+        package_json_path = './Contents/Resources/app/package.json'
+        package_json_content = read_file_binary(package_json_path)
+        package_json_json = json.loads(package_json_content.decode('utf-8'))
+        package_version = package_json_json.get('version')
+
         info_plist_path = './Contents/Info.plist'
         info_plist_content = read_file_binary(info_plist_path)
+
         info_plist_content = info_plist_content.replace(b'>Electron<',
-                                bytes('>%s<' % (APP_TITLE), encoding='utf8'))
+                                bytes('>%s<' % (APP_TITLE), encoding='utf-8'))
         info_plist_content = info_plist_content.replace(b'>com.github.Electron<',
-                                bytes('>%s<' % (APP_BUNDLE_ID_MACOS), encoding='utf8'))
+                                bytes('>%s<' % (APP_BUNDLE_ID_MACOS), encoding='utf-8'))
+
+        info_plist_version_idx = info_plist_content.find(b'<key>CFBundleShortVersionString</key>')
+        info_plist_version_idx = info_plist_content.find(b'<string>', info_plist_version_idx) + len(b'<string>')
+        info_plist_version_end_idx = info_plist_content.find(b'</string>', info_plist_version_idx)
+        info_plist_version = info_plist_content[(info_plist_version_idx - 1):(info_plist_version_end_idx + 1)]
+        # package version (electron version)
+        info_plist_content = info_plist_content.replace(info_plist_version,
+                                bytes('>%s<' % (package_version), encoding='utf-8'), 1)
+
         if new_icns_name_mac != '':
             info_plist_content = info_plist_content.replace(b'>electron.icns<',
-                                    bytes('>%s<' % (new_icns_name_mac), encoding='utf8'))
+                                    bytes('>%s<' % (new_icns_name_mac), encoding='utf-8'))
         write_file_binary(info_plist_path, info_plist_content)
 
     os.chdir(cwd)
