@@ -93,10 +93,10 @@ body {
     color: var(--color-windows-blue);
     /* font-weight: bold; */
 }
-#divToolbarWrapper.dropInfo #divPathDropInfo {
+#divToolbarContent.dropInfo #divPathDropInfo {
     display: block;
 }
-#divToolbarWrapper.dropInfo #divPathContent {
+#divToolbarContent.dropInfo #divPathContent {
     display: none;
 }
 #divToolbarWrapper #divFilterBlock {
