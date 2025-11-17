@@ -5,6 +5,7 @@
     --color-light-gray: #e0e0e0;
     --color-lighter-gray: #f0f0f0;
     --height-toolbar: 48px;
+    --height-toolbar-fake-drop: 60px;
     --tooltip-back-color: rgba(0,0,0,0.78);
     --height-statusbar: 32px;
 }
@@ -59,20 +60,25 @@ body {
 /* Toolbar */
 #divToolbarWrapper {
     width: 100%;
-    height: var(--height-toolbar);
+    height: var(--height-toolbar-fake-drop);
     padding: 0 16px;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
-    background-color: rgba(245,245,247,0.5);
-    backdrop-filter: saturate(200%) blur(40px);
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
-    transition: box-shadow 0.5s;
+    /* background-color: rgba(245,245,247,0.5); */
+    /* backdrop-filter: saturate(200%) blur(40px); */
+    /* box-shadow: 0 -2px 8px rgba(0,0,0,0.2); */
+    /* transition: box-shadow 0.5s; */
+    background: url("../assets/toolbarback.png") repeat-x;
 }
-#divToolbarWrapper.toolbarScrolled {
+/* #divToolbarWrapper.toolbarScrolled {
     box-shadow: 0 -2px 20px rgba(0,0,0,0.3);
     transition: box-shadow 0.5s;
+} */
+#divToolbarWrapper #divToolbarContent {
+    width: 100%;
+    height: var(--height-toolbar);
 }
 #divToolbarWrapper #divPathDropInfo {
     display: none;

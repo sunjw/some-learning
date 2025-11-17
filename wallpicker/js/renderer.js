@@ -103,6 +103,7 @@ class WallpickerPage {
 
         this.body = $('body');
         this.divToolbarWrapper = null;
+        this.divToolbarContent = null;
         this.divPathWrapper = null;
         this.divToolsWrapper = null;
         this.divPathDropInfo = null;
@@ -283,8 +284,11 @@ class WallpickerPage {
 
         // init toolbar
         this.divToolbarWrapper = $('<div/>')
-            .attr('id', 'divToolbarWrapper')
+            .attr('id', 'divToolbarWrapper');
+        this.divToolbarContent = $('<div/>')
+            .attr('id', 'divToolbarContent')
             .addClass('d-flex justify-content-between');
+        this.divToolbarWrapper.append(this.divToolbarContent);
 
         // init path
         this.divPathWrapper = $('<div/>')
@@ -305,7 +309,7 @@ class WallpickerPage {
         this.divPathWrapper.append(this.divPathDropInfo);
         this.divPathWrapper.append(this.divPathContent);
 
-        this.divToolbarWrapper.append(this.divPathWrapper);
+        this.divToolbarContent.append(this.divPathWrapper);
 
         // init tools
         this.divToolsWrapper = $('<div/>')
@@ -387,7 +391,7 @@ class WallpickerPage {
 
         this.initSort();
 
-        this.divToolbarWrapper.append(this.divToolsWrapper);
+        this.divToolbarContent.append(this.divToolsWrapper);
 
         this.body.append(this.divToolbarWrapper);
 
@@ -548,31 +552,31 @@ class WallpickerPage {
         let that = this;
 
         let lastenter = null;
-        let divToolbarWrapperDom = this.divToolbarWrapper.get(0);
-        divToolbarWrapperDom.ondragenter = function (e) {
+        let divToolbarContentDom = this.divToolbarContent.get(0);
+        divToolbarContentDom.ondragenter = function (e) {
             lastenter = e.target;
         };
-        divToolbarWrapperDom.ondragover = function (e) {
-            // utils.log('divToolbarWrapperDom.ondragover');
+        divToolbarContentDom.ondragover = function (e) {
+            // utils.log('divToolbarContentDom.ondragover');
             eleUtils.stopBubble(e);
-            that.divToolbarWrapper.addClass('dropInfo');
+            that.divToolbarContent.addClass('dropInfo');
             return false;
         };
-        divToolbarWrapperDom.ondragleave = function (e) {
-            // utils.log('divToolbarWrapperDom.ondragleave');
+        divToolbarContentDom.ondragleave = function (e) {
+            // utils.log('divToolbarContentDom.ondragleave');
             if (lastenter == e.target) {
-                that.divToolbarWrapper.removeClass('dropInfo');
+                that.divToolbarContent.removeClass('dropInfo');
             }
             return false;
         };
-        divToolbarWrapperDom.ondragend = function () {
-            // utils.log('divToolbarWrapperDom.ondragend');
-            that.divToolbarWrapper.removeClass('dropInfo');
+        divToolbarContentDom.ondragend = function () {
+            // utils.log('divToolbarContentDom.ondragend');
+            that.divToolbarContent.removeClass('dropInfo');
             return false;
         };
-        divToolbarWrapperDom.ondrop = function (e) {
+        divToolbarContentDom.ondrop = function (e) {
             e.preventDefault();
-            that.divToolbarWrapper.removeClass('dropInfo');
+            that.divToolbarContent.removeClass('dropInfo');
             that.onDropFiles(e.dataTransfer.files);
             return false;
         };
