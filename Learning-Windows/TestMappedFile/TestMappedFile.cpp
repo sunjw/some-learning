@@ -1,7 +1,9 @@
 ﻿#include <stdio.h>
 #include <string>
+
 #include <Windows.h>
 #include <strsafe.h>
+#include <time.h>
 
 #include "MMFIODef.h"
 
@@ -105,6 +107,26 @@ int wmain(int argc, wchar_t *argv[], wchar_t *envp[])
             mmfio.GetMMFLastError(lastErrMsg);
             wprintf(L"Failed to open mapped file. Error: %s\n", lastErrMsg.c_str());
             return 0;
+        }
+
+        // generate 4 random characters
+        srand((unsigned int)time(NULL));
+        const int dataSize = 5;
+        char dataToWrite[dataSize] = { 0 };
+        for (int i = 0; i < 4; ++i)
+        {
+            dataToWrite[i] = 'A' + (rand() % 26);
+        }
+        int bytesWritten = mmfio.Write(dataToWrite, dataSize);
+        if (bytesWritten != dataSize)
+        {
+            mmfio.GetMMFLastError(lastErrMsg);
+            wprintf(L"Failed to write to mapped file. Error: %s\n", lastErrMsg.c_str());
+            return 0;
+        }
+        else
+        {
+            wprintf(L"Wrote %d bytes: %hs\\0\n", bytesWritten, dataToWrite);
         }
     }
 
