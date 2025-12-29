@@ -5,6 +5,6 @@ dist/**
 !dist/WinSpotlightWallpaper.zip
 spotlight_wallpapers/
 
-*.spec
-
 *.bak
+*.spec
+*.egg-info
