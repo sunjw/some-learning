@@ -1,7 +1,8 @@
 import binascii
-import getpass
 import os
 import shutil
+
+from pathlib import Path
 
 def list_file(path):
     files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
@@ -45,8 +46,7 @@ def detect_jpeg_file(file):
     return False
 
 def main():
-    username = getpass.getuser()
-    spotlight_wallpaper_dir = os.path.join('C:\\Users', username)
+    spotlight_wallpaper_dir = Path.home()
     spotlight_wallpaper_dir = os.path.join(spotlight_wallpaper_dir, 'AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets')
     print(spotlight_wallpaper_dir)
 
