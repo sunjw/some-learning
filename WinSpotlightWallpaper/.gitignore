@@ -6,3 +6,5 @@ dist/**
 spotlight_wallpapers/
 
 *.spec
+
+*.bak
