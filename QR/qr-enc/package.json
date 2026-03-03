@@ -1,6 +1,6 @@
 {
   "name": "qr-enc-web",
-  "version": "25.10.3",
+  "version": "26.3.4",
   "description": "A web to generate QR code by any text.",
   "main": "js/main.js",
   "scripts": {
