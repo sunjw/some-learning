@@ -157,4 +157,7 @@ class QREncPage {
     }
 }
 
-exports.QREncPage = QREncPage;
+$(function () {
+    utils.log('QREncPage start...');
+    (new QREncPage()).init();
+});
