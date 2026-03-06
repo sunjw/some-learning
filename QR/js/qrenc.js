@@ -1,7 +1,7 @@
 // css
 require('@materializecss/materialize/dist/css/materialize.min.css');
 require('material-design-icons/iconfont/material-icons.css');
-require('../css/main.css');
+require('../css/qrenc.css');
 
 // js
 const M = require('@materializecss/materialize');
