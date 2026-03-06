@@ -115,7 +115,7 @@ def main():
         os.mkdir(dest_app_dir)
         copy_dir(app_dir, dest_app_dir)
 
-    app_files = ['index.html']
+    app_files = ['index.html', 'qrdec.html']
     for app_file in app_files:
         dest_app_file = os.path.join(publish_dir, app_file)
         copy_file(app_file, dest_app_file)
