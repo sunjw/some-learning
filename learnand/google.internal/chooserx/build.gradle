@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 
 android {
     namespace "com.mlkit.example.internal"
-    compileSdkVersion 33
+    compileSdkVersion 36
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 33
+        minSdkVersion 33
+        targetSdkVersion 36
         versionCode 1
         versionName "1.0"
 
