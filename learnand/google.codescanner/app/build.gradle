@@ -3,12 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     namespace 'com.google.mlkit.samples.codescanner'
     defaultConfig {
         applicationId "com.google.mlkit.samples.codescanner"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         setProperty("archivesBaseName", "code-scanner-sample")
