@@ -58,7 +58,7 @@ class QREncPage {
         this.divPageContainer.show();
 
         setTimeout(() => {
-            this.taQrText.focus();
+            this.taQrText.trigger('focus');
         }, 250);
     }
 
@@ -122,7 +122,7 @@ class QREncPage {
         this.iQrTextClear.on('click', () => {
             this.taQrText.val('');
             this.taQrText.trigger('propertychange');
-            this.taQrText.focus();
+            this.taQrText.trigger('focus');
             this.taQrText.get(0).select();
         });
 

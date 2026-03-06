@@ -29,7 +29,7 @@ function getRestRequest(api, successCallback, errorCallback) {
 }
 
 function focusOnInput(inputElem) {
-    inputElem.focus();
+    inputElem.trigger('focus');
     inputElem.get(0).select();
 }
 
