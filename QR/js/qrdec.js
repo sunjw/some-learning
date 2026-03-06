@@ -341,4 +341,7 @@ class QRDecPage {
 
 }
 
-exports.QRDecPage = QRDecPage;
+$(function () {
+    utils.log('QRDecPage start...');
+    (new QRDecPage()).init();
+});
