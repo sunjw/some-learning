@@ -1,5 +1,5 @@
-# QR Code Generator - Web
-A web UI to generator QR code for some text input.
+# QR Code Generator and Decoder - Web
+A web UI to generate and decode QR codes for some text input.
 
 ## Build and run
 1. npm install
