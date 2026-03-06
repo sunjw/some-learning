@@ -3,7 +3,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 // Extract CSS
 const extractCSS = new MiniCssExtractPlugin({
-  filename: 'styles.min.css'
+  filename: '[name].css'
 });
 
 // Copy file
@@ -15,10 +15,13 @@ const copyPlugin = new CopyPlugin({
 });
 
 module.exports = {
-  entry: './js/main.js',
+  entry: {
+    qrenc: './js/qrenc.js',
+    qrdec: './js/qrdec.js',
+  },
   output: {
     path: __dirname + '/dist',
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   module: {
     rules: [{
