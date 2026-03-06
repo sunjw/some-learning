@@ -94,6 +94,14 @@ function escapeHtml(string) {
     return htmlEscape;
 }
 
+function escapeHtmlWithLineEnd(string) {
+    let htmlEscape = escapeHtml(string);
+    htmlEscape = stringReplaceAll(htmlEscape, '\r\n', '<br/>');
+    htmlEscape = stringReplaceAll(htmlEscape, '\r', '<br/>');
+    htmlEscape = stringReplaceAll(htmlEscape, '\n', '<br/>');
+    return htmlEscape;
+}
+
 function byteSizeToShortSize(size) {
     const shortSizeUnit = ['K', 'M', 'G'];
     let shortSize = size;
@@ -111,10 +119,10 @@ function byteSizeToShortSize(size) {
 function getParentDir(path) {
     let curPath = path;
     if (curPath.endsWith('/')) {
-        curPath = curPath.substr(0, curPath.length - 1);
+        curPath = curPath.substring(0, curPath.length - 1);
     }
     let pathDelimIdx = curPath.lastIndexOf('/');
-    let parentDirPath = curPath.substr(0, pathDelimIdx);
+    let parentDirPath = curPath.substring(0, pathDelimIdx);
     parentDirPath = parentDirPath + '/';
     return parentDirPath;
 }
@@ -190,6 +198,7 @@ exports.capitalizeFirstLetter = capitalizeFirstLetter;
 exports.stringReplaceAll = stringReplaceAll;
 exports.escapeShellPath = escapeShellPath;
 exports.escapeHtml = escapeHtml;
+exports.escapeHtmlWithLineEnd = escapeHtmlWithLineEnd;
 exports.byteSizeToShortSize = byteSizeToShortSize;
 exports.getParentDir = getParentDir;
 exports.getFileName = getFileName;
