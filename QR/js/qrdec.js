@@ -10,7 +10,6 @@ const clipboardCopy = require('clipboard-copy');
 const jsQR = require('jsqr');
 const utils = require('./utils');
 const npmUtils = require('./npmUtils');
-const jqueryUtils = require('./jqueryUtils');
 
 function copyText(someText) {
     utils.log('copyText, copied\n%s', someText);
@@ -18,7 +17,7 @@ function copyText(someText) {
     clipboardCopy(someText);
 }
 
-class QrDecPage {
+class QRDecPage {
     constructor() {
         // vars
         this.imgObj = null;
@@ -36,7 +35,7 @@ class QrDecPage {
     }
 
     init() {
-        utils.log('QrDecPage.init');
+        utils.log('QRDecPage.init');
         this.initLayout();
         this.initFunc();
     }
@@ -342,9 +341,4 @@ class QrDecPage {
 
 }
 
-$(function () {
-    utils.log('init, QR decoder start...');
-
-    let page = new QrDecPage();
-    page.init();
-});
+exports.QRDecPage = QRDecPage;
