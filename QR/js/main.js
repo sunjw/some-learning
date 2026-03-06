@@ -5,17 +5,18 @@ require('../css/main.css');
 
 // js
 const M = require('@materializecss/materialize');
-window.$ = require('jquery');
+window.$ = window.jQuery = require('jquery');
 const qrcode = require('qrcode');
 const utils = require('./utils');
 
-const bodyMinWidth = 250;
-const pageMaxWidth = 1000;
-const pageNonFloatWidth = 600;
-const qrImageWidth = 240;
-
 class QrEncPage {
     constructor() {
+        // constants
+        this.bodyMinWidth = 250;
+        this.pageMaxWidth = 1000;
+        this.pageNonFloatWidth = 600;
+        this.qrImageWidth = 240;
+
         // DOM refs (initialized in initContent)
         this.divPageContainer = null;
         this.divQrTextContainer = null;
@@ -47,7 +48,7 @@ class QrEncPage {
 
     initLayout() {
         $('body').css({
-            'min-width': bodyMinWidth + 'px'
+            'min-width': this.bodyMinWidth + 'px'
         });
 
         // run once and on resize (bind with correct this)
@@ -65,8 +66,8 @@ class QrEncPage {
         let windowWidth = $(window).width();
         utils.log('onWindowResize, windowWidth=%d', windowWidth);
         let pageWidth = windowWidth;
-        if (pageWidth > pageMaxWidth)
-            pageWidth = pageMaxWidth;
+        if (pageWidth > this.pageMaxWidth)
+            pageWidth = this.pageMaxWidth;
 
         this.divPageContainer.addClass('floatLeftWrapper');
 
@@ -82,7 +83,7 @@ class QrEncPage {
             'margin-top': '20px'
         });
 
-        if (pageWidth > pageNonFloatWidth) {
+        if (pageWidth > this.pageNonFloatWidth) {
             this.divQrTextContainer.css({
                 'width': pageWidth / 2 + 'px'
             });
@@ -90,7 +91,7 @@ class QrEncPage {
                 'width': pageWidth / 2 + 'px'
             });
             this.canvasQrImgCanvas.css({
-                'margin-left': (pageWidth / 2 - qrImageWidth) / 2 + 'px'
+                'margin-left': (pageWidth / 2 - this.qrImageWidth) / 2 + 'px'
             });
 
             this.divQrTextContainer.addClass('floatLeft');
@@ -103,7 +104,7 @@ class QrEncPage {
                 'width': pageWidth + 'px'
             });
             this.canvasQrImgCanvas.css({
-                'margin-left': (pageWidth - qrImageWidth) / 2 + 'px'
+                'margin-left': (pageWidth - this.qrImageWidth) / 2 + 'px'
             });
 
             this.divQrTextContainer.removeClass('floatLeft');
@@ -151,7 +152,7 @@ class QrEncPage {
             text = 'http://sunjw.us/qr';
         }
         qrcode.toCanvas(this.canvasQrImgCanvas.get(0), text, {
-            width: qrImageWidth
+            width: this.qrImageWidth
         });
     }
 }
