@@ -39,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     barcodeResultView = findViewById(R.id.barcode_result_view)
+    allowManualInput = findViewById<CheckBox>(R.id.allow_manual_input).isChecked
+    enableAutoZoom = findViewById<CheckBox>(R.id.enable_auto_zoom).isChecked
   }
 
   fun onAllowManualInputCheckboxClicked(view: View) {
