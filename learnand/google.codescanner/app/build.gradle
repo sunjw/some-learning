@@ -1,9 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 
 android {
     compileSdkVersion 31
+    namespace 'com.google.mlkit.samples.codescanner'
     defaultConfig {
         applicationId "com.google.mlkit.samples.codescanner"
         minSdkVersion 21
@@ -12,6 +13,9 @@ android {
         versionName "1.0"
         setProperty("archivesBaseName", "code-scanner-sample")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildFeatures {
+        viewBinding true
     }
     buildTypes {
         debug {
