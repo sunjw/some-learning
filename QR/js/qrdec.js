@@ -1,7 +1,7 @@
 // css
 require('bootstrap/dist/css/bootstrap.css');
 require('bootstrap-icons/font/bootstrap-icons.css');
-require('../css/main.css');
+require('../css/qrdec.css');
 
 // js
 window.$ = window.jQuery = require('jquery'); // bootstrap 5 must see window.jQuery
