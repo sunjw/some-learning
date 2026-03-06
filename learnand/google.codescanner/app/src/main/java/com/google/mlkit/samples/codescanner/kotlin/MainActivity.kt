@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import com.google.mlkit.common.MlKitException
 import com.google.mlkit.samples.codescanner.R
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -36,8 +37,10 @@ class MainActivity : AppCompatActivity() {
   private var barcodeResultView: TextView? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    this.enableEdgeToEdge()
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
     barcodeResultView = findViewById(R.id.barcode_result_view)
     allowManualInput = findViewById<CheckBox>(R.id.allow_manual_input).isChecked
     enableAutoZoom = findViewById<CheckBox>(R.id.enable_auto_zoom).isChecked
