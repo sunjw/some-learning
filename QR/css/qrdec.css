@@ -11,34 +11,34 @@
   --qrdec-ani-duration: 0.5s;
 }
 
-body#qrDecBody {
+body {
   font-family: var(--qrdec-font-sans);
 }
-body#qrDecBody .noBsFocus:focus, body#qrDecBody .noBsFocus.focus {
+body .noBsFocus:focus, body .noBsFocus.focus {
   box-shadow: none !important;
 }
-body#qrDecBody .btn-light:disabled, body#qrDecBody .btn-light.disabled {
+body .btn-light:disabled, body .btn-light.disabled {
   color: var(--bs-gray-600);
 }
 /* Common */
 
 /* QR Dec */
-body#qrDecBody #divContentWrapper.contentWide {
+body #divContentWrapper.contentWide {
   width: 1000px;
 }
-body#qrDecBody #divContentWrapper.contentNarrow {
+body #divContentWrapper.contentNarrow {
   max-width: 500px;
 }
-body#qrDecBody #divContentWrapper.contentWide #divUploadWrapper,
-body#qrDecBody #divContentWrapper.contentWide #divResultWrapper {
+body #divContentWrapper.contentWide #divUploadWrapper,
+body #divContentWrapper.contentWide #divResultWrapper {
   width: 480px;
 }
-body#qrDecBody #divContentWrapper.contentNarrow #divUploadWrapper,
-body#qrDecBody #divContentWrapper.contentNarrow #divResultWrapper {
+body #divContentWrapper.contentNarrow #divUploadWrapper,
+body #divContentWrapper.contentNarrow #divResultWrapper {
   width: auto;
 }
 
-body#qrDecBody #divUploadWrapper #labelImageUpload {
+body #divUploadWrapper #labelImageUpload {
   display: block;
   text-align: center;
   width: 100%;
@@ -47,34 +47,34 @@ body#qrDecBody #divUploadWrapper #labelImageUpload {
   border: var(--bs-border-width) solid var(--bs-border-color);
   border-radius: var(--bs-border-radius);
 }
-body#qrDecBody #divUploadWrapper #labelImageUpload.dragDrop {
+body #divUploadWrapper #labelImageUpload.dragDrop {
   border-color: var(--bs-danger);
 }
-body#qrDecBody #divUploadWrapper #imgPreview {
+body #divUploadWrapper #imgPreview {
   border: 0;
   border-radius: var(--bs-border-radius);
 }
-body#qrDecBody #divUploadWrapper #imgPreview.noImage {
+body #divUploadWrapper #imgPreview.noImage {
   border: var(--bs-border-width) solid var(--bs-border-color);
 }
 
-body#qrDecBody #divResultWrapper {
+body #divResultWrapper {
   border: var(--bs-border-width) solid var(--bs-border-color);
   border-radius: var(--bs-border-radius);
 }
-body#qrDecBody #divResultWrapper #divResultHeader {
+body #divResultWrapper #divResultHeader {
   height: 60px;
 }
-body#qrDecBody #divResultWrapper #divResultHeader .toolbarBtn {
+body #divResultWrapper #divResultHeader .toolbarBtn {
   background-color: transparent;
   border-color: transparent;
 }
-body#qrDecBody #divResultWrapper #divResultHeader .toolbarBtn.focus,
-body#qrDecBody #divResultWrapper #divResultHeader .toolbarBtn:focus {
+body #divResultWrapper #divResultHeader .toolbarBtn.focus,
+body #divResultWrapper #divResultHeader .toolbarBtn:focus {
   outline: 0;
   box-shadow: var(--qrdec-shadow-like-bs);
 }
-body#qrDecBody #divResultWrapper #divResultContent {
+body #divResultWrapper #divResultContent {
   overflow-wrap: anywhere;
   word-break: break-all;
 }
