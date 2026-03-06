@@ -14,145 +14,150 @@ const pageMaxWidth = 1000;
 const pageNonFloatWidth = 600;
 const qrImageWidth = 240;
 
-let divPageContainer = 0;
-let divQrTextContainer = 0;
-let divQrImgContainer = 0;
-let taQrText = 0;
-let iQrTextClear = 0;
-let canvasQrImgCanvas = 0;
+class QrEncPage {
+    constructor() {
+        // DOM refs (initialized in initContent)
+        this.divPageContainer = null;
+        this.divQrTextContainer = null;
+        this.divQrImgContainer = null;
+        this.taQrText = null;
+        this.iQrTextClear = null;
+        this.canvasQrImgCanvas = null;
+    }
 
-function initContent() {
-  M.AutoInit();
+    init() {
+        M.AutoInit();
+        this.initContent();
+    }
 
-  divPageContainer = $('div#pageContainer');
-  divQrTextContainer = $('div#qrTextContainer');
-  divQrImgContainer = $('div#qrImgContainer');
-  taQrText = $('textarea#qrText');
-  iQrTextClear = $('i#qrTextClear');
-  canvasQrImgCanvas = $('canvas#qrImgCanvas');
+    initContent() {
+        this.divPageContainer = $('div#pageContainer');
+        this.divQrTextContainer = $('div#qrTextContainer');
+        this.divQrImgContainer = $('div#qrImgContainer');
+        this.taQrText = $('textarea#qrText');
+        this.iQrTextClear = $('i#qrTextClear');
+        this.canvasQrImgCanvas = $('canvas#qrImgCanvas');
 
-  initLayout();
-  initFunc();
+        this.initLayout();
+        this.initFunc();
 
-  // init call
-  generateQrCanvas(taQrText.val());
-}
+        // initial render
+        this.generateQrCanvas(this.taQrText.val());
+    }
 
-function initLayout() {
-  $('body').css({
-    'min-width': bodyMinWidth + 'px'
-  });
+    initLayout() {
+        $('body').css({
+            'min-width': bodyMinWidth + 'px'
+        });
 
-  onWindowResize();
-  $(window).on('resize', function () {
-    onWindowResize();
-  });
+        // run once and on resize (bind with correct this)
+        this.onWindowResize();
+        $(window).on('resize', () => this.onWindowResize());
 
-  divPageContainer.show();
+        this.divPageContainer.show();
 
-  setTimeout(function () {
-    taQrText.focus();
-  }, 250);
-}
+        setTimeout(() => {
+            this.taQrText.focus();
+        }, 250);
+    }
 
-function onWindowResize() {
-  let windowWidth = $(window).width();
-  utils.log('onWindowResize, windowWidth=%d', windowWidth);
-  let pageWidth = windowWidth;
-  if (pageWidth > pageMaxWidth) {
-    pageWidth = pageMaxWidth;
-  }
+    onWindowResize() {
+        let windowWidth = $(window).width();
+        utils.log('onWindowResize, windowWidth=%d', windowWidth);
+        let pageWidth = windowWidth;
+        if (pageWidth > pageMaxWidth)
+            pageWidth = pageMaxWidth;
 
-  divPageContainer.addClass('floatLeftWrapper');
+        this.divPageContainer.addClass('floatLeftWrapper');
 
-  divPageContainer.css({
-    'width': pageWidth + 'px',
-    'margin-left': 'auto',
-    'margin-right': 'auto'
-  });
-  divQrImgContainer.css({
-    'height': '320px'
-  });
-  canvasQrImgCanvas.css({
-    'margin-top': '20px'
-  });
+        this.divPageContainer.css({
+            'width': pageWidth + 'px',
+            'margin-left': 'auto',
+            'margin-right': 'auto'
+        });
+        this.divQrImgContainer.css({
+            'height': '320px'
+        });
+        this.canvasQrImgCanvas.css({
+            'margin-top': '20px'
+        });
 
-  if (pageWidth > pageNonFloatWidth) {
-    divQrTextContainer.css({
-      'width': pageWidth / 2 + 'px'
-    });
+        if (pageWidth > pageNonFloatWidth) {
+            this.divQrTextContainer.css({
+                'width': pageWidth / 2 + 'px'
+            });
+            this.divQrImgContainer.css({
+                'width': pageWidth / 2 + 'px'
+            });
+            this.canvasQrImgCanvas.css({
+                'margin-left': (pageWidth / 2 - qrImageWidth) / 2 + 'px'
+            });
 
-    divQrImgContainer.css({
-      'width': pageWidth / 2 + 'px'
-    });
-    canvasQrImgCanvas.css({
-      'margin-left': (pageWidth / 2 - qrImageWidth) / 2 + 'px'
-    });
+            this.divQrTextContainer.addClass('floatLeft');
+            this.divQrImgContainer.addClass('floatLeft');
+        } else {
+            this.divQrTextContainer.css({
+                'width': pageWidth + 'px'
+            });
+            this.divQrImgContainer.css({
+                'width': pageWidth + 'px'
+            });
+            this.canvasQrImgCanvas.css({
+                'margin-left': (pageWidth - qrImageWidth) / 2 + 'px'
+            });
 
-    divQrTextContainer.addClass('floatLeft');
-    divQrImgContainer.addClass('floatLeft');
-  } else {
-    divQrTextContainer.css({
-      'width': pageWidth + 'px'
-    });
+            this.divQrTextContainer.removeClass('floatLeft');
+            this.divQrImgContainer.removeClass('floatLeft');
+        }
+    }
 
-    divQrImgContainer.css({
-      'width': pageWidth + 'px'
-    });
-    canvasQrImgCanvas.css({
-      'margin-left': (pageWidth - qrImageWidth) / 2 + 'px'
-    });
+    initFunc() {
+        this.onQrTextChange();
+        this.taQrText.on('input propertychange', () => {
+            this.onQrTextChange();
+            this.generateQrCanvas(this.taQrText.val());
+        });
 
-    divQrTextContainer.removeClass('floatLeft');
-    divQrImgContainer.removeClass('floatLeft');
-  }
-}
+        this.iQrTextClear.on('click', () => {
+            this.taQrText.val('');
+            this.taQrText.trigger('propertychange');
+            this.taQrText.focus();
+            this.taQrText.get(0).select();
+        });
 
-function initFunc() {
-  onQrTextChange();
-  taQrText.bind('input propertychange', function () {
-    onQrTextChange();
-    generateQrCanvas(taQrText.val());
-  });
+        this.canvasQrImgCanvas.on('click', () => {
+            let canvasEl = this.canvasQrImgCanvas.get(0);
+            let downloadLink = $('<a/>');
+            downloadLink.attr('download', 'qrcode.png');
+            downloadLink.attr('href', canvasEl.toDataURL());
+            downloadLink.attr('target', '_blank');
+            downloadLink[0].click();
+        });
+    }
 
-  iQrTextClear.on('click', function () {
-    taQrText.val('');
-    taQrText.trigger('propertychange');
-    taQrText.focus();
-    taQrText.get(0).select();
-  });
+    onQrTextChange() {
+        M.textareaAutoResize(this.taQrText);
+        let taVal = this.taQrText.val();
+        if (taVal && taVal.length > 0) {
+            this.iQrTextClear.show();
+        } else {
+            this.iQrTextClear.hide();
+        }
+    }
 
-  canvasQrImgCanvas.on('click', function () {
-    //utils.log('canvasQrImgCanvas.click');
-    let downloadLink = $('<a/>');
-    downloadLink.attr('download', 'qrcode.png');
-    downloadLink.attr('href', this.toDataURL());
-    downloadLink.attr('target', '_blank');
-    downloadLink[0].click();
-  });
-}
-
-function onQrTextChange() {
-  M.textareaAutoResize(taQrText);
-  let taVal = taQrText.val();
-  if (taVal.length > 0) {
-    iQrTextClear.show();
-  } else {
-    iQrTextClear.hide();
-  }
-}
-
-function generateQrCanvas(text) {
-  utils.log('generateQrCanvas, text=[%s]', text);
-  if (text == '') {
-    text = 'http://sunjw.us/qr';
-  }
-  qrcode.toCanvas(canvasQrImgCanvas[0], text, {
-    width: qrImageWidth
-  });
+    generateQrCanvas(text) {
+        utils.log('generateQrCanvas, text=[%s]', text);
+        if (!text || text === '') {
+            text = 'http://sunjw.us/qr';
+        }
+        qrcode.toCanvas(this.canvasQrImgCanvas.get(0), text, {
+            width: qrImageWidth
+        });
+    }
 }
 
 $(function () {
-  utils.log('qr start...');
-  initContent();
+    utils.log('init, QrEncPage start...');
+    const page = new QrEncPage();
+    page.init();
 });
