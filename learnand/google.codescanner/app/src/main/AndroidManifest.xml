@@ -22,10 +22,6 @@
         android:value="barcode_ui"/>
 
     <activity
-        android:name=".EntryChoiceActivity"
-        android:exported="false" />
-
-    <activity
         android:name=".java.MainActivity"
         android:exported="false" />
 
