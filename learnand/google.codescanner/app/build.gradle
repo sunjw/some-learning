@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
 android {
@@ -11,7 +11,7 @@ android {
         targetSdkVersion 36
         versionCode 1
         versionName "1.0"
-        setProperty("archivesBaseName", "code-scanner-sample")
+        // setProperty("archivesBaseName", "code-scanner-sample")
     }
     buildFeatures {
         viewBinding true
@@ -26,12 +26,12 @@ android {
             debuggable false
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard.cfg'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard.cfg'
             // testProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguardTest-rules.pro', 'proguard.cfg'
         }
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard.cfg'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard.cfg'
         }
     }
     compileOptions {
