@@ -53,6 +53,15 @@ kotlin {
     tasks.register("testClasses")
 }
 
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        variant.outputs.any() { output ->
+            def apkName = "CodeScannerDemo-${variant.name}-${android.defaultConfig.versionName}.apk"
+            output.outputFileName.set(apkName)
+        }
+    }
+}
+
 dependencies {
     // implementation project(':internal:chooserx')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
