@@ -1,6 +1,6 @@
 {
   "name": "qr-web",
-  "version": "26.3.10",
+  "version": "26.3.13",
   "description": "A web to generate and decode QR codes for some input.",
   "scripts": {
     "build": "webpack --mode production",
