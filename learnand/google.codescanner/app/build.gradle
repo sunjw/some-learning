@@ -11,8 +11,8 @@ android {
         applicationId "com.google.mlkit.samples.codescanner"
         minSdkVersion 33
         targetSdkVersion 36
-        versionCode 16
-        versionName "26.3.10"
+        versionCode 18
+        versionName "26.3.11"
         // setProperty("archivesBaseName", "code-scanner-sample")
     }
     buildFeatures {
