@@ -42,7 +42,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
-        StatusBarInsetUtil.updateControlPaddingFullScreen(this, R.id.main_layout)
+        StatusBarInsetUtil.updateControlPaddingFullScreen(
+            this, R.id.main_layout, true
+        )
 
         barcodeResultView = findViewById(R.id.barcode_result_view)
         allowManualInput = findViewById<CheckBox>(R.id.allow_manual_input).isChecked

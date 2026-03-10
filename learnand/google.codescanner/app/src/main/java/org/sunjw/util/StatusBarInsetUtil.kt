@@ -54,8 +54,12 @@ object StatusBarInsetUtil {
         controlView.setLayoutParams(controlLayoutParams)
     }
 
-    fun updateControlPaddingFullScreen(activity: AppCompatActivity, viewId: Int) {
-        val statusBarHeightPx = getStatusBarHeightPx(activity)
+    fun updateControlPaddingFullScreen(activity: AppCompatActivity, viewId: Int, withActionBar: Boolean) {
+        var statusBarHeightPx = getStatusBarHeightPx(activity)
+        if (withActionBar) {
+            val actionBarHeightPx = getActionBarHeightPx(activity)
+            statusBarHeightPx += actionBarHeightPx
+        }
         val controlView = activity.findViewById<View>(viewId)
         controlView.setPadding(
             controlView.getPaddingLeft(),
