@@ -17,11 +17,11 @@
 package com.google.mlkit.samples.codescanner.kotlin
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import com.google.mlkit.common.MlKitException
 import com.google.mlkit.samples.codescanner.R
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -79,10 +79,10 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        savedInstanceState.putBoolean(KEY_ALLOW_MANUAL_INPUT, allowManualInput)
-        savedInstanceState.putBoolean(KEY_ENABLE_AUTO_ZOOM, enableAutoZoom)
-        super.onSaveInstanceState(savedInstanceState)
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(KEY_ALLOW_MANUAL_INPUT, allowManualInput)
+        outState.putBoolean(KEY_ENABLE_AUTO_ZOOM, enableAutoZoom)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
