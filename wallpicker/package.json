@@ -26,7 +26,6 @@
     "yargs": "^18.0.0"
   },
   "dependencies": {
-    "@sunjw8888/wallpaper": "^5.3.4",
     "better-sqlite3": "^12.4.1",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
@@ -34,6 +33,7 @@
     "electron-window-state": "^5.0.3",
     "jquery": "^4.0.0",
     "probe-image-size": "^7.2.3",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "wallpaper": "^7.3.0"
   }
 }
