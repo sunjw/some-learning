@@ -7,7 +7,7 @@ const path = require('path');
 window.$ = window.jQuery = require('jquery');
 const bootstrap = require('bootstrap');
 const probeImageSize = require('probe-image-size');
-const wallpaper = require('@sunjw8888/wallpaper');
+const wallpaper = require('wallpaper');
 const sharp = require('sharp');
 
 const utils = require('./utils');
@@ -1157,7 +1157,7 @@ class WallpickerPage {
         let imagePath = this.selectedImageBlock.attr(this.TAG_IMAGE_PATH);
         utils.log('setWallpaper, imagePath=[%s]', imagePath);
         setTimeout(() => {
-            wallpaper.set(imagePath);
+            wallpaper.setWallpaper(imagePath);
         }, 1000);
         this.showToast('Set wallpaper to "<span class="highlight">' + imagePath + '</span>".',
             'right', true);
