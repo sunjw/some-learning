@@ -1,7 +1,7 @@
 buildscript {
     ext {
         kotlin_version = '2.2.10'
-        activity_version = '1.12.4'
+        activity_version = '1.13.0'
     }
 
     repositories {

@@ -65,7 +65,7 @@ androidComponents {
 dependencies {
     // implementation project(':internal:chooserx')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.android.material:material:1.14.0-alpha09'
+    implementation 'com.google.android.material:material:1.14.0-alpha10'
     implementation "androidx.activity:activity:$activity_version"
     implementation "androidx.activity:activity-ktx:$activity_version"
 
