@@ -3,7 +3,10 @@
   <string name="allow_manual_input" translatable="false">Allow input code manually</string>
   <string name="enable_auto_zoom" translatable="false">Enable auto-zoom feature</string>
   <string name="scan_barcode_button" translatable="false">Scan Barcode</string>
+  <string name="copy_display_value_button" translatable="false">Copy Value</string>
   <string name="barcode_result" translatable="false">Barcode detected.\n%1$s</string>
+  <string name="clipboard_label_display_value" translatable="false">Barcode display value</string>
+  <string name="display_value_copied" translatable="false">Display value copied to clipboard.</string>
   <string name="error_scanner_cancelled" translatable="false">Code scanner is cancelled.</string>
   <string name="error_camera_permission_not_granted" translatable="false">Camera permission is not granted.</string>
   <string name="error_app_name_unavailable" translatable="false">App name is not set.</string>

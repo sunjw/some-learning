@@ -43,4 +43,15 @@
         android:layout_marginStart="2dp"
         android:layout_marginTop="20dp"
         android:text="" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/copy_display_value_button"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/copy_display_value_button"
+        android:visibility="gone"
+        app:tint="?attr/colorPrimary" />
 </LinearLayout>

@@ -16,10 +16,13 @@
 
 package com.google.mlkit.samples.codescanner.kotlin
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.mlkit.common.MlKitException
@@ -36,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     private var allowManualInput = false
     private var enableAutoZoom = false
     private var barcodeResultView: TextView? = null
+    private var copyDisplayValueButton: View? = null
+    private var lastDisplayValue: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         this.enableEdgeToEdge()
@@ -47,6 +52,9 @@ class MainActivity : AppCompatActivity() {
         )
 
         barcodeResultView = findViewById(R.id.barcode_result_view)
+        copyDisplayValueButton = findViewById<View>(R.id.copy_display_value_button).apply {
+            setOnClickListener { copyDisplayValueToClipboard() }
+        }
         allowManualInput = findViewById<CheckBox>(R.id.allow_manual_input).isChecked
         enableAutoZoom = findViewById<CheckBox>(R.id.enable_auto_zoom).isChecked
     }
@@ -71,10 +79,15 @@ class MainActivity : AppCompatActivity() {
         gmsBarcodeScanner
             .startScan()
             .addOnSuccessListener { barcode: Barcode ->
+                updateDisplayValueState(barcode.displayValue)
                 barcodeResultView!!.text = getSuccessfulMessage(barcode)
             }
-            .addOnFailureListener { e: Exception -> barcodeResultView!!.text = getErrorMessage(e) }
+            .addOnFailureListener { e: Exception ->
+                updateDisplayValueState(null)
+                barcodeResultView!!.text = getErrorMessage(e)
+            }
             .addOnCanceledListener {
+                updateDisplayValueState(null)
                 barcodeResultView!!.text = getString(R.string.error_scanner_cancelled)
             }
     }
@@ -82,6 +95,7 @@ class MainActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBoolean(KEY_ALLOW_MANUAL_INPUT, allowManualInput)
         outState.putBoolean(KEY_ENABLE_AUTO_ZOOM, enableAutoZoom)
+        outState.putString(KEY_LAST_DISPLAY_VALUE, lastDisplayValue)
         super.onSaveInstanceState(outState)
     }
 
@@ -89,6 +103,22 @@ class MainActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         allowManualInput = savedInstanceState.getBoolean(KEY_ALLOW_MANUAL_INPUT)
         enableAutoZoom = savedInstanceState.getBoolean(KEY_ENABLE_AUTO_ZOOM)
+        updateDisplayValueState(savedInstanceState.getString(KEY_LAST_DISPLAY_VALUE))
+    }
+
+    private fun copyDisplayValueToClipboard() {
+        val displayValue = lastDisplayValue ?: return
+        val clipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData =
+            ClipData.newPlainText(getString(R.string.clipboard_label_display_value), displayValue)
+        clipboardManager.setPrimaryClip(clipData)
+        Toast.makeText(this, R.string.display_value_copied, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateDisplayValueState(displayValue: String?) {
+        lastDisplayValue = displayValue?.takeIf { it.isNotBlank() }
+        copyDisplayValueButton?.visibility =
+            if (lastDisplayValue == null) View.GONE else View.VISIBLE
     }
 
     private fun getSuccessfulMessage(barcode: Barcode): String {
@@ -122,5 +152,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val KEY_ALLOW_MANUAL_INPUT = "allow_manual_input"
         private const val KEY_ENABLE_AUTO_ZOOM = "enable_auto_zoom"
+        private const val KEY_LAST_DISPLAY_VALUE = "last_display_value"
     }
 }
