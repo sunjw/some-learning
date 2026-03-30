@@ -95,11 +95,10 @@ class MainActivity : AppCompatActivity() {
         val barcodeValue =
             String.format(
                 Locale.US,
-                "Display Value: %s\nRaw Value: %s\nFormat: %s\nValue Type: %s",
-                barcode.displayValue,
-                barcode.rawValue,
+                "Format: %s\nValue Type: %s\nValue:\n%s\n",
                 barcode.format,
-                barcode.valueType
+                barcode.valueType,
+                barcode.displayValue
             )
         return getString(R.string.barcode_result, barcodeValue)
     }
