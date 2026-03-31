@@ -53,7 +53,7 @@ namespace RDPPassword
                 byte[] bytesEncrypted = ProtectedData.Protect(bytesDecrypted, null, DataProtectionScope.CurrentUser);
                 foreach (var byteValue in bytesEncrypted)
                 {
-                    strEncrypted += String.Format("{0:X2}", byteValue);
+                    strEncrypted += string.Format("{0:X2}", byteValue);
                 }
             }
             catch (Exception)
@@ -146,7 +146,7 @@ namespace RDPPassword
 
             // Change icon
             IconButtonCopy.Glyph = IconCheckMark;
-            DispatcherTimer timer = new DispatcherTimer
+            DispatcherTimer timer = new()
             {
                 Interval = TimeSpan.FromSeconds(3)
             };
