@@ -19,6 +19,8 @@ namespace RDPPassword
         private bool gridRootLoaded = false;
         private string currentFileVersion = "";
 
+        private bool UseBase64Mode => CheckBoxBase64.IsChecked == true;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -85,6 +87,34 @@ namespace RDPPassword
             return strDecrypted;
         }
 
+        private string EncryptPasswordBase64(string plainText)
+        {
+            try
+            {
+                byte[] bytesDecrypted = U16LE.GetBytes(plainText);
+                byte[] bytesEncrypted = ProtectedData.Protect(bytesDecrypted, null, DataProtectionScope.CurrentUser);
+                return Convert.ToBase64String(bytesEncrypted);
+            }
+            catch (Exception)
+            {
+                return "Encryption error.";
+            }
+        }
+
+        private string DecryptPasswordBase64(string encodedPassword)
+        {
+            try
+            {
+                byte[] bytesEncrypted = Convert.FromBase64String(encodedPassword);
+                byte[] bytesDecrypted = ProtectedData.Unprotect(bytesEncrypted, null, DataProtectionScope.CurrentUser);
+                return U16LE.GetString(bytesDecrypted).Replace("\0", string.Empty);
+            }
+            catch (Exception)
+            {
+                return "Decryption error.";
+            }
+        }
+
 
         private void GridRoot_Loaded(object sender, RoutedEventArgs e)
         {
@@ -132,7 +162,7 @@ namespace RDPPassword
         {
             string mainText = TextBoxMain.Text;
             mainText = mainText.Trim();
-            string encryptedText = EncryptPassword(mainText);
+            string encryptedText = UseBase64Mode ? EncryptPasswordBase64(mainText) : EncryptPassword(mainText);
             TextBoxMain.Text = encryptedText;
         }
 
@@ -140,7 +170,7 @@ namespace RDPPassword
         {
             string mainText = TextBoxMain.Text;
             mainText = mainText.Trim();
-            string decryptedText = DecryptPassword(mainText);
+            string decryptedText = UseBase64Mode ? DecryptPasswordBase64(mainText) : DecryptPassword(mainText);
             TextBoxMain.Text = decryptedText;
         }
     }

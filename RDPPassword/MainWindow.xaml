@@ -45,6 +45,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="96" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
@@ -59,9 +60,17 @@
                 Foreground="Gray"
                 Text="[Info]" />
 
+            <CheckBox
+                x:Name="CheckBoxBase64"
+                Grid.Column="2"
+                Margin="0,0,0,12"
+                VerticalAlignment="Bottom"
+                Content="Base64"
+                ToolTip="Base64" />
+
             <Button
                 x:Name="ButtonClear"
-                Grid.Column="2"
+                Grid.Column="3"
                 Margin="0,0,12,12"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
@@ -71,7 +80,7 @@
             </Button>
             <Button
                 x:Name="ButtonCopy"
-                Grid.Column="3"
+                Grid.Column="4"
                 Margin="0,0,12,12"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
@@ -81,7 +90,7 @@
             </Button>
             <Button
                 x:Name="ButtonEncrypt"
-                Grid.Column="4"
+                Grid.Column="5"
                 Margin="0,0,12,12"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
@@ -89,7 +98,7 @@
                 Content="Encrypt" />
             <Button
                 x:Name="ButtonDecrypt"
-                Grid.Column="5"
+                Grid.Column="6"
                 Margin="0,0,12,12"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
