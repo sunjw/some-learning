@@ -13,6 +13,8 @@ logger = log_util.logger
 SUPPORTED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.webp', '.tiff'}
 DEFAULT_SIMILARITY_THRESHOLD = 90
 HASH_SIZE = 8
+COLOR_HISTOGRAM_SIZE = 64
+COLOR_HISTOGRAM_BINS = 8
 DEFAULT_PROCESSES = cpu_count() or 1
 
 
@@ -36,34 +38,66 @@ def _difference_hash(image, hash_size=HASH_SIZE):
     return pixels[:, 1:] >= pixels[:, :-1]
 
 
+def _color_histogram(image):
+    image_rgb = image.convert('RGB').resize(
+        (COLOR_HISTOGRAM_SIZE, COLOR_HISTOGRAM_SIZE),
+        Image.Resampling.LANCZOS,
+    )
+    pixels = np.asarray(image_rgb, dtype=np.uint8)
+    quantized_pixels = pixels // (256 // COLOR_HISTOGRAM_BINS)
+    histogram_indices = (
+        quantized_pixels[:, :, 0] * COLOR_HISTOGRAM_BINS * COLOR_HISTOGRAM_BINS
+        + quantized_pixels[:, :, 1] * COLOR_HISTOGRAM_BINS
+        + quantized_pixels[:, :, 2]
+    )
+    histogram = np.bincount(
+        histogram_indices.reshape(-1),
+        minlength=COLOR_HISTOGRAM_BINS ** 3,
+    ).astype(np.float32)
+    return histogram / histogram.sum()
+
+
 def _hamming_distance(hash_a, hash_b):
     return int(np.count_nonzero(hash_a != hash_b))
+
+
+def _histogram_intersection(histogram_a, histogram_b):
+    return float(np.minimum(histogram_a, histogram_b).sum())
 
 
 def _compute_hashes(image_path):
     with Image.open(image_path) as image:
         ahash_a = _average_hash(image)
         dhash_a = _difference_hash(image)
+        color_histogram_a = _color_histogram(image)
 
-    return image_path, ahash_a, dhash_a
+    return image_path, ahash_a, dhash_a, color_histogram_a
 
 
 def _get_similarity(hash_entry_a, hash_entry_b):
-    image_path_a, ahash_a, dhash_a = hash_entry_a
-    image_path_b, ahash_b, dhash_b = hash_entry_b
+    image_path_a, ahash_a, dhash_a, color_histogram_a = hash_entry_a
+    image_path_b, ahash_b, dhash_b, color_histogram_b = hash_entry_b
 
     hash_bits = HASH_SIZE * HASH_SIZE
     ahash_distance = _hamming_distance(ahash_a, ahash_b)
     dhash_distance = _hamming_distance(dhash_a, dhash_b)
-    best_distance = min(ahash_distance, dhash_distance)
-    similarity = round((1 - best_distance / hash_bits) * 100)
+    ahash_similarity = (1 - ahash_distance / hash_bits) * 100
+    dhash_similarity = (1 - dhash_distance / hash_bits) * 100
+    hash_similarity = (ahash_similarity + dhash_similarity) / 2
+    color_similarity = _histogram_intersection(color_histogram_a, color_histogram_b) * 100
+    combined_similarity = hash_similarity * 0.6 + color_similarity * 0.4
+    similarity = round(min(
+        combined_similarity,
+        max(ahash_similarity, dhash_similarity) + 5,
+        color_similarity + 15,
+    ))
 
-    return similarity, ahash_distance, dhash_distance
+    return similarity, ahash_distance, dhash_distance, round(color_similarity)
 
 
 def _compare_image_pair(compare_args):
     hash_entry_a, hash_entry_b, similarity_threshold = compare_args
-    similarity, ahash_distance, dhash_distance = _get_similarity(hash_entry_a, hash_entry_b)
+    similarity, ahash_distance, dhash_distance, color_similarity = _get_similarity(hash_entry_a, hash_entry_b)
     if similarity < similarity_threshold:
         return None
 
@@ -73,6 +107,7 @@ def _compare_image_pair(compare_args):
         'similarity': similarity,
         'ahash_distance': ahash_distance,
         'dhash_distance': dhash_distance,
+        'color_similarity': color_similarity,
     }
 
 
@@ -131,9 +166,9 @@ def main():
 
     idx = 1
     for result_itr in result_list:
-        logger.info('%d: %d%% (aHash=%d, dHash=%d)\n%s\n%s\n------',
+        logger.info('%d: %d%% (aHash=%d, dHash=%d, color=%d%%)\n%s\n%s\n------',
                     idx, result_itr['similarity'],
-                    result_itr['ahash_distance'], result_itr['dhash_distance'],
+                    result_itr['ahash_distance'], result_itr['dhash_distance'], result_itr['color_similarity'],
                     result_itr['image_from'], result_itr['image_to'])
         idx = idx + 1
 
