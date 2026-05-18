@@ -10,8 +10,8 @@ import log_util
 
 logger = log_util.logger
 
-SUPPORTED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.webp', '.tiff'}
-DEFAULT_SIMILARITY_THRESHOLD = 90
+SUPPORTED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.webp'}
+DEFAULT_SIMILARITY_THRESHOLD = 85
 HASH_SIZE = 8
 COLOR_HISTOGRAM_SIZE = 64
 COLOR_HISTOGRAM_BINS = 8
