@@ -1,6 +1,7 @@
 import os
 import sys
 from itertools import combinations
+from multiprocessing import Pool, cpu_count
 
 import numpy as np
 from PIL import Image
@@ -12,6 +13,7 @@ logger = log_util.logger
 SUPPORTED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.webp', '.tiff'}
 DEFAULT_SIMILARITY_THRESHOLD = 90
 HASH_SIZE = 8
+DEFAULT_PROCESSES = cpu_count() or 1
 
 
 def _iter_image_paths(images_dir_path):
@@ -38,12 +40,17 @@ def _hamming_distance(hash_a, hash_b):
     return int(np.count_nonzero(hash_a != hash_b))
 
 
-def _get_similarity(image_path_a, image_path_b):
-    with Image.open(image_path_a) as image_a, Image.open(image_path_b) as image_b:
-        ahash_a = _average_hash(image_a)
-        ahash_b = _average_hash(image_b)
-        dhash_a = _difference_hash(image_a)
-        dhash_b = _difference_hash(image_b)
+def _compute_hashes(image_path):
+    with Image.open(image_path) as image:
+        ahash_a = _average_hash(image)
+        dhash_a = _difference_hash(image)
+
+    return image_path, ahash_a, dhash_a
+
+
+def _get_similarity(hash_entry_a, hash_entry_b):
+    image_path_a, ahash_a, dhash_a = hash_entry_a
+    image_path_b, ahash_b, dhash_b = hash_entry_b
 
     hash_bits = HASH_SIZE * HASH_SIZE
     ahash_distance = _hamming_distance(ahash_a, ahash_b)
@@ -54,19 +61,50 @@ def _get_similarity(image_path_a, image_path_b):
     return similarity, ahash_distance, dhash_distance
 
 
-def go(images_dir_path, similarity_threshold=DEFAULT_SIMILARITY_THRESHOLD):
+def _compare_image_pair(compare_args):
+    hash_entry_a, hash_entry_b, similarity_threshold = compare_args
+    similarity, ahash_distance, dhash_distance = _get_similarity(hash_entry_a, hash_entry_b)
+    if similarity < similarity_threshold:
+        return None
+
+    return {
+        'image_from': hash_entry_a[0],
+        'image_to': hash_entry_b[0],
+        'similarity': similarity,
+        'ahash_distance': ahash_distance,
+        'dhash_distance': dhash_distance,
+    }
+
+
+def _get_chunksize(task_count, process_count):
+    if task_count <= process_count:
+        return 1
+
+    return max(1, task_count // (process_count * 4))
+
+
+def go(images_dir_path, similarity_threshold=DEFAULT_SIMILARITY_THRESHOLD, process_count=DEFAULT_PROCESSES):
     image_paths = list(_iter_image_paths(images_dir_path))
+    if len(image_paths) < 2:
+        return []
+
     result_list = []
-    for image_from, image_to in combinations(image_paths, 2):
-        similarity, ahash_distance, dhash_distance = _get_similarity(image_from, image_to)
-        if similarity >= similarity_threshold:
-            result_list.append({
-                'image_from': image_from,
-                'image_to': image_to,
-                'similarity': similarity,
-                'ahash_distance': ahash_distance,
-                'dhash_distance': dhash_distance,
-            })
+    with Pool(processes=process_count) as pool:
+        hash_entries = pool.map(_compute_hashes, image_paths)
+
+        compare_args = (
+            (hash_entry_a, hash_entry_b, similarity_threshold)
+            for hash_entry_a, hash_entry_b in combinations(hash_entries, 2)
+        )
+        task_count = len(hash_entries) * (len(hash_entries) - 1) // 2
+        result_iter = pool.imap_unordered(
+            _compare_image_pair,
+            compare_args,
+            chunksize=_get_chunksize(task_count, process_count),
+        )
+        for result in result_iter:
+            if result is not None:
+                result_list.append(result)
 
     result_list_sorted = sorted(result_list, key=lambda d_val: d_val['similarity'], reverse=True)
     return result_list_sorted
