@@ -13,6 +13,7 @@ logger = log_util.logger
 
 # https://global.bing.com/HPImageArchive.aspx?format=js&idx=0&n=9&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160&setmkt=en-US
 BING_BASE_URL = 'https://global.bing.com'
+BING_IMG_BASE_URL = 'https://www.bing.com'
 BING_WALLPAPER_META_PATH = '/HPImageArchive.aspx?format=js&idx=0&n=9&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160&setmkt='
 # en-US, zh-CN, ja-JP, en-IN, pt-BR, fr-FR, de-DE, en-CA, en-GB, it-IT, es-ES, fr-CA
 BING_MKT = ['en-US']
@@ -93,7 +94,7 @@ def get_bing_wallpaper(mkt, download_count, over_ssh=False, ssh_cmd=None):
             return wallpaper_list
         image_name = image_name[idx + len(name_key):]
 
-        image_url = BING_BASE_URL + image_url + '&qlt=100'
+        image_url = BING_IMG_BASE_URL + image_url + '&qlt=100'
         image_data['url'] = image_url
         image_data['name'] = image_name
         # logger.info('image_data\n%s', comm_util.pprint_dict_to_string(image_data))
