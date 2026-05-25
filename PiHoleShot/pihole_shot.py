@@ -14,16 +14,37 @@ DEFAULT_SCREENSHOT_PREFIX = 'pihole'
 
 
 def get_chrome_path():
+    chrome_candidates = []
     if comm_util.is_linux():
         chrome_candidates = [
             '/usr/bin/google-chrome',
             '/usr/bin/google-chrome-stable',
+            '/usr/bin/google-chrome-beta',
             '/opt/google/chrome/chrome',
+            '/opt/google/chrome-beta/chrome',
             '/snap/bin/chromium',
         ]
-        for chrome_path in chrome_candidates:
-            if os.path.isfile(chrome_path):
-                return chrome_path
+    elif comm_util.is_macos():
+        chrome_candidates = [
+            '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+            '/Applications/Google Chrome Beta.app/Contents/MacOS/Google Chrome Beta',
+        ]
+    elif comm_util.is_windows():
+        local_app_data = os.environ.get('LOCALAPPDATA', '')
+        program_files = os.environ.get('PROGRAMFILES', 'C:/Program Files')
+        program_files_x86 = os.environ.get('PROGRAMFILES(X86)', 'C:/Program Files (x86)')
+        chrome_candidates = [
+            os.path.join(program_files, 'Google/Chrome/Application/chrome.exe'),
+            os.path.join(program_files, 'Google/Chrome Beta/Application/chrome.exe'),
+            os.path.join(program_files_x86, 'Google/Chrome/Application/chrome.exe'),
+            os.path.join(program_files_x86, 'Google/Chrome Beta/Application/chrome.exe'),
+            os.path.join(local_app_data, 'Google/Chrome/Application/chrome.exe'),
+            os.path.join(local_app_data, 'Google/Chrome Beta/Application/chrome.exe'),
+        ]
+
+    for chrome_path in chrome_candidates:
+        if os.path.isfile(chrome_path):
+            return chrome_path
 
     return None
 
