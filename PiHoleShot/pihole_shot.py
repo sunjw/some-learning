@@ -108,6 +108,26 @@ def login_if_needed(page, pihole_password):
     logger.info('Fill Pi-hole password.')
     password_input.fill(pihole_password)
 
+    remember_me_checkbox = page.locator('input[name="persistentlogin"], input#logincookie')
+    remember_me_label = page.locator('label:has-text("Remember me for 7 days")')
+    if remember_me_checkbox.count() > 0 and remember_me_checkbox.first.is_visible():
+        if not remember_me_checkbox.first.is_checked():
+            logger.info('Enable persistent login option.')
+            if remember_me_label.count() > 0 and remember_me_label.first.is_visible():
+                remember_me_label.first.click()
+
+            if not remember_me_checkbox.first.is_checked():
+                remember_me_checkbox.first.evaluate(
+                    """node => {
+                        node.checked = true;
+                        node.dispatchEvent(new Event('input', { bubbles: true }));
+                        node.dispatchEvent(new Event('change', { bubbles: true }));
+                    }"""
+                )
+
+            if not remember_me_checkbox.first.is_checked():
+                raise RuntimeError('Remember me checkbox was found but could not be enabled.')
+
     submit_selectors = [
         'button[type="submit"]',
         'input[type="submit"]',
