@@ -20,6 +20,7 @@ def get_chrome_path():
             '/usr/bin/google-chrome',
             '/usr/bin/google-chrome-stable',
             '/usr/bin/google-chrome-beta',
+            '/usr/lib/chromium/chromium',
             '/opt/google/chrome/chrome',
             '/opt/google/chrome-beta/chrome',
             '/snap/bin/chromium',
