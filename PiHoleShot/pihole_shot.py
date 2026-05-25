@@ -84,6 +84,21 @@ def is_login_page(page):
     return False
 
 
+def is_dashboard_page(page):
+    dashboard_selectors = [
+        'a[href="index.php"]:has-text("Dashboard")',
+        'text="Total queries"',
+        'text="Queries Blocked"',
+    ]
+    for selector in dashboard_selectors:
+        dashboard_element = page.locator(selector)
+        if dashboard_element.count() > 0 and dashboard_element.first.is_visible():
+            logger.info('Detected dashboard page by selector [%s]', selector)
+            return True
+
+    return False
+
+
 def login_if_needed(page, pihole_password):
     if not is_login_page(page):
         logger.info('Login page not detected, continue to screenshot.')
@@ -175,6 +190,12 @@ def capture_pihole_admin_page(pihole_url, pihole_password):
         page.goto(pihole_url, wait_until='domcontentloaded')
         wait_page_ready(page)
         login_if_needed(page, pihole_password)
+
+        if not is_dashboard_page(page):
+            raise RuntimeError(
+                'Pi-hole dashboard was not detected before screenshot. Current URL: [%s], title: [%s]'
+                % (page.url, page.title())
+            )
 
         logger.info('Save full page screenshot to [%s]', screenshot_path)
         page.screenshot(path=screenshot_path, full_page=True)
