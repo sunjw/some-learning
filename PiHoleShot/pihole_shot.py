@@ -15,7 +15,7 @@ DEFAULT_SCREENSHOT_PREFIX = 'pihole'
 
 def get_chrome_path():
     chrome_candidates = []
-    if comm_util.is_linux():
+    if comm_util.is_linux_sys():
         chrome_candidates = [
             '/usr/bin/google-chrome',
             '/usr/bin/google-chrome-stable',
@@ -25,12 +25,12 @@ def get_chrome_path():
             '/opt/google/chrome-beta/chrome',
             '/snap/bin/chromium',
         ]
-    elif comm_util.is_macos():
+    elif comm_util.is_macos_sys():
         chrome_candidates = [
             '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
             '/Applications/Google Chrome Beta.app/Contents/MacOS/Google Chrome Beta',
         ]
-    elif comm_util.is_windows():
+    elif comm_util.is_windows_sys():
         local_app_data = os.environ.get('LOCALAPPDATA', '')
         program_files = os.environ.get('PROGRAMFILES', 'C:/Program Files')
         program_files_x86 = os.environ.get('PROGRAMFILES(X86)', 'C:/Program Files (x86)')
