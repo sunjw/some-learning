@@ -55,7 +55,7 @@ def build_screenshot_path():
         logger.info('Make directory [%s]', shot_dir_path)
         os.makedirs(shot_dir_path, exist_ok=True)
 
-    timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    timestamp = datetime.datetime.now().strftime('%y%m%d%H%M%S')
     file_name = '%s-%s.png' % (DEFAULT_SCREENSHOT_PREFIX, timestamp)
     return os.path.join(shot_dir_path, file_name)
 
