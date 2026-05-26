@@ -57,7 +57,7 @@ def build_screenshot_path():
         os.makedirs(shot_dir_path, exist_ok=True)
 
     timestamp = datetime.datetime.now().strftime('%y%m%d%H%M%S')
-    file_name = '%s-%s.png' % (DEFAULT_SCREENSHOT_PREFIX, timestamp)
+    file_name = '%s-%s.jpg' % (DEFAULT_SCREENSHOT_PREFIX, timestamp)
     return os.path.join(shot_dir_path, file_name)
 
 
@@ -203,7 +203,7 @@ def capture_pihole_admin_page(pihole_url, pihole_password):
 
         screenshot_path = build_screenshot_path()
         logger.info('Save full page screenshot to [%s]', screenshot_path)
-        page.screenshot(path=screenshot_path, full_page=True)
+        page.screenshot(path=screenshot_path, type='jpeg', quality=99, full_page=True)
 
         context.close()
         browser.close()
