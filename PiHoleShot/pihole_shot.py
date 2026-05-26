@@ -198,6 +198,9 @@ def capture_pihole_admin_page(pihole_url, pihole_password):
                 % (page.url, page.title())
             )
 
+        logger.info('Dashboard detected, wait 2 seconds before screenshot.')
+        page.wait_for_timeout(2000)
+
         logger.info('Save full page screenshot to [%s]', screenshot_path)
         page.screenshot(path=screenshot_path, full_page=True)
 
