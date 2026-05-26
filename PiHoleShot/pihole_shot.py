@@ -172,7 +172,6 @@ def capture_pihole_admin_page(pihole_url, pihole_password):
     if chrome_path is None:
         raise RuntimeError('Google Chrome was not found on this machine.')
 
-    screenshot_path = build_screenshot_path()
     logger.info('Use Chrome [%s]', chrome_path)
     logger.info('Open [%s]', pihole_url)
 
@@ -184,7 +183,8 @@ def capture_pihole_admin_page(pihole_url, pihole_password):
         )
         context = browser.new_context(
             ignore_https_errors=True,
-            viewport={'width': 1440, 'height': 2000},
+            viewport={'width': 1600, 'height': 1000},
+            device_scale_factor=1.5,
         )
         page = context.new_page()
 
@@ -198,9 +198,10 @@ def capture_pihole_admin_page(pihole_url, pihole_password):
                 % (page.url, page.title())
             )
 
-        logger.info('Dashboard detected, wait 2 seconds before screenshot.')
-        page.wait_for_timeout(2000)
+        logger.info('Dashboard detected, wait 3s before screenshot.')
+        page.wait_for_timeout(3000)
 
+        screenshot_path = build_screenshot_path()
         logger.info('Save full page screenshot to [%s]', screenshot_path)
         page.screenshot(path=screenshot_path, full_page=True)
 
