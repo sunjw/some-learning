@@ -239,10 +239,12 @@ def capture_pihole_admin_page(pihole_url, pihole_password):
         screenshot_path = build_screenshot_path()
         logger.info('Save full page screenshot to [%s]', screenshot_path)
         page.screenshot(path=screenshot_path, full_page=True)
-        cleanup_old_screenshots()
+        logger.info('Screenshot saved: [%s]', screenshot_path)
 
         context.close()
         browser.close()
+
+    cleanup_old_screenshots()
 
     return screenshot_path
 
@@ -262,8 +264,7 @@ def main():
     pihole_url = args['pihole_url']
     pihole_password = args['pihole_password']
 
-    screenshot_path = capture_pihole_admin_page(pihole_url, pihole_password)
-    logger.info('Screenshot saved: [%s]', screenshot_path)
+    capture_pihole_admin_page(pihole_url, pihole_password)
 
 
 if __name__ == '__main__':
