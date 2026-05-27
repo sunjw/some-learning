@@ -11,6 +11,7 @@ logger = log_util.logger
 
 SHOT_DIR = 'shot'
 DEFAULT_SCREENSHOT_PREFIX = 'pihole'
+MAX_SCREENSHOT_FILES = 12
 
 
 def get_chrome_path():
@@ -59,6 +60,36 @@ def build_screenshot_path():
     timestamp = datetime.datetime.now().strftime('%y%m%d%H%M%S')
     file_name = '%s-%s.png' % (DEFAULT_SCREENSHOT_PREFIX, timestamp)
     return os.path.join(shot_dir_path, file_name)
+
+
+def cleanup_old_screenshots(limit=MAX_SCREENSHOT_FILES):
+    shot_dir_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), SHOT_DIR)
+    if not os.path.isdir(shot_dir_path):
+        return
+
+    file_prefix = '%s-' % DEFAULT_SCREENSHOT_PREFIX
+    screenshot_files = []
+    for file_name in os.listdir(shot_dir_path):
+        if not file_name.startswith(file_prefix) or not file_name.endswith('.png'):
+            continue
+
+        timestamp = file_name[len(file_prefix):-4]
+        if len(timestamp) != 12 or not timestamp.isdigit():
+            logger.debug('Skip cleanup for file with unexpected name [%s]', file_name)
+            continue
+
+        screenshot_files.append(file_name)
+
+    if len(screenshot_files) <= limit:
+        return
+
+    screenshot_files.sort(reverse=True)
+    files_to_delete = screenshot_files[limit:]
+    for file_name in files_to_delete:
+        file_path = os.path.join(shot_dir_path, file_name)
+        if os.path.isfile(file_path):
+            logger.info('Remove old screenshot [%s]', file_path)
+            os.remove(file_path)
 
 
 def wait_page_ready(page):
@@ -204,6 +235,7 @@ def capture_pihole_admin_page(pihole_url, pihole_password):
         screenshot_path = build_screenshot_path()
         logger.info('Save full page screenshot to [%s]', screenshot_path)
         page.screenshot(path=screenshot_path, full_page=True)
+        cleanup_old_screenshots()
 
         context.close()
         browser.close()
