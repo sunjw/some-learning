@@ -9,7 +9,9 @@ from playwright.sync_api import sync_playwright
 
 logger = log_util.logger
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SHOT_DIR = 'shot'
+SHOT_DIR_PATH = os.path.join(BASE_DIR, SHOT_DIR)
 DEFAULT_SCREENSHOT_PREFIX = 'pihole'
 MAX_SCREENSHOT_FILES = 12
 
@@ -52,24 +54,24 @@ def get_chrome_path():
 
 
 def build_screenshot_path():
-    shot_dir_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), SHOT_DIR)
-    if not os.path.isdir(shot_dir_path):
-        logger.info('Make directory [%s]', shot_dir_path)
-        os.makedirs(shot_dir_path, exist_ok=True)
-
     timestamp = datetime.datetime.now().strftime('%y%m%d%H%M%S')
     file_name = '%s-%s.png' % (DEFAULT_SCREENSHOT_PREFIX, timestamp)
-    return os.path.join(shot_dir_path, file_name)
+    return os.path.join(SHOT_DIR_PATH, file_name)
+
+
+def prepare_runtime_environment():
+    if not os.path.isdir(SHOT_DIR_PATH):
+        logger.info('Make directory [%s]', SHOT_DIR_PATH)
+        os.makedirs(SHOT_DIR_PATH, exist_ok=True)
 
 
 def cleanup_old_screenshots(limit=MAX_SCREENSHOT_FILES):
-    shot_dir_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), SHOT_DIR)
-    if not os.path.isdir(shot_dir_path):
+    if not os.path.isdir(SHOT_DIR_PATH):
         return
 
     file_prefix = '%s-' % DEFAULT_SCREENSHOT_PREFIX
     screenshot_files = []
-    for file_name in os.listdir(shot_dir_path):
+    for file_name in os.listdir(SHOT_DIR_PATH):
         if not file_name.startswith(file_prefix) or not file_name.endswith('.png'):
             continue
 
@@ -86,7 +88,7 @@ def cleanup_old_screenshots(limit=MAX_SCREENSHOT_FILES):
     screenshot_files.sort(reverse=True)
     files_to_delete = screenshot_files[limit:]
     for file_name in files_to_delete:
-        file_path = os.path.join(shot_dir_path, file_name)
+        file_path = os.path.join(SHOT_DIR_PATH, file_name)
         if os.path.isfile(file_path):
             logger.info('Remove old screenshot [%s]', file_path)
             os.remove(file_path)
@@ -199,6 +201,8 @@ def login_if_needed(page, pihole_password):
 
 
 def capture_pihole_admin_page(pihole_url, pihole_password):
+    prepare_runtime_environment()
+
     chrome_path = get_chrome_path()
     if chrome_path is None:
         raise RuntimeError('Google Chrome was not found on this machine.')
