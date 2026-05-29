@@ -185,11 +185,13 @@ def download_wallpaper_by_list(wallpaper_list, need_promote):
             continue
 
         logger.info('Download [%s]', image_url)
+        image_resp_ok = True
         with open(image_path, 'wb') as handle:
             response = requests.get(image_url, stream=True)
 
             if not response.ok:
                 logger.error('%s', response)
+                image_resp_ok = False
 
             for block in response.iter_content(1024):
                 if not block:
@@ -198,8 +200,12 @@ def download_wallpaper_by_list(wallpaper_list, need_promote):
                 handle.write(block)
             logger.info('Download finished.')
 
-        image_file_size = os.path.getsize(image_path)
-        logger.info('[%s], image_file_size=%d', image_name, image_file_size)
+        if image_resp_ok:
+            image_file_size = os.path.getsize(image_path)
+            logger.info('[%s], image_file_size=%d', image_name, image_file_size)
+        else:
+            logger.error('[%s], failed and removed.', image_name)
+            os.remove(image_path)
 
         downloaded_file_count = downloaded_file_count + 1
 
