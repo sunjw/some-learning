@@ -149,7 +149,7 @@ def main():
     logger.info('SimilarImagesSearch go!')
 
     if len(sys.argv) not in (2, 3):
-        logger.error('Usage: python3 similar_images_search.py [images directory] [similarity threshold, default=90]')
+        logger.error('Usage: python3 similar_images_search.py [images directory] [similarity threshold, default=%d]', DEFAULT_SIMILARITY_THRESHOLD)
         return
 
     images_dir_path = os.path.realpath(sys.argv[1])
