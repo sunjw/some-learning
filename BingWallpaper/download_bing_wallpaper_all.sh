@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## declare an array variable
-declare -a mkt_arr=("en-us" "zh-cn" "ja-jp" "fr-fr" "it-it" "en-gb" "es-es" "de-de" "pt-br" "en-in")
+declare -a mkt_arr=("en-us" "zh-cn" "ja-jp" "fr-fr" "it-it" "en-gb" "es-es" "de-de" "pt-br" "en-in" "en-ca")
 no_promote_string="--no-promote"
 
 cur_dir="$PWD"
