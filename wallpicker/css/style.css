@@ -70,7 +70,10 @@ body {
     /* backdrop-filter: saturate(200%) blur(40px); */
     /* box-shadow: 0 -2px 8px rgba(0,0,0,0.2); */
     /* transition: box-shadow 0.5s; */
-    background: url("../assets/toolbarback.png") repeat-x;
+    /* background: url("../assets/toolbarback.png") repeat-x; */
+    background: linear-gradient(to top, transparent, white);
+    mask-image: linear-gradient(white 50%, transparent);
+    backdrop-filter: blur(2px);
 }
 /* #divToolbarWrapper.toolbarScrolled {
     box-shadow: 0 -2px 20px rgba(0,0,0,0.3);
@@ -106,6 +109,7 @@ body {
     width: 200px;
     padding-right: 24px;
     border-color: var(--color-light-gray);
+    background-color: white;
 }
 #divToolbarWrapper #divFilterBlock #inputFilter:focus,
 #divToolbarWrapper #divFilterBlock #inputFilter.focus {
