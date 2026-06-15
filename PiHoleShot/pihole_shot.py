@@ -102,6 +102,66 @@ def wait_page_ready(page):
     page.wait_for_timeout(1000)
 
 
+def wait_dashboard_charts_ready(page):
+    try:
+        page.wait_for_function(
+            """
+            () => {
+                const visible = el => {
+                    if (!el) {
+                        return false;
+                    }
+                    const style = window.getComputedStyle(el);
+                    return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+                };
+                const chartReady = chart => chart && chart.data && chart.data.labels && chart.data.labels.length > 0;
+                const timelineOverlay = document.querySelector('#queries-over-time .overlay');
+                const clientsOverlay = document.querySelector('#clients .overlay');
+                return !visible(timelineOverlay)
+                    && !visible(clientsOverlay)
+                    && chartReady(window.timeLineChart)
+                    && (!document.getElementById('clientsChart') || chartReady(window.clientsChart));
+            }
+            """,
+            timeout=10000,
+        )
+    except PlaywrightTimeoutError:
+        logger.debug('Wait for dashboard charts timed out, continue with current chart state.')
+
+    page.evaluate(
+        """
+        async () => {
+            const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
+            const refreshChart = chart => {
+                if (!chart) {
+                    return;
+                }
+                if (typeof chart.resize === 'function') {
+                    chart.resize();
+                }
+                if (typeof chart.update === 'function') {
+                    try {
+                        chart.update('none');
+                    } catch (error) {
+                        try {
+                            chart.update(0);
+                        } catch (error) {
+                            chart.update();
+                        }
+                    }
+                }
+            };
+
+            window.dispatchEvent(new Event('resize'));
+            await nextFrame();
+            [window.timeLineChart, window.clientsChart].forEach(refreshChart);
+            await nextFrame();
+            await nextFrame();
+        }
+        """
+    )
+
+
 def is_login_page(page):
     password_selectors = [
         'input[type="password"]',
@@ -235,6 +295,7 @@ def capture_pihole_admin_page(pihole_url, pihole_password):
 
         logger.info('Dashboard detected, wait 3s before screenshot.')
         page.wait_for_timeout(3000)
+        wait_dashboard_charts_ready(page)
 
         screenshot_path = build_screenshot_path()
         logger.info('Save full page screenshot to [%s]', screenshot_path)
