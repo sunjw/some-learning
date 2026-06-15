@@ -169,7 +169,7 @@ class WallpickerPage {
 
         let onInitWorker = function (result) {
             if (result.err) {
-                utils.log('initWorker.onInitWorker, init table error, err=\n%s', err.message);
+                utils.log('initWorker.onInitWorker, init table error, err=\n%s', result.err.message);
             } else {
                 utils.log('initWorker.onInitWorker, create table success.');
             }
@@ -203,14 +203,14 @@ class WallpickerPage {
         };
         let onUpdateImageThumbnailDb = function (result) {
             if (result.err) {
-                utils.log('initWorker.onUpdateImageThumbnailDb, error, err=\n%s', err.message);
+                utils.log('initWorker.onUpdateImageThumbnailDb, error, err=\n%s', result.err);
             } else {
                 // utils.log('initWorker.onUpdateImageThumbnailDb, create table success.');
             }
         };
         let onClearImageThumbnail = function (result) {
             if (result.err) {
-                utils.log('initWorker.onClearImageThumbnail, error, err=\n%s', err.message);
+                utils.log('initWorker.onClearImageThumbnail, error, err=\n%s', result.err);
             } else {
                 utils.log('initWorker.onClearImageThumbnail, finished, dbChanges=%d, imageThumbDeleted=%d',
                     result.dbChanges, result.imageThumbDeleted);
