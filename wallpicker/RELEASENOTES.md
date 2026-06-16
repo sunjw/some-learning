@@ -6,4 +6,4 @@
   - Updated various npm packages for security and stability.
 - **Fixes & tweaks:**
   - Fixed Electron console warnings.
-  - Tweaked toolbar styles for better layout.
+  - Tweaked toolbar styles.
