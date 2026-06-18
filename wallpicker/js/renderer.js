@@ -323,7 +323,7 @@ class WallpickerPage {
         this.inputFilter = $('<input/>')
             .attr({
                 'id': 'inputFilter',
-                'typ': 'text',
+                'type': 'text',
                 'placeholder': 'filter path...',
                 'aria-label': '.form-control-sm'
             })
@@ -590,6 +590,10 @@ class WallpickerPage {
             utils.log('window.keydown, key=[%s]', e.key);
             if (e.key == 'ArrowUp' || e.key == 'ArrowDown' ||
                 e.key == 'ArrowLeft' || e.key == 'ArrowRight') {
+                let target = e.target;
+                if (target && (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA' || target.isContentEditable)) {
+                    return;
+                }
                 // arrow key
                 that.onArrowKeydown(e);
             }
