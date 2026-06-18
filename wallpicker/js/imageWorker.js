@@ -129,7 +129,7 @@ async function processFile(filePath, stat) {
         atime: stat.atime.getTime(),
         mtime: stat.mtime.getTime(),
         ctime: stat.ctime.getTime(),
-        iccProfileName: null
+        iccProfileName: ''
     }
 
     let imgMetaCombo = fileObj.path + '|' + fileObj.size + '|' + fileObj.mtime;

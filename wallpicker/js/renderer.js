@@ -125,6 +125,7 @@ class WallpickerPage {
         this.iSizeIcon = null;
         this.divImageSizeInfo = null;
         this.divFileSizeInfo = null;
+        this.divIccInfo = null;
         this.divImagePath = null;
         this.divToastWrapperLeft = null;
         this.divToastWrapperRight = null;
@@ -450,9 +451,13 @@ class WallpickerPage {
         divImageSizeIcon.append(this.iSizeIcon);
         this.divImageSizeInfo = $('<div/>').attr('id', 'divImageSizeInfo');
         this.divFileSizeInfo = $('<div/>').attr('id', 'divFileSizeInfo');
+        this.divIccInfo = $('<div/>')
+            .attr('id', 'divIccInfo')
+            .addClass('text-truncate');
         divImageMetaInfo.append(divImageSizeIcon);
         divImageMetaInfo.append(this.divImageSizeInfo);
         divImageMetaInfo.append(this.divFileSizeInfo);
+        divImageMetaInfo.append(this.divIccInfo);
         divStatusBarLeft.append(divImageMetaInfo);
 
         // right
@@ -943,12 +948,14 @@ class WallpickerPage {
                 this.iSizeIcon.show();
                 this.divImageSizeInfo.html(fileObj.width + ' x ' + fileObj.height);
                 this.divFileSizeInfo.html(utils.convertSizeToShortSize(fileObj.size));
+                this.divIccInfo.html(utils.escapeHtml(fileObj.iccProfileName));
                 this.divImagePath.html(utils.escapeHtml(imageSrcPath));
             }
         } else {
             this.iSizeIcon.hide();
             this.divImageSizeInfo.html('');
             this.divFileSizeInfo.html('');
+            this.divIccInfo.html('');
             this.divImagePath.html('');
         }
     }

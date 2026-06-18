@@ -246,6 +246,9 @@ body {
 #divStatusBarWrapper #divImageMetaInfo #divFileSizeInfo {
     width: 66px;
 }
+#divStatusBarWrapper #divImageMetaInfo #divIccInfo {
+    width: 220px;
+}
 /* Statusbar */
 
 /* Others */
