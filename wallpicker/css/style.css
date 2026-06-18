@@ -247,7 +247,7 @@ body {
     width: 66px;
 }
 #divStatusBarWrapper #divImageMetaInfo #divIccInfo {
-    width: 220px;
+    max-width: 220px;
 }
 /* Statusbar */
 
