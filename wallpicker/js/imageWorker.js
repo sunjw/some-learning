@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
+const { parse: parseIcc } = require('icc');
 const probeImageSize = require('probe-image-size');
 const sharp = require('sharp');
 
@@ -40,47 +41,41 @@ function initWorker(options) {
     });
 }
 
-function scanImageDir(options) {
+async function scanImageDir(options) {
     scanImageOptions = options;
     scanImageList = [];
-    scanDir(scanImageOptions.imageDirPath, 0);
-}
 
-function scanDir(dirPath, deep) {
-    utils.log('scanDir, dirPath=[%s], deep=%d', dirPath, deep);
-    readdirEx(dirPath, (deep != 0), (err, files) => {
-        let result = {
-            'messageId': 'scanImageDir'
-        };
-        if (err) {
-            result.err = err;
-            return;
-        }
-
-        for (let fileName of files) {
-            let filePath = path.join(dirPath, fileName);
-            let stat = fs.lstatSync(filePath);
-            if (stat.isDirectory() && !stat.isSymbolicLink()) {
-                // dir
-                scanDir(filePath, deep + 1);
-            } else if (stat.isFile()) {
-                // file
-                // utils.log('scanDir, found filePath=[%s]', filePath);
-                processFile(filePath, stat);
-            } else {
-                utils.log('scanDir, ignore filePath=[%s]', filePath);
-            }
-        }
-
-        if (deep > 0) {
-            return;
-        }
-
-        // top level
+    let result = {
+        'messageId': 'scanImageDir'
+    };
+    try {
+        await scanDir(scanImageOptions.imageDirPath, 0);
         utils.log('scanDir, finished, found %d images.', scanImageList.length);
         result.scanImageList = scanImageList;
-        postMessage(result);
-    });
+    } catch (err) {
+        result.err = err;
+    }
+    postMessage(result);
+}
+
+async function scanDir(dirPath, deep) {
+    utils.log('scanDir, dirPath=[%s], deep=%d', dirPath, deep);
+    let files = await readdirExAsync(dirPath, (deep != 0));
+
+    for (let fileName of files) {
+        let filePath = path.join(dirPath, fileName);
+        let stat = fs.lstatSync(filePath);
+        if (stat.isDirectory() && !stat.isSymbolicLink()) {
+            // dir
+            await scanDir(filePath, deep + 1);
+        } else if (stat.isFile()) {
+            // file
+            // utils.log('scanDir, found filePath=[%s]', filePath);
+            await processFile(filePath, stat);
+        } else {
+            utils.log('scanDir, ignore filePath=[%s]', filePath);
+        }
+    }
 }
 
 function readdirEx(dirPath, isSync, callback) {
@@ -101,7 +96,19 @@ function readdirEx(dirPath, isSync, callback) {
     }
 }
 
-function processFile(filePath, stat) {
+function readdirExAsync(dirPath, isSync) {
+    return new Promise((resolve, reject) => {
+        readdirEx(dirPath, isSync, (err, files) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(files);
+        });
+    });
+}
+
+async function processFile(filePath, stat) {
     let basename = path.basename(filePath);
     let extname = path.extname(filePath);
     if (extname.startsWith('.')) {
@@ -121,7 +128,8 @@ function processFile(filePath, stat) {
         size: stat.size,
         atime: stat.atime.getTime(),
         mtime: stat.mtime.getTime(),
-        ctime: stat.ctime.getTime()
+        ctime: stat.ctime.getTime(),
+        iccProfileName: null
     }
 
     let imgMetaCombo = fileObj.path + '|' + fileObj.size + '|' + fileObj.mtime;
@@ -141,6 +149,18 @@ function processFile(filePath, stat) {
     }
     fileObj.width = imgDim.width;
     fileObj.height = imgDim.height;
+
+    try {
+        let metadata = await sharp(filePath).metadata();
+        if (metadata.icc) {
+            let profile = parseIcc(metadata.icc);
+            if (profile.description) {
+                fileObj.iccProfileName = profile.description;
+            }
+        }
+    } catch (err) {
+        utils.log('processFile, read icc profile failed, filePath=[%s], err=\n%s', filePath, err);
+    }
 
     fileObj.thumbPath = null;
     let imageThumbPath = generateImageThumbnailPath(fileObj);
@@ -328,5 +348,10 @@ onmessage = function (e) {
         utils.log('imageWorker.onmessage, unknown messageId=[%s]', messageData.messageId);
         return;
     }
-    messageHandler(messageData);
+    let result = messageHandler(messageData);
+    if (result && typeof result.catch === 'function') {
+        result.catch((err) => {
+            utils.log('imageWorker.onmessage, handler error, messageId=[%s], err=\n%s', messageData.messageId, err);
+        });
+    }
 };
