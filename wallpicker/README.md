@@ -13,7 +13,8 @@ Windows and macOS distribution packages are in [dist](dist) directory.
 
 ## Update icons
 ```
-./node_modules/.bin/electron-icon-builder --input="./icons/some.png" --output="./"
+# with @sunjw8888/electron-icon-builder
+node index.js --input="./icons/some.png" --output="./"
 ```
 
 ## Pack
