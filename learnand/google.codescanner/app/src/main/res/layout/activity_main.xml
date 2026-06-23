@@ -1,67 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp">
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/allow_manual_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:onClick="onAllowManualInputCheckboxClicked"
-        android:text="@string/allow_manual_input"
-        android:visibility="gone" />
-
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/enable_auto_zoom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:checked="true"
-        android:onClick="onEnableAutoZoomCheckboxClicked"
-        android:text="@string/enable_auto_zoom" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/scan_barcode_button"
-        style="@style/Widget.Material3.Button.ElevatedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="6dp"
-        android:onClick="onScanButtonClicked"
-        android:text="@string/scan_barcode_button"
-        app:tint="?attr/colorPrimary" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/barcode_result_view"
+    <LinearLayout
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="20dp"
-        android:text="" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/copy_display_value_button"
-        style="@style/Widget.Material3.Button.ElevatedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/copy_display_value_button"
-        android:visibility="gone"
-        app:tint="?attr/colorPrimary" />
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/allow_manual_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:onClick="onAllowManualInputCheckboxClicked"
+            android:text="@string/allow_manual_input"
+            android:visibility="gone" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/enable_auto_zoom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:checked="true"
+            android:onClick="onEnableAutoZoomCheckboxClicked"
+            android:text="@string/enable_auto_zoom" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/scan_barcode_button"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="6dp"
+            android:onClick="onScanButtonClicked"
+            android:text="@string/scan_barcode_button"
+            app:tint="?attr/colorPrimary" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/barcode_result_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="20dp"
+            android:text="" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/copy_display_value_button"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/copy_display_value_button"
+            android:visibility="gone"
+            app:tint="?attr/colorPrimary" />
+    </LinearLayout>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/version_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="20dp"
+        android:layout_gravity="bottom|end"
         android:alpha="0.75"
         android:textAppearance="?attr/textAppearanceBodySmall"
         android:textColor="?attr/colorOnSurfaceVariant" />
-</LinearLayout>
+</FrameLayout>
