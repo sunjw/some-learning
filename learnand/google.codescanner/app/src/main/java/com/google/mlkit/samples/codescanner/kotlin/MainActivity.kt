@@ -26,6 +26,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.mlkit.common.MlKitException
+import com.google.mlkit.samples.codescanner.BuildConfig
 import com.google.mlkit.samples.codescanner.R
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
@@ -55,6 +56,8 @@ class MainActivity : AppCompatActivity() {
         copyDisplayValueButton = findViewById<View>(R.id.copy_display_value_button).apply {
             setOnClickListener { copyDisplayValueToClipboard() }
         }
+        findViewById<TextView>(R.id.version_view).text =
+            getString(R.string.version_view_format, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
         allowManualInput = findViewById<CheckBox>(R.id.allow_manual_input).isChecked
         enableAutoZoom = findViewById<CheckBox>(R.id.enable_auto_zoom).isChecked
     }
