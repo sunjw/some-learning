@@ -1,6 +1,6 @@
-# wallpicker 26.7.15 Release Notes
+# wallpaper-picker 26.7.15 Release Notes
 
-## Changes in wallpicker 26.7.15
+## Changes in wallpaper-picker 26.7.15
 - **New feature:**
   - Parse and show image **ICC profile name**.
 - **Fixes & tweaks:**
