@@ -1253,18 +1253,20 @@ class WallpickerPage {
         utils.log('trashSelectedImageDo, imagePath=[%s]', imagePath);
         remote.shell.trashItem(imagePath).then(() => {
             utils.log('trashSelectedImageDo, success, imagePath=[%s]', imagePath);
-            // remove from curImageList
-            this.deleteFileObjectByImagePath(imagePath);
-            // clear selection if it points to the removed image
-            if (this.selectedImageBlock &&
-                this.selectedImageBlock.attr(this.TAG_IMAGE_PATH) == imagePath) {
-                this.clearSelection();
-            }
-            // remove imageBlock from DOM
-            let imageBlock = this.getImageBlockByImagePath(imagePath);
-            if (imageBlock) {
-                imageBlock.remove();
-            }
+            setTimeout(() => {
+                // remove from curImageList
+                this.deleteFileObjectByImagePath(imagePath);
+                // clear selection if it points to the removed image
+                if (this.selectedImageBlock &&
+                    this.selectedImageBlock.attr(this.TAG_IMAGE_PATH) == imagePath) {
+                    this.clearSelection();
+                }
+                // remove imageBlock from DOM
+                let imageBlock = this.getImageBlockByImagePath(imagePath);
+                if (imageBlock) {
+                    imageBlock.remove();
+                }
+            }, 1000);
         }).catch((err) => {
             utils.log('trashSelectedImageDo failed, err=%s', err);
         });
