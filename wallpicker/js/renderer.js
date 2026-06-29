@@ -115,6 +115,7 @@ class WallpickerPage {
         this.btnToolbarRandom = null;
         this.btnToolbarSetWallpaper = null;
         this.btnToolbarShowFile = null;
+        this.btnToolbarTrashFile = null;
         this.btnToolbarShowSelected = null;
         this.btnToolbarSort = null;
         this.divContentWrapper = null;
@@ -382,6 +383,12 @@ class WallpickerPage {
             that.openImageInDirectory();
         });
         this.divToolsWrapper.append(this.btnToolbarShowFile);
+
+        this.btnToolbarTrashFile = this.generateButton('btnToolbarTrashFile', 'bi-trash3', 'Trash file');
+        this.autoBlurButtonClick(this.btnToolbarTrashFile, function () {
+            utils.log('btnToolbarTrashFile.click');
+        });
+        this.divToolsWrapper.append(this.btnToolbarTrashFile);
 
         this.btnToolbarShowSelected = this.generateButton('btnToolbarShowSelected', 'bi-fullscreen-exit', 'Show selected image');
         this.autoBlurButtonClick(this.btnToolbarShowSelected, function () {
@@ -942,11 +949,13 @@ class WallpickerPage {
             // selected
             this.setControlDisabled(this.btnToolbarSetWallpaper, false);
             this.setControlDisabled(this.btnToolbarShowFile, false);
+            this.setControlDisabled(this.btnToolbarTrashFile, false);
             this.setControlDisabled(this.btnToolbarShowSelected, false);
         } else {
             // no selection
             this.setControlDisabled(this.btnToolbarSetWallpaper, true);
             this.setControlDisabled(this.btnToolbarShowFile, true);
+            this.setControlDisabled(this.btnToolbarTrashFile, true);
             this.setControlDisabled(this.btnToolbarShowSelected, true);
         }
         this.setControlDisabled(this.inputFilter, false);
