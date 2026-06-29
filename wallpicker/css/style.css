@@ -173,9 +173,13 @@ body {
     overflow: hidden;
     padding: 10px 10px;
     margin: 5px 5px;
+    transition: filter 0.3s ease;
 }
 #divImageList .imageBlock.filterOut {
     display: none;
+}
+#divImageList .imageBlock.imageTrashing {
+    filter: blur(4px);
 }
 #divImageList .imageBlock .imageWrapper {
     height: 160px;

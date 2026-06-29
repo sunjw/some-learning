@@ -66,6 +66,7 @@ class WallpickerPage {
         this.TIP_READ_DIR_ERROR = 'Read directory error.';
 
         this.CLASS_IMAGE_SELECTED = 'imageSelected';
+        this.CLASS_IMAGE_TRASHING = 'imageTrashing';
         this.CLASS_FILETER_OUT = 'filterOut';
     }
 
@@ -1238,18 +1239,21 @@ class WallpickerPage {
         if (!imagePath) {
             return;
         }
+        let imageBlock = this.selectedImageBlock;
         utils.log('trashSelectedImage, imagePath=[%s]', imagePath);
+        imageBlock.addClass(this.CLASS_IMAGE_TRASHING);
         this.showToast('Trash "<span class="highlight">' + utils.escapeHtml(imagePath) + '</span>."',
             'right', true, (cancelOper) => {
             if (!cancelOper) {
-                this.trashSelectedImageDo(imagePath);
+                this.trashSelectedImageDo(imagePath, imageBlock);
             } else {
                 utils.log('trashSelectedImage, cancelled, not to trash.');
+                imageBlock.removeClass(this.CLASS_IMAGE_TRASHING);
             }
         });
     }
 
-    trashSelectedImageDo(imagePath) {
+    trashSelectedImageDo(imagePath, imageBlock) {
         utils.log('trashSelectedImageDo, imagePath=[%s]', imagePath);
         remote.shell.trashItem(imagePath).then(() => {
             utils.log('trashSelectedImageDo, success, imagePath=[%s]', imagePath);
@@ -1262,13 +1266,15 @@ class WallpickerPage {
                     this.clearSelection();
                 }
                 // remove imageBlock from DOM
-                let imageBlock = this.getImageBlockByImagePath(imagePath);
                 if (imageBlock) {
                     imageBlock.remove();
                 }
             }, 1000);
         }).catch((err) => {
             utils.log('trashSelectedImageDo failed, err=%s', err);
+            if (imageBlock) {
+                imageBlock.removeClass(this.CLASS_IMAGE_TRASHING);
+            }
         });
     }
 
