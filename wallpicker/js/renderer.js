@@ -1229,10 +1229,12 @@ class WallpickerPage {
             return;
         }
         utils.log('trashSelectedImage, imagePath=[%s]', imagePath);
-        this.showToast('Trash "<span class="highlight">' + utils.escapeHtml(imagePath) + '</span>"',
+        this.showToast('Trash "<span class="highlight">' + utils.escapeHtml(imagePath) + '</span>."',
             'right', true, (cancelOper) => {
             if (!cancelOper) {
                 this.trashSelectedImageDo(imagePath);
+            } else {
+                utils.log('trashSelectedImage, cancelled, not to trash.');
             }
         });
     }
