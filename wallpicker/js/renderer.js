@@ -387,6 +387,7 @@ class WallpickerPage {
         this.btnToolbarTrashFile = this.generateButton('btnToolbarTrashFile', 'bi-trash3', 'Trash file');
         this.autoBlurButtonClick(this.btnToolbarTrashFile, function () {
             utils.log('btnToolbarTrashFile.click');
+            that.trashSelectedImage();
         });
         this.divToolsWrapper.append(this.btnToolbarTrashFile);
 
@@ -1219,6 +1220,32 @@ class WallpickerPage {
         });
     }
 
+    trashSelectedImage() {
+        if (!this.selectedImageBlock) {
+            return;
+        }
+        let imagePath = this.selectedImageBlock.attr(this.TAG_IMAGE_PATH);
+        if (!imagePath) {
+            return;
+        }
+        utils.log('trashSelectedImage, imagePath=[%s]', imagePath);
+        this.showToast('Trash "<span class="highlight">' + utils.escapeHtml(imagePath) + '</span>"',
+            'right', true, (cancelOper) => {
+            if (!cancelOper) {
+                this.trashSelectedImageDo(imagePath);
+            }
+        });
+    }
+
+    trashSelectedImageDo(imagePath) {
+        utils.log('trashSelectedImageDo, imagePath=[%s]', imagePath);
+        remote.shell.trashItem(imagePath).then(() => {
+            utils.log('trashSelectedImageDo, success, imagePath=[%s]', imagePath);
+        }).catch((err) => {
+            utils.log('trashSelectedImageDo failed, err=%s', err);
+        });
+    }
+
     scrollToImageBlockDom(imageBlockDom, scrollBlock = 'center') {
         imageBlockDom.scrollIntoView({
             behavior: 'smooth',
@@ -1241,7 +1268,7 @@ class WallpickerPage {
         this.scrollToImageBlockDom(imageBlockDom, scrollBlock);
     }
 
-    showToast(message, position, autoHide) {
+    showToast(message, position, autoHide, hideCallback) {
         utils.log('showToast, position=%s, autoHide=%s', position, autoHide);
 
         let divToast = $('<div/>').attr({
@@ -1276,12 +1303,21 @@ class WallpickerPage {
             this.divToastWrapperRight.append(divToast);
         }
 
+        // cancelOper: true if user explicitly closed via X
+        let cancelOper = false;
+        buttonToastClose.on('click', function () {
+            cancelOper = true;
+        });
+
         divToast.on('hidden.bs.toast', function () {
             // remove self
             utils.log('showToast, clear.');
             setTimeout(() => {
                 divToast.remove();
             }, 2000);
+            if (hideCallback) {
+                hideCallback(cancelOper);
+            }
         });
 
         divToast.toast('show');
