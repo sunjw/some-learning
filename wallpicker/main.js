@@ -10,7 +10,7 @@ const windowStateKeeper = require('electron-window-state')
 const utils = require('./js/utils')
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog, ipcMain } = require('electron')
+const { app, BrowserWindow, clipboard, dialog, ipcMain } = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -114,6 +114,10 @@ ipcMain.on('dialog', (event, arg) => {
     title: arg.title,
     message: arg.message
   })
+})
+
+ipcMain.handle('clipboard-write-text', (event, text) => {
+  clipboard.writeText(String(text ?? ''))
 })
 
 // In this file you can include the rest of your app's specific main process
