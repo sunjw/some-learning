@@ -860,6 +860,11 @@ class WallpickerPage {
                 // fnClickToSelectImage();
                 that.openImage();
             });
+            imgContent.on('contextmenu', function (e) {
+                eleUtils.stopBubble(e);
+                fnClickToSelectImage();
+                that.copyImagePath();
+            });
             divImageWrapper.append(imgContent);
 
             // meta icon
@@ -914,6 +919,11 @@ class WallpickerPage {
                 eleUtils.stopBubble(e);
                 // fnClickToSelectImage();
                 that.openImage();
+            });
+            divImageInfo.on('contextmenu', function (e) {
+                eleUtils.stopBubble(e);
+                fnClickToSelectImage();
+                that.copyImagePath();
             });
             divInfoWrapper.append(divImageInfo);
 
@@ -1184,6 +1194,20 @@ class WallpickerPage {
         let imagePath = this.selectedImageBlock.attr(this.TAG_IMAGE_PATH);
         utils.log('openImage, imagePath=[%s]', imagePath);
         remote.shell.openPath(imagePath);
+    }
+
+    copyImagePath() {
+        let imagePath = this.selectedImageBlock.attr(this.TAG_IMAGE_PATH);
+        utils.log('copyImagePath, imagePath=[%s]', imagePath);
+        if (!imagePath) {
+            return;
+        }
+        ipcRenderer.invoke('clipboard-write-text', imagePath).then(() => {
+            this.showToast('Copied path: "<span class="highlight">' + utils.escapeHtml(imagePath) + '</span>".',
+                'right', true);
+        }).catch((err) => {
+            utils.log('copyImagePath failed, err=%s', err);
+        });
     }
 
     scrollToImageBlockDom(imageBlockDom, scrollBlock = 'center') {
