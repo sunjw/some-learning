@@ -1245,7 +1245,7 @@ class WallpickerPage {
         this.showToast('Trash "<span class="highlight">' + utils.escapeHtml(imagePath) + '</span>."',
             'right', true, (cancelOper) => {
             if (!cancelOper) {
-                this.trashSelectedImageDo(imagePath, imageBlock);
+                this.trashSelectedImageDo(imageBlock);
             } else {
                 utils.log('trashSelectedImage, cancelled, not to trash.');
                 imageBlock.removeClass(this.CLASS_IMAGE_TRASHING);
@@ -1253,7 +1253,8 @@ class WallpickerPage {
         });
     }
 
-    trashSelectedImageDo(imagePath, imageBlock) {
+    trashSelectedImageDo(imageBlock) {
+        let imagePath = imageBlock.attr(this.TAG_IMAGE_PATH);
         utils.log('trashSelectedImageDo, imagePath=[%s]', imagePath);
         remote.shell.trashItem(imagePath).then(() => {
             utils.log('trashSelectedImageDo, success, imagePath=[%s]', imagePath);
