@@ -151,16 +151,23 @@ def main():
     machine_name = platform.machine()
     machine_name = machine_name.lower()
 
+    cwd = os.getcwd()
+
+    # Read version from package.json.
+    package_json_content = read_file_binary('./package.json')
+    package_json_json = json.loads(package_json_content.decode('utf-8'))
+    package_version = package_json_json.get('version')
+
     app_name = PACKAGE_NAME
+    app_name_version = '%s-%s' % (app_name, package_version)
     app_dir_path_relative = 'resources/app'
     if is_macos_sys():
         app_name = PACKAGE_NAME + '.app'
         app_dir_path_relative = 'Contents/Resources/app'
+        app_name_version = app_name_version + '.app'
     app_path_relative = os.path.join(app_name, app_dir_path_relative)
 
     new_icns_name_mac = ''
-
-    cwd = os.getcwd()
 
     # Update modules.
     log_stage('Update modules...')
@@ -290,11 +297,6 @@ def main():
     # Update Info.plist.
     if is_macos_sys():
         log_stage('Update Info.plist...')
-        package_json_path = './Contents/Resources/app/package.json'
-        package_json_content = read_file_binary(package_json_path)
-        package_json_json = json.loads(package_json_content.decode('utf-8'))
-        package_version = package_json_json.get('version')
-
         info_plist_path = './Contents/Info.plist'
         info_plist_content = read_file_binary(info_plist_path)
 
@@ -321,7 +323,7 @@ def main():
     # Package and clean up.
     log_stage('Package and clean up...')
     os.chdir(DIST_DIR)
-    app_package_file = '%s.%s.%s' % (app_name, system_name, machine_name)
+    app_package_file = '%s.%s.%s' % (app_name_version, system_name, machine_name)
     if is_windows_sys():
         app_package_file = '%s.7z' % (app_package_file)
         remove_file(app_package_file)
