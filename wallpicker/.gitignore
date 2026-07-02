@@ -5,7 +5,7 @@ node_modules
 ResourceHacker.log
 
 icons/png/*
-dist/wallpicker.app/*
-dist/wallpicker/*
+dist/wallpaper-picker.app/*
+dist/wallpaper-picker/*
 dist/wallpaper-picker*.app.macos.*.tar.xz
 dist/wallpaper-picker*.win.*.7z
