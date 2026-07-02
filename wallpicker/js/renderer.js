@@ -1495,7 +1495,20 @@ class WallpickerPage {
 
         try {
             let metadata = await sharp(imageThumbPath).metadata();
-            return !!(metadata && metadata.width && metadata.height);
+            if (metadata && metadata.width && metadata.height) {
+                return true;
+            }
+        } catch (err) {
+            utils.log('checkImageThumbnail, sharp.metadata failed, imageThumbPath=[%s], err=\n%s',
+                imageThumbPath, err);
+        }
+
+        // fallback: probe-image-size when sharp fails
+        utils.log('checkImageThumbnail, fall back to probeImageSize, imageThumbPath=[%s]', imageThumbPath);
+        try {
+            let imgData = fs.readFileSync(imageThumbPath);
+            let imgDim = probeImageSize.sync(imgData);
+            return !!(imgDim && imgDim.width && imgDim.height);
         } catch (err) {
             return false;
         }

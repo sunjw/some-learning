@@ -137,22 +137,44 @@ async function processFile(filePath, stat) {
     let imgMetaHash = nodeUtils.hashMd5(imgMetaCombo);
     fileObj.hash = imgMetaHash;
 
+    let gotDims = false;
     try {
         let metadata = await sharp(filePath).metadata();
-        if (!metadata || !metadata.width || !metadata.height) {
-            utils.log('processFile, corrupt image, filePath=[%s]', filePath);
-            return;
-        }
-        fileObj.width = metadata.width;
-        fileObj.height = metadata.height;
-        if (metadata.icc) {
-            let profile = parseIcc(metadata.icc);
-            if (profile.description) {
-                fileObj.iccProfileName = profile.description;
+        if (metadata && metadata.width && metadata.height) {
+            fileObj.width = metadata.width;
+            fileObj.height = metadata.height;
+            if (metadata.icc) {
+                let profile = parseIcc(metadata.icc);
+                if (profile.description) {
+                    fileObj.iccProfileName = profile.description;
+                }
             }
+            gotDims = true;
         }
     } catch (err) {
-        utils.log('processFile, read metadata failed, filePath=[%s], err=\n%s', filePath, err);
+        utils.log('processFile, sharp.metadata failed, filePath=[%s], err=\n%s', filePath, err);
+    }
+
+    if (!gotDims) {
+        // fallback: probe-image-size when sharp fails
+        utils.log('processFile, fall back to probeImageSize, filePath=[%s]', filePath);
+        try {
+            let imgData = fs.readFileSync(filePath);
+            let imgDim = probeImageSize.sync(imgData);
+            if (imgDim && imgDim.width && imgDim.height) {
+                fileObj.width = imgDim.width;
+                fileObj.height = imgDim.height;
+                gotDims = true;
+            }
+        } catch (err) {
+            utils.log('processFile, probeImageSize failed, filePath=[%s], err=\n%s',
+                filePath, err);
+        }
+    }
+
+    if (!gotDims) {
+        utils.log('processFile, corrupt image, filePath=[%s]', filePath);
+        return;
     }
 
     fileObj.thumbPath = null;
@@ -177,7 +199,20 @@ async function checkImageThumbnail(imageThumbPath) {
 
     try {
         let metadata = await sharp(imageThumbPath).metadata();
-        return !!(metadata && metadata.width && metadata.height);
+        if (metadata && metadata.width && metadata.height) {
+            return true;
+        }
+    } catch (err) {
+        utils.log('checkImageThumbnail, sharp.metadata failed, imageThumbPath=[%s], err=\n%s',
+            imageThumbPath, err);
+    }
+
+    // fallback: probe-image-size when sharp fails
+    utils.log('checkImageThumbnail, fall back to probeImageSize, imageThumbPath=[%s]', imageThumbPath);
+    try {
+        let imgData = fs.readFileSync(imageThumbPath);
+        let imgDim = probeImageSize.sync(imgData);
+        return !!(imgDim && imgDim.width && imgDim.height);
     } catch (err) {
         return false;
     }
