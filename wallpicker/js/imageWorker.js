@@ -157,7 +157,7 @@ async function processFile(filePath, stat) {
 
     fileObj.thumbPath = null;
     let imageThumbPath = generateImageThumbnailPath(fileObj);
-    if (checkImageThumbnail(imageThumbPath)) {
+    if (await checkImageThumbnail(imageThumbPath)) {
         // found thumbnail
         fileObj.thumbPath = imageThumbPath;
     }
@@ -170,18 +170,17 @@ function generateImageThumbnailPath(fileObj) {
     return path.join(scanImageOptions.imageThumbDir, fileObj.hash + '.' + scanImageOptions.imageThumbFormat);
 }
 
-function checkImageThumbnail(imageThumbPath) {
+async function checkImageThumbnail(imageThumbPath) {
     if (!fs.existsSync(imageThumbPath)) {
         return false;
     }
 
-    let imgData = fs.readFileSync(imageThumbPath);
-    let imgDim = probeImageSize.sync(imgData);
-    if (!imgDim) {
+    try {
+        let metadata = await sharp(imageThumbPath).metadata();
+        return !!(metadata && metadata.width && metadata.height);
+    } catch (err) {
         return false;
     }
-
-    return true;
 }
 
 function generateImageThumbnail(options) {

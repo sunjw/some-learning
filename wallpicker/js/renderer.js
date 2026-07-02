@@ -1360,7 +1360,7 @@ class WallpickerPage {
         return path.join(this.imageThumbDir, fileObj.hash + '.' + this.THUMBNAIL_FORMAT);
     }
 
-    generateImageThumbnailInWorker() {
+    async generateImageThumbnailInWorker() {
         if (this.curGenThumbIndex < 0) {
             utils.log('generateImageThumbnailInWorker, stop');
             return;
@@ -1408,7 +1408,7 @@ class WallpickerPage {
         }
 
         let imageThumbPath = this.generateImageThumbnailPath(fileObj);
-        if (this.checkImageThumbnail(imageThumbPath)) {
+        if (await this.checkImageThumbnail(imageThumbPath)) {
             // already generated
             utils.log('generateImageThumbnailInWorker, skip generated thumbnail.');
             let result = {
@@ -1488,18 +1488,17 @@ class WallpickerPage {
         this.webWorkerImage.postMessage(updateImageThumbnailDbOptions);
     }
 
-    checkImageThumbnail(imageThumbPath) {
+    async checkImageThumbnail(imageThumbPath) {
         if (!fs.existsSync(imageThumbPath)) {
             return false;
         }
 
-        let imgData = fs.readFileSync(imageThumbPath);
-        let imgDim = probeImageSize.sync(imgData);
-        if (!imgDim) {
+        try {
+            let metadata = await sharp(imageThumbPath).metadata();
+            return !!(metadata && metadata.width && metadata.height);
+        } catch (err) {
             return false;
         }
-
-        return true;
     }
 
     processImageBlockThumb(imageSrcPath, imageThumbPath) {
