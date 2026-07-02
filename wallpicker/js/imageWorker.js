@@ -135,23 +135,16 @@ async function processFile(filePath, stat) {
     let imgMetaCombo = fileObj.path + '|' + fileObj.size + '|' + fileObj.mtime;
     utils.log('processFile, image, imgMetaCombo=[%s]', imgMetaCombo);
     let imgMetaHash = nodeUtils.hashMd5(imgMetaCombo);
-
-    // utils.log('processFile, image, filePath=[%s]', filePath);
-    let imgData = fs.readFileSync(filePath);
-    //let imgDataHash = nodeUtils.hashMd5(imgData);
-
     fileObj.hash = imgMetaHash;
-
-    let imgDim = probeImageSize.sync(imgData);
-    if (!imgDim) {
-        utils.log('processFile, corrupt image, filePath=[%s]', filePath);
-        return;
-    }
-    fileObj.width = imgDim.width;
-    fileObj.height = imgDim.height;
 
     try {
         let metadata = await sharp(filePath).metadata();
+        if (!metadata || !metadata.width || !metadata.height) {
+            utils.log('processFile, corrupt image, filePath=[%s]', filePath);
+            return;
+        }
+        fileObj.width = metadata.width;
+        fileObj.height = metadata.height;
         if (metadata.icc) {
             let profile = parseIcc(metadata.icc);
             if (profile.description) {
@@ -159,7 +152,7 @@ async function processFile(filePath, stat) {
             }
         }
     } catch (err) {
-        utils.log('processFile, read icc profile failed, filePath=[%s], err=\n%s', filePath, err);
+        utils.log('processFile, read metadata failed, filePath=[%s], err=\n%s', filePath, err);
     }
 
     fileObj.thumbPath = null;
