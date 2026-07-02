@@ -6,9 +6,7 @@ const path = require('path');
 
 window.$ = window.jQuery = require('jquery');
 const bootstrap = require('bootstrap');
-const probeImageSize = require('probe-image-size');
 const wallpaper = require('wallpaper');
-const sharp = require('sharp');
 
 const utils = require('./utils');
 const jqueryUtils = require('./jqueryUtils');
@@ -1493,25 +1491,13 @@ class WallpickerPage {
             return false;
         }
 
-        try {
-            let metadata = await sharp(imageThumbPath).metadata();
-            if (metadata && metadata.width && metadata.height) {
-                return true;
-            }
-        } catch (err) {
-            utils.log('checkImageThumbnail, sharp.metadata failed, imageThumbPath=[%s], err=\n%s',
-                imageThumbPath, err);
+        let imgDim = await nodeUtils.readImageMeta(imageThumbPath);
+        if (!imgDim) {
+            utils.log('checkImageThumbnail, fall back to readImageSizeSlow, imageThumbPath=[%s]',
+                imageThumbPath);
+            imgDim = nodeUtils.readImageSizeSlow(imageThumbPath);
         }
-
-        // fallback: probe-image-size when sharp fails
-        utils.log('checkImageThumbnail, fall back to probeImageSize, imageThumbPath=[%s]', imageThumbPath);
-        try {
-            let imgData = fs.readFileSync(imageThumbPath);
-            let imgDim = probeImageSize.sync(imgData);
-            return !!(imgDim && imgDim.width && imgDim.height);
-        } catch (err) {
-            return false;
-        }
+        return !!(imgDim && imgDim.width && imgDim.height);
     }
 
     processImageBlockThumb(imageSrcPath, imageThumbPath) {

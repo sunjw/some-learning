@@ -1,8 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-const { parse: parseIcc } = require('icc');
-const probeImageSize = require('probe-image-size');
 const sharp = require('sharp');
 
 const utils = require('./utils');
@@ -137,44 +135,19 @@ async function processFile(filePath, stat) {
     let imgMetaHash = nodeUtils.hashMd5(imgMetaCombo);
     fileObj.hash = imgMetaHash;
 
-    let gotDims = false;
-    try {
-        let metadata = await sharp(filePath).metadata();
-        if (metadata && metadata.width && metadata.height) {
-            fileObj.width = metadata.width;
-            fileObj.height = metadata.height;
-            if (metadata.icc) {
-                let profile = parseIcc(metadata.icc);
-                if (profile.description) {
-                    fileObj.iccProfileName = profile.description;
-                }
-            }
-            gotDims = true;
-        }
-    } catch (err) {
-        utils.log('processFile, sharp.metadata failed, filePath=[%s], err=\n%s', filePath, err);
+    let imgMeta = await nodeUtils.readImageMeta(filePath);
+    if (!imgMeta) {
+        utils.log('processFile, fall back to readImageSizeSlow, filePath=[%s]', filePath);
+        imgMeta = nodeUtils.readImageSizeSlow(filePath);
     }
-
-    if (!gotDims) {
-        // fallback: probe-image-size when sharp fails
-        utils.log('processFile, fall back to probeImageSize, filePath=[%s]', filePath);
-        try {
-            let imgData = fs.readFileSync(filePath);
-            let imgDim = probeImageSize.sync(imgData);
-            if (imgDim && imgDim.width && imgDim.height) {
-                fileObj.width = imgDim.width;
-                fileObj.height = imgDim.height;
-                gotDims = true;
-            }
-        } catch (err) {
-            utils.log('processFile, probeImageSize failed, filePath=[%s], err=\n%s',
-                filePath, err);
-        }
-    }
-
-    if (!gotDims) {
+    if (!imgMeta) {
         utils.log('processFile, corrupt image, filePath=[%s]', filePath);
         return;
+    }
+    fileObj.width = imgMeta.width;
+    fileObj.height = imgMeta.height;
+    if (imgMeta.iccProfileName) {
+        fileObj.iccProfileName = imgMeta.iccProfileName;
     }
 
     fileObj.thumbPath = null;
@@ -197,25 +170,13 @@ async function checkImageThumbnail(imageThumbPath) {
         return false;
     }
 
-    try {
-        let metadata = await sharp(imageThumbPath).metadata();
-        if (metadata && metadata.width && metadata.height) {
-            return true;
-        }
-    } catch (err) {
-        utils.log('checkImageThumbnail, sharp.metadata failed, imageThumbPath=[%s], err=\n%s',
-            imageThumbPath, err);
+    let imgDim = await nodeUtils.readImageMeta(imageThumbPath);
+    if (!imgDim) {
+        utils.log('checkImageThumbnail, fall back to readImageSizeSlow, imageThumbPath=[%s]',
+            imageThumbPath);
+        imgDim = nodeUtils.readImageSizeSlow(imageThumbPath);
     }
-
-    // fallback: probe-image-size when sharp fails
-    utils.log('checkImageThumbnail, fall back to probeImageSize, imageThumbPath=[%s]', imageThumbPath);
-    try {
-        let imgData = fs.readFileSync(imageThumbPath);
-        let imgDim = probeImageSize.sync(imgData);
-        return !!(imgDim && imgDim.width && imgDim.height);
-    } catch (err) {
-        return false;
-    }
+    return !!(imgDim && imgDim.width && imgDim.height);
 }
 
 function generateImageThumbnail(options) {

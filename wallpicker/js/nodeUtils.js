@@ -31,7 +31,7 @@ async function readImageMeta(filePath) {
             };
         }
     } catch (err) {
-        // swallow; caller may fall back to readImageSizeSlow
+        // swallow
     }
     return null;
 }
