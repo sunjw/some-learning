@@ -163,8 +163,8 @@ def main():
     app_dir_path_relative = 'resources/app'
     if is_macos_sys():
         app_name = PACKAGE_NAME + '.app'
-        app_dir_path_relative = 'Contents/Resources/app'
         app_name_version = app_name_version + '.app'
+        app_dir_path_relative = 'Contents/Resources/app'
     app_path_relative = os.path.join(app_name, app_dir_path_relative)
 
     new_icns_name_mac = ''
