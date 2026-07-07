@@ -83,3 +83,5 @@ wallpaper/
 
 run_*.sh
 run_*.ps1
+
+*.log
