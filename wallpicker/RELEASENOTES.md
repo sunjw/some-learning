@@ -1,9 +1,9 @@
-# wallpaper-picker 26.7.15 Release Notes
+# wallpaper-picker 26.7.20 Release Notes
 
-## Changes in wallpaper-picker 26.7.15
+## Changes in wallpaper-picker 26.7.20
 - **New feature:**
-  - Parse and show image **ICC profile name**.
+  - **Trash** selected image file (with a trash button).
+  - **Right-click** to copy the image path.
 - **Fixes & tweaks:**
-  - Fixed arrow key handling when the filter input is focused.
+  - Tweak image load performance.
 - **Dependency Updates:**
-  - Updated various npm packages for security and stability.
