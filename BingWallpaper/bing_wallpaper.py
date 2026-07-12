@@ -186,26 +186,34 @@ def download_wallpaper_by_list(wallpaper_list, need_promote):
 
         logger.info('Download [%s]', image_url)
         image_resp_ok = True
-        with open(image_path, 'wb') as handle:
-            response = requests.get(image_url, stream=True)
+        try:
+            with open(image_path, 'wb') as handle:
+                response = requests.get(image_url, stream=True)
 
-            if not response.ok:
-                logger.error('%s', response)
-                image_resp_ok = False
-
-            for block in response.iter_content(1024):
-                if not block:
+                if not response.ok:
+                    logger.error('%s', response)
+                    image_resp_ok = False
+                else:
+                    for block in response.iter_content(1024):
+                        if not block:
+                            logger.info('Download finished.')
+                            break
+                        handle.write(block)
                     logger.info('Download finished.')
-                    break
-                handle.write(block)
-            logger.info('Download finished.')
+        except requests.exceptions.ChunkedEncodingError as e:
+            logger.error('[%s] ChunkedEncodingError: %s', image_name, e)
+            image_resp_ok = False
+        except Exception as e:
+            logger.error('[%s] error: %s', image_name, e)
+            image_resp_ok = False
 
         if image_resp_ok:
             image_file_size = os.path.getsize(image_path)
             logger.info('[%s], image_file_size=%d', image_name, image_file_size)
         else:
-            logger.error('[%s], failed and removed.', image_name)
-            os.remove(image_path)
+            logger.error('[%s], download failed and removed.', image_name)
+            if os.path.exists(image_path):
+                os.remove(image_path)
 
         downloaded_file_count = downloaded_file_count + 1
 
