@@ -4,7 +4,8 @@ import json
 import os
 import requests
 import shlex
-from urllib.request import urlopen
+import ssl
+from urllib.request import Request, urlopen
 
 import comm_util
 import log_util
@@ -52,7 +53,8 @@ def get_bing_wallpaper_json_over_ssh(mkt, ssh_cmd):
 def get_bing_wallpaper_json(mkt):
     logger.info('Get Bing wallpaper json')
     bing_wallpaper_meta_json_path = gen_bing_wallpaper_json_url(mkt)
-    resp = urlopen(bing_wallpaper_meta_json_path)
+    req = Request(bing_wallpaper_meta_json_path, headers={'User-Agent': 'Mozilla/5.0'})
+    resp = urlopen(req, context=ssl.create_default_context())
     str_body = resp.read().decode('utf-8')
     wallpaper_json_body = json.loads(str_body)
     # logger.debug('wallpaper_json_body\n%s', comm_util.pprint_dict_to_string(wallpaper_json_body))
@@ -124,7 +126,8 @@ def clean_duplicated_wallpaper(wallpaper_dir):
     files_in_wallpaper_dir.sort()
     for file_name in files_in_wallpaper_dir:
         file_path = os.path.join(wallpaper_dir, file_name)
-        file_md5 = hashlib.md5(open(file_path, 'rb').read()).hexdigest()
+        with open(file_path, 'rb') as f:
+            file_md5 = hashlib.md5(f.read()).hexdigest()
         files_in_wallpaper_md5[file_name] = file_md5
     # logger.info('files_in_wallpaper_md5\n%s', comm_util.pprint_dict_to_string(files_in_wallpaper_md5))
 
