@@ -15,6 +15,74 @@ def log(message):
 def log_err(message):
     print(message, file=sys.stderr)
 
+def log_stage(stage_message):
+    log('\n%s\n' % (stage_message))
+
+def is_windows_sys():
+    return (platform.system() == 'Windows')
+
+def is_macos_sys():
+    return (platform.system() == 'Darwin')
+
+def fix_win_path(path):
+    if is_windows_sys():
+        return path.replace('/', '\\')
+    else:
+        return path
+
+def fix_win_long_path(path):
+    if is_windows_sys() and not path.startswith('\\\\?\\'):
+        abs_path = os.path.abspath(path)
+        return '\\\\?\\' + abs_path
+    return path
+
+def find_strings_in_string(strings, in_string):
+    for str_itr in strings:
+        if in_string.find(str_itr) >= 0:
+            return True
+
+    return False
+
+def copy_file(source, dest):
+    follow_symlinks_os = False
+    if is_windows_sys():
+        follow_symlinks_os = True
+    shutil.copyfile(fix_win_long_path(source), fix_win_long_path(dest), follow_symlinks=follow_symlinks_os)
+
+def copy_dir(source, dest):
+    for filename in os.listdir(source):
+        src_file = os.path.join(source, filename)
+        dst_file = os.path.join(dest, filename)
+        if os.path.isdir(src_file):
+            if not os.path.exists(dst_file):
+                os.mkdir(dst_file)
+            copy_dir(src_file, dst_file)
+
+        if os.path.isfile(src_file):
+            copy_file(src_file, dst_file)
+
+def remove_file(path):
+    fixed_path = fix_win_long_path(path)
+    if os.path.exists(fixed_path):
+        os.remove(fixed_path)
+
+def remove_dir(path):
+    fixed_path = fix_win_long_path(path)
+    if os.path.exists(fixed_path):
+        shutil.rmtree(fixed_path)
+
+def read_file_binary(file_path):
+    if not os.path.exists(file_path):
+        return ''
+    with open(file_path, 'rb') as f:
+        file_content = f.read()
+    return file_content
+
+def write_file_binary(file_path, file_content):
+    file_obj = open(file_path, 'wb')
+    file_obj.write(file_content)
+    file_obj.close()
+
 def run_cmd(cmd):
     log('Run: \n%s' % (cmd))
     os.system(cmd)
@@ -30,63 +98,7 @@ def run_cmd_with_stderr(cmd):
 
     stdout_text, stderr_text = p.communicate()
 
-    return stderr_text
-
-def is_windows_sys():
-    return (platform.system() == 'Windows')
-
-def is_macos_sys():
-    return (platform.system() == 'Darwin')
-
-def fix_win_path(path):
-    if is_windows_sys():
-        return path.replace('/', '\\')
-    else:
-        return path
-
-def find_strings_in_string(strings, in_string):
-    for str_itr in strings:
-        if in_string.find(str_itr) >= 0:
-            return True
-
-    return False
-
-def copy_file(source, dest):
-    shutil.copyfile(source, dest, follow_symlinks=False)
-
-def copy_dir(source, dest):
-    for filename in os.listdir(source):
-        src_file = os.path.join(source, filename)
-        dst_file = os.path.join(dest, filename)
-        if os.path.isdir(src_file):
-            if not os.path.exists(dst_file):
-                os.mkdir(dst_file)
-            copy_dir(src_file, dst_file)
-
-        if os.path.isfile(src_file):
-            copy_file(src_file, dst_file)
-
-def remove_file(path):
-    if os.path.exists(path):
-        os.remove(path)
-
-def remove_dir(path):
-    if os.path.exists(path):
-        shutil.rmtree(path)
-
-def read_file_content(file_path):
-    if not os.path.exists(file_path):
-        return ''
-    file_content = open(file_path, 'rb').read()
-    return file_content
-
-def write_file_content(file_path, file_content):
-    file_obj = open(file_path, 'wb')
-    file_obj.write(file_content)
-    file_obj.close()
-
-def log_stage(stage_message):
-    log('\n%s\n' % (stage_message))
+    return stdout_text, stderr_text
 
 def main():
     cwd = os.getcwd()
