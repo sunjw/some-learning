@@ -16,22 +16,15 @@ def log(message):
 def log_err(message):
     print(message, file=sys.stderr)
 
-def run_cmd(cmd):
-    log('Run: \n%s' % (cmd))
-    os.system(cmd)
+def log_stage(stage_message):
+    log('\n%s\n' % (stage_message))
 
-def run_cmd_with_stdio(cmd, input_data):
-    log('Run: \n%s' % (cmd))
-    p = Popen(shlex.split(cmd), stdout=PIPE, stdin=PIPE, stderr=STDOUT)
-    return p.communicate(input = input_data)[0]
+def find_strings_in_string(strings, in_string):
+    for str_itr in strings:
+        if in_string.find(str_itr) >= 0:
+            return True
 
-def run_cmd_with_stderr(cmd):
-    log('Run: \n%s' % (cmd))
-    p = Popen(shlex.split(cmd), stdout=PIPE, stdin=PIPE, stderr=PIPE)
-
-    stdout_text, stderr_text = p.communicate()
-
-    return stdout_text, stderr_text
+    return False
 
 def is_windows_sys():
     return (platform.system() == 'Windows')
@@ -53,13 +46,6 @@ def fix_win_long_path(path):
         abs_path = os.path.abspath(path)
         return '\\\\?\\' + abs_path
     return path
-
-def find_strings_in_string(strings, in_string):
-    for str_itr in strings:
-        if in_string.find(str_itr) >= 0:
-            return True
-
-    return False
 
 def copy_file(source, dest):
     follow_symlinks_os = False
@@ -92,7 +78,8 @@ def remove_dir(path):
 def read_file_binary(file_path):
     if not os.path.exists(file_path):
         return ''
-    file_content = open(file_path, 'rb').read()
+    with open(file_path, 'rb') as f:
+        file_content = f.read()
     return file_content
 
 def write_file_binary(file_path, file_content):
@@ -100,8 +87,22 @@ def write_file_binary(file_path, file_content):
     file_obj.write(file_content)
     file_obj.close()
 
-def log_stage(stage_message):
-    log('\n%s\n' % (stage_message))
+def run_cmd(cmd):
+    log('Run: \n%s' % (cmd))
+    os.system(cmd)
+
+def run_cmd_with_stdio(cmd, input_data):
+    log('Run: \n%s' % (cmd))
+    p = Popen(shlex.split(cmd), stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+    return p.communicate(input = input_data)[0]
+
+def run_cmd_with_stderr(cmd):
+    log('Run: \n%s' % (cmd))
+    p = Popen(shlex.split(cmd), stdout=PIPE, stdin=PIPE, stderr=PIPE)
+
+    stdout_text, stderr_text = p.communicate()
+
+    return stdout_text, stderr_text
 
 EXE_7Z_WIN = '7z'
 EXE_RESOURCE_HACKER_WIN = 'ResourceHacker.exe'
