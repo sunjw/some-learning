@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const sharp = require('sharp');
+sharp.cache(false);
 
 const utils = require('./utils');
 const nodeUtils = require('./nodeUtils');
