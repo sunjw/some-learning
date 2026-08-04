@@ -73,7 +73,7 @@ def remove_dir(path):
 
 def read_file_binary(file_path):
     if not os.path.exists(file_path):
-        return ''
+        return b''
     with open(file_path, 'rb') as f:
         file_content = f.read()
     return file_content
