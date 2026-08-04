@@ -25,6 +25,8 @@
         <ui:TitleBar
             Title="RDPPassword"
             Grid.Row="0"
+            Height="36"
+            Padding="16,4,8,4"
             CanMaximize="False"
             ShowMaximize="False">
             <ui:TitleBar.Icon>
