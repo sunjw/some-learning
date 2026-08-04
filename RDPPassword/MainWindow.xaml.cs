@@ -4,16 +4,16 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
+using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
 
 namespace RDPPassword
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : FluentWindow
     {
-        private const string IconCheckMark = "\ue73e";
-        private const string IconCopy = "\ue8c8";
         private Encoding U16LE = Encoding.Unicode;
 
         private bool gridRootLoaded = false;
@@ -23,6 +23,8 @@ namespace RDPPassword
 
         public MainWindow()
         {
+            SystemThemeWatcher.Watch(this);
+
             InitializeComponent();
         }
 
@@ -145,14 +147,14 @@ namespace RDPPassword
             TextBoxMain.Focus();
 
             // Change icon
-            IconButtonCopy.Glyph = IconCheckMark;
+            IconButtonCopy.Symbol = SymbolRegular.Checkmark24;
             DispatcherTimer timer = new()
             {
                 Interval = TimeSpan.FromSeconds(3)
             };
             timer.Tick += (s, args) =>
             {
-                IconButtonCopy.Glyph = IconCopy;
+                IconButtonCopy.Symbol = SymbolRegular.Copy24;
                 timer.Stop();
             };
             timer.Start();
