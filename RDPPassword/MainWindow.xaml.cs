@@ -14,7 +14,7 @@ namespace RDPPassword
     /// </summary>
     public partial class MainWindow : FluentWindow
     {
-        private Encoding U16LE = Encoding.Unicode;
+        private readonly Encoding U16LE = Encoding.Unicode;
 
         private bool gridRootLoaded = false;
         private string currentFileVersion = "";
