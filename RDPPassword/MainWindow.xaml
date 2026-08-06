@@ -34,7 +34,7 @@
             </ui:TitleBar.Icon>
         </ui:TitleBar>
 
-        <Grid Grid.Row="1" Margin="8,2,14,0">
+        <Grid Grid.Row="1" Margin="8,0,14,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
@@ -53,11 +53,6 @@
                     Header="Decrypt" />
                 <Separator />
                 <ui:MenuItem
-                    x:Name="ButtonClear"
-                    Click="ButtonClear_Click"
-                    Icon="{ui:SymbolIcon Eraser24}"
-                    ToolTip="Clear" />
-                <ui:MenuItem
                     x:Name="ButtonCopy"
                     Click="ButtonCopy_Click"
                     ToolTip="Copy">
@@ -65,6 +60,11 @@
                         <ui:SymbolIcon x:Name="IconButtonCopy" Symbol="Copy24" />
                     </ui:MenuItem.Icon>
                 </ui:MenuItem>
+                <ui:MenuItem
+                    x:Name="ButtonClear"
+                    Click="ButtonClear_Click"
+                    Icon="{ui:SymbolIcon Eraser24}"
+                    ToolTip="Clear" />
                 <Separator />
             </Menu>
 
