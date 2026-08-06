@@ -38,10 +38,20 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Menu Grid.Column="0" FontSize="16">
+                <ui:MenuItem
+                    x:Name="ButtonEncrypt"
+                    Click="ButtonEncrypt_Click"
+                    Header="Encrypt" />
+                <ui:MenuItem
+                    x:Name="ButtonDecrypt"
+                    Click="ButtonDecrypt_Click"
+                    Header="Decrypt" />
+                <Separator />
                 <ui:MenuItem
                     x:Name="ButtonClear"
                     Click="ButtonClear_Click"
@@ -56,19 +66,11 @@
                     </ui:MenuItem.Icon>
                 </ui:MenuItem>
                 <Separator />
-                <ui:MenuItem
-                    x:Name="ButtonEncrypt"
-                    Click="ButtonEncrypt_Click"
-                    Header="Encrypt" />
-                <ui:MenuItem
-                    x:Name="ButtonDecrypt"
-                    Click="ButtonDecrypt_Click"
-                    Header="Decrypt" />
             </Menu>
 
             <CheckBox
                 x:Name="CheckBoxBase64"
-                Grid.Column="1"
+                Grid.Column="2"
                 Margin="8,2,0,0"
                 VerticalAlignment="Center"
                 Content="Base64"
@@ -76,7 +78,7 @@
 
             <TextBlock
                 x:Name="TextBlockInfo"
-                Grid.Column="2"
+                Grid.Column="3"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Foreground="Gray"
