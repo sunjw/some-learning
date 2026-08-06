@@ -46,10 +46,12 @@
                 <ui:MenuItem
                     x:Name="ButtonEncrypt"
                     Click="ButtonEncrypt_Click"
+                    FontSize="14"
                     Header="Encrypt" />
                 <ui:MenuItem
                     x:Name="ButtonDecrypt"
                     Click="ButtonDecrypt_Click"
+                    FontSize="14"
                     Header="Decrypt" />
                 <Separator />
                 <ui:MenuItem
