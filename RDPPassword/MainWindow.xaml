@@ -18,8 +18,8 @@
     <Grid x:Name="GridRoot" Loaded="GridRoot_Loaded">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <ui:TitleBar
@@ -34,88 +34,66 @@
             </ui:TitleBar.Icon>
         </ui:TitleBar>
 
+        <Grid Grid.Row="1" Margin="8,2,14,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Menu Grid.Column="0" FontSize="16">
+                <ui:MenuItem
+                    x:Name="ButtonClear"
+                    Click="ButtonClear_Click"
+                    Icon="{ui:SymbolIcon Eraser24}"
+                    ToolTip="Clear" />
+                <ui:MenuItem
+                    x:Name="ButtonCopy"
+                    Click="ButtonCopy_Click"
+                    ToolTip="Copy">
+                    <ui:MenuItem.Icon>
+                        <ui:SymbolIcon x:Name="IconButtonCopy" Symbol="Copy24" />
+                    </ui:MenuItem.Icon>
+                </ui:MenuItem>
+                <Separator />
+                <ui:MenuItem
+                    x:Name="ButtonEncrypt"
+                    Click="ButtonEncrypt_Click"
+                    Header="Encrypt" />
+                <ui:MenuItem
+                    x:Name="ButtonDecrypt"
+                    Click="ButtonDecrypt_Click"
+                    Header="Decrypt" />
+            </Menu>
+
+            <CheckBox
+                x:Name="CheckBoxBase64"
+                Grid.Column="1"
+                Margin="8,2,0,0"
+                VerticalAlignment="Center"
+                Content="Base64"
+                ToolTip="Base64" />
+
+            <TextBlock
+                x:Name="TextBlockInfo"
+                Grid.Column="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Foreground="Gray"
+                Text="[Info]" />
+        </Grid>
+
         <Grid
             x:Name="GridMain"
-            Grid.Row="1"
+            Grid.Row="2"
             Margin="0,0,0,0">
             <TextBox
                 x:Name="TextBoxMain"
-                Margin="12,4,12,0"
+                Margin="12,0,12,12"
                 FontFamily="Consolas"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 TextWrapping="Wrap" />
-
-        </Grid>
-
-        <Grid
-            x:Name="GridBottom"
-            Grid.Row="2"
-            Height="54"
-            Margin="0,0,0,0"
-            VerticalAlignment="Bottom">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="96" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <TextBlock
-                x:Name="TextBlockInfo"
-                Grid.Column="0"
-                Margin="14,0,0,0"
-                VerticalAlignment="Center"
-                Foreground="Gray"
-                Text="[Info]" />
-
-            <CheckBox
-                x:Name="CheckBoxBase64"
-                Grid.Column="2"
-                Margin="0,0,0,12"
-                VerticalAlignment="Bottom"
-                Content="Base64"
-                ToolTip="Base64" />
-
-            <Button
-                x:Name="ButtonClear"
-                Grid.Column="3"
-                Margin="0,0,12,12"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Click="ButtonClear_Click"
-                ToolTip="Clear">
-                <ui:SymbolIcon Symbol="Eraser24" />
-            </Button>
-            <Button
-                x:Name="ButtonCopy"
-                Grid.Column="4"
-                Margin="0,0,12,12"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Click="ButtonCopy_Click"
-                ToolTip="Copy">
-                <ui:SymbolIcon x:Name="IconButtonCopy" Symbol="Copy24" />
-            </Button>
-            <Button
-                x:Name="ButtonEncrypt"
-                Grid.Column="5"
-                Margin="0,0,12,12"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Click="ButtonEncrypt_Click"
-                Content="Encrypt" />
-            <Button
-                x:Name="ButtonDecrypt"
-                Grid.Column="6"
-                Margin="0,0,12,12"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Click="ButtonDecrypt_Click"
-                Content="Decrypt" />
 
         </Grid>
 
