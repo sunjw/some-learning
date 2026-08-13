@@ -1,9 +1,8 @@
-# wallpaper-picker 26.7.20 Release Notes
+# wallpaper-picker 26.8.21 Release Notes
 
-## Changes in wallpaper-picker 26.7.20
+## Changes in wallpaper-picker 26.8.21
 - **New feature:**
-  - **Trash** selected image file (with a trash button).
-  - **Right-click** to copy the image path.
 - **Fixes & tweaks:**
-  - Tweak image load performance.
+  - Fixed `sharp` keeping the image file handle open.
 - **Dependency Updates:**
+  - Bumped npm packages to fix several security advisories.
