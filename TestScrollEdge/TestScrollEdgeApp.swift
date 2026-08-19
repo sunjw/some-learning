@@ -24,7 +24,8 @@ struct TestScrollEdgeApp: App {
         }
         .windowStyle(.titleBar)
         .windowToolbarStyle(.unified(showsTitle: false))
-        .defaultSize(width: ContentView.windowWidth, height: ContentView.windowHeight)
         .windowResizability(.contentMinSize)
+        .defaultSize(width: ContentView.windowWidth, height: ContentView.windowHeight)
+        .defaultPosition(.center)
     }
 }
