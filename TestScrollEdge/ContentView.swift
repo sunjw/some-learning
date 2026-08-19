@@ -62,25 +62,19 @@ struct ContentView: View {
     """
 
     var body: some View {
-        GeometryReader { proxy in
-            ScrollView([.horizontal, .vertical], showsIndicators: true) {
-                Text(Self.sampleText)
-                    .font(.system(size: 12, design: .monospaced))
-                    .textSelection(.enabled)
-                    .lineLimit(nil)
-                    .fixedSize(horizontal: true, vertical: true)
-                    .padding(.horizontal, 18)
-                    .padding(.top, 4)
-                    .padding(.bottom, 30)
-                    .frame(
-                        minWidth: proxy.size.width,
-                        minHeight: proxy.size.height,
-                        alignment: .topLeading
-                    )
-            }
-            .scrollEdgeEffectStyle(.soft, for: .vertical)
-            //.scrollEdgeEffectStyle(.hard, for: .vertical)
+        ScrollView([.horizontal, .vertical], showsIndicators: true) {
+            Text(Self.sampleText)
+                .font(.system(size: 12, design: .monospaced))
+                .textSelection(.enabled)
+                .lineLimit(nil)
+                .fixedSize(horizontal: true, vertical: true)
+                .padding(.horizontal, 18)
+                .padding(.top, 4)
+                .padding(.bottom, 30)
         }
+        .defaultScrollAnchor(.topLeading, for: .alignment)
+        .scrollEdgeEffectStyle(.soft, for: .vertical)
+        //.scrollEdgeEffectStyle(.hard, for: .vertical)
         .frame(
             minWidth: Self.windowWidth,
             idealWidth: Self.windowWidth,
