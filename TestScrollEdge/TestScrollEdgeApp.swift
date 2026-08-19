@@ -14,6 +14,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
+extension View {
+    @ViewBuilder
+    func scrollEdgeSoftIfAvailable() -> some View {
+        // *OS 26 defaults to `.soft`, while *OS 27 defaults to `.hard`.
+        // Reset to .soft
+        self.scrollEdgeEffectStyle(.soft, for: .all)
+    }
+}
+
 @main
 struct TestScrollEdgeApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
@@ -21,6 +30,7 @@ struct TestScrollEdgeApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .scrollEdgeSoftIfAvailable()
         }
         .windowStyle(.titleBar)
         .windowToolbarStyle(.unified(showsTitle: false))

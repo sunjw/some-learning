@@ -73,7 +73,7 @@ struct ContentView: View {
                 .padding(.bottom, 30)
         }
         .defaultScrollAnchor(.topLeading, for: .alignment)
-        .scrollEdgeEffectStyle(.soft, for: .vertical)
+        //.scrollEdgeEffectStyle(.soft, for: .vertical)
         //.scrollEdgeEffectStyle(.hard, for: .vertical)
         .frame(
             minWidth: Self.windowWidth,
