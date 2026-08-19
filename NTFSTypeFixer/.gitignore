@@ -1,7 +1,0 @@
-DerivedData/
-*.xcodeproj/xcshareddata/**
-*.xcodeproj/xcuserdata/**
-*.xcworkspace/xcuserdata/**
-*.xcworkspace/xcshareddata/**
-*.xcodeproj/*.xcworkspace/xcuserdata/**
-*.xcodeproj/*.xcworkspace/xcshareddata/**
