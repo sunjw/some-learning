@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name" translatable="false">Code Scanner Demo</string>
+  <string name="app_name" translatable="false">Code Scan</string>
   <string name="allow_manual_input" translatable="false">Allow input code manually</string>
   <string name="enable_auto_zoom" translatable="false">Enable auto-zoom feature</string>
   <string name="scan_barcode_button" translatable="false">Scan Barcode</string>
