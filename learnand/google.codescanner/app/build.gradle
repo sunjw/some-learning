@@ -57,7 +57,7 @@ kotlin {
 androidComponents {
     onVariants(selector().all()) { variant ->
         variant.outputs.any() { output ->
-            def apkName = "CodeScannerDemo-${variant.name}-${android.defaultConfig.versionName}.apk"
+            def apkName = "CodeScan-${variant.name}-${android.defaultConfig.versionName}.apk"
             output.outputFileName.set(apkName)
         }
     }
