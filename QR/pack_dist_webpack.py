@@ -1,9 +1,10 @@
 import os
 import platform
+import re
 import shlex
 import shutil
-import stat
 import sys
+import time
 
 from subprocess import Popen, PIPE, STDOUT
 
@@ -100,11 +101,25 @@ def run_cmd_with_stderr(cmd):
 
     return stdout_text, stderr_text
 
+
 PUBLISH_DIR = 'publish'
 
 APP_DIRS = ['dist']
 APP_FILES = ['index.html', 'qrdec.html']
 CLEAR_FILES = []
+CACHE_BUSTER_FILES = ['index.html', 'qrdec.html']
+
+
+def add_cache_buster(html_content):
+    # Append "?v=<cache_buster>" to HTML content.
+    cache_buster = '%d' % int(time.time())
+    pattern = re.compile(r'((?:href|src))="(\./dist/[^"?]+)"')
+    def replace_func(match):
+        attr = match.group(1)
+        url = match.group(2)
+        return '%s="%s?v=%s"' % (attr, url, cache_buster)
+    return pattern.sub(replace_func, html_content)
+
 
 def main():
     cwd = os.getcwd()
@@ -141,6 +156,19 @@ def main():
         dest_clear_file = os.path.join(PUBLISH_DIR, clear_file)
         if os.path.exists(dest_clear_file):
             os.remove(dest_clear_file)
+
+    # Post step.
+    log_stage('Post step...')
+
+    for cache_buster_file in CACHE_BUSTER_FILES:
+        publish_path = os.path.join(PUBLISH_DIR, cache_buster_file)
+        if not os.path.exists(publish_path):
+            continue
+        content_bytes = read_file_binary(publish_path)
+        content = content_bytes.decode('utf-8')
+        content_buster = add_cache_buster(content)
+        log('Add cache buster to [%s]' % publish_path)
+        write_file_binary(publish_path, content_buster.encode('utf-8'))
 
 if __name__ == '__main__':
     main()
