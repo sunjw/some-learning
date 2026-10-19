@@ -11,8 +11,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		000000000000000000000120 /* MLImageTags */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = MLImageTags; path = "/Users/sunjw/coding/some-learning/MLImageTags/build/Debug/MLImageTags"; sourceTree = "<absolute>"; };
 		415C6F9030860BAE00A1D6A3 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
+		415C6F9230860C4E00A1D6A3 /* MLImageTags */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MLImageTags; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -37,6 +37,7 @@
 			isa = PBXGroup;
 			children = (
 				415C6F8F30860BAE00A1D6A3 /* Frameworks */,
+				415C6F9330860C7500A1D6A3 /* Product */,
 				000000000000000000000010 /* src */,
 			);
 			sourceTree = "<group>";
@@ -47,6 +48,14 @@
 				415C6F9030860BAE00A1D6A3 /* Vision.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		415C6F9330860C7500A1D6A3 /* Product */ = {
+			isa = PBXGroup;
+			children = (
+				415C6F9230860C4E00A1D6A3 /* MLImageTags */,
+			);
+			path = Product;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -66,7 +75,7 @@
 			);
 			name = MLImageTags;
 			productName = Tool;
-			productReference = 000000000000000000000120 /* MLImageTags */;
+			productReference = 415C6F9230860C4E00A1D6A3 /* MLImageTags */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -77,7 +86,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2700;
-				LastUpgradeCheck = 2700;
+				LastUpgradeCheck = 2710;
 				TargetAttributes = {
 					000000000000000100000000 = {
 						CreatedOnToolsVersion = 27.0;
@@ -173,7 +182,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PROJECT_UNIQUE_VALUE = Z7IP8TDJ;
-				SDKROOT = macosx27.0;
+				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -237,7 +246,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PROJECT_UNIQUE_VALUE = Z7IP8TDJ;
-				SDKROOT = macosx27.0;
+				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				TVOS_DEPLOYMENT_TARGET = 27.0;
