@@ -13,7 +13,7 @@ struct App {
             printError(err.message)
             exit(2)
         } catch {
-            printError("\(error)")
+            printError(error.localizedDescription)
             exit(1)
         }
     }
@@ -112,10 +112,7 @@ struct App {
         let height = cgImage.height
         guard width > 0, height > 0 else { return [] }
 
-        let bytesPerPixel = 4
-        let bytesPerRow = width * bytesPerPixel
-        let totalPixels = width * height
-
+        let bytesPerRow = width * 4
         let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) ?? CGColorSpaceCreateDeviceRGB()
         let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue
             | CGBitmapInfo.byteOrder32Big.rawValue
@@ -133,27 +130,7 @@ struct App {
         }
         context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
 
-        guard let raw = context.data else {
-            throw TaggerError.colorAnalysisFailed
-        }
-        let pixels = raw.bindMemory(to: UInt8.self, capacity: totalPixels * bytesPerPixel)
-
-        var counts: [Int] = Array(repeating: 0, count: palette.count)
-        var opaqueCount = 0
-        var i = 0
-        let stride = totalPixels * bytesPerPixel
-        while i < stride {
-            if Int(pixels[i + 3]) < 128 {
-                i += bytesPerPixel
-                continue
-            }
-            let r = Float(pixels[i]) / 255.0
-            let g = Float(pixels[i + 1]) / 255.0
-            let b = Float(pixels[i + 2]) / 255.0
-            counts[nearestPaletteIndex(r: r, g: g, b: b)] += 1
-            opaqueCount += 1
-            i += bytesPerPixel
-        }
+        let (counts, opaqueCount) = countPixels(context: context, width: width, height: height)
 
         guard opaqueCount > 0 else { return [] }
 
@@ -174,6 +151,34 @@ struct App {
             return $0.color < $1.color
         }
         return result
+    }
+
+    private static func countPixels(context: CGContext, width: Int, height: Int) -> (counts: [Int], opaqueCount: Int) {
+        let totalPixels = width * height
+        let bytesPerPixel = 4
+        let stride = totalPixels * bytesPerPixel
+
+        guard let raw = context.data else {
+            return (Array(repeating: 0, count: palette.count), 0)
+        }
+        let pixels = raw.bindMemory(to: UInt8.self, capacity: stride)
+
+        var counts: [Int] = Array(repeating: 0, count: palette.count)
+        var opaqueCount = 0
+        var i = 0
+        while i < stride {
+            if Int(pixels[i + 3]) < 128 {
+                i += bytesPerPixel
+                continue
+            }
+            let r = Float(pixels[i]) / 255.0
+            let g = Float(pixels[i + 1]) / 255.0
+            let b = Float(pixels[i + 2]) / 255.0
+            counts[nearestPaletteIndex(r: r, g: g, b: b)] += 1
+            opaqueCount += 1
+            i += bytesPerPixel
+        }
+        return (counts, opaqueCount)
     }
 
     private static func loadCGImage(at url: URL) throws -> (full: CGImage, thumb: CGImage, orientation: CGImagePropertyOrientation) {
