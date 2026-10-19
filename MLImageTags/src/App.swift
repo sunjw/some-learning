@@ -72,6 +72,8 @@ struct App {
 
         let outputURL: URL? = outputArg.map { resolveURL($0) }
 
+        let startTime = Date()
+
         let tags: [Tag]
         do {
             tags = try classify(imageAt: inputURL, threshold: threshold)
@@ -88,8 +90,10 @@ struct App {
             exit(1)
         }
 
+        let elapsedMs = Int(Date().timeIntervalSince(startTime) * 1000)
+
         do {
-            try emitJSON(path: absolutePath(of: inputURL), tags: tags, colors: colors, to: outputURL)
+            try emitJSON(path: absolutePath(of: inputURL), tags: tags, colors: colors, elapsedMs: elapsedMs, to: outputURL)
         } catch {
             printError("failed to write output: \(error)")
             exit(1)
@@ -222,8 +226,8 @@ struct App {
         return bestIndex
     }
 
-    private static func emitJSON(path: String, tags: [Tag], colors: [ColorResult], to outputURL: URL?) throws {
-        let payload = Result(path: path, tags: tags, colors: colors)
+    private static func emitJSON(path: String, tags: [Tag], colors: [ColorResult], elapsedMs: Int, to outputURL: URL?) throws {
+        let payload = Result(path: path, tags: tags, colors: colors, elapsedMs: elapsedMs)
         let encoder = JSONEncoder()
         encoder.outputFormatting = []
         let data = try encoder.encode(payload)
@@ -242,15 +246,16 @@ struct App {
         let usage = """
         usage: MLImageTags -i <image_path> [-o <output_path>] [-t <0..1>]
 
-        Recognizes tags in an image using Apple's Vision framework
-        (VNClassifyImageRequest) and prints (or writes) a JSON object:
+        Recognizes tags and dominant colors in an image using Apple's
+        Vision framework (VNClassifyImageRequest) and a Core Graphics
+        color histogram, then prints (or writes) a JSON object:
 
-          {"path":"...","tags":[{"tag":"some","confidence":0.95},...]}
+          {"path":"...","tags":[{"tag":"some","confidence":0.95},...],"colors":[{"color":"green","ratio":0.45},...],"elapsedMs":1234}
 
         Options:
           -i, --input <path>      image to analyze (required)
           -o, --output <path>     write JSON to file instead of stdout
-          -t, --threshold <0..1>  minimum confidence (default: 0.2)
+          -t, --threshold <0..1>  minimum confidence for tags (default: 0.2)
           -h, --help              show this message
         """
         FileHandle.standardError.write(Data((usage + "\n").utf8))
@@ -265,6 +270,7 @@ private struct Result: Codable {
     let path: String
     let tags: [Tag]
     let colors: [ColorResult]
+    let elapsedMs: Int
 }
 
 private struct Tag: Codable {
