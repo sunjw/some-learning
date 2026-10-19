@@ -60,10 +60,18 @@ struct App {
 
         let outputURL: URL? = outputArg.map { resolveURL($0) }
 
+        let images: (full: CGImage, thumb: CGImage)
+        do {
+            images = try loadCGImage(at: inputURL)
+        } catch {
+            printError("\(error)")
+            exit(1)
+        }
+
         let startTime = Date()
 
-        async let tagsResult = try classify(imageAt: inputURL, threshold: 0.2)
-        async let colorsResult = try analyzeColors(imageAt: inputURL)
+        async let tagsResult = try classify(cgImage: images.full, threshold: 0.2)
+        async let colorsResult = try analyzeColors(cgImage: images.thumb)
 
         let tags: [Tag]
         let colors: [ColorResult]
@@ -99,9 +107,7 @@ struct App {
         return FileManager.default.currentDirectoryPath + "/" + url.path
     }
 
-    private static func classify(imageAt url: URL, threshold: Float) throws -> [Tag] {
-        let cgImage = try loadCGImage(at: url)
-
+    private static func classify(cgImage: CGImage, threshold: Float) throws -> [Tag] {
         let request = VNClassifyImageRequest()
         let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
         try handler.perform([request])
@@ -121,8 +127,7 @@ struct App {
         return tags
     }
 
-    private static func analyzeColors(imageAt url: URL) throws -> [ColorResult] {
-        let cgImage = try loadCGImage(at: url, maxPixelSize: 512)
+    private static func analyzeColors(cgImage: CGImage) throws -> [ColorResult] {
 
         let width = cgImage.width
         let height = cgImage.height
@@ -176,29 +181,20 @@ struct App {
         return result
     }
 
-    private static func loadCGImage(at url: URL, maxPixelSize: Int = 0) throws -> CGImage {
-        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) else {
+    private static func loadCGImage(at url: URL) throws -> (full: CGImage, thumb: CGImage) {
+        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil),
+              let full = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
             throw TaggerError.imageLoadFailed(url.path)
         }
 
-        if maxPixelSize > 0 {
-            let options: [CFString: Any] = [
-                kCGImageSourceCreateThumbnailFromImageAlways: true,
-                kCGImageSourceCreateThumbnailWithTransform: true,
-                kCGImageSourceShouldCacheImmediately: true,
-                kCGImageSourceThumbnailMaxPixelSize: maxPixelSize,
-            ]
-            if let thumbnail = CGImageSourceCreateThumbnailAtIndex(
-                imageSource, 0, options as CFDictionary
-            ) {
-                return thumbnail
-            }
-        }
-
-        guard let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
-            throw TaggerError.imageLoadFailed(url.path)
-        }
-        return cgImage
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceShouldCacheImmediately: true,
+            kCGImageSourceThumbnailMaxPixelSize: 512,
+        ]
+        let thumb = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as CFDictionary) ?? full
+        return (full, thumb)
     }
 
     private static func nearestPaletteIndex(r: Float, g: Float, b: Float) -> Int {
