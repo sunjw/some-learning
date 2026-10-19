@@ -130,15 +130,11 @@ struct App {
         }
         context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
 
-        let (counts, opaqueCount) = countPixels(context: context, width: width, height: height)
+        let (groupCounts, opaqueCount) = countPixels(context: context, width: width, height: height)
 
         guard opaqueCount > 0 else { return [] }
 
         let total = Float(opaqueCount)
-        var groupCounts: [String: Int] = [:]
-        for (idx, count) in counts.enumerated() where count > 0 {
-            groupCounts[palette[idx].group, default: 0] += count
-        }
         var result: [ColorResult] = []
         for (group, count) in groupCounts {
             let ratio = Float(count) / total
@@ -153,17 +149,17 @@ struct App {
         return result
     }
 
-    private static func countPixels(context: CGContext, width: Int, height: Int) -> (counts: [Int], opaqueCount: Int) {
+    private static func countPixels(context: CGContext, width: Int, height: Int) -> (counts: [String: Int], opaqueCount: Int) {
         let totalPixels = width * height
         let bytesPerPixel = 4
         let stride = totalPixels * bytesPerPixel
 
         guard let raw = context.data else {
-            return (Array(repeating: 0, count: palette.count), 0)
+            return ([:], 0)
         }
         let pixels = raw.bindMemory(to: UInt8.self, capacity: stride)
 
-        var counts: [Int] = Array(repeating: 0, count: palette.count)
+        var groupCounts: [String: Int] = [:]
         var opaqueCount = 0
         var i = 0
         while i < stride {
@@ -174,11 +170,54 @@ struct App {
             let r = Float(pixels[i]) / 255.0
             let g = Float(pixels[i + 1]) / 255.0
             let b = Float(pixels[i + 2]) / 255.0
-            counts[nearestPaletteIndex(r: r, g: g, b: b)] += 1
+            groupCounts[classifyColor(r: r, g: g, b: b), default: 0] += 1
             opaqueCount += 1
             i += bytesPerPixel
         }
-        return (counts, opaqueCount)
+        return (groupCounts, opaqueCount)
+    }
+
+    // MARK: - Color classification (HSL-based)
+
+    private static func classifyColor(r: Float, g: Float, b: Float) -> String {
+        let maxC = max(r, max(g, b))
+        let minC = min(r, min(g, b))
+        let delta = maxC - minC
+
+        // Very dark or near-gray (low saturation) → gray family
+        if maxC < 0.15 || (maxC > 0 && delta / maxC < 0.10) {
+            return "gray"
+        }
+
+        return colorFamily(hue: hue(r: r, g: g, b: b, max: maxC, delta: delta))
+    }
+
+    private static func hue(r: Float, g: Float, b: Float, max maxC: Float, delta: Float) -> Float {
+        var h: Float
+        if maxC == r {
+            h = (g - b) / delta
+        } else if maxC == g {
+            h = 2 + (b - r) / delta
+        } else {
+            h = 4 + (r - g) / delta
+        }
+        h *= 60
+        if h < 0 { h += 360 }
+        return h
+    }
+
+    private static func colorFamily(hue h: Float) -> String {
+        switch h {
+        case ..<15, 345...:  return "red"     // red
+        case 15..<45:        return "red"     // orange
+        case 45..<65:        return "yellow"
+        case 65..<170:       return "green"
+        case 170..<200:      return "blue"    // cyan
+        case 200..<250:      return "blue"    // blue + indigo
+        case 250..<320:      return "purple"
+        case 320..<345:      return "red"     // magenta
+        default:             return "gray"
+        }
     }
 
     private static func loadCGImage(at url: URL) throws -> (full: CGImage, thumb: CGImage, orientation: CGImagePropertyOrientation) {
@@ -204,22 +243,6 @@ struct App {
             throw TaggerError.thumbnailFailed(url.path)
         }
         return (full, thumb, orientation)
-    }
-
-    private static func nearestPaletteIndex(r: Float, g: Float, b: Float) -> Int {
-        var bestIndex = 0
-        var bestDistance: Float = .greatestFiniteMagnitude
-        for (i, color) in palette.enumerated() {
-            let dr = color.r - r
-            let dg = color.g - g
-            let db = color.b - b
-            let d = dr * dr + dg * dg + db * db
-            if d < bestDistance {
-                bestDistance = d
-                bestIndex = i
-            }
-        }
-        return bestIndex
     }
 
     private static func emitJSON(path: String, tags: [Tag], colors: [ColorResult], elapsedMs: Int, to outputURL: URL?) throws {
@@ -278,44 +301,9 @@ private struct ColorResult: Codable {
     let ratio: Float
 }
 
-private struct PaletteColor {
-    let r: Float
-    let g: Float
-    let b: Float
-    let group: String
-}
-
 private let colorMinRatio: Float = 0.05
 private let visionThreshold: Float = 0.2
 private let thumbnailMaxPixelSize: Int = 512
-
-private let palette: [PaletteColor] = [
-    // Apple system colors
-    PaletteColor(r: 1.00, g: 0.23, b: 0.19, group: "red"),
-    PaletteColor(r: 1.00, g: 0.58, b: 0.00, group: "red"),
-    PaletteColor(r: 1.00, g: 0.80, b: 0.00, group: "yellow"),
-    PaletteColor(r: 0.20, g: 0.78, b: 0.35, group: "green"),
-    PaletteColor(r: 0.00, g: 0.78, b: 0.75, group: "green"),
-    PaletteColor(r: 0.35, g: 0.78, b: 0.91, group: "blue"),
-    PaletteColor(r: 0.39, g: 0.82, b: 0.93, group: "blue"),
-    PaletteColor(r: 0.00, g: 0.48, b: 1.00, group: "blue"),
-    PaletteColor(r: 0.35, g: 0.34, b: 0.84, group: "blue"),
-    PaletteColor(r: 0.75, g: 0.35, b: 0.95, group: "purple"),
-    PaletteColor(r: 1.00, g: 0.17, b: 0.55, group: "red"),
-    PaletteColor(r: 0.64, g: 0.52, b: 0.37, group: "yellow"),
-    PaletteColor(r: 0.56, g: 0.56, b: 0.58, group: "gray"),
-    // Custom descriptive
-    PaletteColor(r: 0.53, g: 0.81, b: 0.92, group: "blue"),
-    PaletteColor(r: 0.13, g: 0.55, b: 0.27, group: "green"),
-    PaletteColor(r: 0.00, g: 0.39, b: 0.00, group: "green"),
-    PaletteColor(r: 0.68, g: 0.85, b: 0.90, group: "blue"),
-    PaletteColor(r: 0.00, g: 0.00, b: 0.55, group: "blue"),
-    PaletteColor(r: 0.50, g: 0.50, b: 0.00, group: "green"),
-    PaletteColor(r: 0.00, g: 0.00, b: 0.00, group: "gray"),
-    PaletteColor(r: 0.33, g: 0.33, b: 0.33, group: "gray"),
-    PaletteColor(r: 0.83, g: 0.83, b: 0.83, group: "gray"),
-    PaletteColor(r: 1.00, g: 1.00, b: 1.00, group: "gray"),
-]
 
 private enum TaggerError: LocalizedError {
     case imageLoadFailed(String)
