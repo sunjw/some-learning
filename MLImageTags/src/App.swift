@@ -1,4 +1,5 @@
 import Foundation
+import CoreGraphics
 import Vision
 import ImageIO
 
@@ -79,8 +80,16 @@ struct App {
             exit(1)
         }
 
+        let colors: [ColorResult]
         do {
-            try emitJSON(path: absolutePath(of: inputURL), tags: tags, to: outputURL)
+            colors = try analyzeColors(imageAt: inputURL)
+        } catch {
+            printError("\(error)")
+            exit(1)
+        }
+
+        do {
+            try emitJSON(path: absolutePath(of: inputURL), tags: tags, colors: colors, to: outputURL)
         } catch {
             printError("failed to write output: \(error)")
             exit(1)
@@ -102,10 +111,7 @@ struct App {
     }
 
     private static func classify(imageAt url: URL, threshold: Float) throws -> [Tag] {
-        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil),
-              let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
-            throw TaggerError.imageLoadFailed(url.path)
-        }
+        let cgImage = try loadCGImage(at: url)
 
         let request = VNClassifyImageRequest()
         let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
@@ -126,8 +132,81 @@ struct App {
         return tags
     }
 
-    private static func emitJSON(path: String, tags: [Tag], to outputURL: URL?) throws {
-        let payload = Result(path: path, tags: tags)
+    private static func analyzeColors(imageAt url: URL) throws -> [ColorResult] {
+        let cgImage = try loadCGImage(at: url)
+
+        let width = cgImage.width
+        let height = cgImage.height
+        guard width > 0, height > 0 else { return [] }
+
+        let bytesPerPixel = 4
+        let bytesPerRow = width * bytesPerPixel
+        let totalPixels = width * height
+
+        var pixels = [UInt8](repeating: 0, count: totalPixels * bytesPerPixel)
+        let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) ?? CGColorSpaceCreateDeviceRGB()
+        let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue
+            | CGBitmapInfo.byteOrder32Big.rawValue
+
+        guard let context = CGContext(
+            data: &pixels,
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bytesPerRow: bytesPerRow,
+            space: colorSpace,
+            bitmapInfo: bitmapInfo
+        ) else {
+            throw TaggerError.colorAnalysisFailed
+        }
+        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+
+        var counts: [Int] = Array(repeating: 0, count: palette.count)
+        var i = 0
+        while i < pixels.count {
+            let r = Float(pixels[i]) / 255.0
+            let g = Float(pixels[i + 1]) / 255.0
+            let b = Float(pixels[i + 2]) / 255.0
+            counts[nearestPaletteIndex(r: r, g: g, b: b)] += 1
+            i += bytesPerPixel
+        }
+
+        let total = Float(totalPixels)
+        var result: [ColorResult] = []
+        for (idx, count) in counts.enumerated() where count > 0 {
+            result.append(ColorResult(color: palette[idx].name,
+                                      ratio: Float(count) / total))
+        }
+        result.sort { $0.ratio > $1.ratio }
+        return result
+    }
+
+    private static func loadCGImage(at url: URL) throws -> CGImage {
+        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil),
+              let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
+            throw TaggerError.imageLoadFailed(url.path)
+        }
+        return cgImage
+    }
+
+    private static func nearestPaletteIndex(r: Float, g: Float, b: Float) -> Int {
+        var bestIndex = 0
+        var bestDistance: Float = .greatestFiniteMagnitude
+        for (i, color) in palette.enumerated() {
+            let dr = color.r - r
+            let dg = color.g - g
+            let db = color.b - b
+            let d = dr * dr + dg * dg + db * db
+            if d < bestDistance {
+                bestDistance = d
+                bestIndex = i
+            }
+        }
+        return bestIndex
+    }
+
+    private static func emitJSON(path: String, tags: [Tag], colors: [ColorResult], to outputURL: URL?) throws {
+        let payload = Result(path: path, tags: tags, colors: colors)
         let encoder = JSONEncoder()
         encoder.outputFormatting = []
         let data = try encoder.encode(payload)
@@ -168,6 +247,7 @@ struct App {
 private struct Result: Codable {
     let path: String
     let tags: [Tag]
+    let colors: [ColorResult]
 }
 
 private struct Tag: Codable {
@@ -175,12 +255,54 @@ private struct Tag: Codable {
     let confidence: Float
 }
 
+private struct ColorResult: Codable {
+    let color: String
+    let ratio: Float
+}
+
+private struct PaletteColor {
+    let name: String
+    let r: Float
+    let g: Float
+    let b: Float
+}
+
+private let palette: [PaletteColor] = [
+    // Apple system colors (13)
+    PaletteColor(name: "red",    r: 1.00, g: 0.23, b: 0.19),
+    PaletteColor(name: "orange", r: 1.00, g: 0.58, b: 0.00),
+    PaletteColor(name: "yellow", r: 1.00, g: 0.80, b: 0.00),
+    PaletteColor(name: "green",  r: 0.20, g: 0.78, b: 0.35),
+    PaletteColor(name: "mint",   r: 0.00, g: 0.78, b: 0.75),
+    PaletteColor(name: "teal",   r: 0.35, g: 0.78, b: 0.91),
+    PaletteColor(name: "cyan",   r: 0.39, g: 0.82, b: 0.93),
+    PaletteColor(name: "blue",   r: 0.00, g: 0.48, b: 1.00),
+    PaletteColor(name: "indigo", r: 0.35, g: 0.34, b: 0.84),
+    PaletteColor(name: "purple", r: 0.75, g: 0.35, b: 0.95),
+    PaletteColor(name: "pink",   r: 1.00, g: 0.17, b: 0.55),
+    PaletteColor(name: "brown",  r: 0.64, g: 0.52, b: 0.37),
+    PaletteColor(name: "gray",   r: 0.56, g: 0.56, b: 0.58),
+    // Custom descriptive (10)
+    PaletteColor(name: "sky_blue",     r: 0.53, g: 0.81, b: 0.92),
+    PaletteColor(name: "forest_green", r: 0.13, g: 0.55, b: 0.27),
+    PaletteColor(name: "dark_green",   r: 0.00, g: 0.39, b: 0.00),
+    PaletteColor(name: "light_blue",   r: 0.68, g: 0.85, b: 0.90),
+    PaletteColor(name: "dark_blue",    r: 0.00, g: 0.00, b: 0.55),
+    PaletteColor(name: "olive",        r: 0.50, g: 0.50, b: 0.00),
+    PaletteColor(name: "beige",        r: 0.96, g: 0.96, b: 0.86),
+    PaletteColor(name: "dark_gray",    r: 0.33, g: 0.33, b: 0.33),
+    PaletteColor(name: "light_gray",   r: 0.83, g: 0.83, b: 0.83),
+    PaletteColor(name: "white",        r: 1.00, g: 1.00, b: 1.00),
+]
+
 private enum TaggerError: LocalizedError {
     case imageLoadFailed(String)
+    case colorAnalysisFailed
 
     var errorDescription: String? {
         switch self {
         case .imageLoadFailed(let path): return "failed to load image: \(path)"
+        case .colorAnalysisFailed: return "failed to create bitmap context for color analysis"
         }
     }
 }
