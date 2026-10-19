@@ -21,7 +21,7 @@ struct App {
             exit(1)
         }
 
-        let tags: [String]
+        let tags: [Tag]
         do {
             tags = try classify(imageAt: url)
         } catch {
@@ -46,7 +46,7 @@ struct App {
         return FileManager.default.currentDirectoryPath + "/" + url.path
     }
 
-    private static func classify(imageAt url: URL) throws -> [String] {
+    private static func classify(imageAt url: URL) throws -> [Tag] {
         guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil),
               let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
             throw TaggerError.imageLoadFailed(url.path)
@@ -56,20 +56,20 @@ struct App {
         let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
         try handler.perform([request])
 
-        let observations = request.results ?? []
+        let observations = (request.results ?? []).sorted { $0.confidence > $1.confidence }
 
         var seen = Set<String>()
-        var tags: [String] = []
+        var tags: [Tag] = []
         for obs in observations {
-            let tag = obs.identifier.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !tag.isEmpty, !seen.contains(tag) else { continue }
-            seen.insert(tag)
-            tags.append(tag)
+            let identifier = obs.identifier.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !identifier.isEmpty, !seen.contains(identifier) else { continue }
+            seen.insert(identifier)
+            tags.append(Tag(tag: identifier, confidence: obs.confidence))
         }
         return tags
     }
 
-    private static func emitJSON(path: String, tags: [String]) {
+    private static func emitJSON(path: String, tags: [Tag]) {
         let payload = Result(path: path, tags: tags)
         let encoder = JSONEncoder()
         encoder.outputFormatting = []
@@ -92,7 +92,7 @@ struct App {
         Recognizes tags in an image using Apple's Vision framework
         (VNClassifyImageRequest) and prints a JSON object:
 
-          {"path":"...","tags":["a","b","c",...]}
+          {"path":"...","tags":[{"tag":"a","confidence":0.95},...]}
         """
         FileHandle.standardError.write(Data((usage + "\n").utf8))
     }
@@ -104,7 +104,12 @@ struct App {
 
 private struct Result: Codable {
     let path: String
-    let tags: [String]
+    let tags: [Tag]
+}
+
+private struct Tag: Codable {
+    let tag: String
+    let confidence: Float
 }
 
 private enum TaggerError: LocalizedError {
