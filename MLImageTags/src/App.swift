@@ -126,7 +126,7 @@ struct App {
         Recognizes tags in an image using Apple's Vision framework
         (VNClassifyImageRequest) and prints a JSON object:
 
-          {"path":"...","tags":[{"tag":"a","confidence":0.95},...]}
+          {"path":"...","tags":[{"tag":"some","confidence":0.95},...]}
 
         Options:
           -t, --threshold <0..1>   minimum confidence (default: 0.2)
