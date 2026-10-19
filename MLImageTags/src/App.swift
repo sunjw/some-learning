@@ -12,7 +12,6 @@ struct App {
             exit(2)
         }
 
-        var threshold: Float = 0.2
         var inputArg: String?
         var outputArg: String?
 
@@ -36,17 +35,6 @@ struct App {
                     exit(2)
                 }
                 outputArg = args[i + 1]
-                i += 2
-            case "-t", "--threshold":
-                guard i + 1 < args.count else {
-                    printError("\(a) requires a value in [0, 1]")
-                    exit(2)
-                }
-                guard let v = Float(args[i + 1]), (0...1).contains(v) else {
-                    printError("invalid threshold: \(args[i + 1]) (expected a number in [0, 1])")
-                    exit(2)
-                }
-                threshold = v
                 i += 2
             default:
                 if a.hasPrefix("-") {
@@ -76,7 +64,7 @@ struct App {
 
         let tags: [Tag]
         do {
-            tags = try classify(imageAt: inputURL, threshold: threshold)
+            tags = try classify(imageAt: inputURL, threshold: 0.2)
         } catch {
             printError("\(error)")
             exit(1)
@@ -137,7 +125,7 @@ struct App {
     }
 
     private static func analyzeColors(imageAt url: URL) throws -> [ColorResult] {
-        let cgImage = try loadCGImage(at: url, maxPixelSize: 256)
+        let cgImage = try loadCGImage(at: url, maxPixelSize: 512)
 
         let width = cgImage.width
         let height = cgImage.height
@@ -182,7 +170,10 @@ struct App {
         }
         var result: [ColorResult] = []
         for (group, count) in groupCounts {
-            result.append(ColorResult(color: group, ratio: Float(count) / total))
+            let ratio = Float(count) / total
+            if ratio >= colorMinRatio {
+                result.append(ColorResult(color: group, ratio: ratio))
+            }
         }
         result.sort { $0.ratio > $1.ratio }
         return result
@@ -247,7 +238,7 @@ struct App {
 
     private static func printUsage() {
         let usage = """
-        usage: MLImageTags -i <image_path> [-o <output_path>] [-t <0..1>]
+        usage: MLImageTags -i <image_path> [-o <output_path>]
 
         Recognizes tags and dominant colors in an image using Apple's
         Vision framework (VNClassifyImageRequest) and a Core Graphics
@@ -258,7 +249,6 @@ struct App {
         Options:
           -i, --input <path>      image to analyze (required)
           -o, --output <path>     write JSON to file instead of stdout
-          -t, --threshold <0..1>  minimum confidence for tags (default: 0.2)
           -h, --help              show this message
         """
         FileHandle.standardError.write(Data((usage + "\n").utf8))
@@ -293,6 +283,8 @@ private struct PaletteColor {
     let b: Float
     let group: String
 }
+
+private let colorMinRatio: Float = 0.05
 
 private let palette: [PaletteColor] = [
     // Apple system colors (13)
