@@ -60,7 +60,9 @@ struct App {
 
         let outputURL: URL? = outputArg.map { resolveURL($0) }
 
-        let images: (full: CGImage, thumb: CGImage)
+        let startTime = Date()
+
+        let images: (full: CGImage, thumb: CGImage, orientation: CGImagePropertyOrientation)
         do {
             images = try loadCGImage(at: inputURL)
         } catch {
@@ -68,9 +70,7 @@ struct App {
             exit(1)
         }
 
-        let startTime = Date()
-
-        async let tagsResult = try classify(cgImage: images.full, threshold: 0.2)
+        async let tagsResult = try classify(cgImage: images.full, orientation: images.orientation)
         async let colorsResult = try analyzeColors(cgImage: images.thumb)
 
         let tags: [Tag]
@@ -107,14 +107,17 @@ struct App {
         return FileManager.default.currentDirectoryPath + "/" + url.path
     }
 
-    private static func classify(cgImage: CGImage, threshold: Float) throws -> [Tag] {
+    private static func classify(cgImage: CGImage, orientation: CGImagePropertyOrientation) throws -> [Tag] {
         let request = VNClassifyImageRequest()
-        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        let handler = VNImageRequestHandler(cgImage: cgImage, orientation: orientation, options: [:])
         try handler.perform([request])
 
         let observations = (request.results ?? [])
-            .filter { $0.confidence >= threshold }
-            .sorted { $0.confidence > $1.confidence }
+            .filter { $0.confidence >= visionThreshold }
+            .sorted {
+                if $0.confidence != $1.confidence { return $0.confidence > $1.confidence }
+                return $0.identifier < $1.identifier
+            }
 
         var seen = Set<String>()
         var tags: [Tag] = []
@@ -128,7 +131,6 @@ struct App {
     }
 
     private static func analyzeColors(cgImage: CGImage) throws -> [ColorResult] {
-
         let width = cgImage.width
         let height = cgImage.height
         guard width > 0, height > 0 else { return [] }
@@ -137,13 +139,12 @@ struct App {
         let bytesPerRow = width * bytesPerPixel
         let totalPixels = width * height
 
-        var pixels = [UInt8](repeating: 0, count: totalPixels * bytesPerPixel)
         let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) ?? CGColorSpaceCreateDeviceRGB()
         let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue
             | CGBitmapInfo.byteOrder32Big.rawValue
 
         guard let context = CGContext(
-            data: &pixels,
+            data: nil,
             width: width,
             height: height,
             bitsPerComponent: 8,
@@ -155,17 +156,31 @@ struct App {
         }
         context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
 
+        guard let raw = context.data else {
+            throw TaggerError.colorAnalysisFailed
+        }
+        let pixels = raw.bindMemory(to: UInt8.self, capacity: totalPixels * bytesPerPixel)
+
         var counts: [Int] = Array(repeating: 0, count: palette.count)
+        var opaqueCount = 0
         var i = 0
-        while i < pixels.count {
+        let stride = totalPixels * bytesPerPixel
+        while i < stride {
+            if Int(pixels[i + 3]) < 128 {
+                i += bytesPerPixel
+                continue
+            }
             let r = Float(pixels[i]) / 255.0
             let g = Float(pixels[i + 1]) / 255.0
             let b = Float(pixels[i + 2]) / 255.0
             counts[nearestPaletteIndex(r: r, g: g, b: b)] += 1
+            opaqueCount += 1
             i += bytesPerPixel
         }
 
-        let total = Float(totalPixels)
+        guard opaqueCount > 0 else { return [] }
+
+        let total = Float(opaqueCount)
         var groupCounts: [String: Int] = [:]
         for (idx, count) in counts.enumerated() where count > 0 {
             groupCounts[palette[idx].group, default: 0] += count
@@ -177,13 +192,23 @@ struct App {
                 result.append(ColorResult(color: group, ratio: ratio))
             }
         }
-        result.sort { $0.ratio > $1.ratio }
+        result.sort {
+            if $0.ratio != $1.ratio { return $0.ratio > $1.ratio }
+            return $0.color < $1.color
+        }
         return result
     }
 
-    private static func loadCGImage(at url: URL) throws -> (full: CGImage, thumb: CGImage) {
-        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil),
-              let full = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
+    private static func loadCGImage(at url: URL) throws -> (full: CGImage, thumb: CGImage, orientation: CGImagePropertyOrientation) {
+        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) else {
+            throw TaggerError.imageLoadFailed(url.path)
+        }
+
+        let properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [CFString: Any]
+        let rawOrientation = (properties?[kCGImagePropertyOrientation] as? UInt32) ?? 1
+        let orientation = CGImagePropertyOrientation(rawValue: rawOrientation) ?? .up
+
+        guard let full = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
             throw TaggerError.imageLoadFailed(url.path)
         }
 
@@ -191,10 +216,12 @@ struct App {
             kCGImageSourceCreateThumbnailFromImageAlways: true,
             kCGImageSourceCreateThumbnailWithTransform: true,
             kCGImageSourceShouldCacheImmediately: true,
-            kCGImageSourceThumbnailMaxPixelSize: 512,
+            kCGImageSourceThumbnailMaxPixelSize: thumbnailMaxPixelSize,
         ]
-        let thumb = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as CFDictionary) ?? full
-        return (full, thumb)
+        guard let thumb = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as CFDictionary) else {
+            throw TaggerError.thumbnailFailed(url.path)
+        }
+        return (full, thumb, orientation)
     }
 
     private static func nearestPaletteIndex(r: Float, g: Float, b: Float) -> Int {
@@ -216,7 +243,7 @@ struct App {
     private static func emitJSON(path: String, tags: [Tag], colors: [ColorResult], elapsedMs: Int, to outputURL: URL?) throws {
         let payload = Result(path: path, tags: tags, colors: colors, elapsedMs: elapsedMs)
         let encoder = JSONEncoder()
-        encoder.outputFormatting = []
+        encoder.outputFormatting = [.withoutEscapingSlashes]
         let data = try encoder.encode(payload)
 
         if let outputURL {
@@ -278,6 +305,8 @@ private struct PaletteColor {
 }
 
 private let colorMinRatio: Float = 0.05
+private let visionThreshold: Float = 0.2
+private let thumbnailMaxPixelSize: Int = 512
 
 private let palette: [PaletteColor] = [
     // Apple system colors (13)
@@ -309,11 +338,13 @@ private let palette: [PaletteColor] = [
 
 private enum TaggerError: LocalizedError {
     case imageLoadFailed(String)
+    case thumbnailFailed(String)
     case colorAnalysisFailed
 
     var errorDescription: String? {
         switch self {
         case .imageLoadFailed(let path): return "failed to load image: \(path)"
+        case .thumbnailFailed(let path): return "failed to create thumbnail for: \(path)"
         case .colorAnalysisFailed: return "failed to create bitmap context for color analysis"
         }
     }
