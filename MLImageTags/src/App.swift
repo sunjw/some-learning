@@ -243,7 +243,7 @@ struct App {
     private static func emitJSON(path: String, tags: [Tag], colors: [ColorResult], elapsedMs: Int, to outputURL: URL?) throws {
         let payload = Result(path: path, tags: tags, colors: colors, elapsedMs: elapsedMs)
         let encoder = JSONEncoder()
-        encoder.outputFormatting = [.withoutEscapingSlashes]
+        encoder.outputFormatting = [.withoutEscapingSlashes, .sortedKeys]
         let data = try encoder.encode(payload)
 
         if let outputURL {
