@@ -176,10 +176,13 @@ struct App {
         }
 
         let total = Float(totalPixels)
-        var result: [ColorResult] = []
+        var groupCounts: [String: Int] = [:]
         for (idx, count) in counts.enumerated() where count > 0 {
-            result.append(ColorResult(color: palette[idx].name,
-                                      ratio: Float(count) / total))
+            groupCounts[palette[idx].group, default: 0] += count
+        }
+        var result: [ColorResult] = []
+        for (group, count) in groupCounts {
+            result.append(ColorResult(color: group, ratio: Float(count) / total))
         }
         result.sort { $0.ratio > $1.ratio }
         return result
@@ -288,34 +291,35 @@ private struct PaletteColor {
     let r: Float
     let g: Float
     let b: Float
+    let group: String
 }
 
 private let palette: [PaletteColor] = [
     // Apple system colors (13)
-    PaletteColor(name: "red",    r: 1.00, g: 0.23, b: 0.19),
-    PaletteColor(name: "orange", r: 1.00, g: 0.58, b: 0.00),
-    PaletteColor(name: "yellow", r: 1.00, g: 0.80, b: 0.00),
-    PaletteColor(name: "green",  r: 0.20, g: 0.78, b: 0.35),
-    PaletteColor(name: "mint",   r: 0.00, g: 0.78, b: 0.75),
-    PaletteColor(name: "teal",   r: 0.35, g: 0.78, b: 0.91),
-    PaletteColor(name: "cyan",   r: 0.39, g: 0.82, b: 0.93),
-    PaletteColor(name: "blue",   r: 0.00, g: 0.48, b: 1.00),
-    PaletteColor(name: "indigo", r: 0.35, g: 0.34, b: 0.84),
-    PaletteColor(name: "purple", r: 0.75, g: 0.35, b: 0.95),
-    PaletteColor(name: "pink",   r: 1.00, g: 0.17, b: 0.55),
-    PaletteColor(name: "brown",  r: 0.64, g: 0.52, b: 0.37),
-    PaletteColor(name: "gray",   r: 0.56, g: 0.56, b: 0.58),
+    PaletteColor(name: "red",    r: 1.00, g: 0.23, b: 0.19, group: "red"),
+    PaletteColor(name: "orange", r: 1.00, g: 0.58, b: 0.00, group: "red"),
+    PaletteColor(name: "yellow", r: 1.00, g: 0.80, b: 0.00, group: "yellow"),
+    PaletteColor(name: "green",  r: 0.20, g: 0.78, b: 0.35, group: "green"),
+    PaletteColor(name: "mint",   r: 0.00, g: 0.78, b: 0.75, group: "green"),
+    PaletteColor(name: "teal",   r: 0.35, g: 0.78, b: 0.91, group: "blue"),
+    PaletteColor(name: "cyan",   r: 0.39, g: 0.82, b: 0.93, group: "blue"),
+    PaletteColor(name: "blue",   r: 0.00, g: 0.48, b: 1.00, group: "blue"),
+    PaletteColor(name: "indigo", r: 0.35, g: 0.34, b: 0.84, group: "blue"),
+    PaletteColor(name: "purple", r: 0.75, g: 0.35, b: 0.95, group: "purple"),
+    PaletteColor(name: "pink",   r: 1.00, g: 0.17, b: 0.55, group: "red"),
+    PaletteColor(name: "brown",  r: 0.64, g: 0.52, b: 0.37, group: "yellow"),
+    PaletteColor(name: "gray",   r: 0.56, g: 0.56, b: 0.58, group: "gray"),
     // Custom descriptive (10)
-    PaletteColor(name: "sky_blue",     r: 0.53, g: 0.81, b: 0.92),
-    PaletteColor(name: "forest_green", r: 0.13, g: 0.55, b: 0.27),
-    PaletteColor(name: "dark_green",   r: 0.00, g: 0.39, b: 0.00),
-    PaletteColor(name: "light_blue",   r: 0.68, g: 0.85, b: 0.90),
-    PaletteColor(name: "dark_blue",    r: 0.00, g: 0.00, b: 0.55),
-    PaletteColor(name: "olive",        r: 0.50, g: 0.50, b: 0.00),
-    PaletteColor(name: "black",        r: 0.00, g: 0.00, b: 0.00),
-    PaletteColor(name: "dark_gray",    r: 0.33, g: 0.33, b: 0.33),
-    PaletteColor(name: "light_gray",   r: 0.83, g: 0.83, b: 0.83),
-    PaletteColor(name: "white",        r: 1.00, g: 1.00, b: 1.00),
+    PaletteColor(name: "sky_blue",     r: 0.53, g: 0.81, b: 0.92, group: "blue"),
+    PaletteColor(name: "forest_green", r: 0.13, g: 0.55, b: 0.27, group: "green"),
+    PaletteColor(name: "dark_green",   r: 0.00, g: 0.39, b: 0.00, group: "green"),
+    PaletteColor(name: "light_blue",   r: 0.68, g: 0.85, b: 0.90, group: "blue"),
+    PaletteColor(name: "dark_blue",    r: 0.00, g: 0.00, b: 0.55, group: "blue"),
+    PaletteColor(name: "olive",        r: 0.50, g: 0.50, b: 0.00, group: "green"),
+    PaletteColor(name: "black",        r: 0.00, g: 0.00, b: 0.00, group: "gray"),
+    PaletteColor(name: "dark_gray",    r: 0.33, g: 0.33, b: 0.33, group: "gray"),
+    PaletteColor(name: "light_gray",   r: 0.83, g: 0.83, b: 0.83, group: "gray"),
+    PaletteColor(name: "white",        r: 1.00, g: 1.00, b: 1.00, group: "gray"),
 ]
 
 private enum TaggerError: LocalizedError {
