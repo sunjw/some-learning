@@ -5,7 +5,7 @@ import ImageIO
 
 @main
 struct App {
-    static func main() {
+    static func main() async {
         let args = CommandLine.arguments
         guard args.count >= 2 else {
             printUsage()
@@ -62,17 +62,14 @@ struct App {
 
         let startTime = Date()
 
-        let tags: [Tag]
-        do {
-            tags = try classify(imageAt: inputURL, threshold: 0.2)
-        } catch {
-            printError("\(error)")
-            exit(1)
-        }
+        async let tagsResult = try classify(imageAt: inputURL, threshold: 0.2)
+        async let colorsResult = try analyzeColors(imageAt: inputURL)
 
+        let tags: [Tag]
         let colors: [ColorResult]
         do {
-            colors = try analyzeColors(imageAt: inputURL)
+            tags = try await tagsResult
+            colors = try await colorsResult
         } catch {
             printError("\(error)")
             exit(1)
