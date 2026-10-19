@@ -312,7 +312,7 @@ private let palette: [PaletteColor] = [
     PaletteColor(name: "light_blue",   r: 0.68, g: 0.85, b: 0.90),
     PaletteColor(name: "dark_blue",    r: 0.00, g: 0.00, b: 0.55),
     PaletteColor(name: "olive",        r: 0.50, g: 0.50, b: 0.00),
-    PaletteColor(name: "beige",        r: 0.96, g: 0.96, b: 0.86),
+    PaletteColor(name: "black",        r: 0.00, g: 0.00, b: 0.00),
     PaletteColor(name: "dark_gray",    r: 0.33, g: 0.33, b: 0.33),
     PaletteColor(name: "light_gray",   r: 0.83, g: 0.83, b: 0.83),
     PaletteColor(name: "white",        r: 1.00, g: 1.00, b: 1.00),
