@@ -6,8 +6,13 @@
 	objectVersion = 90;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		415C6F9130860BAE00A1D6A3 /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 415C6F9030860BAE00A1D6A3 /* Vision.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		000000000000000000000120 /* MLImageTags */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MLImageTags; sourceTree = BUILT_PRODUCTS_DIR; };
+		000000000000000000000120 /* MLImageTags */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = MLImageTags; path = "/Users/sunjw/coding/some-learning/MLImageTags/build/Debug/MLImageTags"; sourceTree = "<absolute>"; };
+		415C6F9030860BAE00A1D6A3 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -22,6 +27,7 @@
 		000000000000000130000000 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
+				415C6F9130860BAE00A1D6A3 /* Vision.framework in Frameworks */,
 			);
 		};
 /* End PBXFrameworksBuildPhase section */
@@ -30,17 +36,17 @@
 		000000000000000000000001 = {
 			isa = PBXGroup;
 			children = (
+				415C6F8F30860BAE00A1D6A3 /* Frameworks */,
 				000000000000000000000010 /* src */,
-				000000000000000000000020 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		000000000000000000000020 /* Products */ = {
+		415C6F8F30860BAE00A1D6A3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				000000000000000000000120 /* MLImageTags */,
+				415C6F9030860BAE00A1D6A3 /* Vision.framework */,
 			);
-			name = Products;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -88,7 +94,7 @@
 			mainGroup = 000000000000000000000001;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 90;
-			productRefGroup = 000000000000000000000020 /* Products */;
+			productRefGroup = 000000000000000000000001;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
