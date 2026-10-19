@@ -12,7 +12,8 @@ struct App {
         }
 
         var threshold: Float = 0.2
-        var pathArg: String?
+        var inputArg: String?
+        var outputArg: String?
 
         var i = 1
         while i < args.count {
@@ -21,6 +22,20 @@ struct App {
             case "-h", "--help":
                 printUsage()
                 exit(0)
+            case "-i", "--input":
+                guard i + 1 < args.count else {
+                    printError("\(a) requires a path")
+                    exit(2)
+                }
+                inputArg = args[i + 1]
+                i += 2
+            case "-o", "--output":
+                guard i + 1 < args.count else {
+                    printError("\(a) requires a path")
+                    exit(2)
+                }
+                outputArg = args[i + 1]
+                i += 2
             case "-t", "--threshold":
                 guard i + 1 < args.count else {
                     printError("\(a) requires a value in [0, 1]")
@@ -37,31 +52,39 @@ struct App {
                     printError("unknown option: \(a)")
                     exit(2)
                 }
-                if pathArg == nil { pathArg = a }
-                i += 1
+                printError("unexpected positional argument: \(a)")
+                exit(2)
             }
         }
 
-        guard let pathArg else {
+        guard let inputArg else {
+            printError("missing required -i / --input <path>")
             printUsage()
             exit(2)
         }
 
-        let url = resolveURL(pathArg)
-        guard FileManager.default.fileExists(atPath: url.path) else {
-            printError("file not found: \(url.path)")
+        let inputURL = resolveURL(inputArg)
+        guard FileManager.default.fileExists(atPath: inputURL.path) else {
+            printError("file not found: \(inputURL.path)")
             exit(1)
         }
 
+        let outputURL: URL? = outputArg.map { resolveURL($0) }
+
         let tags: [Tag]
         do {
-            tags = try classify(imageAt: url, threshold: threshold)
+            tags = try classify(imageAt: inputURL, threshold: threshold)
         } catch {
             printError("\(error)")
             exit(1)
         }
 
-        emitJSON(path: absolutePath(of: url), tags: tags)
+        do {
+            try emitJSON(path: absolutePath(of: inputURL), tags: tags, to: outputURL)
+        } catch {
+            printError("failed to write output: \(error)")
+            exit(1)
+        }
     }
 
     // MARK: - Steps
@@ -103,17 +126,17 @@ struct App {
         return tags
     }
 
-    private static func emitJSON(path: String, tags: [Tag]) {
+    private static func emitJSON(path: String, tags: [Tag], to outputURL: URL?) throws {
         let payload = Result(path: path, tags: tags)
         let encoder = JSONEncoder()
         encoder.outputFormatting = []
-        do {
-            let data = try encoder.encode(payload)
+        let data = try encoder.encode(payload)
+
+        if let outputURL {
+            try data.write(to: outputURL, options: .atomic)
+        } else {
             FileHandle.standardOutput.write(data)
             FileHandle.standardOutput.write(Data("\n".utf8))
-        } catch {
-            printError("json encode failed: \(error)")
-            exit(1)
         }
     }
 
@@ -121,15 +144,17 @@ struct App {
 
     private static func printUsage() {
         let usage = """
-        usage: MLImageTags [options] <image_path>
+        usage: MLImageTags -i <image_path> [-o <output_path>] [-t <0..1>]
 
         Recognizes tags in an image using Apple's Vision framework
-        (VNClassifyImageRequest) and prints a JSON object:
+        (VNClassifyImageRequest) and prints (or writes) a JSON object:
 
           {"path":"...","tags":[{"tag":"some","confidence":0.95},...]}
 
         Options:
-          -t, --threshold <0..1>   minimum confidence (default: 0.2)
+          -i, --input <path>      image to analyze (required)
+          -o, --output <path>     write JSON to file instead of stdout
+          -t, --threshold <0..1>  minimum confidence (default: 0.2)
           -h, --help              show this message
         """
         FileHandle.standardError.write(Data((usage + "\n").utf8))
