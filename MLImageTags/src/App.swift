@@ -133,7 +133,7 @@ struct App {
     }
 
     private static func analyzeColors(imageAt url: URL) throws -> [ColorResult] {
-        let cgImage = try loadCGImage(at: url)
+        let cgImage = try loadCGImage(at: url, maxPixelSize: 256)
 
         let width = cgImage.width
         let height = cgImage.height
@@ -181,9 +181,26 @@ struct App {
         return result
     }
 
-    private static func loadCGImage(at url: URL) throws -> CGImage {
-        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil),
-              let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
+    private static func loadCGImage(at url: URL, maxPixelSize: Int = 0) throws -> CGImage {
+        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) else {
+            throw TaggerError.imageLoadFailed(url.path)
+        }
+
+        if maxPixelSize > 0 {
+            let options: [CFString: Any] = [
+                kCGImageSourceCreateThumbnailFromImageAlways: true,
+                kCGImageSourceCreateThumbnailWithTransform: true,
+                kCGImageSourceShouldCacheImmediately: true,
+                kCGImageSourceThumbnailMaxPixelSize: maxPixelSize,
+            ]
+            if let thumbnail = CGImageSourceCreateThumbnailAtIndex(
+                imageSource, 0, options as CFDictionary
+            ) {
+                return thumbnail
+            }
+        }
+
+        guard let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
             throw TaggerError.imageLoadFailed(url.path)
         }
         return cgImage
