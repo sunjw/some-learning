@@ -56,7 +56,7 @@ struct App {
         let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
         try handler.perform([request])
 
-        let observations = (request.results as? [VNClassificationObservation]) ?? []
+        let observations = request.results ?? []
 
         var seen = Set<String>()
         var tags: [String] = []
