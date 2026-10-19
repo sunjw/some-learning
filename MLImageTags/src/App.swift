@@ -121,12 +121,16 @@ struct App {
 
     private static func printUsage() {
         let usage = """
-        usage: MLImageTags <image_path>
+        usage: MLImageTags [options] <image_path>
 
         Recognizes tags in an image using Apple's Vision framework
         (VNClassifyImageRequest) and prints a JSON object:
 
           {"path":"...","tags":[{"tag":"a","confidence":0.95},...]}
+
+        Options:
+          -t, --threshold <0..1>   minimum confidence (default: 0.2)
+          -h, --help              show this message
         """
         FileHandle.standardError.write(Data((usage + "\n").utf8))
     }
