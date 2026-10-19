@@ -10,12 +10,44 @@ struct App {
             printUsage()
             exit(2)
         }
-        if args[1] == "-h" || args[1] == "--help" {
-            printUsage()
-            exit(0)
+
+        var threshold: Float = 0.2
+        var pathArg: String?
+
+        var i = 1
+        while i < args.count {
+            let a = args[i]
+            switch a {
+            case "-h", "--help":
+                printUsage()
+                exit(0)
+            case "-t", "--threshold":
+                guard i + 1 < args.count else {
+                    printError("\(a) requires a value in [0, 1]")
+                    exit(2)
+                }
+                guard let v = Float(args[i + 1]), (0...1).contains(v) else {
+                    printError("invalid threshold: \(args[i + 1]) (expected a number in [0, 1])")
+                    exit(2)
+                }
+                threshold = v
+                i += 2
+            default:
+                if a.hasPrefix("-") {
+                    printError("unknown option: \(a)")
+                    exit(2)
+                }
+                if pathArg == nil { pathArg = a }
+                i += 1
+            }
         }
 
-        let url = resolveURL(args[1])
+        guard let pathArg else {
+            printUsage()
+            exit(2)
+        }
+
+        let url = resolveURL(pathArg)
         guard FileManager.default.fileExists(atPath: url.path) else {
             printError("file not found: \(url.path)")
             exit(1)
@@ -23,7 +55,7 @@ struct App {
 
         let tags: [Tag]
         do {
-            tags = try classify(imageAt: url)
+            tags = try classify(imageAt: url, threshold: threshold)
         } catch {
             printError("\(error)")
             exit(1)
@@ -46,7 +78,7 @@ struct App {
         return FileManager.default.currentDirectoryPath + "/" + url.path
     }
 
-    private static func classify(imageAt url: URL) throws -> [Tag] {
+    private static func classify(imageAt url: URL, threshold: Float) throws -> [Tag] {
         guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil),
               let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
             throw TaggerError.imageLoadFailed(url.path)
@@ -56,7 +88,9 @@ struct App {
         let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
         try handler.perform([request])
 
-        let observations = (request.results ?? []).sorted { $0.confidence > $1.confidence }
+        let observations = (request.results ?? [])
+            .filter { $0.confidence >= threshold }
+            .sorted { $0.confidence > $1.confidence }
 
         var seen = Set<String>()
         var tags: [Tag] = []
