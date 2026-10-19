@@ -6,10 +6,23 @@ import ImageIO
 @main
 struct App {
     static func main() async {
+        do {
+            try await run()
+            exit(0)
+        } catch let err as CLIUsageError {
+            printError(err.message)
+            exit(2)
+        } catch {
+            printError("\(error)")
+            exit(1)
+        }
+    }
+
+    private static func run() async throws {
         let args = CommandLine.arguments
         guard args.count >= 2 else {
             printUsage()
-            exit(2)
+            throw CLIUsageError(message: "missing arguments")
         }
 
         var inputArg: String?
@@ -21,76 +34,45 @@ struct App {
             switch a {
             case "-h", "--help":
                 printUsage()
-                exit(0)
+                return
             case "-i", "--input":
-                guard i + 1 < args.count else {
-                    printError("\(a) requires a path")
-                    exit(2)
-                }
+                guard i + 1 < args.count else { throw CLIUsageError(message: "\(a) requires a path") }
                 inputArg = args[i + 1]
                 i += 2
             case "-o", "--output":
-                guard i + 1 < args.count else {
-                    printError("\(a) requires a path")
-                    exit(2)
-                }
+                guard i + 1 < args.count else { throw CLIUsageError(message: "\(a) requires a path") }
                 outputArg = args[i + 1]
                 i += 2
             default:
                 if a.hasPrefix("-") {
-                    printError("unknown option: \(a)")
-                    exit(2)
+                    throw CLIUsageError(message: "unknown option: \(a)")
                 }
-                printError("unexpected positional argument: \(a)")
-                exit(2)
+                throw CLIUsageError(message: "unexpected positional argument: \(a)")
             }
         }
 
         guard let inputArg else {
-            printError("missing required -i / --input <path>")
-            printUsage()
-            exit(2)
+            throw CLIUsageError(message: "missing required -i / --input <path>")
         }
 
         let inputURL = resolveURL(inputArg)
         guard FileManager.default.fileExists(atPath: inputURL.path) else {
-            printError("file not found: \(inputURL.path)")
-            exit(1)
+            throw TaggerError.imageLoadFailed(inputURL.path)
         }
 
         let outputURL: URL? = outputArg.map { resolveURL($0) }
 
         let startTime = Date()
-
-        let images: (full: CGImage, thumb: CGImage, orientation: CGImagePropertyOrientation)
-        do {
-            images = try loadCGImage(at: inputURL)
-        } catch {
-            printError("\(error)")
-            exit(1)
-        }
+        let images = try loadCGImage(at: inputURL)
 
         async let tagsResult = try classify(cgImage: images.full, orientation: images.orientation)
         async let colorsResult = try analyzeColors(cgImage: images.thumb)
 
-        let tags: [Tag]
-        let colors: [ColorResult]
-        do {
-            tags = try await tagsResult
-            colors = try await colorsResult
-        } catch {
-            printError("\(error)")
-            exit(1)
-        }
+        let tags = try await tagsResult
+        let colors = try await colorsResult
 
         let elapsedMs = Int(Date().timeIntervalSince(startTime) * 1000)
-
-        do {
-            try emitJSON(path: absolutePath(of: inputURL), tags: tags, colors: colors, elapsedMs: elapsedMs, to: outputURL)
-        } catch {
-            printError("failed to write output: \(error)")
-            exit(1)
-        }
+        try emitJSON(path: inputURL.path, tags: tags, colors: colors, elapsedMs: elapsedMs, to: outputURL)
     }
 
     // MARK: - Steps
@@ -100,11 +82,6 @@ struct App {
             return URL(fileURLWithPath: (raw as NSString).expandingTildeInPath)
         }
         return URL(fileURLWithPath: raw)
-    }
-
-    private static func absolutePath(of url: URL) -> String {
-        if url.path.hasPrefix("/") { return url.path }
-        return FileManager.default.currentDirectoryPath + "/" + url.path
     }
 
     private static func classify(cgImage: CGImage, orientation: CGImagePropertyOrientation) throws -> [Tag] {
@@ -122,8 +99,8 @@ struct App {
         var seen = Set<String>()
         var tags: [Tag] = []
         for obs in observations {
-            let identifier = obs.identifier.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !identifier.isEmpty, !seen.contains(identifier) else { continue }
+            let identifier = obs.identifier
+            guard !seen.contains(identifier) else { continue }
             seen.insert(identifier)
             tags.append(Tag(tag: identifier, confidence: obs.confidence))
         }
@@ -241,7 +218,7 @@ struct App {
     }
 
     private static func emitJSON(path: String, tags: [Tag], colors: [ColorResult], elapsedMs: Int, to outputURL: URL?) throws {
-        let payload = Result(path: path, tags: tags, colors: colors, elapsedMs: elapsedMs)
+        let payload = TaggingOutput(path: path, colors: colors, tags: tags, elapsedMs: elapsedMs)
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.withoutEscapingSlashes, .sortedKeys]
         let data = try encoder.encode(payload)
@@ -279,10 +256,10 @@ struct App {
     }
 }
 
-private struct Result: Codable {
+private struct TaggingOutput: Codable {
     let path: String
-    let tags: [Tag]
     let colors: [ColorResult]
+    let tags: [Tag]
     let elapsedMs: Int
 }
 
@@ -297,7 +274,6 @@ private struct ColorResult: Codable {
 }
 
 private struct PaletteColor {
-    let name: String
     let r: Float
     let g: Float
     let b: Float
@@ -309,31 +285,31 @@ private let visionThreshold: Float = 0.2
 private let thumbnailMaxPixelSize: Int = 512
 
 private let palette: [PaletteColor] = [
-    // Apple system colors (13)
-    PaletteColor(name: "red",    r: 1.00, g: 0.23, b: 0.19, group: "red"),
-    PaletteColor(name: "orange", r: 1.00, g: 0.58, b: 0.00, group: "red"),
-    PaletteColor(name: "yellow", r: 1.00, g: 0.80, b: 0.00, group: "yellow"),
-    PaletteColor(name: "green",  r: 0.20, g: 0.78, b: 0.35, group: "green"),
-    PaletteColor(name: "mint",   r: 0.00, g: 0.78, b: 0.75, group: "green"),
-    PaletteColor(name: "teal",   r: 0.35, g: 0.78, b: 0.91, group: "blue"),
-    PaletteColor(name: "cyan",   r: 0.39, g: 0.82, b: 0.93, group: "blue"),
-    PaletteColor(name: "blue",   r: 0.00, g: 0.48, b: 1.00, group: "blue"),
-    PaletteColor(name: "indigo", r: 0.35, g: 0.34, b: 0.84, group: "blue"),
-    PaletteColor(name: "purple", r: 0.75, g: 0.35, b: 0.95, group: "purple"),
-    PaletteColor(name: "pink",   r: 1.00, g: 0.17, b: 0.55, group: "red"),
-    PaletteColor(name: "brown",  r: 0.64, g: 0.52, b: 0.37, group: "yellow"),
-    PaletteColor(name: "gray",   r: 0.56, g: 0.56, b: 0.58, group: "gray"),
-    // Custom descriptive (10)
-    PaletteColor(name: "sky_blue",     r: 0.53, g: 0.81, b: 0.92, group: "blue"),
-    PaletteColor(name: "forest_green", r: 0.13, g: 0.55, b: 0.27, group: "green"),
-    PaletteColor(name: "dark_green",   r: 0.00, g: 0.39, b: 0.00, group: "green"),
-    PaletteColor(name: "light_blue",   r: 0.68, g: 0.85, b: 0.90, group: "blue"),
-    PaletteColor(name: "dark_blue",    r: 0.00, g: 0.00, b: 0.55, group: "blue"),
-    PaletteColor(name: "olive",        r: 0.50, g: 0.50, b: 0.00, group: "green"),
-    PaletteColor(name: "black",        r: 0.00, g: 0.00, b: 0.00, group: "gray"),
-    PaletteColor(name: "dark_gray",    r: 0.33, g: 0.33, b: 0.33, group: "gray"),
-    PaletteColor(name: "light_gray",   r: 0.83, g: 0.83, b: 0.83, group: "gray"),
-    PaletteColor(name: "white",        r: 1.00, g: 1.00, b: 1.00, group: "gray"),
+    // Apple system colors
+    PaletteColor(r: 1.00, g: 0.23, b: 0.19, group: "red"),
+    PaletteColor(r: 1.00, g: 0.58, b: 0.00, group: "red"),
+    PaletteColor(r: 1.00, g: 0.80, b: 0.00, group: "yellow"),
+    PaletteColor(r: 0.20, g: 0.78, b: 0.35, group: "green"),
+    PaletteColor(r: 0.00, g: 0.78, b: 0.75, group: "green"),
+    PaletteColor(r: 0.35, g: 0.78, b: 0.91, group: "blue"),
+    PaletteColor(r: 0.39, g: 0.82, b: 0.93, group: "blue"),
+    PaletteColor(r: 0.00, g: 0.48, b: 1.00, group: "blue"),
+    PaletteColor(r: 0.35, g: 0.34, b: 0.84, group: "blue"),
+    PaletteColor(r: 0.75, g: 0.35, b: 0.95, group: "purple"),
+    PaletteColor(r: 1.00, g: 0.17, b: 0.55, group: "red"),
+    PaletteColor(r: 0.64, g: 0.52, b: 0.37, group: "yellow"),
+    PaletteColor(r: 0.56, g: 0.56, b: 0.58, group: "gray"),
+    // Custom descriptive
+    PaletteColor(r: 0.53, g: 0.81, b: 0.92, group: "blue"),
+    PaletteColor(r: 0.13, g: 0.55, b: 0.27, group: "green"),
+    PaletteColor(r: 0.00, g: 0.39, b: 0.00, group: "green"),
+    PaletteColor(r: 0.68, g: 0.85, b: 0.90, group: "blue"),
+    PaletteColor(r: 0.00, g: 0.00, b: 0.55, group: "blue"),
+    PaletteColor(r: 0.50, g: 0.50, b: 0.00, group: "green"),
+    PaletteColor(r: 0.00, g: 0.00, b: 0.00, group: "gray"),
+    PaletteColor(r: 0.33, g: 0.33, b: 0.33, group: "gray"),
+    PaletteColor(r: 0.83, g: 0.83, b: 0.83, group: "gray"),
+    PaletteColor(r: 1.00, g: 1.00, b: 1.00, group: "gray"),
 ]
 
 private enum TaggerError: LocalizedError {
@@ -348,4 +324,8 @@ private enum TaggerError: LocalizedError {
         case .colorAnalysisFailed: return "failed to create bitmap context for color analysis"
         }
     }
+}
+
+private struct CLIUsageError: Error {
+    let message: String
 }
