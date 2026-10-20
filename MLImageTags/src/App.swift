@@ -183,13 +183,17 @@ struct App {
         let maxC = max(r, max(g, b))
         let minC = min(r, min(g, b))
         let delta = maxC - minC
+        let saturation = maxC > 0 ? delta / maxC : 0
+        let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
 
-        // Very dark or near-gray (low saturation) → gray family, split by luminance
-        if maxC < 0.15 || (maxC > 0 && delta / maxC < 0.10) {
-            let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
-            if luminance < blackMaxLuminance { return "black" }
-            if luminance >= whiteMinLuminance { return "white" }
-            return "gray"
+        // White: bright AND desaturated (a bright saturated pixel is not white)
+        if luminance >= whiteMinLuminance && saturation < whiteMaxSaturation {
+            return "white"
+        }
+
+        // Very dark or near-gray (low saturation) → black / gray
+        if maxC < 0.15 || saturation < 0.10 {
+            return luminance < blackMaxLuminance ? "black" : "gray"
         }
 
         return colorFamily(hue: hue(r: r, g: g, b: b, max: maxC, delta: delta))
@@ -308,7 +312,8 @@ private let colorMinRatio: Float = 0.05
 private let visionThreshold: Float = 0.2
 private let thumbnailMaxPixelSize: Int = 512
 private let blackMaxLuminance: Float = 0.10
-private let whiteMinLuminance: Float = 0.90
+private let whiteMinLuminance: Float = 0.70
+private let whiteMaxSaturation: Float = 0.15
 
 private enum TaggerError: LocalizedError {
     case imageLoadFailed(String)
