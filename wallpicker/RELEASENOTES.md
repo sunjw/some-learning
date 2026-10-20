@@ -4,5 +4,5 @@
 - **New feature:**
 - **Fixes & tweaks:**
 - **Dependency Updates:**
-  - Upgraded Electron to **44.9.0**.
+  - Upgraded `Electron` to **44.9.0**.
   - Bumped npm packages to fix several security advisories.
