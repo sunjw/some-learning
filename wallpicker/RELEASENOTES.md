@@ -1,8 +1,8 @@
-# wallpaper-picker 26.8.21 Release Notes
+# wallpaper-picker 26.10.22 Release Notes
 
-## Changes in wallpaper-picker 26.8.21
+## Changes in wallpaper-picker 26.10.22
 - **New feature:**
 - **Fixes & tweaks:**
-  - Fixed `sharp` keeping the image file handle open.
 - **Dependency Updates:**
+  - Upgraded Electron to **44.9.0**.
   - Bumped npm packages to fix several security advisories.
