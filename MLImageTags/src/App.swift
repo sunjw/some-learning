@@ -208,10 +208,10 @@ struct App {
 
     private static func colorFamily(hue h: Float) -> String {
         switch h {
-        case ..<15, 345...:  return "red"     // red
-        case 15..<45:        return "red"     // orange
-        case 45..<65:        return "yellow"
-        case 65..<170:       return "green"
+        case ..<20, 345...:  return "red"     // red + red-orange
+        case 20..<48:        return "gold"    // amber → gold
+        case 48..<70:        return "yellow"  // pure yellow
+        case 70..<170:       return "green"
         case 170..<200:      return "blue"    // cyan
         case 200..<250:      return "blue"    // blue + indigo
         case 250..<320:      return "purple"
