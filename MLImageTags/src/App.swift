@@ -146,6 +146,25 @@ struct App {
             if $0.ratio != $1.ratio { return $0.ratio > $1.ratio }
             return $0.color < $1.color
         }
+        // Keep the most prominent colors even when they fall below the ratio threshold,
+        // so small-but-salient subjects (e.g. an orange fish in green water) still show up.
+        if result.count < minColorCount, result.count < groupCounts.count {
+            let missing = groupCounts
+                .map { (color: $0.key, ratio: Float($0.value) / total) }
+                .filter { entry in
+                    entry.ratio >= colorAbsoluteMinRatio
+                        && !result.contains { $0.color == entry.color }
+                }
+                .sorted { $0.ratio > $1.ratio }
+            for entry in missing {
+                result.append(ColorResult(color: entry.color, ratio: entry.ratio))
+                if result.count >= minColorCount { break }
+            }
+            result.sort {
+                if $0.ratio != $1.ratio { return $0.ratio > $1.ratio }
+                return $0.color < $1.color
+            }
+        }
         return result
     }
 
@@ -309,6 +328,8 @@ private struct ColorResult: Codable {
 }
 
 private let colorMinRatio: Float = 0.05
+private let colorAbsoluteMinRatio: Float = 0.01
+private let minColorCount: Int = 3
 private let visionThreshold: Float = 0.2
 private let thumbnailMaxPixelSize: Int = 512
 private let blackMaxLuminance: Float = 0.10
