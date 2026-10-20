@@ -45,7 +45,18 @@ class SqliteDb {
         }
         try {
             let stmt = this.prepare(sql);
-            let rows = stmt.all(params);
+            // better-sqlite3 v13 builds rows with Function(), which the renderer
+            // CSP blocks. Read raw arrays and assemble the row objects here.
+            let columns = stmt.columns().map((column) => column.name);
+            let rawRows = stmt.raw().all(params);
+            let rows = [];
+            for (let rawRow of rawRows) {
+                let row = {};
+                for (let i = 0; i < columns.length; ++i) {
+                    row[columns[i]] = rawRow[i];
+                }
+                rows.push(row);
+            }
             callback(null, rows);
         } catch (err) {
             callback(err);
