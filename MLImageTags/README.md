@@ -126,7 +126,7 @@ Colors are grouped into families by hue, with special handling for achromatic (g
 - `green` — hue 70°–170°
 - `blue` — hue 170°–250° (includes cyan and indigo)
 - `purple` — hue 250°–320°
-- `black` — low-saturation pixels with luminance below 0.10
+- `black` — low-saturation pixels with luminance below 0.15 (roughly `#262626` and darker)
 - `white` — bright **and** desaturated pixels (luminance ≥ 0.70 and saturation < 0.15)
 - `gray` — remaining low-saturation pixels
 
