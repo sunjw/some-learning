@@ -1100,10 +1100,12 @@ class WallpickerPage {
     filterImageBlock(imageBlock) {
         let filterWords = this.curFilter.split(' ');
         let imagePath = imageBlock.attr(this.TAG_IMAGE_PATH);
+        // match relative path only, exclude the scan root dir
+        let relPath = path.relative(this.curImageDir, imagePath);
         // let imageInfo = imageBlock.find('.imageInfo');
         // let imageName = imageInfo.attr(this.TAG_IMAGE_NAME);
         // let filterTarget = imageName.toLowerCase();
-        let filterTarget = imagePath.toLowerCase();
+        let filterTarget = relPath.toLowerCase();
         let allMatch = false;
         for (let filterWord of filterWords) {
             if (filterTarget.includes(filterWord)) {
