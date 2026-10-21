@@ -332,7 +332,7 @@ private let colorAbsoluteMinRatio: Float = 0.01
 private let minColorCount: Int = 3
 private let visionThreshold: Float = 0.2
 private let thumbnailMaxPixelSize: Int = 512
-private let blackMaxLuminance: Float = 0.10
+private let blackMaxLuminance: Float = 0.15
 private let whiteMinLuminance: Float = 0.70
 private let whiteMaxSaturation: Float = 0.15
 
