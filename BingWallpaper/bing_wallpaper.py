@@ -5,6 +5,7 @@ import os
 import requests
 import shlex
 import ssl
+import time
 from urllib.request import Request, urlopen
 
 import comm_util
@@ -22,6 +23,13 @@ BING_MKT = ['en-US']
 WALLPAPER_DIR = 'wallpaper'
 OPEN_WALLPAPER_DIR = True
 
+# Retry config for reading the wallpaper json
+JSON_RETRY_WAIT_SECONDS = 30
+JSON_RETRY_COUNT = 1
+
+# Timeout (seconds) of the wallpaper json request
+JSON_REQUEST_TIMEOUT = 60
+
 
 def gen_bing_wallpaper_json_url(mkt):
     if mkt is None:
@@ -33,6 +41,29 @@ def gen_bing_wallpaper_json_url(mkt):
     return bing_wallpaper_meta_json_path
 
 
+def parse_bing_wallpaper_json(json_text):
+    """Parse the wallpaper json text, return (wallpaper_json_body, error_message).
+
+    Never raise, so a broken response does not kill the whole run.
+    """
+    if json_text is None:
+        return None, 'empty response'
+    json_text = json_text.strip()
+    if not json_text:
+        return None, 'empty response'
+    try:
+        wallpaper_json_body = json.loads(json_text)
+    except Exception as e:
+        return None, 'json decode error: %s' % (e)
+    if not isinstance(wallpaper_json_body, dict):
+        return None, 'unexpected json type: %s' % (type(wallpaper_json_body).__name__)
+    if 'images' not in wallpaper_json_body:
+        return None, 'no images in json body'
+    # logger.debug('wallpaper_json_body\n%s', comm_util.pprint_dict_to_string(wallpaper_json_body))
+
+    return wallpaper_json_body, None
+
+
 def get_bing_wallpaper_json_over_ssh(mkt, ssh_cmd):
     logger.info('Get Bing wallpaper json over ssh, ssh_cmd=[%s]', ssh_cmd)
     bing_wallpaper_meta_json_path = gen_bing_wallpaper_json_url(mkt)
@@ -42,35 +73,79 @@ def get_bing_wallpaper_json_over_ssh(mkt, ssh_cmd):
     remote_cmd_list.append(remote_curl_cmd)
     # logger.debug('remote_cmd_list\n%s', comm_util.pprint_dict_to_string(remote_cmd_list))
 
-    returncode, stdout, stderr = comm_util.call_command_with_output(remote_cmd_list)
+    try:
+        returncode, stdout, stderr = comm_util.call_command_with_output(remote_cmd_list)
+    except Exception as e:
+        logger.error('Run ssh command failed: %s', e)
+        return None, 'ssh command error: %s' % (e)
     # logger.debug('stdout\n%s', stdout)
-    wallpaper_json_body = json.loads(stdout)
-    # logger.debug('wallpaper_json_body\n%s', comm_util.pprint_dict_to_string(wallpaper_json_body))
+    if returncode != 0:
+        logger.error('ssh command failed, returncode=%d, stderr=[%s]', returncode, stderr)
+        return None, 'ssh command failed, returncode=%d' % (returncode)
 
-    return wallpaper_json_body
+    return parse_bing_wallpaper_json(stdout)
 
 
 def get_bing_wallpaper_json(mkt):
     logger.info('Get Bing wallpaper json')
     bing_wallpaper_meta_json_path = gen_bing_wallpaper_json_url(mkt)
     req = Request(bing_wallpaper_meta_json_path, headers={'User-Agent': 'Mozilla/5.0'})
-    resp = urlopen(req, context=ssl.create_default_context())
-    str_body = resp.read().decode('utf-8')
-    wallpaper_json_body = json.loads(str_body)
-    # logger.debug('wallpaper_json_body\n%s', comm_util.pprint_dict_to_string(wallpaper_json_body))
 
-    return wallpaper_json_body
+    try:
+        resp = urlopen(req, context=ssl.create_default_context(), timeout=JSON_REQUEST_TIMEOUT)
+    except Exception as e:
+        logger.error('Get Bing wallpaper json error: %s', e)
+        return None, 'request error: %s' % (e)
+
+    try:
+        str_body = resp.read().decode('utf-8')
+    except Exception as e:
+        logger.error('Read Bing wallpaper json error: %s', e)
+        return None, 'read error: %s' % (e)
+    finally:
+        try:
+            resp.close()
+        except Exception:
+            pass
+
+    return parse_bing_wallpaper_json(str_body)
+
+
+def get_bing_wallpaper_json_with_retry(mkt, over_ssh=False, ssh_cmd=None):
+    """Get the wallpaper json, on failure wait JSON_RETRY_WAIT_SECONDS and retry once."""
+    attempt = 0
+    while True:
+        attempt = attempt + 1
+        if over_ssh:
+            wallpaper_json_body, error_message = get_bing_wallpaper_json_over_ssh(mkt, ssh_cmd)
+        else:
+            wallpaper_json_body, error_message = get_bing_wallpaper_json(mkt)
+
+        if wallpaper_json_body is not None:
+            return wallpaper_json_body
+
+        logger.error('Get Bing wallpaper json failed (attempt %d/%d), mkt=[%s], error=[%s]',
+                     attempt, JSON_RETRY_COUNT + 1, mkt, error_message)
+        if attempt > JSON_RETRY_COUNT:
+            return None
+
+        logger.info('Wait %ds before retry getting Bing wallpaper json, mkt=[%s]',
+                    JSON_RETRY_WAIT_SECONDS, mkt)
+        time.sleep(JSON_RETRY_WAIT_SECONDS)
 
 
 def get_bing_wallpaper(mkt, download_count, over_ssh=False, ssh_cmd=None):
     wallpaper_list = []
-    wallpaper_json_body = {}
-    if not over_ssh:
-        wallpaper_json_body = get_bing_wallpaper_json(mkt)
-    else:
-        wallpaper_json_body = get_bing_wallpaper_json_over_ssh(mkt, ssh_cmd)
+    wallpaper_json_body = get_bing_wallpaper_json_with_retry(mkt, over_ssh, ssh_cmd)
+    if wallpaper_json_body is None:
+        logger.error('No wallpaper json body, mkt=[%s]', mkt)
+        return wallpaper_list
 
     images_list = wallpaper_json_body['images']
+    if not images_list:
+        logger.error('No images in wallpaper json body, mkt=[%s]', mkt)
+        return wallpaper_list
+
     images_list_len = len(images_list)
     if download_count == -1:
         download_count = images_list_len
