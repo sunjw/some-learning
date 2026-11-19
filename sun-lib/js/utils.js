@@ -111,10 +111,10 @@ function byteSizeToShortSize(size) {
 function getParentDir(path) {
     let curPath = path;
     if (curPath.endsWith('/')) {
-        curPath = curPath.substr(0, curPath.length - 1);
+        curPath = curPath.substring(0, curPath.length - 1);
     }
     let pathDelimIdx = curPath.lastIndexOf('/');
-    let parentDirPath = curPath.substr(0, pathDelimIdx);
+    let parentDirPath = curPath.substring(0, pathDelimIdx);
     parentDirPath = parentDirPath + '/';
     return parentDirPath;
 }
