@@ -92,6 +92,7 @@ stdin                                      stdout
 ────────────────────────────────────────────────────────────────────────
 /Users/me/Pictures/forest.jpg        →     {"colors":[...],"elapsedMs":...,"path":"/Users/me/Pictures/forest.jpg","tags":[...]}
 /Users/me/Pictures/My Photo.jpg       →     {"colors":[...],"elapsedMs":...,"path":"/Users/me/Pictures/My Photo.jpg","tags":[...]}
+EXIT                                  →     (daemon shuts down)
 ```
 
 ### Protocol
@@ -111,7 +112,12 @@ stdin                                      stdout
   {"colors":[],"elapsedMs":0,"error":"failed to load image: /nope.jpg","path":"/nope.jpg","tags":[]}
   ```
 
-- **Termination** — the daemon exits when stdin reaches end-of-file.
+- **Termination** — send the line `EXIT` to shut the daemon down, or close
+  stdin. The `EXIT` line is matched exactly (case-sensitive, no surrounding
+  whitespace) and produces no output.
+
+  Note that because of this, a file literally named `EXIT` cannot be
+  analyzed in daemon mode.
 
 ### Example client
 
@@ -133,6 +139,7 @@ for path in ["~/Pictures/forest.jpg", "~/Pictures/My Photo.jpg"]:
     else:
         print(reply["path"], [t["tag"] for t in reply["tags"]])
 
+proc.stdin.write("EXIT\n")               # shut the daemon down
 proc.stdin.close()
 proc.wait()
 ```
