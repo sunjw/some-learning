@@ -83,10 +83,13 @@ struct App {
     // MARK: - Daemon mode
 
     /// Reads one image path per line from stdin and writes one JSON object per
-    /// line to stdout. Blank lines are ignored. Every input line produces
+    /// line to stdout. Blank lines are ignored. The line "EXIT" terminates the
+    /// daemon without producing output. Every other input line produces
     /// exactly one output line, so a client can read them back synchronously.
     private static func runDaemon() async {
         while let rawLine = readLine(strippingNewline: true) {
+            if rawLine == daemonExitCommand { break }
+
             let path = stripQuotes(rawLine)
             if path.isEmpty { continue }
 
@@ -376,7 +379,8 @@ struct App {
           Each non-blank line of stdin is an image path, optionally wrapped in
           single or double quotes. Blank lines are ignored. Every input line
           produces exactly one output line; failures are reported as a JSON
-          object with an "error" field.
+          object with an "error" field. The line "EXIT" shuts the daemon down
+          without producing output.
         """
         FileHandle.standardError.write(Data((usage + "\n").utf8))
     }
@@ -420,6 +424,9 @@ private let thumbnailMaxPixelSize: Int = 512
 private let blackMaxLuminance: Float = 0.15
 private let whiteMinLuminance: Float = 0.70
 private let whiteMaxSaturation: Float = 0.15
+
+/// The exact line that makes the daemon shut down.
+private let daemonExitCommand = "EXIT"
 
 private enum TaggerError: LocalizedError {
     case imageLoadFailed(String)
