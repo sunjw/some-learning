@@ -6,6 +6,10 @@ import ImageIO
 @main
 struct App {
     static func main() async {
+        // A client that goes away closes the pipe; ignore SIGPIPE so that
+        // writing to it fails with EPIPE instead of killing the process.
+        signal(SIGPIPE, SIG_IGN)
+
         do {
             try await run()
             exit(0)
@@ -100,10 +104,46 @@ struct App {
                 payload = TaggingOutput(path: path, colors: [], tags: [],
                                         elapsedMs: 0, error: error.localizedDescription)
             }
-            guard let data = encodeJSON(payload) else { continue }
-            FileHandle.standardOutput.write(data)
-            FileHandle.standardOutput.write(Data("\n".utf8))
+
+            // Always emit exactly one line per request, even if encoding fails.
+            let line: Data
+            if let data = encodeJSON(payload) {
+                line = data
+            } else {
+                line = Data(fallbackJSON(path: path).utf8)
+            }
+
+            do {
+                try FileHandle.standardOutput.write(contentsOf: line)
+                try FileHandle.standardOutput.write(contentsOf: Data("\n".utf8))
+            } catch {
+                // The client closed the pipe; stop serving.
+                break
+            }
         }
+    }
+
+    /// A minimal JSON object used when the normal payload cannot be encoded.
+    /// The path is escaped by hand because the fallback cannot rely on the
+    /// encoder that just failed.
+    private static func fallbackJSON(path: String) -> String {
+        var escaped = ""
+        for character in path.unicodeScalars {
+            switch character {
+            case "\"": escaped += "\\\""
+            case "\\": escaped += "\\\\"
+            case "\n": escaped += "\\n"
+            case "\r": escaped += "\\r"
+            case "\t": escaped += "\\t"
+            default:
+                if character.value < 0x20 {
+                    escaped += String(format: "\\u%04x", character.value)
+                } else {
+                    escaped.unicodeScalars.append(character)
+                }
+            }
+        }
+        return "{\"colors\":[],\"elapsedMs\":0,\"error\":\"failed to encode JSON result\",\"path\":\"\(escaped)\",\"tags\":[]}"
     }
 
     /// Removes a matching pair of surrounding single or double quotes.
@@ -350,8 +390,8 @@ struct App {
         if let outputURL {
             try data.write(to: outputURL, options: .atomic)
         } else {
-            FileHandle.standardOutput.write(data)
-            FileHandle.standardOutput.write(Data("\n".utf8))
+            try FileHandle.standardOutput.write(contentsOf: data)
+            try FileHandle.standardOutput.write(contentsOf: Data("\n".utf8))
         }
     }
 
