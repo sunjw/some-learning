@@ -27,6 +27,7 @@ struct App {
 
         var inputArg: String?
         var outputArg: String?
+        var daemon = false
 
         var i = 1
         while i < args.count {
@@ -35,6 +36,9 @@ struct App {
             case "-h", "--help":
                 printUsage()
                 return
+            case "-d", "--daemon":
+                daemon = true
+                i += 1
             case "-i", "--input":
                 guard i + 1 < args.count else { throw CLIUsageError(message: "\(a) requires a path") }
                 inputArg = args[i + 1]
@@ -51,6 +55,17 @@ struct App {
             }
         }
 
+        if daemon {
+            guard inputArg == nil else {
+                throw CLIUsageError(message: "-d / --daemon cannot be combined with -i / --input")
+            }
+            guard outputArg == nil else {
+                throw CLIUsageError(message: "-d / --daemon cannot be combined with -o / --output")
+            }
+            await runDaemon()
+            return
+        }
+
         guard let inputArg else {
             throw CLIUsageError(message: "missing required -i / --input <path>")
         }
@@ -61,6 +76,62 @@ struct App {
         }
 
         let outputURL: URL? = outputArg.map { resolveURL($0) }
+        let payload = try await analyze(path: inputURL.path)
+        try emitJSON(payload, to: outputURL)
+    }
+
+    // MARK: - Daemon mode
+
+    /// Reads one image path per line from stdin and writes one JSON object per
+    /// line to stdout. Blank lines are ignored. Every input line produces
+    /// exactly one output line, so a client can read them back synchronously.
+    private static func runDaemon() async {
+        while let rawLine = readLine(strippingNewline: true) {
+            let path = stripQuotes(rawLine)
+            if path.isEmpty { continue }
+
+            let payload: TaggingOutput
+            do {
+                payload = try await analyze(path: path)
+            } catch {
+                payload = TaggingOutput(path: path, colors: [], tags: [],
+                                        elapsedMs: 0, error: error.localizedDescription)
+            }
+            guard let data = encodeJSON(payload) else { continue }
+            FileHandle.standardOutput.write(data)
+            FileHandle.standardOutput.write(Data("\n".utf8))
+        }
+    }
+
+    /// Removes a matching pair of surrounding single or double quotes.
+    private static func stripQuotes(_ line: String) -> String {
+        var s = line.trimmingCharacters(in: .whitespaces)
+        if s.count >= 2 {
+            let first = s.first!
+            let last = s.last!
+            if (first == "\"" && last == "\"") || (first == "'" && last == "'") {
+                s = String(s.dropFirst().dropLast())
+            }
+        }
+        return s
+    }
+
+    // MARK: - Steps
+
+    private static func resolveURL(_ raw: String) -> URL {
+        if raw.hasPrefix("~") {
+            return URL(fileURLWithPath: (raw as NSString).expandingTildeInPath)
+        }
+        return URL(fileURLWithPath: raw)
+    }
+
+    /// Analyzes one image and returns the full result payload.
+    /// Shared by one-shot and daemon mode.
+    private static func analyze(path: String) async throws -> TaggingOutput {
+        let inputURL = resolveURL(path)
+        guard FileManager.default.fileExists(atPath: inputURL.path) else {
+            throw TaggerError.imageLoadFailed(inputURL.path)
+        }
 
         let startTime = Date()
         let images = try loadCGImage(at: inputURL)
@@ -72,16 +143,7 @@ struct App {
         let colors = try await colorsResult
 
         let elapsedMs = Int(Date().timeIntervalSince(startTime) * 1000)
-        try emitJSON(path: inputURL.path, tags: tags, colors: colors, elapsedMs: elapsedMs, to: outputURL)
-    }
-
-    // MARK: - Steps
-
-    private static func resolveURL(_ raw: String) -> URL {
-        if raw.hasPrefix("~") {
-            return URL(fileURLWithPath: (raw as NSString).expandingTildeInPath)
-        }
-        return URL(fileURLWithPath: raw)
+        return TaggingOutput(path: inputURL.path, colors: colors, tags: tags, elapsedMs: elapsedMs)
     }
 
     private static func classify(cgImage: CGImage, orientation: CGImagePropertyOrientation) throws -> [Tag] {
@@ -271,11 +333,16 @@ struct App {
         return (full, thumb, orientation)
     }
 
-    private static func emitJSON(path: String, tags: [Tag], colors: [ColorResult], elapsedMs: Int, to outputURL: URL?) throws {
-        let payload = TaggingOutput(path: path, colors: colors, tags: tags, elapsedMs: elapsedMs)
+    private static func encodeJSON(_ payload: TaggingOutput) -> Data? {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.withoutEscapingSlashes, .sortedKeys]
-        let data = try encoder.encode(payload)
+        return try? encoder.encode(payload)
+    }
+
+    private static func emitJSON(_ payload: TaggingOutput, to outputURL: URL?) throws {
+        guard let data = encodeJSON(payload) else {
+            throw TaggerError.jsonEncodingFailed
+        }
 
         if let outputURL {
             try data.write(to: outputURL, options: .atomic)
@@ -290,6 +357,7 @@ struct App {
     private static func printUsage() {
         let usage = """
         usage: MLImageTags -i <image_path> [-o <output_path>]
+               MLImageTags -d
 
         Recognizes tags and dominant colors in an image using Apple's
         Vision framework (VNClassifyImageRequest) and a Core Graphics
@@ -298,9 +366,17 @@ struct App {
           {"path":"...","tags":[{"tag":"some","confidence":0.95},...],"colors":[{"color":"green","ratio":0.45},...],"elapsedMs":1234}
 
         Options:
-          -i, --input <path>      image to analyze (required)
+          -i, --input <path>      image to analyze (required unless -d)
           -o, --output <path>     write JSON to file instead of stdout
+          -d, --daemon            read image paths from stdin, one per line, and
+                                  write one JSON object per line to stdout
           -h, --help              show this message
+
+        Daemon mode:
+          Each non-blank line of stdin is an image path, optionally wrapped in
+          single or double quotes. Blank lines are ignored. Every input line
+          produces exactly one output line; failures are reported as a JSON
+          object with an "error" field.
         """
         FileHandle.standardError.write(Data((usage + "\n").utf8))
     }
@@ -315,6 +391,15 @@ private struct TaggingOutput: Codable {
     let colors: [ColorResult]
     let tags: [Tag]
     let elapsedMs: Int
+    var error: String?
+
+    init(path: String, colors: [ColorResult], tags: [Tag], elapsedMs: Int, error: String? = nil) {
+        self.path = path
+        self.colors = colors
+        self.tags = tags
+        self.elapsedMs = elapsedMs
+        self.error = error
+    }
 }
 
 private struct Tag: Codable {
@@ -340,12 +425,14 @@ private enum TaggerError: LocalizedError {
     case imageLoadFailed(String)
     case thumbnailFailed(String)
     case colorAnalysisFailed
+    case jsonEncodingFailed
 
     var errorDescription: String? {
         switch self {
         case .imageLoadFailed(let path): return "failed to load image: \(path)"
         case .thumbnailFailed(let path): return "failed to create thumbnail for: \(path)"
         case .colorAnalysisFailed: return "failed to create bitmap context for color analysis"
+        case .jsonEncodingFailed: return "failed to encode JSON result"
         }
     }
 }
