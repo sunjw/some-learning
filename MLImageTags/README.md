@@ -119,6 +119,9 @@ EXIT                                  →     (daemon shuts down)
   Note that because of this, a file literally named `EXIT` cannot be
   analyzed in daemon mode.
 
+- **Client disconnects** — if the client closes the pipe (for example it is
+  killed), the daemon stops serving and exits cleanly instead of crashing.
+
 ### Example client
 
 ```python
