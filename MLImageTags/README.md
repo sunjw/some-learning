@@ -42,12 +42,14 @@ To use it without installing, just call it by path:
 
 ```
 MLImageTags -i <image_path> [-o <output_path>]
+MLImageTags -d
 ```
 
 | Option | Description |
 | --- | --- |
-| `-i`, `--input <path>` | Path of the image to analyze. **Required.** `~` is expanded. |
+| `-i`, `--input <path>` | Path of the image to analyze. Required unless `-d` is given. `~` is expanded. |
 | `-o`, `--output <path>` | Write the JSON result to this file instead of printing it to stdout. `~` is expanded. |
+| `-d`, `--daemon` | Run as a daemon: read image paths from stdin, write JSON results to stdout. Cannot be combined with `-i` or `-o`. |
 | `-h`, `--help` | Print usage information and exit. |
 
 ### Examples
@@ -76,6 +78,74 @@ MLImageTags -i ~/Pictures/forest.jpg | jq -r '.tags[] | "\(.tag)\t\(.confidence)
 
 ---
 
+## Daemon mode
+
+With `-d`, the tool becomes a long-running service that reads image paths from
+stdin and writes one JSON object per line to stdout.
+
+```bash
+MLImageTags -d
+```
+
+```
+stdin                                      stdout
+────────────────────────────────────────────────────────────────────────
+/Users/me/Pictures/forest.jpg        →     {"colors":[...],"elapsedMs":...,"path":"/Users/me/Pictures/forest.jpg","tags":[...]}
+/Users/me/Pictures/My Photo.jpg       →     {"colors":[...],"elapsedMs":...,"path":"/Users/me/Pictures/My Photo.jpg","tags":[...]}
+```
+
+### Protocol
+
+- **Input** — one image path per line, terminated by `\n`. A path may be
+  written bare, or wrapped in matching single or double quotes (useful for
+  paths containing spaces). Blank lines are ignored. A leading `~` is expanded
+  to the home directory.
+- **Output** — exactly one JSON object per input line, terminated by `\n`.
+  Every line of input produces exactly one line of output, so a client can
+  read and process replies synchronously.
+- **Errors** — a failed image is reported as a regular JSON object with an
+  extra `error` field and empty `tags` / `colors`, so the client never has to
+  special-case the reply shape:
+
+  ```json
+  {"colors":[],"elapsedMs":0,"error":"failed to load image: /nope.jpg","path":"/nope.jpg","tags":[]}
+  ```
+
+- **Termination** — the daemon exits when stdin reaches end-of-file.
+
+### Example client
+
+```python
+import json
+import subprocess
+
+proc = subprocess.Popen(
+    ["MLImageTags", "-d"],
+    stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True, bufsize=1,
+)
+
+for path in ["~/Pictures/forest.jpg", "~/Pictures/My Photo.jpg"]:
+    proc.stdin.write(f'"{path}"\n')      # quotes are optional
+    proc.stdin.flush()
+    reply = json.loads(proc.stdout.readline())
+    if "error" in reply:
+        print("failed:", reply["error"])
+    else:
+        print(reply["path"], [t["tag"] for t in reply["tags"]])
+
+proc.stdin.close()
+proc.wait()
+```
+
+### Why it is faster
+
+The daemon keeps the process — and therefore the Vision classification model —
+alive between requests, so the model is loaded once instead of on every image.
+The first request still pays the model-loading cost; subsequent ones are
+noticeably faster than launching a fresh process per image.
+
+---
+
 ## Output format
 
 The output is a single JSON object. Keys are sorted alphabetically, so the output is byte-for-byte reproducible for the same image and the same binary.
@@ -97,6 +167,12 @@ The output is a single JSON object. Keys are sorted alphabetically, so the outpu
 ### `path`
 
 The absolute path of the analyzed image.
+
+### `error` (daemon mode only)
+
+Present only when the image could not be analyzed. The value is a
+human-readable description of what went wrong. When this field is present,
+`tags` and `colors` are empty arrays.
 
 ### `tags`
 
@@ -144,13 +220,17 @@ Total processing time in milliseconds, including image decoding, Vision classifi
 | --- | --- |
 | `0` | Success |
 | `1` | Runtime error (file not found, unsupported image, failed analysis) |
-| `2` | Usage error (missing or unknown option) |
+| `2` | Usage error (missing or unknown option, `-d` combined with `-i` / `-o`) |
 
 Error messages are written to stderr:
 
 ```
 error: failed to load image: /Users/me/does-not-exist.jpg
 ```
+
+In daemon mode the process keeps running after a per-image failure — the error
+is reported in the JSON reply instead, and the exit code only reflects whether
+the daemon itself ran correctly.
 
 ---
 
@@ -171,6 +251,10 @@ On an Apple Silicon Mac, a typical 4K image takes roughly **80–200 ms**. Very 
 | 6016 × 6016 Display P3 PNG | ~600–900 ms |
 
 The Vision classification and the color analysis run concurrently, so the total time is roughly that of the slower of the two.
+
+In daemon mode the per-image time drops further, because the Vision model stays
+loaded between requests. The very first image in a daemon session still pays the
+model-loading cost.
 
 ---
 
